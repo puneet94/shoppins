@@ -112,9 +112,9 @@ angular
   .config(["$routeProvider","$httpProvider","$authProvider",authConfig]);
   function authConfig($routeProvider,$httpProvider,$authProvider) {
     //shopuae
-    //var fbClientId = '991629147629579';
+    var fbClientId = '991629147629579';
     //shoppinss
-    var fbclientId = '1068203956594250';
+    //var fbclientId = '1068203956594250';
     var authenticateUrl = 'https://shoppins.herokuapp.com/authenticate';
     $routeProvider
       .when('/signup',{
@@ -1790,6 +1790,28 @@ angular.module('app.user')
   }
 })(window.angular);
 
+
+(function(angular){
+  angular.module('app.product')
+  .directive('singleProductDirective',[singleProductDirective]);
+  
+  function singleProductDirective(){
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl:'app/product/views/singleProductTemplate.html',
+      scope:{
+        product:'=singleProduct'
+      },
+      link: function(scope,element,attrs){
+
+      }
+    };
+  }
+  
+
+})(window.angular);
+
 (function(angular){
   angular.module('app.product')
 
@@ -2007,28 +2029,6 @@ angular.module('app.product')
     }
 
   }
-
-})(window.angular);
-
-
-(function(angular){
-  angular.module('app.product')
-  .directive('singleProductDirective',[singleProductDirective]);
-  
-  function singleProductDirective(){
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl:'app/product/views/singleProductTemplate.html',
-      scope:{
-        product:'=singleProduct'
-      },
-      link: function(scope,element,attrs){
-
-      }
-    };
-  }
-  
 
 })(window.angular);
 

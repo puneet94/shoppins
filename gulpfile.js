@@ -26,9 +26,6 @@ gulp.task('nodemon', function (cb) {
 		}
 	});
 });
-gulp.task('bs-reload', function () {
-  browserSync.reload();
-});
 
 gulp.task('images', function(){
   gulp.src('src/images/**/*')
@@ -67,7 +64,7 @@ gulp.task('scripts', function(){
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
     .pipe(gulp.dest('public/dist2/scripts/'))
-    .pipe(browserSync.reload({stream:true}))
+    
 });
 
 gulp.task('default', function(){
