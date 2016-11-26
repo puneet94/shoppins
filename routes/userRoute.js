@@ -47,7 +47,7 @@ userRouter.route('/singleUser/:user_id')
 	});
 userRouter.route('/userReviews/:user_id')
 	.get(function(req,res){
-		var populateQuery = [{path:'store', select:'name'}, {path:'product', select:'name'}];
+		var populateQuery = [{path:'store', select:'name'}, {path:'product', select:'name'},{path:'user'}];
 		Review.find({ user: req.params.user_id })
 
 		.populate(populateQuery)

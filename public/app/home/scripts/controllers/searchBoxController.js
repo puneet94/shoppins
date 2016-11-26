@@ -27,7 +27,6 @@ function SearchBoxController($scope,$http,$routeParams,cityStorage,citiesService
 		hm.selectedItemChange(hm.selectedItem);
 		function userSearchItemChange(item){
 
-
 			var changeEntity = item.userSearchString.split("#&#")[1];
 			var entityName = item.userSearchString.split("#&#")[0];
 			var location = hm.selectedItem;

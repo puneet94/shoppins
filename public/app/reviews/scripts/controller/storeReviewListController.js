@@ -14,6 +14,16 @@ angular.module('app.review')
     slc.submitUserReviewUpvote = submitUserReviewUpvote;
     slc.deleteUserReviewUpvote = deleteUserReviewUpvote;
     slc.getUserPage = userData.getUserPage;
+
+    //parameter for review directive
+    slc.reviewParams = {};
+    slc.reviewParams.getRating = getRating;
+    slc.reviewParams.userReviewUpvoted = userReviewUpvoted;
+    slc.reviewParams.submitUserReviewUpvote = submitUserReviewUpvote;
+    slc.reviewParams.deleteUserReviewUpvote = deleteUserReviewUpvote;
+    slc.reviewParams.smallLoadingModel = slc.smallLoadingModel;
+    slc.reviewParams.getRating = getRating;
+
     
     if(slc.authCheck){
       slc.userUpvotes  = userData.getUser().upvotes;
@@ -43,7 +53,6 @@ angular.module('app.review')
     }
 
     function userReviewUpvoted(locReview){
-      
       var upArr = locReview.upvotes;
       for(var i=0;i<upArr.length;i++){
         if(slc.userUpvotes.indexOf(upArr[i])!=-1){

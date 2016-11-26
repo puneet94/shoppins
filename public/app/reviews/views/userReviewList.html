@@ -13,7 +13,8 @@
           
         </div>
       </div>
-      <div  class="contentSection">
+      <single-review-directive review-params="url.reviewParams" review="review"></single-review-directive>
+      <!--<div  class="contentSection">
         <div class="ratingSection">
           <span ng-repeat="i in url.getRating(review)">
             <i aria-hidden="true" class="fa fa-star"></i>
@@ -22,22 +23,27 @@
         <div class="reviewContent">
           {{::review.description }}
         </div>
+
+        
         <div class="contentRatingSection">
           <div class="reviewStats"><span>{{ ::review.upvotes.length ||0 }} <i class="fa fa-heart-o" aria-hidden="true"></i></span></div>
         </div>
 
         <div class="userReviewUpvoteSection" ng-if="url.authCheck">
+
+  
           <like-directive
             up-fn="url.submitUserReviewUpvote(review)"
             down-fn="url.deleteUserReviewUpvote(review)"
             upv-chk="url.userReviewUpvoted(review)"
-            small-loading="url.smallLoadingModel[review._id]">
+            small-loading="url.smallLoadingModel[review._id]"
+            current-review="review">
           </like-directive>
 
 
 
         </div>
-      </div>
+      </div>-->
 
   </div>
   <div ng-repeat-end=""></div>

@@ -1,7 +1,8 @@
 <div ng-controller="ProductReviewListController as prl" class="reviewListSection">
   <h1 class="reviewHeadingText" >Reviews</h1>
-  <div layout="row" layout-sm="column" layout-xs="column" md-whiteframe="1" class="singleReview" ng-repeat-start="review in prl.reviewList track by review._id">
-      <div flex="25" flex-xs="100" flex-sm="100" class="userSection">
+  <div  md-whiteframe="1"  ng-repeat-start="review in prl.reviewList track by review._id">
+      <single-review-directive review-params="prl.reviewParams" review="review"></single-review-directive>
+      <!--<div flex="25" flex-xs="100" flex-sm="100" class="userSection">
         <div layout="row" class="userProfile">
           <div class="userImgSection">
             <div class="userImg" style='background-image:url("{{review.user.picture}}")'></div>
@@ -41,7 +42,7 @@
 
 
         </div>
-      </div>
+      </div>-->
 
   </div>
   <div ng-repeat-end=""></div>

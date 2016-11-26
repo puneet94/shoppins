@@ -16,6 +16,16 @@ angular.module('app.review')
     url.getUserPage = userData.getUserPage;
     url.getSingleStorePage = getSingleStore.getSingleStorePage;
     url.getSingleProductPage = getProductsService.getSingleProductPage;
+
+
+    url.reviewParams = {};
+    url.reviewParams.getRating = getRating;
+    url.reviewParams.userReviewUpvoted = userReviewUpvoted;
+    url.reviewParams.submitUserReviewUpvote = submitUserReviewUpvote;
+    url.reviewParams.deleteUserReviewUpvote = deleteUserReviewUpvote;
+    url.reviewParams.smallLoadingModel = url.smallLoadingModel;
+    url.reviewParams.getRating = getRating;
+    
     if(url.authCheck){
       url.userUpvotes  = userData.getUser().upvotes;
     }
@@ -31,7 +41,7 @@ angular.module('app.review')
     function getUserReviews(){
       reviewService.getUserReviews().then(function(res){
         url.reviewList = res.data;
-
+        
       },function(res){
 
       });

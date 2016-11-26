@@ -11,7 +11,6 @@ var moment = require('moment');
 var request = require('request');
 var jwt = require('jwt-simple');
 
-
 //Variables
 var port = process.env.PORT || 3000;
 var http = require('http');

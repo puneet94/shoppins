@@ -15,6 +15,14 @@ angular.module('app.review')
     plc.deleteUserReviewUpvote = deleteUserReviewUpvote;
     plc.getUserPage = userData.getUserPage;
 
+    plc.reviewParams = {};
+    plc.reviewParams.getRating = getRating;
+    plc.reviewParams.userReviewUpvoted = userReviewUpvoted;
+    plc.reviewParams.submitUserReviewUpvote = submitUserReviewUpvote;
+    plc.reviewParams.deleteUserReviewUpvote = deleteUserReviewUpvote;
+    plc.reviewParams.smallLoadingModel = plc.smallLoadingModel;
+    plc.reviewParams.getRating = getRating;
+
     if(plc.authCheck){
       plc.userUpvotes  = userData.getUser().upvotes;
     }
