@@ -185,6 +185,151 @@ md-ink-bar {
     -webkit-transform: rotate(359deg);
     transform: rotate(359deg); } }
 
+.mdMenuContainer {
+  width: 250px;
+  text-transform: capitalize;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  font-size: 10px; }
+  .mdMenuContainer .md-button span {
+    width: 100%;
+    text-transform: capitalize;
+    overflow-x: hidden;
+    text-overflow: ellipsis; }
+  .mdMenuContainer .menuHeading {
+    margin: 2px 5px; }
+
+.userActivityButtonContainer {
+  border-radius: 2px;
+  font-size: 14px;
+  height: 40px;
+  margin: 10px;
+  background-color: white;
+  border: 2px solid white; }
+  .userActivityButtonContainer:hover {
+    background-color: #E5E7EC;
+    box-shadow: 0 0 0 1px transparent inset;
+    color: rgba(0, 0, 0, 0.95);
+    border: 2px solid #e7e7e7; }
+  .userActivityButtonContainer span {
+    float: left;
+    margin: 5px;
+    margin-top: 6px; }
+  .userActivityButtonContainer .userName {
+    text-transform: capitalize;
+    margin-top: 10px; }
+  .userActivityButtonContainer .dropIcon {
+    margin-top: 10px; }
+  .userActivityButtonContainer .userActionListImage {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%; }
+
+.search-banner {
+  width: 100%;
+  height: 50vh;
+  position: relative;
+  background-image: url("https://www.ultimatedesignertoolkit.com/wp-content/uploads/2015/11/Background_5.jpg");
+  background-position: 0 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding-bottom: 50px; }
+
+.dark-mask-absolute {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(233, 30, 99, 0.35); }
+
+.content-header {
+  position: relative;
+  color: white; }
+
+.search-box-container {
+  margin: auto 10%;
+  font-family: 'Raleway', sans-serif !important; }
+
+.logoSection {
+  color: white;
+  margin: 10px; }
+
+.chipElement {
+  background: #e0e0e0;
+  color: #424242;
+  cursor: default;
+  border-radius: 16px;
+  font-weight: 900;
+  height: 32px;
+  line-height: 32px;
+  margin: 8px 8px 0 0;
+  padding: 0 12px;
+  box-sizing: border-box;
+  max-width: 100%;
+  position: relative; }
+
+@media (max-width: 959px) and (min-width: 600px) {
+  .search-banner {
+    height: 50vh; }
+  .searchBoxLayout {
+    height: 120px; }
+  .search-box-container {
+    margin: auto 10%;
+    font-family: 'Raleway', sans-serif !important; }
+    .search-box-container > div:first-child {
+      height: 250px; } }
+
+@media (max-width: 599px) {
+  .search-box-container {
+    margin: auto 10%;
+    font-family: 'Raleway', sans-serif !important; } }
+
+@media (max-width: 959px) and (min-width: 600px) {
+  .homePageDiv .searchBoxLayout {
+    height: 300px; } }
+
+@media (max-width: 599px) {
+  .fixedTopHeader {
+    position: fixed;
+    top: 0px;
+    z-index: 99999; }
+  .scrollUpSearch {
+    position: fixed;
+    top: 55px;
+    width: 100%;
+    z-index: 99;
+    display: none; }
+  .search-icon-div {
+    padding: 10px; }
+  .fixedHeaderMain {
+    margin-top: 65px; }
+  .homePageDiv .searchBoxLayout {
+    height: 200px; }
+  .homePageDiv .fixedTopHeader {
+    position: relative; }
+  .homePageDiv .search-box-container {
+    margin: auto 5%;
+    width: auto; }
+  .homePageDiv .search-banner {
+    height: 50vh;
+    padding: 0; } }
+
+.searchBoxStores .searchBoxLayout {
+  height: 80px;
+  padding: 20px;
+  background-color: teal; }
+
+@media (max-width: 959px) and (min-width: 600px) {
+  .searchBoxStores .searchBoxLayout {
+    padding: 0;
+    height: 100%; } }
+
+@media (max-width: 599px) {
+  .searchBoxStores .searchBoxLayout {
+    padding: 0;
+    height: 100%; } }
+
 .productPageContainer .singleProductContainer .productTopContainer .productImageContainer {
   padding: 10px;
   background-color: white;
@@ -332,151 +477,6 @@ md-ink-bar {
   border-left: none;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px; }
-
-.mdMenuContainer {
-  width: 250px;
-  text-transform: capitalize;
-  border: 1px solid #eee;
-  border-radius: 3px;
-  font-size: 10px; }
-  .mdMenuContainer .md-button span {
-    width: 100%;
-    text-transform: capitalize;
-    overflow-x: hidden;
-    text-overflow: ellipsis; }
-  .mdMenuContainer .menuHeading {
-    margin: 2px 5px; }
-
-.userActivityButtonContainer {
-  border-radius: 2px;
-  font-size: 14px;
-  height: 40px;
-  margin: 10px;
-  background-color: white;
-  border: 2px solid white; }
-  .userActivityButtonContainer:hover {
-    background-color: #E5E7EC;
-    box-shadow: 0 0 0 1px transparent inset;
-    color: rgba(0, 0, 0, 0.95);
-    border: 2px solid #e7e7e7; }
-  .userActivityButtonContainer span {
-    float: left;
-    margin: 5px;
-    margin-top: 6px; }
-  .userActivityButtonContainer .userName {
-    text-transform: capitalize;
-    margin-top: 10px; }
-  .userActivityButtonContainer .dropIcon {
-    margin-top: 10px; }
-  .userActivityButtonContainer .userActionListImage {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%; }
-
-.search-banner {
-  width: 100%;
-  height: 50vh;
-  position: relative;
-  background-image: url("https://www.ultimatedesignertoolkit.com/wp-content/uploads/2015/11/Background_5.jpg");
-  background-position: 0 0;
-  background-size: cover;
-  background-repeat: no-repeat;
-  padding-bottom: 50px; }
-
-.dark-mask-absolute {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  background-color: rgba(233, 30, 99, 0.35); }
-
-.content-header {
-  position: relative;
-  color: white; }
-
-.search-box-container {
-  margin: auto 10%;
-  font-family: 'Raleway', sans-serif !important; }
-
-.logoSection {
-  color: white;
-  margin: 10px; }
-
-.chipElement {
-  background: #e0e0e0;
-  color: #424242;
-  cursor: default;
-  border-radius: 16px;
-  font-weight: 900;
-  height: 32px;
-  line-height: 32px;
-  margin: 8px 8px 0 0;
-  padding: 0 12px;
-  box-sizing: border-box;
-  max-width: 100%;
-  position: relative; }
-
-@media (max-width: 959px) and (min-width: 600px) {
-  .search-banner {
-    height: 50vh; }
-  .searchBoxLayout {
-    height: 120px; }
-  .search-box-container {
-    margin: auto 10%;
-    font-family: 'Raleway', sans-serif !important; }
-    .search-box-container > div:first-child {
-      height: 250px; } }
-
-@media (max-width: 599px) {
-  .search-box-container {
-    margin: auto 10%;
-    font-family: 'Raleway', sans-serif !important; } }
-
-@media (max-width: 959px) and (min-width: 600px) {
-  .homePageDiv .searchBoxLayout {
-    height: 300px; } }
-
-@media (max-width: 599px) {
-  .fixedTopHeader {
-    position: fixed;
-    top: 0px;
-    z-index: 99999; }
-  .scrollUpSearch {
-    position: fixed;
-    top: 55px;
-    width: 100%;
-    z-index: 99;
-    display: none; }
-  .search-icon-div {
-    padding: 10px; }
-  .fixedHeaderMain {
-    margin-top: 65px; }
-  .homePageDiv .searchBoxLayout {
-    height: 300px; }
-  .homePageDiv .fixedTopHeader {
-    position: relative; }
-  .homePageDiv .search-box-container {
-    margin: auto 5%;
-    width: auto; }
-  .homePageDiv .search-banner {
-    height: 100vh;
-    padding: 0; } }
-
-.searchBoxStores .searchBoxLayout {
-  height: 80px;
-  padding: 20px;
-  background-color: teal; }
-
-@media (max-width: 959px) and (min-width: 600px) {
-  .searchBoxStores .searchBoxLayout {
-    padding: 0;
-    height: 100%; } }
-
-@media (max-width: 599px) {
-  .searchBoxStores .searchBoxLayout {
-    padding: 0;
-    height: 100%; } }
 
 .capital-heading-text {
   text-transform: capitalize;

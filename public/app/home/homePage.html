@@ -6,17 +6,17 @@
   </header>
   <main>
      <div layout="row">
-        <div class="search-banner" layout="column"       layout-align="center center">
-           <div class="dark-mask-absolute"></div>
-           <div layout="row" layout-align="center center">
+        <div class="search-banner" layout="column" layout-align="start center" layout-align-gt-sm="center center">
+          <div class="dark-mask-absolute"></div>
+          <div layout="row" layout-align="center center">
               <div class="search-content">
-                 <div class="content-header md-title">
-                    <h4>Search for stores, products and brands</h4>
+                 <div class="content-header ">
+                    <h3>Search for stores, products and brands</h3>
                  </div>
               </div>
-           </div>
+          </div>
 
-              <div style="width:100%" ng-include="'app/home/searchBoxHome.html'"></div>
+            <div style="width:100%" ng-include="'app/home/searchBoxHome.html'"></div>
 
         </div>
      </div>
@@ -27,7 +27,14 @@
      <div flex="50" flex-xs="100" flex-sm="100">
         <md-content class="md-padding">
     <md-tabs md-selected="selectedIndex" md-border-bottom="" md-autoselect="" md-dynamic-height="">
-      
+      <md-tab  label="Activity">
+        <div class="demo-tab" >
+          
+          <div class="" ng-include="'app/user/views/userFeed.html'" >
+
+        </div>
+      </md-tab>
+
       <md-tab  label="Offers">
         <div class="demo-tab" >
           <div ng-include="''" flex></div>
@@ -42,14 +49,7 @@
 
         </div>
       </md-tab>
-      <md-tab  label="Activity">
-        <div class="demo-tab" >
-          
-          <div class="" ng-include="'app/user/views/userFeed.html'" >
-
-        </div>
-      </md-tab>
-
+      
     </md-tabs>
   </md-content>
 

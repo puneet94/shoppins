@@ -169,9 +169,10 @@ function innerLoadingDirective() {
         restrict: 'E',
         replace:true,
         scope:{
-          loading:"=innerLoading"
+          loading:"=innerLoading",
+          containerHeight:"@containerHeight"
         },
-        template: '<div class="innerSpinnerDiv"><div class="ajaxLoadingSpinner"></div></div>',
+        templateUrl: 'app/common/views/innerLoadingTemplate.html',
         link: function (scope, element, attr) {
               scope.$watch('loading', function (val) {
                   if (val)
@@ -179,6 +180,8 @@ function innerLoadingDirective() {
                   else
                       $(element).hide();
               });
+              
+              $('.innerLoadingContainer').height(scope.containerHeight);
         }
       };
   }

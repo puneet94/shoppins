@@ -27,7 +27,6 @@ adminRouter.route('/offer/:offerId/:storeId')
 	.put(commons.ensureAuthenticated,commons.ensureStoreAdminAuthenticated,offerController.updateOffer)
 	.delete(commons.ensureAuthenticated,commons.ensureStoreAdminAuthenticated,offerController.deleteOffer);
 
-
 adminRouter.route('/store/products')
 .get(commons.ensureAuthenticated,function(req,res){
   res.send('store');

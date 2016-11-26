@@ -1,8 +1,8 @@
 
 <div ng-controller="StoreListController as slc">
 	<h3 class="storeListHeading">{{slc.storesSearchHeader.split("-").join(" ")}}</h3>
-	<loading-directive loading="slc.loading"></loading-directive>
-	<h1 ng-if="slc.storesList.length==0">No stores available</h1>
+	
+	<!--<h1 ng-if="slc.storesList.length==0">No stores available</h1>-->
 	<div ng-repeat="store in slc.storesList track by store._id">
 
 		<md-card >
@@ -73,5 +73,6 @@
 
 		</md-card>
 	</div>
+	<inner-loading-directive inner-loading="slc.loading" container-height="200px"></inner-loading-directive>
 	<button ng-click="slc.getStoresCollection()" ng-cloak ng-if="slc.storesList.length<slc.totalStores">LoadMore</button>
 </div>

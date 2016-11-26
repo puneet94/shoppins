@@ -12,7 +12,6 @@ var request = require('request');
 var jwt = require('jwt-simple');
 
 
-
 //Variables
 var port = process.env.PORT || 3000;
 var http = require('http');
@@ -22,7 +21,6 @@ var server = http.createServer(app);
 //Imports from custom made js
 var facebookAuth  = require('./services/facebookAuth.js');
 var createJWT = require('./services/jwtService.js');
-
 
 
 var storeRouter = require('./routes/store');
@@ -81,8 +79,3 @@ app.listen(app.get('port'),function(){
 	console.log("Listening");
 	console.log(__dirname);
 })
-/*
-server.listen(3000,'0.0.0.0',function(){
-  console.log("Listening");
-  console.log(__dirname);
-})*/

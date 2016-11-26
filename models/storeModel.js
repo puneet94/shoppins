@@ -273,6 +273,7 @@ var ProductSchema = new Schema({
 	visits:[{ type:Schema.ObjectId, ref:"Visit" }],
 	bannerImage: String,
 	productImages:[String],
+	images:[String],
 	imagesMin:[String],
 	visitsCount: Number,
 	reviewsCount:Number,

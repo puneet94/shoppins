@@ -40,19 +40,7 @@ angular.module('app.admin',[]).config(['$routeProvider',
           redirectIfNotAuthenticated: redirectIfNotAuthenticated,
           redirectIfNotStoreAuthenticated: redirectIfNotStoreAuthenticated
         }
-      })/*.when('/store/storesCollection/category/:category/:location/:slug?', {
-        templateUrl: 'app/store/views/storesCategoryCollection.html',
-        controller: 'StoreCategoryCollectionController',
-        controllerAs: 'sccc'
-      }).when('/store/storesCollection/location/:location/:slug?', {
-        templateUrl: 'app/store/views/storesLocationCollection.html',
-        controller: 'StoreLocationCollectionController',
-        controllerAs: 'slcc'
-      }).when('/store/singleStore/:storeId/:myslug?', {
-        templateUrl: 'app/store/views/singleStore.html',
-        controller: 'SingleStoreController',
-        controllerAs: 'ssc'
-      })*/;
+      });
   }]);
 
 
@@ -112,9 +100,9 @@ angular
   .config(["$routeProvider","$httpProvider","$authProvider",authConfig]);
   function authConfig($routeProvider,$httpProvider,$authProvider) {
     //shopuae
-    var fbClientId = '991629147629579';
-    //shoppinss
-    //var fbclientId = '1068203956594250';
+    //var fbClientId = '991629147629579';
+    //shoppins
+    var fbClientId = '1068203956594250';
     var authenticateUrl = 'https://shoppins.herokuapp.com/authenticate';
     $routeProvider
       .when('/signup',{
@@ -137,7 +125,6 @@ angular
         clientId: fbClientId,
         url:authenticateUrl+'/auth/facebook'
       });
-      //$httpProvider.interceptors.push('authInterceptor');
   }
 })(window.angular);
 
@@ -149,7 +136,7 @@ angular.module('app.common',[]);
 
 //mongod.exe --storageEngine=mmapv1
 
-//https://www.npmjs.com/package/ng-file-upload#node
+
 
 //tvBBDUqIvQAAAAAAAAAACDM-ioz0dFLdYfD6B60bpAKBpHNB79L42WhumJM_DAYG dropbox access token
 
@@ -616,9 +603,10 @@ function innerLoadingDirective() {
         restrict: 'E',
         replace:true,
         scope:{
-          loading:"=innerLoading"
+          loading:"=innerLoading",
+          containerHeight:"@containerHeight"
         },
-        template: '<div class="innerSpinnerDiv"><div class="ajaxLoadingSpinner"></div></div>',
+        templateUrl: 'app/common/views/innerLoadingTemplate.html',
         link: function (scope, element, attr) {
               scope.$watch('loading', function (val) {
                   if (val)
@@ -626,6 +614,8 @@ function innerLoadingDirective() {
                   else
                       $(element).hide();
               });
+              
+              $('.innerLoadingContainer').height(scope.containerHeight);
         }
       };
   }
@@ -1790,28 +1780,6 @@ angular.module('app.user')
   }
 })(window.angular);
 
-
-(function(angular){
-  angular.module('app.product')
-  .directive('singleProductDirective',[singleProductDirective]);
-  
-  function singleProductDirective(){
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl:'app/product/views/singleProductTemplate.html',
-      scope:{
-        product:'=singleProduct'
-      },
-      link: function(scope,element,attrs){
-
-      }
-    };
-  }
-  
-
-})(window.angular);
-
 (function(angular){
   angular.module('app.product')
 
@@ -2029,6 +1997,28 @@ angular.module('app.product')
     }
 
   }
+
+})(window.angular);
+
+
+(function(angular){
+  angular.module('app.product')
+  .directive('singleProductDirective',[singleProductDirective]);
+  
+  function singleProductDirective(){
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl:'app/product/views/singleProductTemplate.html',
+      scope:{
+        product:'=singleProduct'
+      },
+      link: function(scope,element,attrs){
+
+      }
+    };
+  }
+  
 
 })(window.angular);
 
@@ -2473,9 +2463,7 @@ angular.module('app.store')
       return Object.keys(ssc.storeData.address).map(function(key){return ssc.storeData.address[key];}).join(' ');
     }
      $scope.showAlert = function(ev) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    // Modal dialogs should fully cover application
-    // to prevent interaction outside of dialog
+    
     $mdDialog.show(
       $mdDialog.alert()
         .parent(angular.element(document.querySelector('#popupContainer')))
@@ -2496,8 +2484,7 @@ angular.module('app.store')
           obj.src=ssc.storeData.storeImages[i];
           ssc.storeImagesObj.push(obj);
         }
-        //ssc.showImagesCarousel = true;
-        console.log(ssc.storeImagesObj);
+        
         ssc.loading = false;
         if($location.search().param){
             scrollToIdService.scrollToId($location.search().param);
@@ -3276,16 +3263,16 @@ angular.module('app.user')
       ual.loading = true;
       if(ual.authCheck){
         activityService.getUserFollowingActivity($auth.getPayload().sub).then(function(result){
-        ual.activityData= result.data;
-        ual.loading = false;
+       ual.activityData= result.data;
+       ual.loading = false;
       });  
       }
       else{
        activityService.getAllActivity().then(function(result){
         console.log("from the activity");
         console.log(result);
-        ual.activityData= result.data;
-        ual.loading = false;
+       ual.activityData= result.data;
+       ual.loading = false;
       }); 
       }
       

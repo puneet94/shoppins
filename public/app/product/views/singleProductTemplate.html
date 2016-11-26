@@ -6,7 +6,12 @@
       
       <div class="productDetailsContainer" flex="50" layout="column" layout-align="space-between stretch">
         <div layout="row" layout-align="space-between end">
-          <div class="productName" ng-click="plc.getSingleProduct(product)"> {{::product.name}}</div>
+          <div class="productName" > 
+          <a ng-href="#/product/singleProduct/{{product._id}}">
+              {{::product.name}}
+          </a>
+          
+          </div>
           <div class="productPrice"> {{::product.price.value}} {{::product.price.currency}}</div>
         </div>
         <div>

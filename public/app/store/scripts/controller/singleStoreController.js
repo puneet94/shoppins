@@ -15,9 +15,7 @@ angular.module('app.store')
       return Object.keys(ssc.storeData.address).map(function(key){return ssc.storeData.address[key];}).join(' ');
     }
      $scope.showAlert = function(ev) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    // Modal dialogs should fully cover application
-    // to prevent interaction outside of dialog
+    
     $mdDialog.show(
       $mdDialog.alert()
         .parent(angular.element(document.querySelector('#popupContainer')))
@@ -38,8 +36,7 @@ angular.module('app.store')
           obj.src=ssc.storeData.storeImages[i];
           ssc.storeImagesObj.push(obj);
         }
-        //ssc.showImagesCarousel = true;
-        console.log(ssc.storeImagesObj);
+        
         ssc.loading = false;
         if($location.search().param){
             scrollToIdService.scrollToId($location.search().param);

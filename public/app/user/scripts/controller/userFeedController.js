@@ -13,16 +13,16 @@ angular.module('app.user')
       ual.loading = true;
       if(ual.authCheck){
         activityService.getUserFollowingActivity($auth.getPayload().sub).then(function(result){
-        ual.activityData= result.data;
-        ual.loading = false;
+       ual.activityData= result.data;
+       ual.loading = false;
       });  
       }
       else{
        activityService.getAllActivity().then(function(result){
         console.log("from the activity");
         console.log(result);
-        ual.activityData= result.data;
-        ual.loading = false;
+       ual.activityData= result.data;
+       ual.loading = false;
       }); 
       }
       

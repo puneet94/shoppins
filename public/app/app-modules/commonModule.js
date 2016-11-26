@@ -6,7 +6,7 @@ angular.module('app.common',[]);
 
 //mongod.exe --storageEngine=mmapv1
 
-//https://www.npmjs.com/package/ng-file-upload#node
+
 
 //tvBBDUqIvQAAAAAAAAAACDM-ioz0dFLdYfD6B60bpAKBpHNB79L42WhumJM_DAYG dropbox access token
 

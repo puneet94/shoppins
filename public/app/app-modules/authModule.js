@@ -18,9 +18,9 @@ angular
   .config(["$routeProvider","$httpProvider","$authProvider",authConfig]);
   function authConfig($routeProvider,$httpProvider,$authProvider) {
     //shopuae
-    var fbClientId = '991629147629579';
-    //shoppinss
-    //var fbclientId = '1068203956594250';
+    //var fbClientId = '991629147629579';
+    //shoppins
+    var fbClientId = '1068203956594250';
     var authenticateUrl = 'http://localhost:3000/authenticate';
     $routeProvider
       .when('/signup',{
@@ -43,6 +43,5 @@ angular
         clientId: fbClientId,
         url:authenticateUrl+'/auth/facebook'
       });
-      //$httpProvider.interceptors.push('authInterceptor');
   }
 })(window.angular);
