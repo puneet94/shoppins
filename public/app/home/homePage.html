@@ -1,0 +1,62 @@
+
+<div class="homePageDiv">
+
+  <header layout="row">
+     <div ng-include="'app/home/pageHeader.html'" flex></div>
+  </header>
+  <main>
+     <div layout="row">
+        <div class="search-banner" layout="column"       layout-align="center center">
+           <div class="dark-mask-absolute"></div>
+           <div layout="row" layout-align="center center">
+              <div class="search-content">
+                 <div class="content-header md-title">
+                    <h4>Search for stores, products and brands</h4>
+                 </div>
+              </div>
+           </div>
+
+              <div style="width:100%" ng-include="'app/home/searchBoxHome.html'"></div>
+
+        </div>
+     </div>
+    <div layout="row" layout-xs="column" layout-sm="column" layout-wrap>
+     <div flex="20" flex-xs="100" flex-sm="100">
+       <!--<div ng-include="'app/home/storeCategoryList.html'"></div>-->
+     </div>
+     <div flex="50" flex-xs="100" flex-sm="100">
+        <md-content class="md-padding">
+    <md-tabs md-selected="selectedIndex" md-border-bottom="" md-autoselect="" md-dynamic-height="">
+      
+      <md-tab  label="Offers">
+        <div class="demo-tab" >
+          <div ng-include="''" flex></div>
+          <br>
+
+        </div>
+      </md-tab>
+      <md-tab  label="Deals of the Day">
+        <div class="demo-tab" >
+          
+          <div  ng-include="''" >
+
+        </div>
+      </md-tab>
+      <md-tab  label="Activity">
+        <div class="demo-tab" >
+          
+          <div class="" ng-include="'app/user/views/userFeed.html'" >
+
+        </div>
+      </md-tab>
+
+    </md-tabs>
+  </md-content>
+
+       
+     </div>
+     <div flex="20" flex-xs="100" flex-sm="100"><!--Most reviewed--></div>
+     </div>
+
+  </main>
+</div>

@@ -1,0 +1,72 @@
+<div ng-controller="StoreStatisticsController as ssc" layout="column" ng-cloak="">
+<md-content class="tabsContent">
+  <md-tabs md-selected="selectedIndex" md-border-bottom="" md-autoselect="" md-dynamic-height="">
+    
+    <md-tab>
+      <md-tab-label class="tabLabelContainer">
+        <div class="tabLabel">
+          <span class="tabLabelIcon"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
+          <span class="tabLabelText">Store Info</span>  
+        </div>
+        
+      </md-tab-label>
+      <md-tab-body>
+        <div  >
+          <div ng-include="'app/admin/views/adminEditStore.html'" flex></div>
+          <br>
+
+        </div>
+      </md-tab-body>
+    </md-tab>
+    
+        
+    <md-tab  label="Products">
+      <md-tab-label class="tabLabelContainer">
+        <div class="tabLabel">
+          <span class="tabLabelIcon"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
+          <span class="tabLabelText">Products</span>  
+        </div>
+        
+      </md-tab-label>
+      <md-tab-body>
+        <div ng-include="'app/admin/views/adminCreateProduct.html'" flex></div>
+              <h3>Products</h3>
+              <div class="" ng-include="'app/product/views/productsStoreCollection.html'" ></div>
+      </md-tab-body>
+      
+    </md-tab>
+    <md-tab  label="Offers">
+      <md-tab-label class="tabLabelContainer">
+        <div class="tabLabel">
+          <span class="tabLabelIcon"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
+          <span class="tabLabelText">Offers</span>  
+        </div>
+        
+      </md-tab-label>
+      <md-tab-body>
+        
+      </md-tab-body>
+    </md-tab>
+    <md-tab  label="Reviews">
+    <md-tab-label class="tabLabelContainer">
+        <div class="tabLabel">
+          <span class="tabLabelIcon"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
+          <span class="tabLabelText">Reviews</span>  
+        </div>
+        
+      </md-tab-label>
+      <md-tab-body>
+        <div class="" ng-include="'app/reviews/views/storeReviewList.html'" ></div>
+      </md-tab-body>
+      
+    </md-tab>
+  </md-tabs>
+</md-content>
+
+
+</div>
+
+<!--
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that can be foundin the LICENSE file at http://material.angularjs.org/HEAD/license.
+-->

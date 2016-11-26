@@ -1,0 +1,19 @@
+<div class="filterDirectiveTemplate">
+    <div class="filterNameHeading">
+        <h5>{{filterName}}</h5>
+        <button type="button" class="clearFilterButton" name="button" ng-disabled="!radioModel[filterName.toLowerCase()]"  remove-class="highlightClass" ng-click="clearClick()">Clear</button>
+        <div style="clear:both;"></div>
+    </div>
+
+    <div class="filterDirectiveRadioGroup" >
+      <md-radio-group ng-model="radioModel[filterName.toLowerCase()]" ng-change="radioChange()">
+        <md-radio-button ng-repeat="item in radioRepeat" value="{{item}}" class="filterRadioButton" add-class="highlightClass" sibling-remove-class="highlightClass">
+          <span class="filterDirectiveRadioText hello" >
+            {{item}}
+          </span>
+        </md-radio-button>
+      </md-radio-group>
+    </div>
+
+    
+</div>

@@ -1,0 +1,9 @@
+<div ng-controller="CategoryListController as clc">
+	<md-list>
+		<md-list-item ng-repeat="category in clc.cateList" ng-click="clc.categoryLinkClicked(category)">
+    		<img alt="{{ category.name }}" ng-src="{{ category.name }}"+".png" class="md-avatar" />
+    		<p>{{ category }}</p>
+  		</md-list-item>
+	</md-list>
+	<button ng-click="clc.getCategories()" ng-hide="clc.categLoadMore">LoadMore</button>
+</div>

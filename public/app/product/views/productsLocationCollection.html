@@ -1,0 +1,45 @@
+<div class="storesLocationCollection">
+
+</div>
+<header layout="row"  >
+	<div ng-include="'app/home/pageHeader.html'" flex></div>
+</header>
+<div ng-include="'app/home/searchBox.html'"></div>
+
+<main class="fixedHeaderMain">
+	<h3 toggle-mobile=".locationFilters" hide-lg hide-md>Filters</h3>
+<div layout="row" layout-wrap>
+
+		<div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100" >
+			<h3 hide-sm hide-xs>Filters</h3>
+			<div class="" layout-sm="column" layout-xs="column"  >
+				
+				<filter-directive
+					filter-name="Area"
+					radio-model="plc.areaModel"
+					radio-change="plc.areaRadioClicked()"
+					radio-repeat="plc.areas"
+					clear-click="plc.clearAreaFilters()">
+				</filter-directive>
+				<filter-directive
+					filter-name="Category"
+					radio-model="plc.categoryModel"
+					radio-change="plc.categoryRadioClicked()"
+					radio-repeat="plc.categories"
+					clear-click="plc.clearCategoryFilters()">
+				</filter-directive>
+			</div>
+
+
+    </div>
+	<div flex="80" flex-sm="100" flex-xs="100">
+		<div ng-include="'app/product/views/productList.html'"></div>
+
+
+	</div>
+	
+
+
+</div>
+</main>
+</div>

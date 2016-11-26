@@ -1,0 +1,96 @@
+<div class="layout-column flex">
+   <h2>Create Product</h2>
+
+   <form name="myFrom" class="" style="">
+      <div class="formItem  layout-column" >
+         <div class="productMainImage" style="background-image: url('{{csc.productForm.bannerImage}}')">
+      
+         </div>
+         <div>
+          <button class="imageUploadClick" type="file" ngf-select="csc.uploadProductImage($file, $invalidFiles)"
+          accept="image/*" ngf-max-height="1000" ngf-max-size="10MB">
+            Upload product image
+          </button>
+          </div>
+         <div>
+            <button ngf-select="csc.uploadMultipleImages($files)" multiple accept="image/*">Upload Images</button>
+            <br>
+
+            {{csc.errorMsg}}
+         </div>
+        </div>
+        <div layout="row" class="productImagesCollection">
+          <images-list-directive images-list="csc.productForm.productImages"></images-list-directive>  
+        </div>
+        
+         <div>
+            <md-input-container >
+               <label >Product Name</label>
+               <input ng-model="csc.productForm.name" type="text"  id="input_2"   required="required" style="">
+               <div ng-messages=""  style="">
+                  <!-- ngMessage: required -->
+                  <div ng-message="required" class="" style="">This field is required</div>
+               </div>
+            </md-input-container>
+         </div>
+         <div>
+            <md-input-container >
+               <label >Price</label>
+               <input ng-model="csc.productForm.price.value" type="number"     required="required" style="">
+               <div ng-messages=""  style="">
+                  <!-- ngMessage: required -->
+                  <div ng-message="required" class="" style="">This field is required</div>
+               </div>
+            </md-input-container>
+         </div>
+         <div>
+            <md-input-container >
+               <label >Price Currency</label>
+               <input ng-model="csc.productForm.price.currency" type="text"     >
+               <div ng-messages=""  style="">
+                  <!-- ngMessage: required -->
+                  <div ng-message="required" class="" style="">This field is required</div>
+               </div>
+            </md-input-container>
+         </div>
+         <div>
+
+            <div class="formItem-help-text">For multiple separate by comma Ex: sports, fashion etc</div>
+
+                  <md-input-container >
+                     <label >Category</label>
+                     <input ng-model="csc.productForm.category" type="text" id="input_16" required="required" style="">
+                     <div ng-messages="InputView.form.$error" >
+
+                        <div ng-message="required" class="" style="">This field is required</div>
+                     </div>
+                  </md-input-container>
+         </div>
+         <div>
+            <div class="formItem-help-text ">any specific product type you sell</div>
+            <md-input-container >
+               <label >Sub Category</label>
+               <input ng-model="csc.productForm.subCategory" type="text" />
+               <div ng-messages="InputView.form.$error" style="">
+                  <!-- ngMessage: required -->
+               </div>
+            </md-input-container>
+
+            <!-- end ngSwitchWhen: --><!-- ngSwitchWhen: textarea --><!-- ngSwitchWhen: matrix -->
+         </div>
+         
+         <div>
+            <div class="formItem-help-text ">A brief description about your product</div>
+
+            <md-input-container  >
+               <label >Description</label>
+               <textarea ng-model="csc.productForm.description"  rows="1" aria-multiline="true" ></textarea>
+               <div ng-messages="TextareaView.form.$error" >
+                  <!-- ngMessage: required -->
+               </div>
+            </md-input-container>  
+         </div>
+         
+               <button ng-click="csc.createProduct()">Submit</button>
+   </form>
+</div>

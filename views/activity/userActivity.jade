@@ -1,0 +1,163 @@
+for i,index in activity
+	div(class="singleActivity")
+		if i.statement == "reviewed store"
+			div(class="activityHeading")
+				- var userLink = "#/user/"+i.review.user._id
+				div(class="creatorImageContainer")
+					a(ng-href='#{userLink}')
+						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}')
+				div(class="activityHeadingTextContainer")
+					h5(class="activityHeadingText")
+						span(class="activityHeadingTextInfo")
+							a(ng-href='#{userLink}').
+								#{i.creator.displayName}
+						span(class="activityHeadingTextInfo").
+							#{i.statement}
+						
+						span(class="activityHeadingTextInfo")
+							- var storeLink = "#/store/singleStore/"+i.review.store._id
+							a(ng-href='#{storeLink}').
+								#{i.review.store.name}
+				
+					h6(class="activityTime")
+						span.
+							#{i.time}
+				div(class="clearBoth")
+			div(class="activityContent")
+				div(md-whiteframe="3" class="activityContentText")
+					div
+						div(class="activityReviewStoreImageContainer")
+							div(class="reviewStoreImage" afkl-lazy-image="#{i.review.store.bannerImage}")
+						div(class="activityReviewContentContainer")
+							div(class="activityReviewRating")
+								- var rating = parseInt(i.review.rating)
+								each _ in Array(rating)
+									i(aria-hidden="true" class="fa fa-star")
+							div(class="activityReviewDescription")
+								span.
+									#{i.review.description}
+		else if i.statement == "reviewed product"
+			div(class="activityHeading")
+				- var userLink = "#/user/"+i.review.user._id
+				div(class="creatorImageContainer")
+					a(ng-href='#{userLink}')
+						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}')
+				div(class="activityHeadingTextContainer")
+					h5(class="activityHeadingText")
+						span(class="activityHeadingTextInfo")
+							a(ng-href='#{userLink}').
+								#{i.creator.displayName}
+						span(class="activityHeadingTextInfo").
+							#{i.statement}
+						
+						span(class="activityHeadingTextInfo")
+							- var productLink = "#/product/singleProduct/"+i.review.product._id
+							a(ng-href='#{productLink}').
+								#{i.review.product.name}
+						
+					h6(class="activityTime")
+						span.
+							#{i.time}
+				div(class="clearBoth")
+			div(class="activityContent")
+				div(md-whiteframe="3" class="activityContentText")
+					div
+						div(class="activityReviewProductImageContainer")
+							div(class="reviewProductImage" afkl-lazy-image="#{i.review.product.images[0]}")
+						div(class="activityReviewContentContainer")
+							div(class="activityReviewRating")
+								- var rating = parseInt(i.review.rating)
+								each _ in Array(rating)
+									i(aria-hidden="true" class="fa fa-star")
+							div(class="activityReviewDescription")
+								span.
+									#{i.review.description}
+		else if i.statement == "followed"
+			div(class="activityHeading")
+				- var userLink = "#/user/"+i.creator._id
+				div(class="creatorImageContainer")
+					a(ng-href='#{userLink}')
+						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}')
+				div(class="activityHeadingTextContainer")
+					h5(class="activityHeadingText")
+						span(class="activityHeadingTextInfo")
+							a(ng-href='#{userLink}').
+								#{i.creator.displayName}
+						span(class="activityHeadingTextInfo").
+							#{i.statement}
+						span(class="activityHeadingTextInfo")
+							- var followedLink = "#/user/"+i.followed._id
+							a(ng-href='#{followedLink}').
+								#{i.followed.displayName}
+				
+					h6(class="activityTime")
+						span.
+							#{i.time}
+				div(class="clearBoth")
+			div(class="activityContent")
+				div(md-whiteframe="3" class="activityContentText")
+					div
+						div(class="activityFollowCreatorImageContainer")
+							div(class="followCreatorImage" afkl-lazy-image="#{i.creator.picture}")
+						div(class="activityFollowFollowedImageContainer")
+							div(class="followFollowedImage" afkl-lazy-image="#{i.followed.picture}")
+						div(class="clearBoth")
+							
+		else if i.statement == "visited store"
+			div(class="activityHeading")
+				- var userLink = "#/user/"+i.creator._id
+				div(class="creatorImageContainer")
+					a(ng-href='#{userLink}')
+						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}')
+				div(class="activityHeadingTextContainer")
+					h5(class="activityHeadingText")
+						span(class="activityHeadingTextInfo")
+							a(ng-href='#{userLink}').
+								#{i.creator.displayName}
+						span(class="activityHeadingTextInfo").
+							#{i.statement}
+						
+						span(class="activityHeadingTextInfo")
+							- var storeLink = "#/store/singleStore/"+i.store._id
+							a(ng-href='#{storeLink}').
+								#{i.store.name}
+				
+					h6(class="activityTime")
+						span.
+							#{i.time}
+				div(class="clearBoth")
+			div(class="activityContent")
+				div(md-whiteframe="3" class="activityContentText")
+					div
+						div(class="activityReviewStoreImageContainer")
+							div(class="reviewStoreImage" afkl-lazy-image="#{i.store.bannerImage}")
+
+		else if i.statement == "purchased product"
+			div(class="activityHeading")
+				- var userLink = "#/user/"+i.creator._id
+				div(class="creatorImageContainer")
+					a(ng-href='#{userLink}')
+						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}')
+				div(class="activityHeadingTextContainer")
+					h5(class="activityHeadingText")
+						span(class="activityHeadingTextInfo")
+							a(ng-href='#{userLink}').
+								#{i.creator.displayName}
+						span(class="activityHeadingTextInfo").
+							#{i.statement}
+						
+						span(class="activityHeadingTextInfo")
+							- var productLink = "#/product/singleProduct/"+i.product._id
+							a(ng-href='#{productLink}').
+								#{i.product.name}
+						
+					h6(class="activityTime")
+						span.
+							#{i.time}
+				div(class="clearBoth")
+			div(class="activityContent")
+				div(md-whiteframe="3" class="activityContentText")
+					div
+						div(class="activityReviewProductImageContainer")
+							div(class="reviewProductImage" afkl-lazy-image="#{i.product.images[0]}")
+						

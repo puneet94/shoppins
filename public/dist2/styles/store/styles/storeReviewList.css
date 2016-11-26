@@ -1,0 +1,64 @@
+.userImg {
+  width: 50px;
+  height: 50px;
+  background-image: url("http://opstatic.com/img/profile/default_user.jpg");
+  background-size: cover; }
+
+.reviewListSection .singleReview {
+  padding: 5px; }
+
+.reviewListSection .userSection {
+  font-size: 12px; }
+
+.reviewListSection .userImg {
+  width: 50px;
+  height: 50px;
+  background-image: url("http://opstatic.com/img/profile/default_user.jpg");
+  background-size: cover; }
+
+.reviewListSection .userStats ul {
+  list-style: none; }
+  .reviewListSection .userStats ul .userName {
+    font-size: 14px;
+    font-weight: bold; }
+  .reviewListSection .userStats ul .userFollowers {
+    font-weight: bold; }
+
+.reviewListSection .contentRatingSection {
+  font-size: 11px;
+  margin-top: 5px; }
+
+.userRatingSection > input {
+  display: none; }
+
+.userRatingSection > label:before {
+  margin: 5px;
+  font-size: 1.25em;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f005"; }
+
+.userRatingSection > .half:before {
+  content: "\f089";
+  position: absolute; }
+
+.userRatingSection > label {
+  color: #ddd;
+  float: right; }
+
+.userRatingSection > input:checked ~ label {
+  color: #FFD700; }
+
+.userRatingSection:not(:checked) > label:hover {
+  color: #FFD700; }
+  .userRatingSection:not(:checked) > label:hover ~ label {
+    color: #FFD700; }
+
+.userRatingSection > input:checked + label:hover, .userRatingSection > input:checked ~ label:hover {
+  color: #FFED85; }
+
+.userRatingSection > label:hover ~ input:checked ~ label, .userRatingSection > input:checked ~ label:hover ~ label {
+  color: #FFED85; }
+
+/***** CSS Magic to Highlight Stars on Hover **** */
+/* hover previous stars in list */

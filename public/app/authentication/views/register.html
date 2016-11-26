@@ -1,0 +1,57 @@
+
+<form name="registerForm" ng-submit="rcl.formSubmit()" novalidate="novalidate">
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h2>SignUp</h2><span flex="flex"></span>
+
+		</div>
+	</md-toolbar>
+	<md-content layout="row">
+		<div class="md-dialog-content">
+			<md-input-container class="md-block">
+				<label>Email</label>
+				<input ng-model="rcl.user.email" type="email" name="email" placeholder="Email (required)" required="true"/>
+				<div ng-messages="registerForm.email.$error">
+					<div ng-message="required">This is required.....</div>
+					<div ng-message="email">Valid email</div>
+					<!--<div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>-->
+				</div>
+			</md-input-container>
+			<md-input-container class="md-block">
+				<label>FirstName</label>
+				<input ng-model="rcl.user.firstName" type="text" name="firstName" placeholder="Firstname (required)" required="true" pattern="[a-zA-Z\s]+"/>
+				<div ng-messages="registerForm.firstName.$error">
+					<div ng-message="required">This is required.....</div>
+				</div>
+			</md-input-container>
+			<md-input-container class="md-block">
+				<label>LastName</label>
+				<input ng-model="rcl.user.lastName" type="text" name="lastName" placeholder="Lastname" pattern="[a-zA-Z\s]+"/>
+			</md-input-container>
+
+			<md-input-container class="md-block">
+				<label>Password</label>
+				<input ng-model="rcl.user.password" type="password" name="password" md-minlength="6" placeholder="Password (required)" required="true"/>
+				<div ng-messages="registerForm.password.$error">
+					<div ng-message="required">This is required.</div>
+					<div ng-message="md-minlength">The password has to be more than 6 characters long.</div>
+				</div>
+			</md-input-container>
+      <md-input-container class="md-block">
+				<label>Password</label>
+				<input ng-model="rcl.user.password_confirm" type="password" name="password_confirm" same-as="rcl.user.password" md-minlength="6" placeholder="Password (required)" required="true"/>
+        <p ng-show="registerForm.password_confirm.$dirty &amp;&amp; registerForm.password_confirm.$invalid" class="help-block">please match the passwords</p>
+        <div ng-messages="registerForm.password_confirm.$dirty &amp;&amp; registerForm.password_confirm.$invalid">
+				
+					<div ng-message="required">This is required.</div>
+					<div ng-message="md-minlength">The name has to be more than ch 6aracters long.</div>
+				</div>
+			</md-input-container>
+			<section layout="row" layout-sm="column" layout-align="center center" layout-wrap="layout-wrap">
+				<md-button  type="submit" class="md-raised md-primary" ng-disabled="registerForm.$invalid">register</md-button>
+			</section>
+
+		</div>
+	</md-content>
+
+</form>

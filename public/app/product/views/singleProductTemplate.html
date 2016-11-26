@@ -1,0 +1,49 @@
+  
+  <div layout="row" layout-align="space-between stretch">
+      <div class="productImageContainer" flex="50">
+        <img class="singleProductImage" ng-src="{{::product.bannerImage||product.images[0]||product.imagesMin[0]||'http://www.planwallpaper.com/static/images/desktop-year-of-the-tiger-images-wallpaper.jpg'}}"/>  
+      </div>
+      
+      <div class="productDetailsContainer" flex="50" layout="column" layout-align="space-between stretch">
+        <div layout="row" layout-align="space-between end">
+          <div class="productName" ng-click="plc.getSingleProduct(product)"> {{::product.name}}</div>
+          <div class="productPrice"> {{::product.price.value}} {{::product.price.currency}}</div>
+        </div>
+        <div>
+          <div >
+            <span ng-repeat="category in product.category" class="productCategory">
+              {{::category}}
+            
+            </span>
+          </div>
+          <div>
+            <span ng-repeat="subCat in product.subCategory" class="productSubCategory">
+              {{::subCat}}
+            </span>
+          </div>
+        </div>
+        <div class="productStatsContainer" layout="row" layout-align="end none">
+          <div layout="row" layout-align="space-between none">
+            <div class="productStatsEntity">
+              <span> {{::product.reviewsCount}}</span>  
+              <span><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span> 
+            
+            </div>
+            <div class="productStatsEntity">
+              <span > {{::product.upvotesCount}}</span>  
+              <span><i class="fa fa-hand-paper-o" aria-hidden="true"></i></span>
+            
+            </div>
+            <div class="productStatsEntity">
+              <span > {{::product.visitsCount}}</span>  
+              <span><i class="fa fa-cart-arrow-down" aria-hidden="true"></i></span>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+      </div>
+  
+</div>  
+
