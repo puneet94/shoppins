@@ -1,10 +1,10 @@
   
-  <div layout="row" layout-align="space-between stretch">
-      <div class="productImageContainer" flex="50">
+  <div layout="row" layout-align="space-between stretch" layout-sm="column" layout-xs="column">
+      <div class="productImageContainer" flex="50" flex-sm="100" flex-xs="100">
         <img class="singleProductImage" ng-src="{{::product.bannerImage||product.images[0]||product.imagesMin[0]||'http://www.planwallpaper.com/static/images/desktop-year-of-the-tiger-images-wallpaper.jpg'}}"/>  
       </div>
       
-      <div class="productDetailsContainer" flex="50" layout="column" layout-align="space-between stretch">
+      <div class="productDetailsContainer" flex="50" flex-sm="100" flex-xs="100" layout="column" layout-align="space-between stretch">
         <div layout="row" layout-align="space-between end">
           <div class="productName" > 
           <a ng-href="#/product/singleProduct/{{product._id}}">

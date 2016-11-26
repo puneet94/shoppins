@@ -259,12 +259,12 @@ md-ink-bar {
   background: #e0e0e0;
   color: #424242;
   cursor: default;
-  border-radius: 16px;
-  font-weight: 900;
+  border-radius: 3px;
+  font-weight: 500;
   height: 32px;
   line-height: 32px;
   margin: 8px 8px 0 0;
-  padding: 0 12px;
+  padding: 2px 12px;
   box-sizing: border-box;
   max-width: 100%;
   position: relative; }
