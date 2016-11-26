@@ -112,10 +112,10 @@ angular
   .config(["$routeProvider","$httpProvider","$authProvider",authConfig]);
   function authConfig($routeProvider,$httpProvider,$authProvider) {
     //shopuae
-    var fbClientId = '991629147629579';
+    //var fbClientId = '991629147629579';
     //shoppinss
-    //var fbclientId = '1068203956594250';
-    var authenticateUrl = 'http://localhost:3000/authenticate';
+    var fbclientId = '1068203956594250';
+    var authenticateUrl = 'https://shoppins.herokuapp.com/authenticate';
     $routeProvider
       .when('/signup',{
         templateUrl:'app/authentication/views/register.html',
@@ -391,7 +391,7 @@ angular.module('app.common')
 	}
 
 	function AjaxURL(){
-		this.baseUrl = "http://localhost:3000/";
+		this.baseUrl = "https://shoppins.herokuapp.com/";
 
 		this.getStoresWithCatgeoryLocation = this.baseUrl + "store/storesCollection/category/";//:category/:location?";
 		this.getStoresWithNameLocation = this.baseUrl + "store/storesCollection/storeName/";
