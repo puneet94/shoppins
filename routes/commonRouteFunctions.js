@@ -105,7 +105,6 @@ cob.storeRatingAvg = function(req,res){
 cob.enterActivity  = function(activ){
   var activity = new Activity();
   activity.creator = activ.creator||null;
-  activity.creatorStore = activ.creatorStore||null;
   activity.review = activ.review || null;
   activity.store = activ.store || null;
   activity.product = activ.product || null;
@@ -119,11 +118,13 @@ cob.enterActivity  = function(activ){
         return handleError(err)
       }
       else{
-        activity.save(function(err){
+        activity.save(function(err,savedActivity){
             if(err){
               console.log(err);
               return res.send(err);
             }
+            console.log("got saved here");
+            console.log(savedActivity);
           });
       }
     })

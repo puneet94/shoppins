@@ -20,8 +20,8 @@ for i,index in activity
 								#{i.review.store.name}
 				
 					h6(class="activityTime")
-						span.
-							#{i.time}
+						span(title='#{moment(i.time).format("dddd, MMMM Do YYYY, h:mm a")}').
+							#{moment(i.time).fromNow()}
 				div(class="clearBoth")
 			div(class="activityContent")
 				div(md-whiteframe="3" class="activityContentText")
@@ -57,7 +57,7 @@ for i,index in activity
 						
 					h6(class="activityTime")
 						span.
-							#{i.time}
+							#{moment(i.time).fromNow()}
 				div(class="clearBoth")
 			div(class="activityContent")
 				div(md-whiteframe="3" class="activityContentText")
@@ -92,7 +92,7 @@ for i,index in activity
 				
 					h6(class="activityTime")
 						span.
-							#{i.time}
+							#{moment(i.time).fromNow()}
 				div(class="clearBoth")
 			div(class="activityContent")
 				div(md-whiteframe="3" class="activityContentText")
@@ -124,7 +124,7 @@ for i,index in activity
 				
 					h6(class="activityTime")
 						span.
-							#{i.time}
+							#{moment(i.time).fromNow()}
 				div(class="clearBoth")
 			div(class="activityContent")
 				div(md-whiteframe="3" class="activityContentText")
@@ -153,11 +153,107 @@ for i,index in activity
 						
 					h6(class="activityTime")
 						span.
-							#{i.time}
+							#{moment(i.time).fromNow()}
 				div(class="clearBoth")
 			div(class="activityContent")
 				div(md-whiteframe="3" class="activityContentText")
 					div
 						div(class="activityReviewProductImageContainer")
 							div(class="reviewProductImage" afkl-lazy-image="#{i.product.images[0]}")
+		else if i.statement == "followed store"
+			div(class="activityHeading")
+				- var userLink = "#/user/"+i.creator._id
+				div(class="creatorImageContainer")
+					a(ng-href='#{userLink}')
+						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}')
+				div(class="activityHeadingTextContainer")
+					h5(class="activityHeadingText")
+						span(class="activityHeadingTextInfo")
+							a(ng-href='#{userLink}').
+								#{i.creator.displayName}
+						span(class="activityHeadingTextInfo").
+							#{i.statement}
 						
+						span(class="activityHeadingTextInfo")
+							- var storeLink = "#/store/singleStore/"+i.store._id
+							a(ng-href='#{storeLink}').
+								#{i.store.name}
+				
+					h6(class="activityTime")
+						span(title='#{moment(i.time).format("dddd, MMMM Do YYYY, h:mm a")}').
+							#{moment(i.time).fromNow()}
+				div(class="clearBoth")
+			div(class="activityContent")
+				div(md-whiteframe="3" class="activityContentText")
+					div
+						div(class="activityReviewStoreImageContainer")
+							div(class="reviewStoreImage" afkl-lazy-image="#{i.store.bannerImage}")
+		else if i.statement == "upvoted store review"
+			div(class="activityHeading")
+				- var userLink = "#/user/"+i.creator._id
+				div(class="creatorImageContainer")
+					a(ng-href='#{userLink}')
+						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}')
+				div(class="activityHeadingTextContainer")
+					h5(class="activityHeadingText")
+						span(class="activityHeadingTextInfo")
+							a(ng-href='#{userLink}').
+								#{i.creator.displayName}
+						span(class="activityHeadingTextInfo").
+							#{i.statement}
+						
+						span(class="activityHeadingTextInfo")
+							- var storeLink = "#/store/singleStore/"+i.review.store._id
+							a(ng-href='#{storeLink}').
+								#{i.review.store.name}
+				
+					h6(class="activityTime")
+						span(title='#{moment(i.time).format("dddd, MMMM Do YYYY, h:mm a")}').
+							#{moment(i.time).fromNow()}
+				div(class="clearBoth")
+			div(class="activityContent")
+				div(md-whiteframe="3" class="activityContentText")
+					div
+						div(class="activityReviewContentContainer")
+							div(class="activityReviewRating")
+								- var rating = parseInt(i.review.rating)
+								each _ in Array(rating)
+									i(aria-hidden="true" class="fa fa-star")
+							div(class="activityReviewDescription")
+								span.
+									#{i.review.description}
+		else if i.statement == "upvoted product review"
+			div(class="activityHeading")
+				- var userLink = "#/user/"+i.creator._id
+				div(class="creatorImageContainer")
+					a(ng-href='#{userLink}')
+						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}')
+				div(class="activityHeadingTextContainer")
+					h5(class="activityHeadingText")
+						span(class="activityHeadingTextInfo")
+							a(ng-href='#{userLink}').
+								#{i.creator.displayName}
+						span(class="activityHeadingTextInfo").
+							#{i.statement}
+						
+						span(class="activityHeadingTextInfo")
+							- var productLink = "#/product/singleProduct/"+i.review.product._id
+							a(ng-href='#{productLink}').
+								#{i.review.product.name}
+				
+					h6(class="activityTime")
+						span(title='#{moment(i.time).format("dddd, MMMM Do YYYY, h:mm a")}').
+							#{moment(i.time).fromNow()}
+				div(class="clearBoth")
+			div(class="activityContent")
+				div(md-whiteframe="3" class="activityContentText")
+					div
+						div(class="activityReviewContentContainer")
+							div(class="activityReviewRating")
+								- var rating = parseInt(i.review.rating)
+								each _ in Array(rating)
+									i(aria-hidden="true" class="fa fa-star")
+							div(class="activityReviewDescription")
+								span.
+									#{i.review.description}	
+			

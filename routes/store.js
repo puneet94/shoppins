@@ -266,7 +266,6 @@ storeRouter.route('/submitStoreFollow')
 			commons.validateId(store_id,Store).then(function(doc2){
 				User.update({_id:user_id},{$push:{'storeFollowing':store_id}},{upsert:true},function(err,data){
 					if(err){
-
 					}
 					else{
 						Store.update({_id:store_id},{$push:{'userFollowers':user_id}},{upsert:true},function(err,data){
@@ -275,10 +274,10 @@ storeRouter.route('/submitStoreFollow')
 						else{
 							var activity = {};
     						activity.creator = user_id;
-							activity.followed = store_id;
+							activity.store = store_id;
 							activity.statement = "followed store";
 							commons.enterActivity(activity);
-							res.json('followers created');
+							res.json('user followed store');
 						}
 						})
 					}
@@ -293,19 +292,23 @@ storeRouter.route('/deleteStoreFollow')
 		var recData = req.body;
 		var user_id = recData.userId;
 		var store_id  = recData.storeId;
+		console.log(req.body);
 		commons.validateId(user_id,User).then(function(doc){
+			console.log("validated user");
 			commons.validateId(store_id,Store).then(function(doc2){
-
+				console.log("validated store");
 				User.update({_id:user_id},{$pull:{'storeFollowing':store_id}},{upsert:true},function(err,data){
 					if(err){
 
 					}
 					else{
-						User.update({_id:store_id},{$pull:{'userFollowers':user_id}},{upsert:true},function(err,data){
+						console.log("entered1");
+						Store.update({_id:store_id},{$pull:{'userFollowers':user_id}},{upsert:true},function(err,data){
 						if(err){
 
 						}
 						else{
+							console.log("entered 2");
 							res.json('followers deleted');
 						}
 						})

@@ -108,9 +108,9 @@ upvoteRouter.route('/upvotes/store/:storeId?')
 
 upvoteRouter.route('/upvotes/review')
 .post(commons.ensureAuthenticated,function(req,res){
-  var upvote = new Upvote();
-  var recData = req.body;
-  console.log(recData);
+  	var upvote = new Upvote();
+  	var recData = req.body;
+  	var activityStatement = "upvoted";
 	upvote.user=recData.userId;
 	if(recData.storeId){
 		console.log("hit the of");
@@ -118,12 +118,14 @@ upvoteRouter.route('/upvotes/review')
 		upvote.store = recData.storeId;	
 		upvote.type = "review";
 		var entity = Store;
+		activityStatement = activityStatement + " store";
 	}
 	else if(recData.productId){
 		upvote.entityId = recData.productId;
 		upvote.product = recData.productId;
 		var entity = Product;
 		upvote.type = "review";
+		activityStatement = activityStatement + " product";
 	}
 	else{
 		upvote.entityId = recData.userId;
@@ -144,7 +146,19 @@ upvoteRouter.route('/upvotes/review')
 					        return res.send(err);
 			      		}
 			    	}
-				    console.log(" upvote saved");
+				    
+				    var activity = {};
+    				activity.creator = recData.userId;
+					if(recData.storeId){
+						activity.store = recData.storeId;	
+					}
+					else if(recData.productId){
+						activity.product = recData.productId;	
+					}
+					activity.statement = activityStatement+" review";
+					activity.review = recData.reviewId;
+					commons.enterActivity(activity);
+					
 				    res.json({"message":"Upvote created","id":upvote._id});
 		  		});
 			})

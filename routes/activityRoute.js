@@ -10,6 +10,7 @@ var commons = require('./commonRouteFunctions');
 var ObjectId = require('mongoose').Schema.ObjectId;
 var commons = require('./commonRouteFunctions');
 var app = express();
+var moment = require('moment');
 
 app.set('view engine',"jade");
 activityRouter.use(function(req,res,next){
@@ -23,6 +24,7 @@ function getActivity(res,usersList){
 	}
 	Activity
 					.find(queryObj)
+					.sort({'time':'desc'})
 					.populate({path:'creator',model: 'User',select:'displayName picture'})
 					.populate({path: 'followed',model: 'User',select:'displayName picture'})
 					.populate({path: 'store',select: 'name bannerImage',model: 'Store'})
@@ -36,7 +38,7 @@ function getActivity(res,usersList){
 						}
 						else{
 							
-							app.render('activity/userActivity', { activity: activities }, function(err, html){
+							app.render('activity/userActivity', { activity: activities,moment:moment }, function(err, html){
 								
 								if(err){
 									console.log(err);

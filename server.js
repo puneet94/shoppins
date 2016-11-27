@@ -17,6 +17,10 @@ var http = require('http');
 var app = express();
 var server = http.createServer(app);
 
+
+//moment added to be used in jade
+
+//app.locals.moment = require('moment');
 //Imports from custom made js
 var facebookAuth  = require('./services/facebookAuth.js');
 var createJWT = require('./services/jwtService.js');

@@ -32,8 +32,7 @@
             .then(function(res){
               usu.userStoreFollowed = false;
               userData.setUser();
-              
-             
+              console.log(res);             
             },
               function(res)
               {

@@ -16,7 +16,6 @@ mongoose.createConnection(urlStrings.connectionString,function (err) {
 var ActivitySchema = new Schema({
 	//activityFor:{ type:Schema.ObjectId, ref:"User"},
 	creator: { type:Schema.ObjectId, ref:"User"}, //created by person
-	creatorStore:{ type:Schema.ObjectId, ref:"Store"}, //created by which store
 	offer:{ type:Schema.ObjectId, ref:"Offer" },
 	review:{ type:Schema.ObjectId, ref:"Review" },
 	followed: { type:Schema.ObjectId, ref:"User"},
