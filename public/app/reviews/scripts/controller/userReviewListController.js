@@ -41,7 +41,6 @@ angular.module('app.review')
     function getUserReviews(){
       reviewService.getUserReviews().then(function(res){
         url.reviewList = res.data;
-        
       },function(res){
 
       });

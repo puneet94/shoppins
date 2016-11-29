@@ -3,14 +3,11 @@
   padding: 10px
   .singleProductContainer
     background-color: white
-    margin-bottom: 10px
-    border-right: 10px solid #f3f3f3
-    box-shadow: none
+    margin: 5px
+    max-width: 48%
     .productImageContainer
       width: 100%
-      margin: 5px
-      //box-shadow: 0 1px 3px 0 rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 2px 1px -1px rgba(0,0,0,.12)
-      box-shadow: 0px 0px 2px 2px rgba(0,0,0,0.12)
+      padding: 5px
       .singleProductImage
         width: 100%
         height: 100%
@@ -18,8 +15,6 @@
     .productDetailsContainer
       padding: 5px
       text-transform: capitalize
-      //box-shadow: 0 1px 3px 0 rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 2px 1px -1px rgba(0,0,0,.12)
-      box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.12)
       .productName
         font-size: 16px
         font-weight: 700
@@ -51,3 +46,12 @@
         font-weight: 600
         .productStatsEntity
           margin: 0 2px 
+
+
+@media (max-width: 599px)
+  .productContainer
+    .singleProductContainer
+      background-color: white
+      margin: 10px
+      max-width: 100%
+

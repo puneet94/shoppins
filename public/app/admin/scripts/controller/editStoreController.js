@@ -68,8 +68,8 @@
     		adminStoreService.getStore($routeParams.storeId).then(function(response){
     			console.log(response);
 
-                response.data.category = response.data.category.join(",");
-                response.data.subCategory = response.data.subCategory.join(",");
+                response.data.category = response.data.category;
+                response.data.subCategory = response.data.subCategory;
                 response.data.keywords = response.data.keywords.join(",");
                 console.log(response);
     			csc.storeForm = response.data;

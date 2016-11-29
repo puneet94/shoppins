@@ -3,9 +3,9 @@
   <h3 class="productListHeading">{{plc.productsSearchHeader.split("-").join(" ")}}</h3>
   <!--<loading-directive loading="plc.loading"></loading-directive>-->
   
-  <div class="productContainer" layout="row" layout-wrap layout-align="space-between start" >
+  <div class="productContainer" layout="row" layout-wrap layout-align="center center"><!--space-between start" >-->
     
-    <div class="singleProductContainer" md-whiteframe="1" flex="50"  flex-xs="100" ng-repeat="product in plc.productsList track by product._id"  >
+    <div class="singleProductContainer" md-whiteframe="2"   flex-xs="100" ng-repeat="product in plc.productsList track by product._id"  >
       
     <single-product-directive single-product="product"> </single-product-directive>
 
@@ -47,7 +47,8 @@
     </div>
   </div>
   <div style="position:relative">
-    <inner-loading-directive inner-loading="plc.loading"></inner-loading-directive>
+
+    <inner-loading-directive inner-loading="plc.loading" container-height="200px"></inner-loading-directive>
   </div>
 </div>
 

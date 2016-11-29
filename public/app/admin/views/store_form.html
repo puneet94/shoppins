@@ -43,7 +43,18 @@
 
                   <md-input-container >
                      <label >Category</label>
-                     <input ng-model="csc.storeForm.category" type="text" id="input_16" required="required" style="">
+                     <md-chips ng-model="csc.storeForm.category" name="categoryName" readonly="false" md-removable="true" md-max-chips="10" placeholder="Press enter after each word">
+                 <md-chip-template>
+                   <strong>{{$chip}}</strong>
+                   
+                 </md-chip-template>
+               </md-chips>
+
+               <div class="errors" ng-messages="storeForm.categoryName.$error">
+                 <div ng-message="md-max-chips">The maxmium of chips is reached.</div>
+               </div>
+
+                     <!--<input  type="text" id="input_16" required="required" style="">-->
                      <div ng-messages="InputView.form.$error" >
 
                         <div ng-message="required" class="" style="">This field is required</div>
@@ -54,7 +65,19 @@
             <div class="formItem-help-text ">any specific product type you sell</div>
             <md-input-container >
                <label >Sub Category</label>
-               <input ng-model="csc.storeForm.subCategory" type="text" />
+
+               <md-chips ng-model="csc.storeForm.subCategory" name="subCategoryName" readonly="false" md-removable="true" md-max-chips="10" placeholder="Press enter after each word">
+                 <md-chip-template>
+                   <strong>{{$chip}}</strong>
+                   
+                 </md-chip-template>
+               </md-chips>
+
+               <div class="errors" ng-messages="storeForm.subCategoryName.$error">
+                 <div ng-message="md-max-chips">The maxmium of chips is reached.</div>
+               </div>
+
+               <!--<input ng-model="csc.storeForm.subCategory" type="text" />-->
                <div ng-messages="InputView.form.$error" style="">
                   <!-- ngMessage: required -->
                </div>

@@ -25,8 +25,8 @@ function createStore(req, res){
   }
 
   store.address = address;
-  store.category = item.category.toLowerCase().split(",");
-  store.subCategory = item.subCategory.toLowerCase().split(",");
+  store.category = item.category.map(function(item){return item.toLowerCase();});
+  store.subCategory = item.subCategory.map(function(item){return item.toLowerCase();});
   store.keywords = item.keywords.toLowerCase().split(",");
   store.bannerImage = item.bannerImage;
   store.storeImages = item.storeImages;
@@ -83,8 +83,8 @@ function updateStore(req, res){
       store.name = item.name;
       address = item.address;
       store.address = address;
-      store.category = item.category.split(",");
-      store.subCategory = item.subCategory.split(",");
+      store.category = item.category.map(function(item){return item.toLowerCase();});
+      store.subCategory = item.subCategory.map(function(item){return item.toLowerCase();});
       store.keywords = item.keywords.split(",");
       store.bannerImage = item.bannerImage;
       store.storeImages = item.storeImages;
