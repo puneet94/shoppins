@@ -1,141 +1,139 @@
 <loading-directive loading="ssc.loading"></loading-directive>
-<header layout="row" meta-tags data-keywords="" data-description="" >
-   <div ng-include="'app/home/pageHeader.html'" flex></div>
+<header layout="row" meta-tags data-keywords="" data-description="">
+    <div ng-include="'app/home/pageHeader.html'" flex></div>
 </header>
 <div ng-include="'app/home/searchBox.html'"></div>
 <main flex class="fixedHeaderMain">
-   <div class="" layout="row" layout-xs="column" layout-sm="column">
-      <div class="storeLeftPane" flex-sm="100" flex-xs="100" flex="65" >
-         <div class="storeImageContent" >
-            <div ng-if="!ssc.storeData.admin" class="businessClaimButton">
-               <md-button class="md-primary md-raised " ng-click="showAlert($event)"   >
-                  Own this store?
-               </md-button>
-            </div>
-            <div class="storeBannerImage" style='background-image:url("{{ssc.storeData.bannerImage}}")'>
-            </div>
-            <div class="storeHeadingRating" layout="row" layout-align="space-between">
-               <div layout="row">
-                  <h1 class="singleStoreHeading">{{::ssc.storeData.name}} </h1>
-                  <!--<div class="addressContentText" >
+    <div class="" layout="row" layout-xs="column" layout-sm="column">
+        <div class="storeLeftPane" flex-sm="100" flex-xs="100" flex="65">
+            <div class="storeImageContent">
+                <div ng-if="!ssc.storeData.admin" class="businessClaimButton">
+                    <md-button class="md-primary md-raised " ng-click="showAlert($event)">
+                        Own this store?
+                    </md-button>
+                </div>
+                <div class="storeBannerImage" style='background-image:url("{{ssc.storeData.bannerImage}}")'>
+                </div>
+                <div class="storeHeadingRating" layout="row" layout-align="space-between">
+                    <div layout="row">
+                        <h1 class="singleStoreHeading">{{::ssc.storeData.name}} </h1>
+                        <!--<div class="addressContentText" >
                      <span>{{::ssc.storeData.address.locality}}</span>
                      <span>{{::ssc.storeData.address.area}}</span>
                      <span><a target="_blank" ng-href="http://maps.google.com/?q={{::ssc.storeData.name}}{{::ssc.storeData.address.doorNo}}{{::ssc.storeData.address.locality}}{{::ssc.storeData.address.area}}{{::ssc.storeData.address.city}}{{::ssc.storeData.address.state}}">Map</a></span>
                   </div>-->
-               </div>
-               <div>
-                  <h3>
+                    </div>
+                    <div>
+                        <h3>
                      <span><i class="fa fa-pencil-square" aria-hidden="true"></i></span>
                      <span>{{::ssc.storeData.storeRatingAvg.toFixed(1)}}/5</span>
                   </h3>
-               </div>
-            </div>
-            <div class="userInteractionNav"  ng-if="ssc.authCheck">
-               <div class=""  layout="row" >
-                  <div class="userStoreVisitCheck userInteractionContainers" ng-controller="UserStoreVisitController as usv">
-                     <span class="chipType" ng-if="!usv.userStoreVisited" ng-click="usv.submitVisit()">
+                    </div>
+                </div>
+                <div class="userInteractionNav" ng-if="ssc.authCheck">
+                    <div class="" layout="row">
+                        <div class="userStoreVisitCheck userInteractionContainers" ng-controller="UserStoreVisitController as usv">
+                            <span class="chipType" ng-if="!usv.userStoreVisited" ng-click="usv.submitVisit()">
                      <span>
                      <i aria-hidden="true" class="fa fa-bookmark-o"></i>
                      </span>
-                     <span class="chipText">Visit</span>
-                     </span>
-                     <span class="chipType" ng-if="usv.userStoreVisited" ng-click="usv.deleteVisit()">
+                            <span class="chipText">Visit</span>
+                            </span>
+                            <span class="chipType" ng-if="usv.userStoreVisited" ng-click="usv.deleteVisit()">
                      <span>
                      <i aria-hidden="true" class="fa fa-bookmark"></i>
                      </span>
-                     <span class="chipText">
+                            <span class="chipText">
                      Visited
                      </span>
-                     </span>
-                  </div>
-                  
-                  <div class="userStoreVisitCheck userInteractionContainers" ng-controller="UserStoreFollowController as usf">
-                     <span class="chipType" ng-if="!usf.userStoreFollowed" ng-click="usf.submitFollow()">
+                            </span>
+                        </div>
+                        <div class="userStoreVisitCheck userInteractionContainers" ng-controller="UserStoreFollowController as usf">
+                            <span class="chipType" ng-if="!usf.userStoreFollowed" ng-click="usf.submitFollow()">
                         <span>
                            <i class="fa fa-user-plus" aria-hidden="true"></i>
                            
                         </span>
-                        <span class="chipText">Follow</span>
-                     </span>
-                     <span class="chipType" ng-if="usf.userStoreFollowed" ng-click="usf.deleteFollow()">
+                            <span class="chipText">Follow</span>
+                            </span>
+                            <span class="chipType" ng-if="usf.userStoreFollowed" ng-click="usf.deleteFollow()">
                         <span>
                            <i class="fa fa-user" aria-hidden="true"></i>
                         </span>
-                        <span class="chipText">
+                            <span class="chipText">
                            Followed
                         </span>
-                     </span>
-                  </div>
-               </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
-         </div>
-         <md-content class="tabsContent">
-            <md-tabs md-selected="selectedIndex" md-border-bottom="" md-autoselect="" md-dynamic-height="">
-               <md-tab>
-                  <md-tab-label class="tabLabelContainer">
-                     <div class="tabLabel">
-                        <span class="tabLabelIcon"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
-                        <span class="tabLabelText">Info</span>  
-                     </div>
-                  </md-tab-label>
-                  <md-tab-body>
-                     <div  class="md-body-tab" ng-include="'app/store/views/storeAddressDetails.html'" >
-
-                     </div>
-                  </md-tab-body>
-               </md-tab>
-               <md-tab  label="Products">
-                  <md-tab-label class="tabLabelContainer">
-                     <div class="tabLabel">
-                        <span class="tabLabelIcon"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
-                        <span class="tabLabelText">Products</span>  
-                     </div>
-                  </md-tab-label>
-                  <md-tab-body>
-                     <div class="md-body-tab">
-                        <h4>Products</h4>
-                        <div class="" ng-include="'app/product/views/productsStoreCollection.html'" >
-                        </div>
-                     </div>
-                  </md-tab-body>
-               </md-tab>
-               <md-tab  label="Offers">
-                  <md-tab-label class="tabLabelContainer">
-                     <div class="tabLabel">
-                        <span class="tabLabelIcon"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
-                        <span class="tabLabelText">Images</span>  
-                     </div>
-                  </md-tab-label>
-                  <md-tab-body>
-                     <div  class="md-body-tab">
-                        <div>
-                           <h2>Images</h2>
-                        </div>
-                        <div layout="row" class="storeImagesCollection">
-                           <images-list-directive images-list="ssc.storeData.storeImages"></images-list-directive>
-                        </div>
-                     </div>
-                  </md-tab-body>
-               </md-tab>
-               <md-tab  label="Reviews">
-                  <md-tab-label class="tabLabelContainer">
-                     <div class="tabLabel">
-                        <span class="tabLabelIcon"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
-                        <span class="tabLabelText">Reviews</span>  
-                     </div>
-                  </md-tab-label>
-                  <md-tab-body>
-                     <div  class="md-body-tab">
-                        <div id="flowReviews"  class="" ng-include="'app/reviews/views/storeReviewList.html'">
-                        </div>
-                        <div class="" ng-include="'app/reviews/views/storeReviewSubmit.html'" ng-if="ssc.authCheck">
-                        </div>
-                     </div>
-                  </md-tab-body>
-               </md-tab>
-            </md-tabs>
-         </md-content>
-         <!--
+            <md-content class="tabsContent">
+                <md-tabs md-selected="selectedIndex" md-stretch-tabs="always" md-border-bottom="" md-autoselect="" md-dynamic-height="">
+                    <md-tab>
+                        <md-tab-label class="tabLabelContainer">
+                            <div class="tabLabel">
+                                <span class="tabLabelIcon"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
+                                <span class="tabLabelText">Info</span>
+                            </div>
+                        </md-tab-label>
+                        <md-tab-body>
+                            <div class="md-body-tab" ng-include="'app/store/views/storeAddressDetails.html'">
+                            </div>
+                        </md-tab-body>
+                    </md-tab>
+                    <md-tab label="Products">
+                        <md-tab-label class="tabLabelContainer">
+                            <div class="tabLabel">
+                                <span class="tabLabelIcon"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
+                                <span class="tabLabelText">Products</span>
+                            </div>
+                        </md-tab-label>
+                        <md-tab-body>
+                            <div class="md-body-tab">
+                                <h4>Products</h4>
+                                <div class="" ng-include="'app/product/views/productsStoreCollection.html'">
+                                </div>
+                            </div>
+                        </md-tab-body>
+                    </md-tab>
+                    <md-tab label="Offers">
+                        <md-tab-label class="tabLabelContainer">
+                            <div class="tabLabel">
+                                <span class="tabLabelIcon"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
+                                <span class="tabLabelText">Images</span>
+                            </div>
+                        </md-tab-label>
+                        <md-tab-body>
+                            <div class="md-body-tab">
+                                <div>
+                                    <h2>Images</h2>
+                                </div>
+                                <div layout="row" class="storeImagesCollection">
+                                    <images-list-directive images-list="ssc.storeData.storeImages"></images-list-directive>
+                                </div>
+                            </div>
+                        </md-tab-body>
+                    </md-tab>
+                    <md-tab label="Reviews">
+                        <md-tab-label class="tabLabelContainer">
+                            <div class="tabLabel">
+                                <span class="tabLabelIcon"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
+                                <span class="tabLabelText">Reviews</span>
+                            </div>
+                        </md-tab-label>
+                        <md-tab-body>
+                            <div class="md-body-tab">
+                                <div id="flowReviews" class="" ng-include="'app/reviews/views/storeReviewList.html'">
+                                </div>
+                                <div class="" ng-include="'app/reviews/views/storeReviewSubmit.html'" ng-if="ssc.authCheck">
+                                </div>
+                            </div>
+                        </md-tab-body>
+                    </md-tab>
+                </md-tabs>
+            </md-content>
+            <!--
          <div class="storePageStatsNav" layout="row" layout-xs="column">
             <div class="storeReviewsBrief">
                <div layout="row" layout-align="space-between center" layout-xs="column" layout-sm="row" layout-align-sm="start start" class="storeReviewsBriefIcons layout-xs-column layout-sm-row layout-align-sm-start-start layout-align-space-between-center layout-row">
@@ -179,8 +177,39 @@
             <div class="" ng-include="'app/product/views/productsStoreCollection.html'" >
             </div>
          </div>-->
-      </div>
-   </div>
+        </div>
+        <div flex="35" >
+            <div class="mapContainer" style="margin-top:20px;margin-left:20px;">
+               <ng-map zoom='15' center="{{ssc.pos}}" scrollwheel="false" >
+                   <marker position="{{ssc.pos}}" animation="Animation.BOUNCE">
+                      
+                   </marker>
+               </ng-map>
+            </div>
+            <div class="storeSuggestionsContainer" >
+               <h3 class="storeSuggestionHeader">Few More</h3>
+               <div layout="row" layout-wrap layout-align="space-between">
+                  <div flex="30" class="singleStoreSuggestion" ng-repeat = "suggestedStore in ssc.storeSuggestions">
+                     <div class="suggestedStoreImage"  >
+                        <img ng-src="{{suggestedStore.bannerImage}}" >
+                        
+                     </div>
+                     <div class="suggestedStoreInfo">
+                        <a ng-href="#/store/singleStore/{{suggestedStore._id}}">
+                           <h5 class="suggestedStoreName">{{suggestedStore.name}}</h5>
+                        </a>
+                        <p class="suggestedStoreAddress">{{suggestedStore.address.area+" "}}{{suggestedStore.address.locality}}</p>
+                     </div>
+                     
+                     <!--<suggestion-store> 
+                     
+                     </suggestion-store>      -->
+                  </div>
+               </div>
+               
+            </div>
+        </div>
+    </div>
 </main>
 <!--
    <div id="flowProducts">Products list yo</div>

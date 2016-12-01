@@ -15,7 +15,7 @@
 .addressHeadingText
   @extend .capital-heading-text
 .storeImageContent
-  margin-top: 35px
+  margin-top: 20px
   background-color: #fafafa
   border: 1px solid #e7e7e7
   border-radius: 1px;
@@ -44,19 +44,17 @@
       color: #7B8489
       border-radius: 5px
       font-weight: 500
-      .chipType
-        display: block
-        padding: 6px 15px
-        cursor: pointer
-        
-        transition: background .1s ease
-        &:hover
-          background: #eee
-        .chipText
-          margin-left: 7px
-          //color: #7B8489
-          font-size: 14px
-          
+.chipType
+  display: block
+  padding: 6px 15px
+  cursor: pointer
+  transition: background .1s ease
+  &:hover
+    background: #eee
+  .chipText
+    margin-left: 7px
+    font-size: 14px
+    
 
 
 .addressContentText
@@ -90,3 +88,40 @@
         margin: 5px
   md-divider
     border-right-width: 3px
+
+
+.storeSuggestionsContainer
+  margin-top: 20px
+  margin-left: 15px
+  background-color: white
+  padding: 10px
+  border: 1px solid #eee
+  border-radius: 5px
+  .storeSuggestionHeader
+    margin-top: 5px
+    margin-bottom: 10px
+  .singleStoreSuggestion
+    width: 100%
+    margin-bottom: 10px
+    .suggestedStoreImage
+      width: 100%
+      img
+        width: 100%
+        height: 100px
+        border: 1px solid #eee
+        border-radius: 5px  
+        
+    .suggestedStoreInfo
+      padding: 0 5px
+      word-wrap: break-word
+      a
+        text-decoration: none
+      .suggestedStoreName
+        text-transform: capitalize
+        margin-top: 0px
+        margin-bottom: 0
+      .suggestedStoreAddress
+        margin-top: 2px
+        font-size: 12px
+        margin-bottom: 0
+

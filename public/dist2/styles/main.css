@@ -527,6 +527,53 @@ md-ink-bar {
     margin: 10px;
     max-width: 100%; } }
 
+.reviewSubmitForm {
+  background-color: white;
+  padding: 25px; }
+  .reviewSubmitForm .reviewSubmitFormContent {
+    background-color: white; }
+
+.userRatingSection {
+  width: 175px; }
+  .userRatingSection .rating {
+    border: none; }
+    .userRatingSection .rating input {
+      display: none; }
+    .userRatingSection .rating label:before {
+      margin: 5px;
+      font-size: 1.25em;
+      font-family: FontAwesome;
+      display: inline-block;
+      content: "\f005"; }
+    .userRatingSection .rating label {
+      color: rgba(0, 0, 0, 0.5);
+      float: right; }
+    .userRatingSection .rating input:checked ~ label {
+      color: #FFD700; }
+    .userRatingSection .rating:not(:checked) > label:hover {
+      color: #FFD700; }
+      .userRatingSection .rating:not(:checked) > label:hover ~ label {
+        color: #FFD700; }
+    .userRatingSection .rating > input:checked + label:hover, .userRatingSection .rating > input:checked ~ label:hover {
+      color: #FFED85; }
+    .userRatingSection .rating > label:hover ~ input:checked ~ label, .userRatingSection .rating > input:checked ~ label:hover ~ label {
+      color: #FFED85; }
+
+.likeReviewContainer .likeReviewIconContainer {
+  background-color: #eee;
+  padding: 8px 10px; }
+  .likeReviewContainer .likeReviewIconContainer .likeText {
+    margin-left: 5px; }
+
+.likeReviewContainer .likeReviewCountContainer {
+  background-color: white;
+  padding: 7px 9px;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  border-left: none;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px; }
+
 .capital-heading-text {
   text-transform: capitalize;
   font-size: 24px;
@@ -626,7 +673,7 @@ md-ink-bar {
   z-index: 99999999999; }
 
 .storeImageContent {
-  margin-top: 35px;
+  margin-top: 20px;
   background-color: #fafafa;
   border: 1px solid #e7e7e7;
   border-radius: 1px;
@@ -655,17 +702,18 @@ md-ink-bar {
       color: #7B8489;
       border-radius: 5px;
       font-weight: 500; }
-      .storeImageContent .userInteractionNav .userInteractionContainers .chipType {
-        display: block;
-        padding: 6px 15px;
-        cursor: pointer;
-        -webkit-transition: background .1s ease;
-                transition: background .1s ease; }
-        .storeImageContent .userInteractionNav .userInteractionContainers .chipType:hover {
-          background: #eee; }
-        .storeImageContent .userInteractionNav .userInteractionContainers .chipType .chipText {
-          margin-left: 7px;
-          font-size: 14px; }
+
+.chipType {
+  display: block;
+  padding: 6px 15px;
+  cursor: pointer;
+  -webkit-transition: background .1s ease;
+          transition: background .1s ease; }
+  .chipType:hover {
+    background: #eee; }
+  .chipType .chipText {
+    margin-left: 7px;
+    font-size: 14px; }
 
 .addressContentText {
   margin-top: 25px;
@@ -698,6 +746,40 @@ md-ink-bar {
 
 .storePageStatsNav md-divider {
   border-right-width: 3px; }
+
+.storeSuggestionsContainer {
+  margin-top: 20px;
+  margin-left: 15px;
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px; }
+  .storeSuggestionsContainer .storeSuggestionHeader {
+    margin-top: 5px;
+    margin-bottom: 10px; }
+  .storeSuggestionsContainer .singleStoreSuggestion {
+    width: 100%;
+    margin-bottom: 10px; }
+    .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreImage {
+      width: 100%; }
+      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreImage img {
+        width: 100%;
+        height: 100px;
+        border: 1px solid #eee;
+        border-radius: 5px; }
+    .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo {
+      padding: 0 5px;
+      word-wrap: break-word; }
+      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo a {
+        text-decoration: none; }
+      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo .suggestedStoreName {
+        text-transform: capitalize;
+        margin-top: 0px;
+        margin-bottom: 0; }
+      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo .suggestedStoreAddress {
+        margin-top: 2px;
+        font-size: 12px;
+        margin-bottom: 0; }
 
 .storeDetailsContainer {
   padding: 10px; }
@@ -1002,50 +1084,3 @@ md-ink-bar {
   visibility: visible;
   height: 100%;
     height-opacity: 1; }
-
-.reviewSubmitForm {
-  background-color: white;
-  padding: 25px; }
-  .reviewSubmitForm .reviewSubmitFormContent {
-    background-color: white; }
-
-.userRatingSection {
-  width: 175px; }
-  .userRatingSection .rating {
-    border: none; }
-    .userRatingSection .rating input {
-      display: none; }
-    .userRatingSection .rating label:before {
-      margin: 5px;
-      font-size: 1.25em;
-      font-family: FontAwesome;
-      display: inline-block;
-      content: "\f005"; }
-    .userRatingSection .rating label {
-      color: rgba(0, 0, 0, 0.5);
-      float: right; }
-    .userRatingSection .rating input:checked ~ label {
-      color: #FFD700; }
-    .userRatingSection .rating:not(:checked) > label:hover {
-      color: #FFD700; }
-      .userRatingSection .rating:not(:checked) > label:hover ~ label {
-        color: #FFD700; }
-    .userRatingSection .rating > input:checked + label:hover, .userRatingSection .rating > input:checked ~ label:hover {
-      color: #FFED85; }
-    .userRatingSection .rating > label:hover ~ input:checked ~ label, .userRatingSection .rating > input:checked ~ label:hover ~ label {
-      color: #FFED85; }
-
-.likeReviewContainer .likeReviewIconContainer {
-  background-color: #eee;
-  padding: 8px 10px; }
-  .likeReviewContainer .likeReviewIconContainer .likeText {
-    margin-left: 5px; }
-
-.likeReviewContainer .likeReviewCountContainer {
-  background-color: white;
-  padding: 7px 9px;
-  border: 1px solid #eee;
-  border-radius: 3px;
-  border-left: none;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px; }

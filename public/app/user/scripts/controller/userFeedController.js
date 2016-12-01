@@ -2,8 +2,9 @@
   'use strict';
 angular.module('app.user')
 
-  .controller('UserFeedController',["$scope","$auth","activityService",UserFeedController]);
+  .controller('UserFeedController',["$scope","$auth","activityService",'NgMap',UserFeedController]);
   function UserFeedController($scope,$auth,activityService){
+    
     var ual = this;
     ual.loading = true;
     ual.authCheck = $auth.isAuthenticated();

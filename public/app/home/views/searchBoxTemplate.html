@@ -20,7 +20,7 @@
               </span>
            </md-item-template>
         </md-autocomplete>
-     </div>
+     </div><!--|filter:sbc.userSearchText-->
      <div flex="50" flex-sm="100" flex-xs="100">
 
         <md-autocomplete
@@ -30,7 +30,7 @@
            md-selected-item="sbc.userSearchSelectedItem"
            md-search-text="sbc.userSearchText"
            md-selected-item-change="sbc.userSearchItemChange(item)"
-           md-items="item in sbc.userSearches|filter:sbc.userSearchText"
+           md-items="item in sbc.userSearches"
            md-item-text="item.userSearchString.split('#&amp;#').join(' ')"
            md-min-length="0"
            placeholder="Select a store, product or brand"

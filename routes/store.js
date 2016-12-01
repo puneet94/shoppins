@@ -69,6 +69,7 @@ storeRouter.route('/cities')
 
 storeRouter.route('/storesCollection/stores/:location/:pageNo')
 	.get(function(req,res){
+		var limit = 35;
 		console.log(req.query);
 		var queryObject = {'address.city':req.params.location};
 		if(req.query.area){
@@ -81,9 +82,12 @@ storeRouter.route('/storesCollection/stores/:location/:pageNo')
 			console.log(req.query.category);
 			queryObject['category']=req.query.category;
 		}
+		if(req.query.limit){
+			limit=parseInt(req.query.limit);
+		}
 		console.log(queryObject);
 		Store.paginate(queryObject,
-			{page: req.params.pageNo, limit: 35}, function(err, result) {
+			{page: req.params.pageNo, limit: limit}, function(err, result) {
 		    if(err){
 				res.send(err);
 			}
@@ -139,13 +143,16 @@ storeRouter.route('/storesCollection/storeName/:storeName/:location/:pageNo')
 	});
 storeRouter.route('/storesCollection/category/:category/:location/:pageNo')
 	.get(function(req,res){
-		console.log(req.query);
+		var limit = 35;
 		var queryObject = {'category':req.params.category,'address.city':req.params.location};
 		if(req.query.area){
-				queryObject['address.area']=req.query.area;
+			queryObject['address.area']=req.query.area;
+		}
+		if(req.query.limit){
+			limit=parseInt(req.query.limit);
 		}
 		Store.paginate(queryObject,
-			{page: req.params.pageNo, limit: 35 }, function(err, result) {
+			{page: req.params.pageNo, limit: limit }, function(err, result) {
 		    if(err){
 				res.send(err);
 			}
