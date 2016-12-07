@@ -6,11 +6,12 @@
         var csc = this;
         csc.storeForm = {};
         csc.storeForm.storeImages = [];
+        csc.storeForm.category = [];
+        csc.storeForm.subCategory = [];
         activate();
         
         csc.createStore = createStore;
-        csc.uploadSingleImage = function(file, errFiles) {
-          
+        csc.uploadSingleImage = function(file, errFiles) {  
           csc.f = file;
           csc.errFile = errFiles && errFiles[0];
           if (file) {
@@ -20,12 +21,12 @@
                   url: baseUrlService.baseUrl + 'upload/singleUpload',
                   data: {file: file}
               });
-              //csc.spinnerLoading = true;
+              
               file.upload.then(function (response) {
                   
                       file.result = response.data;
                       
-                      console.log(response.data);
+                      
                       csc.uploadedImage = response.data;
                       $('.adminStoreBannerImage').css('background-image','url('+response.data+')');
                       csc.formBannerLoading = false;
