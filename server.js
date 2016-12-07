@@ -78,7 +78,7 @@ app.get('*', function (req, res) {
 
 mongoose.connect(urlStrings.connectionString);//"mongodb://shop_dir:shop_dir@ds023912.mlab.com:23912/shoppins");
 //mongoose.connect("mongodb://shopdb:shopdb1234@ds029476.mlab.com:29476/shopdb");
-app.listen(app.get('port'),function(){
+server.listen(app.get('port'),function(){
 	console.log("Listening");
 	console.log(__dirname);
 })

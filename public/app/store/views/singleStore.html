@@ -17,11 +17,6 @@
                 <div class="storeHeadingRating" layout="row" layout-align="space-between">
                     <div layout="row">
                         <h1 class="singleStoreHeading">{{::ssc.storeData.name}} </h1>
-                        <!--<div class="addressContentText" >
-                     <span>{{::ssc.storeData.address.locality}}</span>
-                     <span>{{::ssc.storeData.address.area}}</span>
-                     <span><a target="_blank" ng-href="http://maps.google.com/?q={{::ssc.storeData.name}}{{::ssc.storeData.address.doorNo}}{{::ssc.storeData.address.locality}}{{::ssc.storeData.address.area}}{{::ssc.storeData.address.city}}{{::ssc.storeData.address.state}}">Map</a></span>
-                  </div>-->
                     </div>
                     <div>
                         <h3>
@@ -133,85 +128,34 @@
                     </md-tab>
                 </md-tabs>
             </md-content>
-            <!--
-         <div class="storePageStatsNav" layout="row" layout-xs="column">
-            <div class="storeReviewsBrief">
-               <div layout="row" layout-align="space-between center" layout-xs="column" layout-sm="row" layout-align-sm="start start" class="storeReviewsBriefIcons layout-xs-column layout-sm-row layout-align-sm-start-start layout-align-space-between-center layout-row">
-                  <div flex="grow"  class="storeReviewsIconContainer iconContainer  flex-grow">
-                     <div class="reviewsIcon iconClass"><span><i aria-hidden="true" class="fa fa-pencil-square"></i></span></div>
-                     <div class="productReview"><span>Write a Review</span></div>
-                  </div>
-                  <div scroll-to-id="flowProducts"  flex="grow"  class="storeProductsIconContainer iconContainer  flex-grow">
-                     <div class="ratingIcon iconClass"><span><i class="fa fa-shopping-bag" aria-hidden="true"></i></span></div>
-                     <div class="productRating"><span class="ng-binding">{{ssc.storeData.productsCount}} Products</span></div>
-                  </div>
-                  <div scroll-to-id="flowReviews" flex="grow"  class="storeReviewsCountIconContainer iconContainer  flex-grow">
-                     <div class="reviewsCountIcon iconClass"><span><i aria-hidden="true" class="fa fa-comments"></i></span></div>
-                     <div class="storeReviewCount"><span class="ng-binding">{{ssc.storeData.reviewsCount}} Reviews</span></div>
-                  </div>
-                  <div flex="grow"  class="storeVisitsContainer iconContainer  flex-grow">
-                     <div class="visitsIcon iconClass"><span><i aria-hidden="true" class="fa fa-cart-arrow-down"></i></span></div>
-                     <div class="storeVisit"><span class="ng-binding">{{ssc.storeData.visitsCount}} Visits</span></div>
-                  </div>
-                  <div flex="grow"  scroll-to-id="flowStoreImages" class="storeImagessContainer iconContainer  flex-grow">
-                     <div class="imagesIcon iconClass"><span><i aria-hidden="true" class="fa fa-thumbs-up"></i></span></div>
-                     <div class="storeUpvote"><span class="ng-binding">{{ssc.storeData.storeImages.length}} Images</span></div>
-                  </div>
-               </div>
-            </div>
-         </div>
-         <div id="flowStoreImages"   >
-            <div>
-               <h2>Images</h2>
-            </div>
-            <div layout="row" class="storeImagesCollection">
-               <images-list-directive images-list="ssc.storeData.storeImages"></images-list-directive>
-            </div>
-         </div>
-         <div id="flowReviews"  class="" ng-include="'app/reviews/views/storeReviewList.html'">
-         </div>
-         <div class="" ng-include="'app/reviews/views/storeReviewSubmit.html'" ng-if="ssc.authCheck">
-         </div>
-         <div class="" id="flowProducts">
-            <h1>Products</h1>
-            <div class="" ng-include="'app/product/views/productsStoreCollection.html'" >
-            </div>
-         </div>-->
+            
         </div>
-        <div flex="35" >
+        <div flex="35" flex-sm="100" flex-xs="100">
             <div class="mapContainer" style="margin-top:20px;margin-left:20px;">
-               <ng-map zoom='15' center="{{ssc.pos}}" scrollwheel="false" >
-                   <marker position="{{ssc.pos}}" animation="Animation.BOUNCE">
-                      
-                   </marker>
-               </ng-map>
+                <ng-map zoom='15' center="{{ssc.pos}}" scrollwheel="false">
+                    <marker position="{{ssc.pos}}" animation="Animation.BOUNCE">
+                    </marker>
+                </ng-map>
             </div>
-            <div class="storeSuggestionsContainer" >
-               <h3 class="storeSuggestionHeader">Few More</h3>
-               <div layout="row" layout-wrap layout-align="space-between">
-                  <div flex="30" class="singleStoreSuggestion" ng-repeat = "suggestedStore in ssc.storeSuggestions">
-                     <div class="suggestedStoreImage"  >
-                        <img ng-src="{{suggestedStore.bannerImage}}" >
-                        
-                     </div>
-                     <div class="suggestedStoreInfo">
-                        <a ng-href="#/store/singleStore/{{suggestedStore._id}}">
-                           <h5 class="suggestedStoreName">{{suggestedStore.name}}</h5>
-                        </a>
-                        <p class="suggestedStoreAddress">{{suggestedStore.address.area+" "}}{{suggestedStore.address.locality}}</p>
-                     </div>
-                     
-                     <!--<suggestion-store> 
+            <div class="storeSuggestionsContainer">
+                <h3 class="storeSuggestionHeader">Few More</h3>
+                <div layout="row" layout-wrap layout-align="space-between">
+                    <div flex="30" class="singleStoreSuggestion" ng-repeat="suggestedStore in ssc.storeSuggestions">
+                        <div class="suggestedStoreImage">
+                            <img ng-src="{{suggestedStore.bannerImage}}">
+                        </div>
+                        <div class="suggestedStoreInfo">
+                            <a ng-href="#/store/singleStore/{{suggestedStore._id}}">
+                                <h5 class="suggestedStoreName">{{suggestedStore.name}}</h5>
+                            </a>
+                            <p class="suggestedStoreAddress">{{suggestedStore.address.area+" "}}{{suggestedStore.address.locality}}</p>
+                        </div>
+                        <!--<suggestion-store> 
                      
                      </suggestion-store>      -->
-                  </div>
-               </div>
-               
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </main>
-<!--
-   <div id="flowProducts">Products list yo</div>
-   
-   <div>Reviews list yo</div>-->

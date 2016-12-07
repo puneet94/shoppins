@@ -1,8 +1,8 @@
 (function(angular){
   angular.module('app.admin')
 
-    .controller('EditStoreController',['$auth','adminStoreService','Upload','$routeParams','$timeout','baseUrlService',EditStoreController]);
-    function EditStoreController($auth,adminStoreService,Upload,$routeParams,$timeout,baseUrlService){
+    .controller('EditStoreController',['$auth','$route','adminStoreService','Upload','$routeParams','$timeout','baseUrlService','$mdDialog',EditStoreController]);
+    function EditStoreController($auth,$route,adminStoreService,Upload,$routeParams,$timeout,baseUrlService,$mdDialog){
     	var csc = this;
     	csc.storeForm = {};
     	activate();
@@ -57,7 +57,16 @@
     		adminStoreService.updateStore($routeParams.storeId,csc.storeForm)
 	    		.then(function(response){
 	    			console.log(response);
-	    			alert("store created");
+	    			$mdDialog.show(
+                        $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title('Store edited')
+                        .textContent('Your Store has been edited.')
+                        .ariaLabel('Alert Dialog Demo')
+                        .ok('Got it!')
+                        
+                    );
+            $route.reload();
 	    		},function(response){
 	    			console.log(response);
 	    		});	

@@ -31,27 +31,10 @@
         </p>
 
         <a class="moreLocationsLink" ng-href="#/store/storesCollection/storeName/{{ssc.storeData.name}}/{{ssc.storeData.address.city}}">More Location</a>
-        <a ng-href="https://www.google.com/maps/preview/@{{ssc.storeData.address.latitude}},{{ssc.storeData.address.longitude}}">Map</a>
         
         
         
       </div>
     </div>
   </div>
-</div>
-<div class="storeAddressPartial" >
-  
-
-
-  <div class="addressContentSection" layout="column" layout-gt-md="row">
-    
-    <div class="addressContentMap">
-      <div class="">
-        <map style="" scrollwheel="false" center="ssc.getAddressString()">
-           <marker position="ssc.getAddressString()" title="{{ssc.storeData.name}}"></marker>
-        </map>
-      </div>
-    </div>
-  </div>
-
 </div>

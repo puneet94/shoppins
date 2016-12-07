@@ -1,8 +1,8 @@
 (function(angular){
   angular.module('app.admin')
 
-    .controller('CreateProductController',['$routeParams','adminProductService','Upload','baseUrlService',CreateProductController]);
-    function CreateProductController($routeParams,adminProductService,Upload,baseUrlService){
+    .controller('CreateProductController',['$routeParams','adminProductService','Upload','baseUrlService','$mdDialog',CreateProductController]);
+    function CreateProductController($routeParams,adminProductService,Upload,baseUrlService,$mdDialog){
     	var csc = this;
     	csc.productForm = {};
         csc.productForm.price = {};
@@ -58,7 +58,15 @@
     		adminProductService.createProduct(csc.productForm,$routeParams.storeId)
 	    		.then(function(response){
 	    			console.log(response);
-	    			alert("product created");
+	    			$mdDialog.show(
+                        $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title('Product created')
+                        .textContent('Your Product has been created.')
+                        .ariaLabel('Alert Dialog Demo')
+                        .ok('Got it!')
+                        
+                    );
 	    		},function(response){
 	    			console.log(response);
 	    		});	

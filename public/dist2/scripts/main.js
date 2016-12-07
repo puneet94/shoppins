@@ -776,23 +776,25 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
     	var asc = this;
         asc.storeData = {};
         activate();
+        
         asc.uploadStoreBanner = function(file, errFiles) {
-          console.log("Enterd file uploading");
+
           asc.f = file;
           asc.errFile = errFiles && errFiles[0];
           if (file) {
+              asc.bannerLoading = true;
               file.upload = Upload.upload({
                   url: baseUrlService.baseUrl+'upload/storeBannerUpload/'+$routeParams.storeId,
                   data: {file: file}
               });
-              asc.spinnerLoading = true;
+              
               file.upload.then(function (response) {
                   
                       file.result = response.data;
-                      //asc.storeForm.bannerImage = response.data;
+                      
                       console.log(response.data);
-                      $('.storeBannerImage').css('background-image','url('+response.data+')');
-                      //asc.spinnerLoading = false;
+                      $('.adminStoreBannerImage').css('background-image','url('+response.data+')');
+                      asc.bannerLoading = false;
               });
           }
       };
@@ -825,8 +827,8 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
 (function(angular){
   angular.module('app.admin')
 
-    .controller('CreateProductController',['$routeParams','adminProductService','Upload','baseUrlService',CreateProductController]);
-    function CreateProductController($routeParams,adminProductService,Upload,baseUrlService){
+    .controller('CreateProductController',['$routeParams','adminProductService','Upload','baseUrlService','$mdDialog',CreateProductController]);
+    function CreateProductController($routeParams,adminProductService,Upload,baseUrlService,$mdDialog){
     	var csc = this;
     	csc.productForm = {};
         csc.productForm.price = {};
@@ -882,7 +884,15 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
     		adminProductService.createProduct(csc.productForm,$routeParams.storeId)
 	    		.then(function(response){
 	    			console.log(response);
-	    			alert("product created");
+	    			$mdDialog.show(
+                        $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title('Product created')
+                        .textContent('Your Product has been created.')
+                        .ariaLabel('Alert Dialog Demo')
+                        .ok('Got it!')
+                        
+                    );
 	    		},function(response){
 	    			console.log(response);
 	    		});	
@@ -895,66 +905,103 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
     }
 })(window.angular);
 
-(function(angular){
-  angular.module('app.admin')
-    .controller('CreateStoreController',['$auth','adminStoreService','Upload','userData','$timeout','baseUrlService','$location',CreateStoreController]);
-    function CreateStoreController($auth,adminStoreService,Upload,userData,$timeout,baseUrlService,$location){
-    	var csc = this;
-    	csc.storeForm = {};
-      csc.storeForm.storeImages = [];
-    	activate();
-    	csc.createStore = createStore;
-    csc.uploadMultipleImages = function (files) {
-        csc.files = files;
-        angular.forEach(files, function(file) {
-            file.upload = Upload.upload({
-                url: baseUrlService.baseUrl+'upload/singleUpload',
-                data: {file: file}
-            });
+(function(angular) {
+    angular.module('app.admin')
+        .controller('CreateStoreController', ['$auth', 'adminStoreService', 'Upload', 'userData', '$timeout', 'baseUrlService', '$location', '$mdDialog',CreateStoreController]);
 
-            file.upload.then(function (response) {
-                $timeout(function () {
-                    file.result = response.data;
-                    console.log(response.data);
-                    csc.storeForm.storeImages.push(response.data);
-                });
-            }, function (response) {
-                if (response.status > 0)
-                    csc.errorMsg = response.status + ': ' + response.data;
-            }, function (evt) {
-                file.progress = Math.min(100, parseInt(100.0 * 
-                                         evt.loaded / evt.total));
-            });
-        });
+    function CreateStoreController($auth, adminStoreService, Upload, userData, $timeout, baseUrlService, $location,$mdDialog) {
+        var csc = this;
+        csc.storeForm = {};
+        csc.storeForm.storeImages = [];
+        activate();
         
-    };
-    	function createStore(){
-        csc.storeForm.bannerImage = csc.storeForm.storeImages[0];
-    		adminStoreService.createStore(csc.storeForm)
-	    		.then(function(response){
-	    			console.log(response.data._id);
-            userData.setUser();
-	    			alert("store created");
-            $location.url('/admin/adminStorePage/'+response.data._id);
-            //$window.location.reload();
-	    		},function(response){
-	    			console.log(response);
-	    		});	
-    	}
-    	
-    	
-    	function activate(){
-    		
-    	}
-    	
+        csc.createStore = createStore;
+        csc.uploadSingleImage = function(file, errFiles) {
+          
+          csc.f = file;
+          csc.errFile = errFiles && errFiles[0];
+          if (file) {
+            csc.formBannerLoading = true;
+
+              file.upload = Upload.upload({
+                  url: baseUrlService.baseUrl + 'upload/singleUpload',
+                  data: {file: file}
+              });
+              //csc.spinnerLoading = true;
+              file.upload.then(function (response) {
+                  
+                      file.result = response.data;
+                      
+                      console.log(response.data);
+                      csc.uploadedImage = response.data;
+                      $('.adminStoreBannerImage').css('background-image','url('+response.data+')');
+                      csc.formBannerLoading = false;
+                      
+              });
+          }
+      };
+        csc.uploadMultipleImages = function(files) {
+            csc.files = files;
+            csc.formImgListLoading = true;
+            angular.forEach(files, function(file) {
+                file.upload = Upload.upload({
+                    url: baseUrlService.baseUrl + 'upload/singleUpload',
+                    data: { file: file }
+                });
+
+                file.upload.then(function(response) {
+                    $timeout(function() {
+                        file.result = response.data;
+                        console.log(response.data);
+                        csc.storeForm.storeImages.push(response.data);
+                    });
+                }, function(response) {
+                    if (response.status > 0)
+                        csc.errorMsg = response.status + ': ' + response.data;
+                }, function(evt) {
+                    file.progress = Math.min(100, parseInt(100.0 *
+                        evt.loaded / evt.total));
+                });
+            });
+            csc.formImgListLoading = false;
+
+        };
+
+        function createStore() {
+            csc.storeForm.bannerImage = csc.storeForm.storeImages[0];
+            adminStoreService.createStore(csc.storeForm)
+                .then(function(response) {
+                    console.log(response.data._id);
+                    userData.setUser();
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title('Store created')
+                        .textContent('Your Store has been created.')
+                        .ariaLabel('Alert Dialog Demo')
+                        .ok('Got it!')
+                        
+                    );
+                    $location.url('/admin/adminStorePage/' + response.data._id);
+                    //$window.location.reload();
+                }, function(response) {
+                    console.log(response);
+                });
+        }
+
+
+        function activate() {
+
+        }
+
     }
 })(window.angular);
 
 (function(angular){
   angular.module('app.admin')
 
-    .controller('EditProductController',['$auth','adminProductService','$routeParams',EditProductController]);
-    function EditProductController($auth,adminProductService,$routeParams){
+    .controller('EditProductController',['$auth','adminProductService','$routeParams','$mdDialog',EditProductController]);
+    function EditProductController($auth,adminProductService,$routeParams,$mdDialog){
     	var csc = this;
     	csc.productForm = {};
     	activate();
@@ -964,7 +1011,15 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
     		adminProductService.updateProduct($routeParams.productId,csc.productForm)
 	    		.then(function(response){
 	    			console.log(response);
-	    			alert("product created");
+	    			$mdDialog.show(
+                        $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title('Product Edited')
+                        .textContent('Your Product has been edited.')
+                        .ariaLabel('Alert Dialog Demo')
+                        .ok('Got it!')
+                        
+                    );
 	    		},function(response){
 	    			console.log(response);
 	    		});	
@@ -988,8 +1043,8 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
 (function(angular){
   angular.module('app.admin')
 
-    .controller('EditStoreController',['$auth','adminStoreService','Upload','$routeParams','$timeout','baseUrlService',EditStoreController]);
-    function EditStoreController($auth,adminStoreService,Upload,$routeParams,$timeout,baseUrlService){
+    .controller('EditStoreController',['$auth','$route','adminStoreService','Upload','$routeParams','$timeout','baseUrlService','$mdDialog',EditStoreController]);
+    function EditStoreController($auth,$route,adminStoreService,Upload,$routeParams,$timeout,baseUrlService,$mdDialog){
     	var csc = this;
     	csc.storeForm = {};
     	activate();
@@ -1044,7 +1099,16 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
     		adminStoreService.updateStore($routeParams.storeId,csc.storeForm)
 	    		.then(function(response){
 	    			console.log(response);
-	    			alert("store created");
+	    			$mdDialog.show(
+                        $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title('Store edited')
+                        .textContent('Your Store has been edited.')
+                        .ariaLabel('Alert Dialog Demo')
+                        .ok('Got it!')
+                        
+                    );
+            $route.reload();
 	    		},function(response){
 	    			console.log(response);
 	    		});	
@@ -1371,6 +1435,302 @@ angular.module('authModApp')
   }
 })(window.angular);
 
+
+(function(angular){
+  angular.module('app.product')
+  .directive('singleProductDirective',[singleProductDirective]);
+  
+  function singleProductDirective(){
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl:'app/product/views/singleProductTemplate.html',
+      scope:{
+        product:'=singleProduct'
+      },
+      link: function(scope,element,attrs){
+
+      }
+    };
+  }
+  
+
+})(window.angular);
+
+(function(angular){
+  angular.module('app.product')
+
+    .controller('ProductCategoryCollectionController',[productCategoryCollectionController]);
+    function productCategoryCollectionController(){
+    	
+    }
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.product')
+  .controller('ProductListController',["$scope","$auth",'$location',"$routeParams","changeBrowserURL","baseUrlService","getProductCollectionService",ProductListController]);
+  function ProductListController($scope,$auth,$location,$routeParams,changeBrowserURL,baseUrlService,getProductCollectionService){
+  	 var plc = this;
+      plc.pageNo = 0;
+      plc.productsList = [];
+      plc.getSingleProduct = getSingleProduct;
+      plc.getProductsCollection = getProductsCollection;
+      plc.productsSearchHeader = $routeParams.slug;
+      activate();
+      $scope.$on('parent', function (event, data) {
+        plc.pageNo = 0;
+        plc.paramData = data;
+        plc.getProductsCollection();
+        
+      });
+      function getSingleProduct(product,scrollId){
+        var url = "product/singleProduct/"+product._id;//+"/"+product.myslug;
+        if(scrollId){
+          changeBrowserURL.changeBrowserURLMethod(url,scrollId);
+        }
+        changeBrowserURL.changeBrowserURLMethod(url);
+      }
+      function getProductsCollection(){
+        plc.loading = true;
+        plc.pageNo = plc.pageNo + 1;
+        var location = $routeParams.location;
+        var url ='';
+        if($location.absUrl().indexOf("/productsCollectionCategory/")!=-1){
+          var category = $routeParams.category;           
+           url = 'product/products/category/'+category+'/'+location+'/'+plc.pageNo;
+        }
+        else if($location.absUrl().indexOf("/productsCollectionSubCategory/")!=-1){
+          var productSubCategory = $routeParams.subCategory;
+           url = 'product/products/subCategory/'+productSubCategory+'/'+location+'/'+plc.pageNo;
+        }
+        else if($location.absUrl().indexOf("/productsCollectionName/")!=-1){
+          var productName = $routeParams.productName;
+           url = 'product/products/name/'+productName+'/'+location+'/'+plc.pageNo;
+        }
+        else if($location.absUrl().indexOf("/productsCollectionLocation/")!=-1){
+          
+           url = 'product/products/location'+'/'+location+'/'+plc.pageNo;
+        }
+        /*
+          * This will work with mongoose-paginate only because the existencce of the button
+            in html is dependant on the total documents retrieved
+          * I check the total documents available to the length of array displayed.. if they both are equal
+            then the button is hidden
+        */
+        getProductCollectionService.getProductCollection(url,plc.paramData)
+        .then(function(response){
+          plc.totalProducts = response.data.total;
+          if(plc.productsList.length===0){
+            var tempProductList = [];
+            for (var i = response.data.docs.length - 1; i >= 0; i--) {
+              tempProductList.push(response.data.docs[i]);
+
+            }
+            plc.productsList = tempProductList;
+          }
+          else{
+
+            if(plc.paramData&&plc.pageNo==1){
+              plc.productsList = [];
+            }
+            for (var j = response.data.docs.length - 1; j >= 0; j--) {
+              plc.productsList.push(response.data.docs[j]);
+            }
+
+          }
+          plc.loading = false;
+        },function(response){
+          console.log(response);
+        });
+      }
+      function activate(){
+        plc.getProductsCollection();
+      }
+
+    }						
+    
+
+  
+
+})(window.angular);
+
+(function(angular){
+  angular.module('app.product')
+
+    .controller('ProductNameCollectionController',[productNameCollectionController]);
+    function productNameCollectionController(){
+    	
+    }
+})(window.angular);
+
+(function(angular){
+  angular.module('app.product')
+    .controller('ProductsLocationController',["$scope","$routeParams","getCityProductLocalitiesService","getCityProductCategoriesService","getCityProductSubCategoriesService",ProductsLocationController]);
+
+  function ProductsLocationController($scope,$routeParams,getCityProductLocalitiesService,getCityProductCategoriesService,getCityProductSubCategoriesService){
+    var plc = this;
+    plc.areaModel = {};
+    plc.categoryModel = {};
+    plc.launchFilterEvent = launchFilterEvent;
+    plc.areaRadioClicked = areaRadioClicked;
+    plc.categoryRadioClicked = categoryRadioClicked;
+    plc.majorFilter = {};
+    plc.clearAreaFilters = clearAreaFilters;
+    plc.clearCategoryFilters = clearCategoryFilters;
+    function areaRadioClicked(){
+      plc.majorFilter.area=plc.areaModel.area;
+      launchFilterEvent(plc.majorFilter);
+    }
+    function clearAreaFilters(){
+      delete plc.majorFilter.area;
+      plc.areaModel = {};
+      launchFilterEvent(plc.majorFilter);
+    }
+    function categoryRadioClicked(){
+      plc.majorFilter.category=plc.categoryModel.category;
+      launchFilterEvent(plc.majorFilter);
+    }
+    function clearCategoryFilters(){
+      delete plc.majorFilter.category;
+      plc.categoryModel = {};
+      launchFilterEvent(plc.majorFilter);
+    }
+    var location = $routeParams.location;
+    getCityProductLocalitiesService.getCityLocalities(location)
+      .then(function(res){
+        plc.areas = res.data;
+      },function(res){
+        
+      });
+      getCityProductCategoriesService.getCityCategories(location)
+        .then(function(res){
+          plc.categories = res.data;
+          
+        },function(res){
+          console.log(res);
+        });
+    function launchFilterEvent(obj){
+        $scope.$broadcast('parent', obj);
+    }
+
+  }
+})(window.angular);
+
+(function(angular){
+  angular.module('app.product')
+
+    .controller('ProductSubCategoryCollectionController',[productSubCategoryCollectionController]);
+    function productSubCategoryCollectionController(){
+    	
+    }
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.product')
+
+  .controller('SingleProductController',["$scope","$auth",'getProductsService','$location','scrollToIdService',"$routeParams",SingleProductController]);
+  function SingleProductController($scope,$auth,getProductsService,$location,scrollToIdService,$routeParams){
+    
+    var spc = this;
+    spc.authCheck = $auth.isAuthenticated();
+    activate();
+    
+
+
+
+    function activate(){
+    	getProductsService.getSingleProduct($routeParams.productId).then(function(res){
+    		
+    		spc.product = res.data;	
+    	});
+		
+    }
+  }
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.product')
+  .controller('StoreProductListController',["$scope","$auth",'$location','scrollToIdService',"$routeParams","getProductsService","changeBrowserURL",StoreProductListController]);
+  function StoreProductListController($scope,$auth,$location,scrollToIdService,$routeParams,getProductsService,changeBrowserURL){
+    var splc = this;
+    splc.storeProductsList = [];
+    splc.pageNo = 0;
+    splc.getSingleProduct = getSingleProduct;
+    activate();
+
+    function getSingleProduct(productId){
+      var url = "/product/singleProduct/"+productId;
+      changeBrowserURL.changeBrowserURLMethod(url);
+    }
+    function activate(){
+    	getProductsService.getStoreProductsList($routeParams.storeId).then(function(response){
+        
+        splc.storeProductsList = response.data.docs;
+      });
+    }
+
+  }
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('app.product')
+  .service('getProductCollectionService',["$http","baseUrlService",GetProductCollectionService]);
+
+/*
+  * This servic has a function to get collection of products`
+*/
+function GetProductCollectionService($http,baseUrlService){
+  this.getProductCollection = getProductCollection;
+
+  function getProductCollection(url,paramData){
+    return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+}
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('app.product')
+  .service('getProductsService',["$http","storeData","baseUrlService",'changeBrowserURL',GetProductsService]);
+
+/*
+  * This servic has a function to get collection of stores`
+*/
+function GetProductsService($http,storeData,baseUrlService,changeBrowserURL){
+  this.getStoreProductsList = getStoreProductsList;
+  this.getSingleProduct = getSingleProduct;
+this.getSingleProductPage = getSingleProductPage;
+  function getStoreProductsList(storeId){
+  	var pageNo = 1;
+  	return $http.get(baseUrlService.baseUrl+'product/products/store/'+storeId+"/"+pageNo);
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function getSingleProduct(productId){
+  	return $http.get(baseUrlService.baseUrl+'product/products/singleProduct/'+productId);
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function getSingleProductPage(product,scrollId){
+        var url = "product/singleProduct/"+product._id+"/"+(product.myslug || ' ');
+        if(scrollId){
+          //url = url + "?scrollId="+scrollId;
+          changeBrowserURL.changeBrowserURLMethod(url,scrollId);
+        }
+        changeBrowserURL.changeBrowserURLMethod(url);
+      }
+}
+})(window.angular);
+
 (function(angular){
 	'use strict';
 
@@ -1603,7 +1963,7 @@ function SearchBoxController($scope,$http,$routeParams,cityStorage,citiesService
 		}
 		else{
 
-			hm.selectedItem = 'dubai';
+			hm.selectedItem = 'hyderabad';
 		}
 		activate();
 		hm.userSearches = [];
@@ -1774,302 +2134,6 @@ angular.module('app.user')
       	
       }
   }
-})(window.angular);
-
-(function(angular){
-  angular.module('app.product')
-
-    .controller('ProductCategoryCollectionController',[productCategoryCollectionController]);
-    function productCategoryCollectionController(){
-    	
-    }
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.product')
-  .controller('ProductListController',["$scope","$auth",'$location',"$routeParams","changeBrowserURL","baseUrlService","getProductCollectionService",ProductListController]);
-  function ProductListController($scope,$auth,$location,$routeParams,changeBrowserURL,baseUrlService,getProductCollectionService){
-  	 var plc = this;
-      plc.pageNo = 0;
-      plc.productsList = [];
-      plc.getSingleProduct = getSingleProduct;
-      plc.getProductsCollection = getProductsCollection;
-      plc.productsSearchHeader = $routeParams.slug;
-      activate();
-      $scope.$on('parent', function (event, data) {
-        plc.pageNo = 0;
-        plc.paramData = data;
-        plc.getProductsCollection();
-        
-      });
-      function getSingleProduct(product,scrollId){
-        var url = "product/singleProduct/"+product._id;//+"/"+product.myslug;
-        if(scrollId){
-          changeBrowserURL.changeBrowserURLMethod(url,scrollId);
-        }
-        changeBrowserURL.changeBrowserURLMethod(url);
-      }
-      function getProductsCollection(){
-        plc.loading = true;
-        plc.pageNo = plc.pageNo + 1;
-        var location = $routeParams.location;
-        var url ='';
-        if($location.absUrl().indexOf("/productsCollectionCategory/")!=-1){
-          var category = $routeParams.category;           
-           url = 'product/products/category/'+category+'/'+location+'/'+plc.pageNo;
-        }
-        else if($location.absUrl().indexOf("/productsCollectionSubCategory/")!=-1){
-          var productSubCategory = $routeParams.subCategory;
-           url = 'product/products/subCategory/'+productSubCategory+'/'+location+'/'+plc.pageNo;
-        }
-        else if($location.absUrl().indexOf("/productsCollectionName/")!=-1){
-          var productName = $routeParams.productName;
-           url = 'product/products/name/'+productName+'/'+location+'/'+plc.pageNo;
-        }
-        else if($location.absUrl().indexOf("/productsCollectionLocation/")!=-1){
-          
-           url = 'product/products/location'+'/'+location+'/'+plc.pageNo;
-        }
-        /*
-          * This will work with mongoose-paginate only because the existencce of the button
-            in html is dependant on the total documents retrieved
-          * I check the total documents available to the length of array displayed.. if they both are equal
-            then the button is hidden
-        */
-        getProductCollectionService.getProductCollection(url,plc.paramData)
-        .then(function(response){
-          plc.totalProducts = response.data.total;
-          if(plc.productsList.length===0){
-            var tempProductList = [];
-            for (var i = response.data.docs.length - 1; i >= 0; i--) {
-              tempProductList.push(response.data.docs[i]);
-
-            }
-            plc.productsList = tempProductList;
-          }
-          else{
-
-            if(plc.paramData&&plc.pageNo==1){
-              plc.productsList = [];
-            }
-            for (var j = response.data.docs.length - 1; j >= 0; j--) {
-              plc.productsList.push(response.data.docs[j]);
-            }
-
-          }
-          plc.loading = false;
-        },function(response){
-          console.log(response);
-        });
-      }
-      function activate(){
-        plc.getProductsCollection();
-      }
-
-    }						
-    
-
-  
-
-})(window.angular);
-
-(function(angular){
-  angular.module('app.product')
-
-    .controller('ProductNameCollectionController',[productNameCollectionController]);
-    function productNameCollectionController(){
-    	
-    }
-})(window.angular);
-
-(function(angular){
-  angular.module('app.product')
-    .controller('ProductsLocationController',["$scope","$routeParams","getCityProductLocalitiesService","getCityProductCategoriesService","getCityProductSubCategoriesService",ProductsLocationController]);
-
-  function ProductsLocationController($scope,$routeParams,getCityProductLocalitiesService,getCityProductCategoriesService,getCityProductSubCategoriesService){
-    var plc = this;
-    plc.areaModel = {};
-    plc.categoryModel = {};
-    plc.launchFilterEvent = launchFilterEvent;
-    plc.areaRadioClicked = areaRadioClicked;
-    plc.categoryRadioClicked = categoryRadioClicked;
-    plc.majorFilter = {};
-    plc.clearAreaFilters = clearAreaFilters;
-    plc.clearCategoryFilters = clearCategoryFilters;
-    function areaRadioClicked(){
-      plc.majorFilter.area=plc.areaModel.area;
-      launchFilterEvent(plc.majorFilter);
-    }
-    function clearAreaFilters(){
-      delete plc.majorFilter.area;
-      plc.areaModel = {};
-      launchFilterEvent(plc.majorFilter);
-    }
-    function categoryRadioClicked(){
-      plc.majorFilter.category=plc.categoryModel.category;
-      launchFilterEvent(plc.majorFilter);
-    }
-    function clearCategoryFilters(){
-      delete plc.majorFilter.category;
-      plc.categoryModel = {};
-      launchFilterEvent(plc.majorFilter);
-    }
-    var location = $routeParams.location;
-    getCityProductLocalitiesService.getCityLocalities(location)
-      .then(function(res){
-        plc.areas = res.data;
-      },function(res){
-        
-      });
-      getCityProductCategoriesService.getCityCategories(location)
-        .then(function(res){
-          plc.categories = res.data;
-          
-        },function(res){
-          console.log(res);
-        });
-    function launchFilterEvent(obj){
-        $scope.$broadcast('parent', obj);
-    }
-
-  }
-})(window.angular);
-
-(function(angular){
-  angular.module('app.product')
-
-    .controller('ProductSubCategoryCollectionController',[productSubCategoryCollectionController]);
-    function productSubCategoryCollectionController(){
-    	
-    }
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.product')
-
-  .controller('SingleProductController',["$scope","$auth",'getProductsService','$location','scrollToIdService',"$routeParams",SingleProductController]);
-  function SingleProductController($scope,$auth,getProductsService,$location,scrollToIdService,$routeParams){
-    
-    var spc = this;
-    spc.authCheck = $auth.isAuthenticated();
-    activate();
-    
-
-
-
-    function activate(){
-    	getProductsService.getSingleProduct($routeParams.productId).then(function(res){
-    		
-    		spc.product = res.data;	
-    	});
-		
-    }
-  }
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.product')
-  .controller('StoreProductListController',["$scope","$auth",'$location','scrollToIdService',"$routeParams","getProductsService","changeBrowserURL",StoreProductListController]);
-  function StoreProductListController($scope,$auth,$location,scrollToIdService,$routeParams,getProductsService,changeBrowserURL){
-    var splc = this;
-    splc.storeProductsList = [];
-    splc.pageNo = 0;
-    splc.getSingleProduct = getSingleProduct;
-    activate();
-
-    function getSingleProduct(productId){
-      var url = "/product/singleProduct/"+productId;
-      changeBrowserURL.changeBrowserURLMethod(url);
-    }
-    function activate(){
-    	getProductsService.getStoreProductsList($routeParams.storeId).then(function(response){
-        
-        splc.storeProductsList = response.data.docs;
-      });
-    }
-
-  }
-
-})(window.angular);
-
-
-(function(angular){
-  angular.module('app.product')
-  .directive('singleProductDirective',[singleProductDirective]);
-  
-  function singleProductDirective(){
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl:'app/product/views/singleProductTemplate.html',
-      scope:{
-        product:'=singleProduct'
-      },
-      link: function(scope,element,attrs){
-
-      }
-    };
-  }
-  
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-
-angular.module('app.product')
-  .service('getProductCollectionService',["$http","baseUrlService",GetProductCollectionService]);
-
-/*
-  * This servic has a function to get collection of products`
-*/
-function GetProductCollectionService($http,baseUrlService){
-  this.getProductCollection = getProductCollection;
-
-  function getProductCollection(url,paramData){
-    return $http.get(baseUrlService.baseUrl+url,{params:paramData});
-
-  }
-}
-})(window.angular);
-
-(function(angular){
-  'use strict';
-
-angular.module('app.product')
-  .service('getProductsService',["$http","storeData","baseUrlService",'changeBrowserURL',GetProductsService]);
-
-/*
-  * This servic has a function to get collection of stores`
-*/
-function GetProductsService($http,storeData,baseUrlService,changeBrowserURL){
-  this.getStoreProductsList = getStoreProductsList;
-  this.getSingleProduct = getSingleProduct;
-this.getSingleProductPage = getSingleProductPage;
-  function getStoreProductsList(storeId){
-  	var pageNo = 1;
-  	return $http.get(baseUrlService.baseUrl+'product/products/store/'+storeId+"/"+pageNo);
-    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
-
-  }
-  function getSingleProduct(productId){
-  	return $http.get(baseUrlService.baseUrl+'product/products/singleProduct/'+productId);
-    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
-
-  }
-  function getSingleProductPage(product,scrollId){
-        var url = "product/singleProduct/"+product._id+"/"+(product.myslug || ' ');
-        if(scrollId){
-          //url = url + "?scrollId="+scrollId;
-          changeBrowserURL.changeBrowserURLMethod(url,scrollId);
-        }
-        changeBrowserURL.changeBrowserURLMethod(url);
-      }
-}
 })(window.angular);
 
 (function(angular){
@@ -3005,85 +3069,6 @@ angular.module('app.store')
 })(window.angular);
 
 (function(angular){
-  angular.module('app.store')
-  .directive('filterDirective',["$window","$location", filterDirective])
-  .directive('addClass',["$window","$location", addClassDirective])
-  .directive('removeClass',["$window","$location", removeClassDirective])
-  .directive('siblingRemoveClass',["$window","$location", siblingRemoveClassDirective]);
-  function filterDirective($window,$location) {
-    return {
-      restrict: 'E',
-      templateUrl:'app/store/views/filterDirectiveTemplate.html',
-      scope:{
-        filterName:"@filterName",
-        radioModel:"=radioModel",
-        radioChange:"&radioChange",
-        radioRepeat:"=radioRepeat",
-        clearClick:"&clearClick"
-      },
-      link: function(scope, element, attrs) {
-      }
-    };
-  }
-  function addClassDirective($window,$location) {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          //$(element).removeClass('highlightClass');
-          $(this).addClass(attrs.addClass);
-
-        });
-
-      }
-    };
-  }
-  function siblingRemoveClassDirective($window,$location) {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          $(this).siblings().removeClass(attrs.siblingRemoveClass);
-        });
-
-      }
-    };
-  }
-
-  function removeClassDirective($window,$location) {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          $(this).siblings('.filterDirectiveRadioGroup').find('.filterRadioButton').removeClass(attrs.removeClass);
-        });
-
-      }
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular){
-  angular.module('app.store')
-  .directive('scrollToId',['scrollToIdService',scrollToIdDirective]);
-
-  function scrollToIdDirective(scrollToIdService) {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          scrollToIdService.scrollToId(attrs.scrollToId);
-        });
-      }
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular){
   'use strict';
 
 angular.module('app.store')
@@ -3282,6 +3267,85 @@ function UserVisitService($http,baseUrlService){
     return $http.delete(baseUrlService.baseUrl+"visit/visits/",{"params":visitObj});
   }
 }
+})(window.angular);
+
+(function(angular){
+  angular.module('app.store')
+  .directive('filterDirective',["$window","$location", filterDirective])
+  .directive('addClass',["$window","$location", addClassDirective])
+  .directive('removeClass',["$window","$location", removeClassDirective])
+  .directive('siblingRemoveClass',["$window","$location", siblingRemoveClassDirective]);
+  function filterDirective($window,$location) {
+    return {
+      restrict: 'E',
+      templateUrl:'app/store/views/filterDirectiveTemplate.html',
+      scope:{
+        filterName:"@filterName",
+        radioModel:"=radioModel",
+        radioChange:"&radioChange",
+        radioRepeat:"=radioRepeat",
+        clearClick:"&clearClick"
+      },
+      link: function(scope, element, attrs) {
+      }
+    };
+  }
+  function addClassDirective($window,$location) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          //$(element).removeClass('highlightClass');
+          $(this).addClass(attrs.addClass);
+
+        });
+
+      }
+    };
+  }
+  function siblingRemoveClassDirective($window,$location) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          $(this).siblings().removeClass(attrs.siblingRemoveClass);
+        });
+
+      }
+    };
+  }
+
+  function removeClassDirective($window,$location) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          $(this).siblings('.filterDirectiveRadioGroup').find('.filterRadioButton').removeClass(attrs.removeClass);
+        });
+
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular){
+  angular.module('app.store')
+  .directive('scrollToId',['scrollToIdService',scrollToIdDirective]);
+
+  function scrollToIdDirective(scrollToIdService) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          scrollToIdService.scrollToId(attrs.scrollToId);
+        });
+      }
+    };
+  }
+
+
 })(window.angular);
 
 (function(angular){

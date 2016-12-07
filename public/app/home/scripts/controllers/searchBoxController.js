@@ -15,7 +15,7 @@ function SearchBoxController($scope,$http,$routeParams,cityStorage,citiesService
 		}
 		else{
 
-			hm.selectedItem = 'dubai';
+			hm.selectedItem = 'hyderabad';
 		}
 		activate();
 		hm.userSearches = [];

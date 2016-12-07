@@ -1,8 +1,8 @@
 (function(angular){
   angular.module('app.admin')
 
-    .controller('EditProductController',['$auth','adminProductService','$routeParams',EditProductController]);
-    function EditProductController($auth,adminProductService,$routeParams){
+    .controller('EditProductController',['$auth','adminProductService','$routeParams','$mdDialog',EditProductController]);
+    function EditProductController($auth,adminProductService,$routeParams,$mdDialog){
     	var csc = this;
     	csc.productForm = {};
     	activate();
@@ -12,7 +12,15 @@
     		adminProductService.updateProduct($routeParams.productId,csc.productForm)
 	    		.then(function(response){
 	    			console.log(response);
-	    			alert("product created");
+	    			$mdDialog.show(
+                        $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title('Product Edited')
+                        .textContent('Your Product has been edited.')
+                        .ariaLabel('Alert Dialog Demo')
+                        .ok('Got it!')
+                        
+                    );
 	    		},function(response){
 	    			console.log(response);
 	    		});	

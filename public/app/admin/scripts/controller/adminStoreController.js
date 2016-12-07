@@ -6,23 +6,25 @@
     	var asc = this;
         asc.storeData = {};
         activate();
+        
         asc.uploadStoreBanner = function(file, errFiles) {
-          console.log("Enterd file uploading");
+
           asc.f = file;
           asc.errFile = errFiles && errFiles[0];
           if (file) {
+              asc.bannerLoading = true;
               file.upload = Upload.upload({
                   url: baseUrlService.baseUrl+'upload/storeBannerUpload/'+$routeParams.storeId,
                   data: {file: file}
               });
-              asc.spinnerLoading = true;
+              
               file.upload.then(function (response) {
                   
                       file.result = response.data;
-                      //asc.storeForm.bannerImage = response.data;
+                      
                       console.log(response.data);
-                      $('.storeBannerImage').css('background-image','url('+response.data+')');
-                      //asc.spinnerLoading = false;
+                      $('.adminStoreBannerImage').css('background-image','url('+response.data+')');
+                      asc.bannerLoading = false;
               });
           }
       };
