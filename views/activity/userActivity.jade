@@ -1,5 +1,5 @@
 for i,index in activity
-	div(class="singleActivity")
+	div(class="singleActivity" md-whiteframe="3")
 		if i.statement == "reviewed store"
 			div(class="activityHeading")
 				- var userLink = "#/user/"+i.review.user._id
@@ -24,7 +24,7 @@ for i,index in activity
 							#{moment(i.time).fromNow()}
 				div(class="clearBoth")
 			div(class="activityContent")
-				div(md-whiteframe="3" class="activityContentText")
+				div( class="activityContentText")
 					div
 						div(class="activityReviewStoreImageContainer")
 							div(class="reviewStoreImage" afkl-lazy-image="#{i.review.store.bannerImage}")
@@ -60,7 +60,7 @@ for i,index in activity
 							#{moment(i.time).fromNow()}
 				div(class="clearBoth")
 			div(class="activityContent")
-				div(md-whiteframe="3" class="activityContentText")
+				div( class="activityContentText")
 					div
 						div(class="activityReviewProductImageContainer")
 							div(class="reviewProductImage" afkl-lazy-image="#{i.review.product.images[0]}")
@@ -95,7 +95,7 @@ for i,index in activity
 							#{moment(i.time).fromNow()}
 				div(class="clearBoth")
 			div(class="activityContent")
-				div(md-whiteframe="3" class="activityContentText")
+				div( class="activityContentText")
 					div
 						div(class="activityFollowCreatorImageContainer")
 							div(class="followCreatorImage" afkl-lazy-image="#{i.creator.picture}")
@@ -127,7 +127,7 @@ for i,index in activity
 							#{moment(i.time).fromNow()}
 				div(class="clearBoth")
 			div(class="activityContent")
-				div(md-whiteframe="3" class="activityContentText")
+				div( class="activityContentText")
 					div
 						div(class="activityReviewStoreImageContainer")
 							div(class="reviewStoreImage" afkl-lazy-image="#{i.store.bannerImage}")
@@ -156,7 +156,7 @@ for i,index in activity
 							#{moment(i.time).fromNow()}
 				div(class="clearBoth")
 			div(class="activityContent")
-				div(md-whiteframe="3" class="activityContentText")
+				div( class="activityContentText")
 					div
 						div(class="activityReviewProductImageContainer")
 							div(class="reviewProductImage" afkl-lazy-image="#{i.product.images[0]}")
@@ -184,7 +184,7 @@ for i,index in activity
 							#{moment(i.time).fromNow()}
 				div(class="clearBoth")
 			div(class="activityContent")
-				div(md-whiteframe="3" class="activityContentText")
+				div( class="activityContentText")
 					div
 						div(class="activityReviewStoreImageContainer")
 							div(class="reviewStoreImage" afkl-lazy-image="#{i.store.bannerImage}")
@@ -212,7 +212,7 @@ for i,index in activity
 							#{moment(i.time).fromNow()}
 				div(class="clearBoth")
 			div(class="activityContent")
-				div(md-whiteframe="3" class="activityContentText")
+				div( class="activityContentText")
 					div
 						div(class="activityReviewContentContainer")
 							div(class="activityReviewRating")
@@ -246,7 +246,7 @@ for i,index in activity
 							#{moment(i.time).fromNow()}
 				div(class="clearBoth")
 			div(class="activityContent")
-				div(md-whiteframe="3" class="activityContentText")
+				div( class="activityContentText")
 					div
 						div(class="activityReviewContentContainer")
 							div(class="activityReviewRating")

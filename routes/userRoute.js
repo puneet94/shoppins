@@ -15,7 +15,7 @@ cloudinary.config({
 var Store = models.Store;
 var User = models.User;
 var Review = models.Review;
-
+var Activity = models.Activity;
 var UserSearch = require('..//models/user_search');
 var userRouter = express.Router();
 var commons = require('./commonRouteFunctions');
@@ -139,9 +139,17 @@ userRouter.route('/deleteFollow/:user_id/:followedUser_id')
 					else{
 						User.update({_id:fold_id},{$pull:{'followers':user_id}},{upsert:true},function(err,data){
 						if(err){
-
+							
 						}
 						else{
+							var activityObj = {};
+							activityObj.followed = fold_id;
+							activityObj.creator = user_id;
+							activityObj.statement = "followed";
+							Activity.findOne(activityObj).remove().exec(function(err, data) {
+  								console.log("activity deleted");
+  								console.log(data);
+							});
 							res.json('followers deleted');
 						}
 						})
