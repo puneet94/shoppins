@@ -30,6 +30,7 @@ function createStore(req, res){
   //store.keywords = item.keywords.toLowerCase().split(",");
   store.bannerImage = item.bannerImage;
   store.storeImages = item.storeImages;
+  store.phone = item.phone;
   store.admin = req.user;
   console.log(req.user+'gfnjfgng');
   console.log(store);
@@ -81,11 +82,12 @@ function updateStore(req, res){
       var address = {};
       item = req.body;
       store.name = item.name;
+      store.phone = item.phone;
       address = item.address;
       store.address = address;
       store.category = item.category.map(function(item){return item.toLowerCase();});
       store.subCategory = item.subCategory.map(function(item){return item.toLowerCase();});
-      store.keywords = item.keywords.split(",");
+      //store.keywords = item.keywords.split(",");
       store.bannerImage = item.bannerImage;
       store.storeImages = item.storeImages;
       store.save(function (err, result) {

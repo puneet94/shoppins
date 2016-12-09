@@ -213,6 +213,7 @@ var Address = new Schema({
 	zipCode:String,
 	area:String,
 	locality:String,
+	landmark:String,
 	latitude:Number,
 	longitude:Number
 });

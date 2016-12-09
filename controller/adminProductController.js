@@ -29,7 +29,7 @@ function createProduct(req, res){
   price.value = item.price.value;
   price.currency = item.price.currency||'INR';
   product.price = price;
-  product.sizesAvailable=item.sizesAvailable;
+  //product.sizesAvailable=item.sizesAvailable;
   product.store = req.params.storeId;
   Store.findById(req.params.storeId,function(err,store){
     if(err){
@@ -92,7 +92,7 @@ function updateProduct(req, res){
       price.value = item.price.value;
       price.currency = item.price.currency||'INR';
       product.price = price;
-      product.sizesAvailable=item.sizesAvailable;
+      //product.sizesAvailable=item.sizesAvailable;
       product.save(function (err, result) {
         res.json(result);
       });
