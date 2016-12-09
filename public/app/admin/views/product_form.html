@@ -23,7 +23,7 @@
                     <input class="formEntityInput" type="text" ng-model="csc.productForm.price.currency" name="productPriceCurrency" />
                 </div>
                 <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
-                    <md-button class="md-raised md-primary" type="file" ngf-select="csc.uploadSingleImage($file, $invalidFiles)" accept="image/*" ngf-max-height="1000" ngf-max-size="10MB">
+                    <md-button class="md-raised md-primary" type="file" ngf-select="csc.uploadSingleImage($file, $invalidFiles)" accept="image/*" ngf-max-height="5000" ngf-max-size="10MB">
                         Upload banner Image
                     </md-button>
                     <inner-loading-directive inner-loading="csc.formBannerLoading" container-height="100px"></inner-loading-directive>

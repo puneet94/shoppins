@@ -27,7 +27,7 @@ function createStore(req, res){
   store.address = address;
   store.category = item.category.map(function(item){return item.toLowerCase();});
   store.subCategory = item.subCategory.map(function(item){return item.toLowerCase();});
-  store.keywords = item.keywords.toLowerCase().split(",");
+  //store.keywords = item.keywords.toLowerCase().split(",");
   store.bannerImage = item.bannerImage;
   store.storeImages = item.storeImages;
   store.admin = req.user;

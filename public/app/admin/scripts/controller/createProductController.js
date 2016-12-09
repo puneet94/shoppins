@@ -24,7 +24,7 @@
             file.upload.then(function (response) {
                 $timeout(function () {
                     file.result = response.data;
-                    console.log(response.data);
+                    
                     csc.productForm.productImages.push(response.data);
                     csc.formImgListLoading = false;
                 });

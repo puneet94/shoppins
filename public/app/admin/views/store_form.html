@@ -3,7 +3,7 @@
       
       <!--
       <button class="imageUploadClick" type="file" ngf-select="csc.uploadSingleImage($file, $invalidFiles)"
-          accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">
+          accept="image/*" ngf-max-height="5000" ngf-max-size="1MB">
       Upload Banner Image</button>
       <div style="width:100px;height:100px;">
          <img ng-src="{{csc.storeForm.bannerImage}}" style="width:100%;height:100%;">
@@ -202,7 +202,7 @@
                             <input class="formEntityInput" type="tel" ng-model="csc.storeForm.phone" name="storePhone" />
                         </div>
                         <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
-                            <md-button class="md-raised md-primary" type="file" ngf-select="csc.uploadSingleImage($file, $invalidFiles)" accept="image/*" ngf-max-height="1000" ngf-max-size="10MB">
+                            <md-button class="md-raised md-primary" type="file" ngf-select="csc.uploadSingleImage($file, $invalidFiles)" accept="image/*" ngf-max-height="5000" ngf-max-size="10MB">
                                 Upload banner Image
                             </md-button>
                             <inner-loading-directive inner-loading="csc.formBannerLoading" container-height="100px"></inner-loading-directive>
@@ -291,22 +291,7 @@
                                     <div ng-message="md-max-chips">The maxmium of chips is reached.</div>
                                 </div>
                             </div>
-                            <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
-                                <label class="formEntityLabel" for="addressCity">City</label>
-                                <input class="formEntityInput" type="text" name="addressCity" />
-                            </div>
-                            <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
-                                <label class="formEntityLabel" for="addressState">State</label>
-                                <input class="formEntityInput" type="text" name="addressState" />
-                            </div>
-                            <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
-                                <label class="formEntityLabel" for="addressPincode">Pincode</label>
-                                <input class="formEntityInput" type="text" name="addressPincode" />
-                            </div>
-                            <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
-                                <label class="formEntityLabel" for="addressCountry">Country</label>
-                                <input class="formEntityInput" type="text" name="addressCountry" />
-                            </div>
+                            
                         </div>
                     </div>
                 </div>

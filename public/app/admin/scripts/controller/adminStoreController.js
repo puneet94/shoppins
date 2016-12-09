@@ -8,7 +8,7 @@
         activate();
         
         asc.uploadStoreBanner = function(file, errFiles) {
-
+          
           asc.f = file;
           asc.errFile = errFiles && errFiles[0];
           if (file) {
