@@ -185,11 +185,10 @@
       <md-button ng-click="csc.createStore()" class="md-raised md-primary md-button" type="submit">Submit</md-button>
    </form>-->
     <div layout="row">
-        <div  style="background: #FFF;" md-whiteframe="2">
+        <div style="background: #FFF;" md-whiteframe="2">
             <form name="storeForm">
-               
                 <div class="storeIntroSection">
-                     <h3 class="formSectionHeaders">Store Details</h3>
+                    <h3 class="formSectionHeaders">Store Details</h3>
                     <div layout="row" layout-align="space-around" layout-wrap layout-margin>
                         <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
                             <label class="formEntityLabel" for="storeName">Name</label>
@@ -206,22 +205,18 @@
                             <md-button class="md-raised md-primary" type="file" ngf-select="csc.uploadSingleImage($file, $invalidFiles)" accept="image/*" ngf-max-height="1000" ngf-max-size="10MB">
                                 Upload banner Image
                             </md-button>
-                            <inner-loading-directive inner-loading="csc.formBannerLoading" container-height="100px"></inner-loading-directive>  
+                            <inner-loading-directive inner-loading="csc.formBannerLoading" container-height="100px"></inner-loading-directive>
                             <div style="width:90px;height:90px;" ng-if="csc.storeForm.bannerImage || csc.uploadedImage">
-                              <img ng-src="{{csc.storeForm.bannerImage || csc.uploadedImage}}" style="width:100%;height:100%;">   
+                                <img ng-src="{{csc.storeForm.bannerImage || csc.uploadedImage}}" style="width:100%;height:100%;">
                             </div>
-                            
                         </div>
                         <div flex="45" flex-sm="100" flex-xs="100" class="formEntity">
                             <div>
-                                 
                                 <md-button class="md-raised md-primary" ngf-select="csc.uploadMultipleImages($files)" multiple accept="image/*">Upload Images</md-button>
-
-                                 {{csc.errorMsg}}
+                                {{csc.errorMsg}}
                             </div>
-                            <inner-loading-directive inner-loading="csc.formImgListLoading" container-height="100px"></inner-loading-directive>  
+                            <inner-loading-directive inner-loading="csc.formImgListLoading" container-height="100px"></inner-loading-directive>
                             <div layout="row" class="storeImagesCollection">
-                                 
                                 <images-list-directive images-list="csc.storeForm.storeImages"></images-list-directive>
                             </div>
                         </div>
