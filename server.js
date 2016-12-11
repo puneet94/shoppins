@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 var compression = require('compression')
 var qs = require('querystring');
 var moment = require('moment');
+var io = require('socket.io');
 var request = require('request');
 var jwt = require('jwt-simple');
 
@@ -16,6 +17,8 @@ var port = process.env.PORT || 3000;
 var http = require('http');
 var app = express();
 var server = http.createServer(app);
+io = io.listen(server);
+
 
 
 //moment added to be used in jade
@@ -33,6 +36,7 @@ var authenticateRouter = require('./routes/authenticateRoute');
 var reviewRouter = require('./routes/reviewRoute');
 var visitRouter = require('./routes/visitRoute');
 var adminRouter = require('./routes/adminRoute');
+var chatRouter = require('./routes/chatRoute');
 var urlStrings = require('./routes/url');
 var uploadRouter = require('./routes/uploadRoute');
 var upvoteRouter = require('./routes/upvoteRoute');
@@ -57,7 +61,7 @@ if (app.get('env') === 'production') {
   });
 }
 
-//Middleware from custom methods
+
 
 app.use('/store',storeRouter);
 app.use('/search',searchRouter);
@@ -71,14 +75,39 @@ app.use('/upload',uploadRouter);
 app.use('/user',userRouter);
 app.use('/activity',activityRouter);
 app.use(express.static(__dirname + '/public'));
-
+app.use(function(req, res, next) {
+    req.io = io;
+    next();
+});
+app.use('/chat', chatRouter);
 app.get('*', function (req, res) {
         res.sendFile(__dirname + '/public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
 });
 
 mongoose.connect(urlStrings.connectionString);//"mongodb://shop_dir:shop_dir@ds023912.mlab.com:23912/shoppins");
 //mongoose.connect("mongodb://shopdb:shopdb1234@ds029476.mlab.com:29476/shopdb");
-server.listen(app.get('port'),function(){
-	console.log("Listening");
-	console.log(__dirname);
-})
+
+io.on('connection', function(socket) {
+    // We're connected to someone now. Let's listen for events from them
+    
+    socket.on('addToRoom', function(room) {
+      console.log("joined the room");
+        console.log(room.roomId);
+        socket.join(room.roomId);
+    });
+    socket.on('addToSingleRoom', function(room) {
+      console.log("joined the single room");
+        console.log(room.roomId);
+        socket.join(room.roomId);
+    });
+    socket.on('removeFromRoom', function(room) {
+        socket.leave(room.roomId);
+    });
+    socket.on('disconnect', function() {
+        console.log('user disconnected');
+    });
+});
+server.listen(app.get('port'), function() {
+        console.log("Listening");
+        console.log(__dirname);
+    })

@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular.module('app.home')
-		.controller("AuthController",["$scope","changeBrowserURL","$auth","$window","$route","userData",AuthController]);
-	function AuthController($scope,changeBrowserURL,$auth,$window,$route,userData){
+		.controller("AuthController",["$scope","changeBrowserURL","$auth","$window","$route","userData",'Socket',AuthController]);
+	function AuthController($scope,changeBrowserURL,$auth,$window,$route,userData,Socket){
 			var phc = this;
 			phc.toHomePage = toHomePage;
 			phc.authenticate = authenticate;
@@ -15,6 +15,13 @@
 			function toHomePage(){
 				changeBrowserURL.changeBrowserURLMethod('/');
 			}
+			function socketStart() {
+
+            Socket.on("connect", function() {
+                
+                Socket.emit('addToSingleRoom', { 'roomId': userData.getUser()._id });
+            });
+        }
 			function loginPage(){
 				changeBrowserURL.changeBrowserURLMethod('/login');
 			}
@@ -22,6 +29,7 @@
 		    	$auth.authenticate(provider).then(function(response) {
 						userData.setUser();
 						alert('login with facebook successfull');
+						socketStart();
 						//$route.reload();
 						$window.location.reload();
 	        });

@@ -1,0 +1,40 @@
+<div ng-controller="ChatRoomListController as crl">
+    <div ng-repeat="chatRoom in crl.chatRoomList">
+        <div class="chatRoom" md-whiteframe="3" >
+            <div layout="row" >
+                <div flex="20">
+                    <div class="creatorImage">
+                        <div ng-if="crl.currentUser == chatRoom.creator1._id">
+                            <img ng-src="{{chatRoom.creator2.picture}}" />
+                        </div>
+                        <div ng-if="crl.currentUser == chatRoom.creator2._id">
+                            <img ng-src="{{chatRoom.creator1.picture}}" />
+                        </div>
+                    </div>
+                </div>
+                <div flex="60">
+                    <div layout="column" layout-align="center start" class="chatRoomContent">
+                        <div class="chatCreator">
+                            <div ng-if="crl.currentUser == chatRoom.creator1._id">
+                                <span>{{chatRoom.creator2.displayName}}</span>
+                            </div>
+                            <div ng-if="crl.currentUser == chatRoom.creator2._id">
+                                <span>{{chatRoom.creator1.displayName}}</span>
+                            </div>
+                        </div>
+                        <div class="chatMessage">
+                            <span>{{chatRoom.lastMessage.message}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div flex="20">
+                    <div layout="column" layout-align="center start" class="chatMessageTime">
+                        <div >
+                            <span>{{chatRoom.lastMessageTime| date:'MMM d'}}  </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

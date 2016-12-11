@@ -2,9 +2,9 @@
 	'use strict';
 
 	angular.module('app.home')
-	.controller('HeaderController',["$scope","userData","changeBrowserURL","$auth","$mdDialog", "$mdMedia","$timeout", "$mdSidenav", "$log",HeaderController]);
+	.controller('HeaderController',["$scope","userData","changeBrowserURL","$auth","$mdDialog", "$mdMedia","$timeout", "$mdSidenav", "$log",'Socket',HeaderController]);
 
-	function HeaderController($scope,userData,changeBrowserURL,$auth,$mdDialog, $mdMedia,$timeout, $mdSidenav, $log){
+	function HeaderController($scope,userData,changeBrowserURL,$auth,$mdDialog, $mdMedia,$timeout, $mdSidenav, $log,Socket){
 			var phc = this;
 			phc.toHomePage = toHomePage;
 			phc.authenticate = authenticate;
@@ -12,6 +12,23 @@
 			phc.showAdvanced = showAdvanced;
 			phc.customFullscreen = undefined;
 			phc.isAuth = $auth.isAuthenticated();
+			function socketStart() {
+            Socket.emit('addToSingleRoom', { 'roomId': userData.getUser()._id });
+            
+        	}
+			if(phc.isAuth){
+				socketStart();
+				Socket.on('newMessageReceived',function(message){
+					
+					if(message.user._id == userData.getUser()._id){
+
+					}
+					else{
+						console.log("the received thing");
+						console.log(message);
+					}
+				});
+			}
 			phc.isOpenLeft = function(){
 	      return $mdSidenav('left').isOpen();
 	    };
