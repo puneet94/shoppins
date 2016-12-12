@@ -24,8 +24,7 @@
 
 					}
 					else{
-						console.log("the received thing");
-						console.log(message);
+						
 					}
 				});
 			}

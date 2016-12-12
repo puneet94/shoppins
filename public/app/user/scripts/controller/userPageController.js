@@ -12,6 +12,8 @@ angular.module('app.user')
     upc.submitUserFollow = submitUserFollow;
     upc.deleteUserFollow = deleteUserFollow;
     upc.userFollowed = userFollowed;
+    upc.currentProfileUser = $routeParams.userId;
+    upc.loggedUser = userData.getUser()._id;
     upc.currentUser = currentUser;
 
     function currentUser(){

@@ -23,11 +23,13 @@ angular.module('authModApp')
 
     };
     function socketStart() {
-
+        if($auth.isAuthenticated()){
             Socket.on("connect", function() {
                 
                 Socket.emit('addToSingleRoom', { 'roomId': userData.getUser()._id });
             });
+        }
+          
         }
     function signUp(){
       $location.path("/signup");
