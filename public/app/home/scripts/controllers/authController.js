@@ -37,7 +37,7 @@
             	console.log(response);
                 userData.setUser();
                 alert('login with facebook successfull');
-                socketStart();
+                //socketStart();
                 //$route.reload();
                 $window.location.reload();
             });

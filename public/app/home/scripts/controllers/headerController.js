@@ -18,6 +18,10 @@
         	}
 			if(phc.isAuth){
 				socketStart();
+				Socket.on("connect", function() {
+
+                    Socket.emit('addToSingleRoom', { 'roomId': userData.getUser()._id });
+                });
 				Socket.on('newMessageReceived',function(message){
 					
 					if(message.user._id == userData.getUser()._id){
