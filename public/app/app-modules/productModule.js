@@ -1,3 +1,4 @@
+(function(angular){
 angular.module('app.product',[]).config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
@@ -24,6 +25,7 @@ angular.module('app.product',[]).config(['$routeProvider',
       });
   }]);
 
+})(window.angular);
 //productsCollection/";
 //productsCollectionCategory/";
 //productsCollectionSubCategory/";

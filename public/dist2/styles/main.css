@@ -121,7 +121,7 @@
 
 .chatBoxUL {
   padding: 0;
-  height: 60vh;
+  height: 63vh;
   overflow: auto; }
   .chatBoxUL li {
     list-style-type: none;
@@ -172,8 +172,7 @@
 .chatRoom {
   padding: 10px;
   background-color: #fff;
-  border-bottom: 1px solid #eee;
-  margin: 1px; }
+  border-bottom: 1px solid #eee; }
   .chatRoom .creatorImage {
     width: 50px;
     height: 50px; }
@@ -677,13 +676,14 @@ md-ink-bar {
   .productContainer .singleProductContainer {
     background-color: white;
     margin: 5px;
-    max-width: 48%; }
+    width: 48%; }
     .productContainer .singleProductContainer .productImageContainer {
       width: 100%;
-      padding: 5px; }
+      padding: 5px;
+      height: 100%; }
       .productContainer .singleProductContainer .productImageContainer .singleProductImage {
         width: 100%;
-        height: 100%; }
+        height: 180px; }
     .productContainer .singleProductContainer .productDetailsContainer {
       padding: 5px;
       text-transform: capitalize; }
@@ -712,7 +712,7 @@ md-ink-bar {
         padding: 5px 10px;
         border-radius: 2px;
         color: white;
-        background-color: red; }
+        background-color: #cb202d; }
       .productContainer .singleProductContainer .productDetailsContainer .productStatsContainer {
         font-size: 14px;
         font-weight: 600; }
@@ -724,53 +724,6 @@ md-ink-bar {
     background-color: white;
     margin: 10px;
     max-width: 100%; } }
-
-.reviewSubmitForm {
-  background-color: white;
-  padding: 25px; }
-  .reviewSubmitForm .reviewSubmitFormContent {
-    background-color: white; }
-
-.userRatingSection {
-  width: 175px; }
-  .userRatingSection .rating {
-    border: none; }
-    .userRatingSection .rating input {
-      display: none; }
-    .userRatingSection .rating label:before {
-      margin: 5px;
-      font-size: 1.25em;
-      font-family: FontAwesome;
-      display: inline-block;
-      content: "\f005"; }
-    .userRatingSection .rating label {
-      color: rgba(0, 0, 0, 0.5);
-      float: right; }
-    .userRatingSection .rating input:checked ~ label {
-      color: #FFD700; }
-    .userRatingSection .rating:not(:checked) > label:hover {
-      color: #FFD700; }
-      .userRatingSection .rating:not(:checked) > label:hover ~ label {
-        color: #FFD700; }
-    .userRatingSection .rating > input:checked + label:hover, .userRatingSection .rating > input:checked ~ label:hover {
-      color: #FFED85; }
-    .userRatingSection .rating > label:hover ~ input:checked ~ label, .userRatingSection .rating > input:checked ~ label:hover ~ label {
-      color: #FFED85; }
-
-.likeReviewContainer .likeReviewIconContainer {
-  background-color: #eee;
-  padding: 8px 10px; }
-  .likeReviewContainer .likeReviewIconContainer .likeText {
-    margin-left: 5px; }
-
-.likeReviewContainer .likeReviewCountContainer {
-  background-color: white;
-  padding: 7px 9px;
-  border: 1px solid #eee;
-  border-radius: 3px;
-  border-left: none;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px; }
 
 .capital-heading-text {
   text-transform: capitalize;
@@ -1280,3 +1233,50 @@ md-ink-bar {
   visibility: visible;
   height: 100%;
     height-opacity: 1; }
+
+.reviewSubmitForm {
+  background-color: white;
+  padding: 25px; }
+  .reviewSubmitForm .reviewSubmitFormContent {
+    background-color: white; }
+
+.userRatingSection {
+  width: 175px; }
+  .userRatingSection .rating {
+    border: none; }
+    .userRatingSection .rating input {
+      display: none; }
+    .userRatingSection .rating label:before {
+      margin: 5px;
+      font-size: 1.25em;
+      font-family: FontAwesome;
+      display: inline-block;
+      content: "\f005"; }
+    .userRatingSection .rating label {
+      color: rgba(0, 0, 0, 0.5);
+      float: right; }
+    .userRatingSection .rating input:checked ~ label {
+      color: #FFD700; }
+    .userRatingSection .rating:not(:checked) > label:hover {
+      color: #FFD700; }
+      .userRatingSection .rating:not(:checked) > label:hover ~ label {
+        color: #FFD700; }
+    .userRatingSection .rating > input:checked + label:hover, .userRatingSection .rating > input:checked ~ label:hover {
+      color: #FFED85; }
+    .userRatingSection .rating > label:hover ~ input:checked ~ label, .userRatingSection .rating > input:checked ~ label:hover ~ label {
+      color: #FFED85; }
+
+.likeReviewContainer .likeReviewIconContainer {
+  background-color: #eee;
+  padding: 8px 10px; }
+  .likeReviewContainer .likeReviewIconContainer .likeText {
+    margin-left: 5px; }
+
+.likeReviewContainer .likeReviewCountContainer {
+  background-color: white;
+  padding: 7px 9px;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  border-left: none;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px; }

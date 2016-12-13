@@ -1,3 +1,4 @@
+(function(angular){
 angular.module('app.chat',[]).config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
@@ -33,3 +34,5 @@ function redirectIfNotAuthenticated($q,$auth,$route,userData,changeBrowserURL) {
 }
           
 
+
+})(window.angular);

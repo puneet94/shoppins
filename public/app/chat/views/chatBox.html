@@ -4,7 +4,10 @@
 <div ng-include="'app/home/searchBox.html'"></div>
 <div layout="row" layout-xs="column" layout-sm="column">
     <div flex="20" >
-      <div ng-include="'app/chat/views/chatRoomList.html'"></div>
+        
+            <div ng-include="'app/chat/views/chatRoomList.html'"></div>      
+        
+      
     </div>
     <div flex="50" flex-sm="100" flex-xs="100">
         <div ng-cloak class="chatBoxPage" md-whiteframe="3">
@@ -19,8 +22,12 @@
                     </div>
                 </li>
             </ul>
-            <div style="clear:both;" class="msgBox">
-                <inner-loading-directive inner-loading="cbc.messageLoading" container-height="50px"></inner-loading-directive>
+            <div style="clear:both;position: relative;" class="msgBox" >
+                <div style="text-align:center;margin-left:50%;position:absolute;">
+                    <small-loading-directive small-loading="cbc.messageLoading"></small-loading-directive>        
+                </div>
+                
+                
                 <textarea ng-model="cbc.myMsg" ng-disabled="cbc.messageLoading" style="width:100%" ng-keypress="cbc.sendMsg($event)"></textarea>
             </div>
         </div>

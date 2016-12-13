@@ -35,11 +35,11 @@
             $auth.authenticate(provider).then(function(response) {
             	console.log("for facebook login");
             	console.log(response);
-                userData.setUser();
-                //alert('login with facebook successfull');
+                userData.setUser(response.data.user);
+                alert('login with facebook successfull');
                 //socketStart();
                 //$route.reload();
-                //$window.location.reload();
+                $window.location.reload();
             });
         }
 

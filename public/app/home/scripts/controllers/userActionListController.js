@@ -22,6 +22,7 @@ angular.module('app.user')
 	      $mdOpenMenu(ev);
 		  }
       function createNewStore(){
+
         changeBrowserURL.changeBrowserURLMethod('/admin/createStore/'); 
       }
 

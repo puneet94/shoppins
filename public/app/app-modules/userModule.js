@@ -1,3 +1,4 @@
+(function(angular){
 angular.module('app.user',[]).config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
@@ -7,3 +8,9 @@ angular.module('app.user',[]).config(['$routeProvider',
         controllerAs: 'upc'
       });
   }]);
+
+
+
+
+})(window.angular);
+

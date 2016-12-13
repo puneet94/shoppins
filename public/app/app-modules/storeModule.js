@@ -1,3 +1,4 @@
+(function(angular){
 angular.module('app.store',[]).config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
@@ -23,3 +24,6 @@ angular.module('app.store',[]).config(['$routeProvider',
         controllerAs: 'ssc'
       });
   }]);
+
+})(window.angular);
+

@@ -41,7 +41,7 @@ angular.module('authModApp')
 
           userData.setUser(response.data.user);    
           alert("Login successfull");
-          socketStart();
+          //socketStart();
           window.history.back();
     		},function(response){
     			console.log(response);

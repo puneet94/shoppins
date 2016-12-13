@@ -1,6 +1,7 @@
 angular.module('myApp',
-  ['ngRoute','ngCookies','ngMessages','ngSanitize','afkl.lazyImage','satellizer','ngFileUpload','ngMap',
-    'btford.socket-io','authModApp','app.common','app.home','app.store','app.admin','app.chat','ngMaterial','app.review','app.product','app.user']
+  ['ngRoute','ngCookies','ngMessages','ngSanitize','afkl.lazyImage','satellizer','ngFileUpload','ngMap','btford.socket-io',
+  'authModApp',
+  'app.common','app.home','app.store','app.chat','app.admin','ngMaterial','app.review','app.product','app.user']
   ).config(['$routeProvider','$mdThemingProvider',
   function($routeProvider,$mdThemingProvider) {
       $mdThemingProvider.theme('default')
@@ -22,63 +23,66 @@ angular.module('myApp',
 //     .accentPalette('orange');
 // });//"angular-material": "master","ng-directive-lazy-image": "afkl-lazy-image#^0.3.1"
 
-angular.module('app.admin',[]).config(['$routeProvider',
-  function($routeProvider) {
-    $routeProvider.
-      when('/admin/createStore', {
-        templateUrl: 'app/admin/views/adminCreateStore.html',
-        controller: 'CreateStoreController',
-        controllerAs: 'csc',
-        resolve:{
-          redirectIfNotAuthenticated: redirectIfNotAuthenticated
-        }
-      }).when('/admin/adminStorePage/:storeId', {
-        templateUrl: 'app/admin/views/adminStorePage.html',
-        controller: 'AdminStoreController',
-        controllerAs: 'asc',
-        resolve:{
-          redirectIfNotAuthenticated: redirectIfNotAuthenticated,
-          redirectIfNotStoreAuthenticated: redirectIfNotStoreAuthenticated
-        }
-      });
-  }]);
-
-
-function redirectIfNotAuthenticated($q, $timeout,$auth,changeBrowserURL) {
-            var defer = $q.defer();
-            if($auth.isAuthenticated()) {
-              defer.resolve(); /* (3) */
-            } else {
-              $timeout(function () {
-                changeBrowserURL.changeBrowserURLMethod('/login');//$state.go(‘login’); /* (4) */
-              });
-              defer.reject();
+(function(angular){
+angular.module('app.admin', []).config(['$routeProvider',
+    function($routeProvider) {
+        $routeProvider.
+        when('/admin/createStore', {
+            templateUrl: 'app/admin/views/adminCreateStore.html',
+            controller: 'CreateStoreController',
+            controllerAs: 'csc',
+            resolve: {
+                redirectIfNotAuthenticated2: redirectIfNotAuthenticated2
             }
-            return defer.promise;
+        }).when('/admin/adminStorePage/:storeId', {
+            templateUrl: 'app/admin/views/adminStorePage.html',
+            controller: 'AdminStoreController',
+            controllerAs: 'asc',
+            resolve: {
+                redirectIfNotAuthenticated2: redirectIfNotAuthenticated2,
+                redirectIfNotStoreAuthenticated: redirectIfNotStoreAuthenticated
+            }
+        });
+    }
+]);
+
+
+function redirectIfNotAuthenticated2($q, $timeout, $auth, changeBrowserURL) {
+
+    var defer = $q.defer();
+    if ($auth.isAuthenticated()) {
+        defer.resolve();
+    } else {
+        $timeout(function() {
+            changeBrowserURL.changeBrowserURLMethod('/login'); 
+        });
+        defer.reject();
+    }
+       
+        
+    return defer.promise;
 }
 
-function redirectIfNotStoreAuthenticated($q,$route,userData,adminStoreService,changeBrowserURL) {
-            var defer = $q.defer();
-            adminStoreService.getStore($route.current.params.storeId,{'select':'admin'}).then(function(response){
-              console.log('the');
-              console.log(userData.getUser()._id);
-              console.log(response);
-              if(userData.getUser()._id==response.data.admin){
-                defer.resolve();  
-                
-              }
-              else{
-                defer.reject();
-                changeBrowserURL.changeBrowserURLMethod('/home');
-              }
-            },function(response){
-              console.log(response);
-            });
-            
-            return defer.promise;
-}
-          
+function redirectIfNotStoreAuthenticated($q, $route, userData, adminStoreService, changeBrowserURL) {
+    var defer = $q.defer();
+    adminStoreService.getStore($route.current.params.storeId, { 'select': 'admin' }).then(function(response) {
 
+        if (userData.getUser()._id == response.data.admin) {
+            defer.resolve();
+
+        } else {
+            defer.reject();
+            changeBrowserURL.changeBrowserURLMethod('/home');
+        }
+    }, function(response) {
+        console.log(response);
+    });
+
+    return defer.promise;
+}
+
+
+})(window.angular);
 
 (function(angular){
 'use strict';
@@ -128,6 +132,7 @@ angular
   }
 })(window.angular);
 
+(function(angular){
 angular.module('app.chat',[]).config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
@@ -164,6 +169,7 @@ function redirectIfNotAuthenticated($q,$auth,$route,userData,changeBrowserURL) {
           
 
 
+})(window.angular);
 (function(angular){
 'use strict';
 angular.module('app.common',[]);
@@ -206,6 +212,7 @@ angular.module('app.common',[]);
 
 //http://speakingaword.blogspot.in/2013/08/authentication-in-angularjs-nodejs-and.html
 
+(function(angular){
 angular.module('app.product',[]).config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
@@ -232,6 +239,7 @@ angular.module('app.product',[]).config(['$routeProvider',
       });
   }]);
 
+})(window.angular);
 //productsCollection/";
 //productsCollectionCategory/";
 //productsCollectionSubCategory/";
@@ -251,6 +259,7 @@ angular.module('app.product',[]).config(['$routeProvider',
   angular.module('app.review',[]);
 })(window.angular);
 
+(function(angular){
 angular.module('app.store',[]).config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
@@ -277,6 +286,10 @@ angular.module('app.store',[]).config(['$routeProvider',
       });
   }]);
 
+})(window.angular);
+
+
+(function(angular){
 angular.module('app.user',[]).config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
@@ -286,6 +299,12 @@ angular.module('app.user',[]).config(['$routeProvider',
         controllerAs: 'upc'
       });
   }]);
+
+
+
+
+})(window.angular);
+
 
 (function(angular){
 'use strict';
@@ -882,6 +901,7 @@ function innerLoadingDirective() {
         .controller('CreateStoreController', ['$auth', 'adminStoreService', 'Upload', 'userData', '$timeout', 'baseUrlService', '$location', '$mdDialog', CreateStoreController]);
 
     function CreateStoreController($auth, adminStoreService, Upload, userData, $timeout, baseUrlService, $location, $mdDialog) {
+        
         var csc = this;
         csc.storeForm = {};
         csc.storeForm.storeImages = [];
@@ -1184,41 +1204,6 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
 })(window.angular);
 
 
-
-/**
- * @ngdoc directive
- * @name authModApp.directive:sameAs
- * @description
- * # sameAs
- */
- (function(angular){
- 'use strict';
-	angular.module('authModApp')
-		.directive('sameAs', function () {
-			return {
-				require: 'ngModel',
-				restrict: 'EA',
-				link: function postLink(scope, element, attrs,ngModelCtrl) {
-          console.log(attrs);
-          console.log(attrs.sameAs);
-					//console.log(scope.$eval(attrs.sameAs));
-					function validateEqual(value){
-						var valid = (value === scope.$eval(attrs.sameAs));
-						ngModelCtrl.$setValidity('equal',valid);
-						return valid ? value : undefined;
-					}
-					ngModelCtrl.$parsers.push(validateEqual);
-					ngModelCtrl.$formatters.push(validateEqual);
-					scope.$watch(attrs.sameAs,function(){
-						ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
-					});
-				}
-			};
-		});
-
-})(window.angular);
-
-
 // 'use strict';
 //
 // /*
@@ -1290,7 +1275,7 @@ angular.module('authModApp')
 
           userData.setUser(response.data.user);    
           alert("Login successfull");
-          socketStart();
+          //socketStart();
           window.history.back();
     		},function(response){
     			console.log(response);
@@ -1414,6 +1399,41 @@ angular.module('authModApp')
 //
 //     }
 //   }
+
+
+
+/**
+ * @ngdoc directive
+ * @name authModApp.directive:sameAs
+ * @description
+ * # sameAs
+ */
+ (function(angular){
+ 'use strict';
+	angular.module('authModApp')
+		.directive('sameAs', function () {
+			return {
+				require: 'ngModel',
+				restrict: 'EA',
+				link: function postLink(scope, element, attrs,ngModelCtrl) {
+          console.log(attrs);
+          console.log(attrs.sameAs);
+					//console.log(scope.$eval(attrs.sameAs));
+					function validateEqual(value){
+						var valid = (value === scope.$eval(attrs.sameAs));
+						ngModelCtrl.$setValidity('equal',valid);
+						return valid ? value : undefined;
+					}
+					ngModelCtrl.$parsers.push(validateEqual);
+					ngModelCtrl.$formatters.push(validateEqual);
+					scope.$watch(attrs.sameAs,function(){
+						ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
+					});
+				}
+			};
+		});
+
+})(window.angular);
 
 (function(angular){
 'use strict';
@@ -1666,11 +1686,11 @@ angular.module('app.chat')
             $auth.authenticate(provider).then(function(response) {
             	console.log("for facebook login");
             	console.log(response);
-                userData.setUser();
-                //alert('login with facebook successfull');
+                userData.setUser(response.data.user);
+                alert('login with facebook successfull');
                 //socketStart();
                 //$route.reload();
-                //$window.location.reload();
+                $window.location.reload();
             });
         }
 
@@ -2058,6 +2078,7 @@ angular.module('app.user')
 	      $mdOpenMenu(ev);
 		  }
       function createNewStore(){
+
         changeBrowserURL.changeBrowserURLMethod('/admin/createStore/'); 
       }
 
@@ -2815,367 +2836,6 @@ angular.module('app.review')
 
 (function(angular){
   'use strict';
-angular.module('app.user')
-
-  .controller('UserActivityListController',["$scope",'$routeParams',"activityService",UserActivityListController]);
-  function UserActivityListController($scope,$routeParams,activityService){
-    var ual = this;
-    ual.loading = true;
-    activate();
-    function activate(){
-
-      ual.loading = true;
-        activityService.getSingleUserActivity($routeParams.userId).then(function(result){        
-        ual.activityData= result.data;
-
-        ual.loading = false;
-      }); 
-      
-    }
-
-
-    }
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.user')
-
-  .controller('UserFeedController',["$scope","$auth","activityService",'NgMap',UserFeedController]);
-  function UserFeedController($scope,$auth,activityService){
-    
-    var ual = this;
-    ual.loading = true;
-    ual.authCheck = $auth.isAuthenticated();
-    activate();
-    function activate(){
-
-      ual.loading = true;
-      if(ual.authCheck){
-        activityService.getUserFollowingActivity($auth.getPayload().sub).then(function(result){
-        ual.activityData= result.data;
-        ual.loading = false;
-      });  
-      }
-      else{
-       activityService.getAllActivity().then(function(result){
-        console.log("from the activity");
-        console.log(result);
-       ual.activityData= result.data;
-       ual.loading = false;
-      }); 
-      }
-      
-      
-    }
-
-
-    }
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.user')
-
-  .controller('UserFollowersController',["$scope","$auth",'$location','$routeParams',"userData","userService",UserFollowersController]);
-  function UserFollowersController($scope,$auth,$location,$routeParams,userData,userService){
-    var ufc = this;
-    activate();
-
-    ufc.loading = true;
-    ufc.authCheck = $auth.isAuthenticated();
-    ufc.followersList = [];
-    ufc.currentUserFollowed = currentUserFollowed;
-    ufc.submitUserFollow = submitUserFollow;
-    ufc.deleteUserFollow = deleteUserFollow;
-    ufc.getUserPage = userData.getUserPage;
-
-    function activate(){
-      ufc.loading = true;
-
-      userService.getUserFollowers($routeParams.userId)
-    .then(function(res){
-        ufc.followersList = res.data;
-        
-        ufc.loading = false;
-      });
-    }
-    function submitUserFollow(followerId){
-      userService.submitUserFollow(userData.getUser()._id,followerId).then(function(response){
-
-        
-        userData.setUser();
-      });
-    }
-    function deleteUserFollow(followerId){
-      userService.deleteUserFollow(userData.getUser()._id,followerId).then(function(response){
-        
-        userData.setUser();
-      });
-    }
-    function currentUserFollowed(follower){
-
-      if(userData.getUser().following.indexOf(follower)==-1){
-        return false;
-      }
-      return true;
-    }
-
-    }
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.user')
-
-  .controller('UserFollowingController',["$scope","$auth",'$location','$routeParams',"userData","userService",UserFollowingController]);
-  function UserFollowingController($scope,$auth,$location,$routeParams,userData,userService){
-    var ufc = this;
-    activate();
-
-    ufc.loading = true;
-    ufc.authCheck = $auth.isAuthenticated();
-    ufc.followersList = [];
-    ufc.currentUserFollowed = currentUserFollowed;
-    ufc.submitUserFollow = submitUserFollow;
-    ufc.deleteUserFollow = deleteUserFollow;
-    ufc.getUserPage = userData.getUserPage;
-
-    function activate(){
-      ufc.loading = true;
-
-      userService.getUserFollowing($routeParams.userId)
-    .then(function(res){
-        ufc.followersList = res.data;
-        
-        ufc.loading = false;
-      });
-    }
-    function submitUserFollow(followerId){
-      userService.submitUserFollow(userData.getUser()._id,followerId).then(function(response){
-
-        
-        userData.setUser();
-      });
-    }
-    function deleteUserFollow(followerId){
-      userService.deleteUserFollow(userData.getUser()._id,followerId).then(function(response){
-        
-        userData.setUser();
-      });
-    }
-    function currentUserFollowed(follower){
-
-      if(userData.getUser().following.indexOf(follower)==-1){
-        return false;
-      }
-      return true;
-    }
-
-    }
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.user')
-
-  .controller('UserPageController',["$scope","$auth",'$routeParams',"userData","userService",UserPageController]);
-  function UserPageController($scope,$auth,$routeParams,userData,userService){
-    var upc = this;
-    activate();
-    upc.currentUserData = {};
-    upc.loading = true;
-    upc.authCheck = $auth.isAuthenticated();
-    upc.submitUserFollow = submitUserFollow;
-    upc.deleteUserFollow = deleteUserFollow;
-    upc.userFollowed = userFollowed;
-    upc.currentProfileUser = $routeParams.userId;
-    upc.loggedUser = userData.getUser()._id;
-    upc.currentUser = currentUser;
-
-    function currentUser(){
-      return ($routeParams.userId == userData.getUser()._id);
-    }
-    function submitUserFollow(userId){
-      userService.submitUserFollow(userData.getUser()._id,userId).then(function(res){
-        userData.setUser();
-      },function(res){
-
-      });
-    }
-
-    function deleteUserFollow(userId){
-      userService.deleteUserFollow(userData.getUser()._id,userId).then(function(res){
-        var index = userData.getUser().following.indexOf(userId);
-        userData.setUser();
-
-      },function(res){
-
-      });
-    }
-
-    function userFollowed(userId){
-
-      if(userData.getUser().following.indexOf(userId)!=-1){
-
-        return true;
-      }
-      return false;
-    }
-    function activate(){
-      upc.loading = true;
-      userService.getSingleUser($routeParams.userId)
-    .then(function(res){
-        upc.currentUserData = res.data;
-        upc.loading = false;
-        
-      });
-    }
-
-
-    }
-
-})(window.angular);
-
-//inject angular file upload directives and services.
-(function(angular){
-  'use strict';
-angular.module('app.user')
-  .controller('UserProfileImageController', ['$scope', 'Upload', 'userData','baseUrlService',UserProfileImageController]);
-  function UserProfileImageController($scope, Upload,userData, baseUrlService) {
-      var upc = this;
-      upc.spinnerLoading = false;
-      upc.uploadFiles = function(file, errFiles) {
-          console.log("Enterd file uploading");
-          upc.f = file;
-          upc.errFile = errFiles && errFiles[0];
-          if (file) {
-              file.upload = Upload.upload({
-                  url: baseUrlService.baseUrl+'user/upload/profileImage/'+userData.getUser()._id,
-                  data: {file: file}
-              });
-              upc.spinnerLoading = true;
-              file.upload.then(function (response) {
-                  
-                      file.result = response.data;
-                      userData.setUser();
-                      userData.getUser().picture = response.data;
-                      $('.userProfileImage').find('img').attr('src',response.data);
-                      upc.spinnerLoading = false;
-              });
-          }
-      };
-  }
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.user')
-
-  .controller('UserStatisticsController',["$scope","$auth",'$location','$routeParams',"userData","userService",UserStatisticsController]);
-  function UserStatisticsController($scope,$auth,$location,$routeParams,userData,userService){
-    var upc = this;
-    activate();
-    function activate(){
-      
-    }
-
-
-    }
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-/*
-  *Service for getting a single store with its id
-*/
-angular.module('app.user')
-  .service('activityService',["$http","baseUrlService",ActivityService]);
-
-/*
-  * This servic has a function names getStore which takes id as parameter and returns a promise
-*/
-function ActivityService($http,baseUrlService){
-  this.getSingleUserActivity = getSingleUserActivity;
-  this.getAllActivity = getAllActivity;
-  this.getUserFollowingActivity = getUserFollowingActivity;
-  function getSingleUserActivity(id){
-    return $http.get(baseUrlService.baseUrl+'activity/singleUserActivity/'+id);
-  }
-  function getAllActivity(){
-    return $http.get(baseUrlService.baseUrl+'activity/allActivity/');
-  }
-  function getUserFollowingActivity(userId){
-    return $http.get(baseUrlService.baseUrl+'activity/userFollowingActivity/'+userId);
-  }
-
-
-
-}
-})(window.angular);
-
-(function(angular){
-  'use strict';
-/*
-  *Service for getting a single store with its id
-*/
-angular.module('app.user')
-  .service('userService',["$http","baseUrlService",UserService]);
-
-/*
-  * This servic has a function names getStore which takes id as parameter and returns a promise
-*/
-function UserService($http,baseUrlService){
-  this.getSingleUser = getSingleUser;
-  this.getStoreRating = getStoreRating;
-  this.submitUserFollow = submitUserFollow;
-  this.deleteUserFollow = deleteUserFollow;
-  this.checkUserFollow = checkUserFollow;
-  this.getUserFollowers = getUserFollowers;
-  this.getUserFollowing = getUserFollowing;
-  this.getUserStores = getUserStores;
-  function getSingleUser(id){
-    return $http.get(baseUrlService.baseUrl+"user/singleUser/"+id);
-
-  }
-  function getStoreRating(id){
-  	return $http.get(baseUrlService.baseUrl+"review/ratings/store/"+id);
-  }
-
-  function submitUserFollow(userId,followedId){
-
-    return $http.post(baseUrlService.baseUrl+"user/submitFollow/"+userId+'/'+followedId);
-  }
-  function deleteUserFollow(userId,followedId){
-
-    return $http.post(baseUrlService.baseUrl+"user/deleteFollow/"+userId+'/'+followedId);
-  }
-  function checkUserFollow(userId,followedId){
-    
-    return $http.get(baseUrlService.baseUrl+"user/checkFollow/"+userId+'/'+followedId);
-  }
-  function getUserFollowers(userId){
-    return $http.get(baseUrlService.baseUrl+"user/userFollowers/"+userId);
-  }
-  function getUserFollowing(userId){
-    return $http.get(baseUrlService.baseUrl+"user/userFollowing/"+userId);
-  }
-  function getUserStores(userId){
-    return $http.get(baseUrlService.baseUrl+"user/singleUser/"+userId,{params: { 'select': 'name address.area address.locality' }});
-  }
-
-
-
-}
-})(window.angular);
-
-(function(angular){
-  'use strict';
 angular.module('app.store')
 
   .controller('SingleStoreController',["$scope","$auth",'$location','scrollToIdService',"$routeParams","storeData","getSingleStore",'$mdDialog','NgMap','getStoreCollectionService',SingleStoreController]);
@@ -3690,6 +3350,85 @@ angular.module('app.store')
 })(window.angular);
 
 (function(angular){
+  angular.module('app.store')
+  .directive('filterDirective',["$window","$location", filterDirective])
+  .directive('addClass',["$window","$location", addClassDirective])
+  .directive('removeClass',["$window","$location", removeClassDirective])
+  .directive('siblingRemoveClass',["$window","$location", siblingRemoveClassDirective]);
+  function filterDirective($window,$location) {
+    return {
+      restrict: 'E',
+      templateUrl:'app/store/views/filterDirectiveTemplate.html',
+      scope:{
+        filterName:"@filterName",
+        radioModel:"=radioModel",
+        radioChange:"&radioChange",
+        radioRepeat:"=radioRepeat",
+        clearClick:"&clearClick"
+      },
+      link: function(scope, element, attrs) {
+      }
+    };
+  }
+  function addClassDirective($window,$location) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          //$(element).removeClass('highlightClass');
+          $(this).addClass(attrs.addClass);
+
+        });
+
+      }
+    };
+  }
+  function siblingRemoveClassDirective($window,$location) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          $(this).siblings().removeClass(attrs.siblingRemoveClass);
+        });
+
+      }
+    };
+  }
+
+  function removeClassDirective($window,$location) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          $(this).siblings('.filterDirectiveRadioGroup').find('.filterRadioButton').removeClass(attrs.removeClass);
+        });
+
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular){
+  angular.module('app.store')
+  .directive('scrollToId',['scrollToIdService',scrollToIdDirective]);
+
+  function scrollToIdDirective(scrollToIdService) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          scrollToIdService.scrollToId(attrs.scrollToId);
+        });
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular){
   'use strict';
 
 angular.module('app.store')
@@ -3891,80 +3630,362 @@ function UserVisitService($http,baseUrlService){
 })(window.angular);
 
 (function(angular){
-  angular.module('app.store')
-  .directive('filterDirective',["$window","$location", filterDirective])
-  .directive('addClass',["$window","$location", addClassDirective])
-  .directive('removeClass',["$window","$location", removeClassDirective])
-  .directive('siblingRemoveClass',["$window","$location", siblingRemoveClassDirective]);
-  function filterDirective($window,$location) {
-    return {
-      restrict: 'E',
-      templateUrl:'app/store/views/filterDirectiveTemplate.html',
-      scope:{
-        filterName:"@filterName",
-        radioModel:"=radioModel",
-        radioChange:"&radioChange",
-        radioRepeat:"=radioRepeat",
-        clearClick:"&clearClick"
-      },
-      link: function(scope, element, attrs) {
-      }
-    };
-  }
-  function addClassDirective($window,$location) {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          //$(element).removeClass('highlightClass');
-          $(this).addClass(attrs.addClass);
+  'use strict';
+angular.module('app.user')
 
-        });
+  .controller('UserActivityListController',["$scope",'$routeParams',"activityService",UserActivityListController]);
+  function UserActivityListController($scope,$routeParams,activityService){
+    var ual = this;
+    ual.loading = true;
+    activate();
+    function activate(){
 
-      }
-    };
-  }
-  function siblingRemoveClassDirective($window,$location) {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          $(this).siblings().removeClass(attrs.siblingRemoveClass);
-        });
+      ual.loading = true;
+        activityService.getSingleUserActivity($routeParams.userId).then(function(result){        
+        ual.activityData= result.data;
 
-      }
-    };
-  }
+        ual.loading = false;
+      }); 
+      
+    }
 
-  function removeClassDirective($window,$location) {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          $(this).siblings('.filterDirectiveRadioGroup').find('.filterRadioButton').removeClass(attrs.removeClass);
-        });
 
-      }
-    };
-  }
-
+    }
 
 })(window.angular);
 
 (function(angular){
-  angular.module('app.store')
-  .directive('scrollToId',['scrollToIdService',scrollToIdDirective]);
+  'use strict';
+angular.module('app.user')
 
-  function scrollToIdDirective(scrollToIdService) {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          scrollToIdService.scrollToId(attrs.scrollToId);
-        });
+  .controller('UserFeedController',["$scope","$auth","activityService",'NgMap',UserFeedController]);
+  function UserFeedController($scope,$auth,activityService){
+    
+    var ual = this;
+    ual.loading = true;
+    ual.authCheck = $auth.isAuthenticated();
+    activate();
+    function activate(){
+
+      ual.loading = true;
+      if(ual.authCheck){
+        activityService.getUserFollowingActivity($auth.getPayload().sub).then(function(result){
+        ual.activityData= result.data;
+        ual.loading = false;
+      });  
       }
-    };
+      else{
+       activityService.getAllActivity().then(function(result){
+        console.log("from the activity");
+        console.log(result);
+       ual.activityData= result.data;
+       ual.loading = false;
+      }); 
+      }
+      
+      
+    }
+
+
+    }
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.user')
+
+  .controller('UserFollowersController',["$scope","$auth",'$location','$routeParams',"userData","userService",UserFollowersController]);
+  function UserFollowersController($scope,$auth,$location,$routeParams,userData,userService){
+    var ufc = this;
+    activate();
+
+    ufc.loading = true;
+    ufc.authCheck = $auth.isAuthenticated();
+    ufc.followersList = [];
+    ufc.currentUserFollowed = currentUserFollowed;
+    ufc.submitUserFollow = submitUserFollow;
+    ufc.deleteUserFollow = deleteUserFollow;
+    ufc.getUserPage = userData.getUserPage;
+
+    function activate(){
+      ufc.loading = true;
+
+      userService.getUserFollowers($routeParams.userId)
+    .then(function(res){
+        ufc.followersList = res.data;
+        
+        ufc.loading = false;
+      });
+    }
+    function submitUserFollow(followerId){
+      userService.submitUserFollow(userData.getUser()._id,followerId).then(function(response){
+
+        
+        userData.setUser();
+      });
+    }
+    function deleteUserFollow(followerId){
+      userService.deleteUserFollow(userData.getUser()._id,followerId).then(function(response){
+        
+        userData.setUser();
+      });
+    }
+    function currentUserFollowed(follower){
+
+      if(userData.getUser().following.indexOf(follower)==-1){
+        return false;
+      }
+      return true;
+    }
+
+    }
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.user')
+
+  .controller('UserFollowingController',["$scope","$auth",'$location','$routeParams',"userData","userService",UserFollowingController]);
+  function UserFollowingController($scope,$auth,$location,$routeParams,userData,userService){
+    var ufc = this;
+    activate();
+
+    ufc.loading = true;
+    ufc.authCheck = $auth.isAuthenticated();
+    ufc.followersList = [];
+    ufc.currentUserFollowed = currentUserFollowed;
+    ufc.submitUserFollow = submitUserFollow;
+    ufc.deleteUserFollow = deleteUserFollow;
+    ufc.getUserPage = userData.getUserPage;
+
+    function activate(){
+      ufc.loading = true;
+
+      userService.getUserFollowing($routeParams.userId)
+    .then(function(res){
+        ufc.followersList = res.data;
+        
+        ufc.loading = false;
+      });
+    }
+    function submitUserFollow(followerId){
+      userService.submitUserFollow(userData.getUser()._id,followerId).then(function(response){
+
+        
+        userData.setUser();
+      });
+    }
+    function deleteUserFollow(followerId){
+      userService.deleteUserFollow(userData.getUser()._id,followerId).then(function(response){
+        
+        userData.setUser();
+      });
+    }
+    function currentUserFollowed(follower){
+
+      if(userData.getUser().following.indexOf(follower)==-1){
+        return false;
+      }
+      return true;
+    }
+
+    }
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.user')
+
+  .controller('UserPageController',["$scope","$auth",'$routeParams',"userData","userService",UserPageController]);
+  function UserPageController($scope,$auth,$routeParams,userData,userService){
+    var upc = this;
+    activate();
+    upc.currentUserData = {};
+    upc.loading = true;
+    upc.authCheck = $auth.isAuthenticated();
+    upc.submitUserFollow = submitUserFollow;
+    upc.deleteUserFollow = deleteUserFollow;
+    upc.userFollowed = userFollowed;
+    upc.currentProfileUser = $routeParams.userId;
+    upc.loggedUser = userData.getUser()._id;
+    upc.currentUser = currentUser;
+
+    function currentUser(){
+      return ($routeParams.userId == userData.getUser()._id);
+    }
+    function submitUserFollow(userId){
+      userService.submitUserFollow(userData.getUser()._id,userId).then(function(res){
+        userData.setUser();
+      },function(res){
+
+      });
+    }
+
+    function deleteUserFollow(userId){
+      userService.deleteUserFollow(userData.getUser()._id,userId).then(function(res){
+        var index = userData.getUser().following.indexOf(userId);
+        userData.setUser();
+
+      },function(res){
+
+      });
+    }
+
+    function userFollowed(userId){
+
+      if(userData.getUser().following.indexOf(userId)!=-1){
+
+        return true;
+      }
+      return false;
+    }
+    function activate(){
+      upc.loading = true;
+      userService.getSingleUser($routeParams.userId)
+    .then(function(res){
+        upc.currentUserData = res.data;
+        upc.loading = false;
+        
+      });
+    }
+
+
+    }
+
+})(window.angular);
+
+//inject angular file upload directives and services.
+(function(angular){
+  'use strict';
+angular.module('app.user')
+  .controller('UserProfileImageController', ['$scope', 'Upload', 'userData','baseUrlService',UserProfileImageController]);
+  function UserProfileImageController($scope, Upload,userData, baseUrlService) {
+      var upc = this;
+      upc.spinnerLoading = false;
+      upc.uploadFiles = function(file, errFiles) {
+          console.log("Enterd file uploading");
+          upc.f = file;
+          upc.errFile = errFiles && errFiles[0];
+          if (file) {
+              file.upload = Upload.upload({
+                  url: baseUrlService.baseUrl+'user/upload/profileImage/'+userData.getUser()._id,
+                  data: {file: file}
+              });
+              upc.spinnerLoading = true;
+              file.upload.then(function (response) {
+                  
+                      file.result = response.data;
+                      userData.setUser();
+                      userData.getUser().picture = response.data;
+                      $('.userProfileImage').find('img').attr('src',response.data);
+                      upc.spinnerLoading = false;
+              });
+          }
+      };
+  }
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.user')
+
+  .controller('UserStatisticsController',["$scope","$auth",'$location','$routeParams',"userData","userService",UserStatisticsController]);
+  function UserStatisticsController($scope,$auth,$location,$routeParams,userData,userService){
+    var upc = this;
+    activate();
+    function activate(){
+      
+    }
+
+
+    }
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+/*
+  *Service for getting a single store with its id
+*/
+angular.module('app.user')
+  .service('activityService',["$http","baseUrlService",ActivityService]);
+
+/*
+  * This servic has a function names getStore which takes id as parameter and returns a promise
+*/
+function ActivityService($http,baseUrlService){
+  this.getSingleUserActivity = getSingleUserActivity;
+  this.getAllActivity = getAllActivity;
+  this.getUserFollowingActivity = getUserFollowingActivity;
+  function getSingleUserActivity(id){
+    return $http.get(baseUrlService.baseUrl+'activity/singleUserActivity/'+id);
+  }
+  function getAllActivity(){
+    return $http.get(baseUrlService.baseUrl+'activity/allActivity/');
+  }
+  function getUserFollowingActivity(userId){
+    return $http.get(baseUrlService.baseUrl+'activity/userFollowingActivity/'+userId);
   }
 
 
+
+}
+})(window.angular);
+
+(function(angular){
+  'use strict';
+/*
+  *Service for getting a single store with its id
+*/
+angular.module('app.user')
+  .service('userService',["$http","baseUrlService",UserService]);
+
+/*
+  * This servic has a function names getStore which takes id as parameter and returns a promise
+*/
+function UserService($http,baseUrlService){
+  this.getSingleUser = getSingleUser;
+  this.getStoreRating = getStoreRating;
+  this.submitUserFollow = submitUserFollow;
+  this.deleteUserFollow = deleteUserFollow;
+  this.checkUserFollow = checkUserFollow;
+  this.getUserFollowers = getUserFollowers;
+  this.getUserFollowing = getUserFollowing;
+  this.getUserStores = getUserStores;
+  function getSingleUser(id){
+    return $http.get(baseUrlService.baseUrl+"user/singleUser/"+id);
+
+  }
+  function getStoreRating(id){
+  	return $http.get(baseUrlService.baseUrl+"review/ratings/store/"+id);
+  }
+
+  function submitUserFollow(userId,followedId){
+
+    return $http.post(baseUrlService.baseUrl+"user/submitFollow/"+userId+'/'+followedId);
+  }
+  function deleteUserFollow(userId,followedId){
+
+    return $http.post(baseUrlService.baseUrl+"user/deleteFollow/"+userId+'/'+followedId);
+  }
+  function checkUserFollow(userId,followedId){
+    
+    return $http.get(baseUrlService.baseUrl+"user/checkFollow/"+userId+'/'+followedId);
+  }
+  function getUserFollowers(userId){
+    return $http.get(baseUrlService.baseUrl+"user/userFollowers/"+userId);
+  }
+  function getUserFollowing(userId){
+    return $http.get(baseUrlService.baseUrl+"user/userFollowing/"+userId);
+  }
+  function getUserStores(userId){
+    return $http.get(baseUrlService.baseUrl+"user/singleUser/"+userId,{params: { 'select': 'name address.area address.locality' }});
+  }
+
+
+
+}
 })(window.angular);

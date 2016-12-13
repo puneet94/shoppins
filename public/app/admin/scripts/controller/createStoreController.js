@@ -3,6 +3,7 @@
         .controller('CreateStoreController', ['$auth', 'adminStoreService', 'Upload', 'userData', '$timeout', 'baseUrlService', '$location', '$mdDialog', CreateStoreController]);
 
     function CreateStoreController($auth, adminStoreService, Upload, userData, $timeout, baseUrlService, $location, $mdDialog) {
+        
         var csc = this;
         csc.storeForm = {};
         csc.storeForm.storeImages = [];
