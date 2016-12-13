@@ -64,15 +64,23 @@
                             </div>
                             <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
                                 <label class="formEntityLabel" for="addressState">State</label>
-                                <input class="formEntityInput" type="text" name="addressState" />
+                                <input class="formEntityInput" type="text" name="addressState" ng-model="csc.storeForm.address.state"/>
                             </div>
                             <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
                                 <label class="formEntityLabel" for="addressPincode">Pincode</label>
-                                <input class="formEntityInput" type="text" name="addressPincode" />
+                                <input class="formEntityInput" type="text" name="addressPincode" ng-model="csc.storeForm.address.pincode"/>
                             </div>
                             <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
                                 <label class="formEntityLabel" for="addressCountry">Country</label>
                                 <input class="formEntityInput" type="text" name="addressCountry" ng-model="csc.storeForm.address.country" />
+                            </div>
+                            <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
+                                <label class="formEntityLabel" for="addressLatitude">Latitude</label>
+                                <input class="formEntityInput" type="text" name="addressLatitude" ng-model="csc.storeForm.address.latitude"/>
+                            </div>
+                            <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
+                                <label class="formEntityLabel" for="addressLongitude">Longitude</label>
+                                <input class="formEntityInput" type="text" name="addressLongitude" ng-model="csc.storeForm.address.longitude" />
                             </div>
                         </div>
                     </div>

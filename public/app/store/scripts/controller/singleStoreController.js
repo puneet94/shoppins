@@ -2,8 +2,8 @@
   'use strict';
 angular.module('app.store')
 
-  .controller('SingleStoreController',["$scope","$auth",'$location','scrollToIdService',"$routeParams","storeData","getSingleStore",'$mdDialog','NgMap','getStoreCollectionService',SingleStoreController]);
-  function SingleStoreController($scope,$auth,$location,scrollToIdService,$routeParams,storeData,getSingleStore,$mdDialog,NgMap,getStoreCollectionService){
+  .controller('SingleStoreController',["$scope","$auth",'$location','userData',"$routeParams","storeData","getSingleStore",'$mdDialog','NgMap','getStoreCollectionService',SingleStoreController]);
+  function SingleStoreController($scope,$auth,$location,userData,$routeParams,storeData,getSingleStore,$mdDialog,NgMap,getStoreCollectionService){
     
     NgMap.getMap().then(function(map) {
       //map.setZoom(16);
@@ -16,6 +16,9 @@ angular.module('app.store')
     ssc.storeData = {};
     ssc.loading = true;
     ssc.authCheck = $auth.isAuthenticated();
+    if(ssc.authCheck){
+      ssc.currentUserId = userData.getUser()._id;
+    }
     ssc.getAddressString = getAddressString;
     ssc.storeImagesObj = [];
     function getAddressString(){

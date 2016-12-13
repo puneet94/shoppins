@@ -12,6 +12,11 @@
                         Own this store?
                     </md-button>
                 </div>
+                <div ng-if="ssc.storeData.admin && ssc.authCheck" class="businessClaimButton">
+                    <a class="md-primary md-raised " style="text-decoration:none;color: white;padding:10px;background-color: rgb(0,188,212);"ng-href="#/chatBox/{{ssc.storeData.admin}}/{{ssc.currentUserId}}">
+                        Chat with admin
+                    </a>
+                </div>
                 <div class="storeBannerImage" style='background-image:url("{{ssc.storeData.bannerImage}}")'>
                 </div>
                 <div class="storeHeadingRating" layout="row" layout-align="space-between">

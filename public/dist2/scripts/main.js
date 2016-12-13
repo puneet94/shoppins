@@ -289,22 +289,27 @@ angular.module('app.store',[]).config(['$routeProvider',
 })(window.angular);
 
 
-(function(angular){
-angular.module('app.user',[]).config(['$routeProvider',
-  function($routeProvider) {
-    $routeProvider.
-      when('/user/:userId', {
-        templateUrl: 'app/user/views/userProfilePage.html',
-        controller: 'UserPageController',
-        controllerAs: 'upc'
-      });
-  }]);
+(function(angular) {
+    angular.module('app.user', []).config(['$routeProvider',
+        function($routeProvider) {
+            $routeProvider.
+            when('/user/:userId', {
+                templateUrl: 'app/user/views/userProfilePage.html',
+                controller: 'UserPageController',
+                controllerAs: 'upc'
+            }).
+            when('/user/userSettings/:userId', {
+                templateUrl: 'app/user/views/userSettingsPage.html',
+                controller: 'UserSettingsController',
+                controllerAs: 'usc'
+            });
+        }
+    ]);
 
 
 
 
 })(window.angular);
-
 
 (function(angular){
 'use strict';
@@ -901,7 +906,6 @@ function innerLoadingDirective() {
         .controller('CreateStoreController', ['$auth', 'adminStoreService', 'Upload', 'userData', '$timeout', 'baseUrlService', '$location', '$mdDialog', CreateStoreController]);
 
     function CreateStoreController($auth, adminStoreService, Upload, userData, $timeout, baseUrlService, $location, $mdDialog) {
-        
         var csc = this;
         csc.storeForm = {};
         csc.storeForm.storeImages = [];
@@ -1400,41 +1404,6 @@ angular.module('authModApp')
 //     }
 //   }
 
-
-
-/**
- * @ngdoc directive
- * @name authModApp.directive:sameAs
- * @description
- * # sameAs
- */
- (function(angular){
- 'use strict';
-	angular.module('authModApp')
-		.directive('sameAs', function () {
-			return {
-				require: 'ngModel',
-				restrict: 'EA',
-				link: function postLink(scope, element, attrs,ngModelCtrl) {
-          console.log(attrs);
-          console.log(attrs.sameAs);
-					//console.log(scope.$eval(attrs.sameAs));
-					function validateEqual(value){
-						var valid = (value === scope.$eval(attrs.sameAs));
-						ngModelCtrl.$setValidity('equal',valid);
-						return valid ? value : undefined;
-					}
-					ngModelCtrl.$parsers.push(validateEqual);
-					ngModelCtrl.$formatters.push(validateEqual);
-					scope.$watch(attrs.sameAs,function(){
-						ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
-					});
-				}
-			};
-		});
-
-})(window.angular);
-
 (function(angular){
 'use strict';
 
@@ -1506,6 +1475,41 @@ angular.module('authModApp')
     };
     return obj1;
   }
+})(window.angular);
+
+
+
+/**
+ * @ngdoc directive
+ * @name authModApp.directive:sameAs
+ * @description
+ * # sameAs
+ */
+ (function(angular){
+ 'use strict';
+	angular.module('authModApp')
+		.directive('sameAs', function () {
+			return {
+				require: 'ngModel',
+				restrict: 'EA',
+				link: function postLink(scope, element, attrs,ngModelCtrl) {
+          console.log(attrs);
+          console.log(attrs.sameAs);
+					//console.log(scope.$eval(attrs.sameAs));
+					function validateEqual(value){
+						var valid = (value === scope.$eval(attrs.sameAs));
+						ngModelCtrl.$setValidity('equal',valid);
+						return valid ? value : undefined;
+					}
+					ngModelCtrl.$parsers.push(validateEqual);
+					ngModelCtrl.$formatters.push(validateEqual);
+					scope.$watch(attrs.sameAs,function(){
+						ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
+					});
+				}
+			};
+		});
+
 })(window.angular);
 
 (function(angular) {
@@ -2838,8 +2842,8 @@ angular.module('app.review')
   'use strict';
 angular.module('app.store')
 
-  .controller('SingleStoreController',["$scope","$auth",'$location','scrollToIdService',"$routeParams","storeData","getSingleStore",'$mdDialog','NgMap','getStoreCollectionService',SingleStoreController]);
-  function SingleStoreController($scope,$auth,$location,scrollToIdService,$routeParams,storeData,getSingleStore,$mdDialog,NgMap,getStoreCollectionService){
+  .controller('SingleStoreController',["$scope","$auth",'$location','userData',"$routeParams","storeData","getSingleStore",'$mdDialog','NgMap','getStoreCollectionService',SingleStoreController]);
+  function SingleStoreController($scope,$auth,$location,userData,$routeParams,storeData,getSingleStore,$mdDialog,NgMap,getStoreCollectionService){
     
     NgMap.getMap().then(function(map) {
       //map.setZoom(16);
@@ -2852,6 +2856,9 @@ angular.module('app.store')
     ssc.storeData = {};
     ssc.loading = true;
     ssc.authCheck = $auth.isAuthenticated();
+    if(ssc.authCheck){
+      ssc.currentUserId = userData.getUser()._id;
+    }
     ssc.getAddressString = getAddressString;
     ssc.storeImagesObj = [];
     function getAddressString(){
@@ -3880,12 +3887,40 @@ angular.module('app.user')
                       file.result = response.data;
                       userData.setUser();
                       userData.getUser().picture = response.data;
+                      console.log("the image received");
+                      console.log(response.data);
                       $('.userProfileImage').find('img').attr('src',response.data);
                       upc.spinnerLoading = false;
               });
           }
       };
   }
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.user')
+
+  .controller('UserSettingsController',["$scope","$auth",'userData',UserSettingsController]);
+  function UserSettingsController($scope,$auth,userData){
+    
+    var usl = this;
+    usl.authCheck = $auth.isAuthenticated();
+    activate();
+    function activate(){
+
+      usl.userForm = userData.getUser();
+      console.log("dataaaa");
+      console.log(usl.userForm);
+    }
+      
+      
+      
+    }
+
+
+    
+
 })(window.angular);
 
 (function(angular){

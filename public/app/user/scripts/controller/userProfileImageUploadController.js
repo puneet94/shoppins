@@ -21,6 +21,8 @@ angular.module('app.user')
                       file.result = response.data;
                       userData.setUser();
                       userData.getUser().picture = response.data;
+                      console.log("the image received");
+                      console.log(response.data);
                       $('.userProfileImage').find('img').attr('src',response.data);
                       upc.spinnerLoading = false;
               });
