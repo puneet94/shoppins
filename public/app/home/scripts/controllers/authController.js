@@ -39,7 +39,7 @@
                 //alert('login with facebook successfull');
                 //socketStart();
                 //$route.reload();
-                $window.location.reload();
+                //$window.location.reload();
             });
         }
 
