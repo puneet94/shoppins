@@ -6,29 +6,51 @@
     <div class="userPageContainer">
         <div class="userPageSections" layout="row" layout-xs="column" layout-sm="column">
             <section class="middleTab" flex="60" flex-sm="100" flex-xs="100">
-                <article class="userProfileSection">
-                    <section class="userProfileImageContainer">
-                        <div class="userProfileImage" afkl-lazy-image={{upc.currentUserData.picture}}>
+                <div class="mainContainer">
+                    <div class="imageContainer" >
+                      <div class="userProfileImage" afkl-lazy-image={{upc.currentUserData.picture}}>
                             <div class="imageUpload" ng-if="upc.authCheck">
                                 <div class="" ng-if="upc.currentUser()">
                                     <div ng-include="'app/user/views/userProfileImageUpload.html'" flex></div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="textContainer">
+                      <div class="nameContainer"> 
+                        <h1 class="nameHeader">
+                          <span>{{upc.currentUserData.displayName}}</span>
+                        </h1>  
+                        
+                      </div>
+                      <div class="headLineConatiner">
+                        <h4 class="headLineHeader">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam eos, ipsa excepturi officiis nesciunt quae, autem  </h4>
+                      </div>
+                      <div class="bioContainer">
+                        <h5>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima quasi reiciendis dignissimos, eaque pariatur nam magnam saepe, ipsa veniam voluptates vitae quaerat mollitia obcaecati. Hic eum modi id sit sequi. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius modi, itaque veniam quos quibusdam sit libero, repellat fugit ratione. Corrupti totam debitis molestias, provident deleniti accusamus expedita tempora repellendus facilis?
+                            
+                        </h5>
+                      </div>
+                    </div>
+                </div>
+                <article class="userProfileSection">
+                    <section class="userProfileImageContainer">
+                        
                         <div class="userFollowSection" ng-if="upc.authCheck">
                             <follow-directive up-fn="upc.submitUserFollow(upc.currentUserData._id)" down-fn="upc.deleteUserFollow(upc.currentUserData._id)" upv-chk="upc.userFollowed(upc.currentUserData._id)" small-loading="upc.smallLoadingModel">
                             </follow-directive>
                         </div>
                         <div class="userChatSection">
-                        	<div ng-if="!upc.currentUser()">
-                        		<a ng-href="#/chatBox/{{upc.currentProfileUser}}/{{upc.loggedUser}}">Chat</a>
-                        	</div>
+                            <div ng-if="!upc.currentUser()">
+                                <a ng-href="#/chatBox/{{upc.currentProfileUser}}/{{upc.loggedUser}}">Chat</a>
+                            </div>
                         </div>
                     </section>
                     <section class="userInfoSection">
                         <article class="userInfoContainer">
                             <div class="userNameSection">
-                                <span>{{upc.currentUserData.displayName}}</span>
+                                
                             </div>
                             <div class="userDescriptionContainer">
                                 <div>

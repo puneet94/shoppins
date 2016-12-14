@@ -1,3 +1,21 @@
+.capital-heading-text {
+  text-transform: capitalize;
+  font-size: 24px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-sub-heading-text {
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-normal-text {
+  text-transform: capitalize;
+  font-size: 14px;
+  font-weight: 400;
+  color: #795548; }
+
 .adminStoreBannerImage {
   height: 300px;
   width: 100%;
@@ -93,24 +111,6 @@
   .storeImagesList li {
     display: inline;
     margin: 2px; }
-
-.capital-heading-text {
-  text-transform: capitalize;
-  font-size: 24px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-sub-heading-text {
-  text-transform: capitalize;
-  font-size: 16px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-normal-text {
-  text-transform: capitalize;
-  font-size: 14px;
-  font-weight: 400;
-  color: #795548; }
 
 
 .chatBoxPage {
@@ -575,6 +575,47 @@ md-ink-bar {
     margin: auto 10%;
     font-family: 'Raleway', sans-serif !important; } }
 
+.mobileSearchBoxContainer {
+  background-color: white;
+  position: fixed;
+  top: 60px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999999999999; }
+  .mobileSearchBoxContainer .closeMobileSearchBoxContainer {
+    background-color: #eee;
+    padding: 10px; }
+    .mobileSearchBoxContainer .closeMobileSearchBoxContainer .closeText {
+      color: red; }
+  .mobileSearchBoxContainer .searchBoxInputContainer {
+    padding: 10px;
+    height: 40px; }
+    .mobileSearchBoxContainer .searchBoxInputContainer input {
+      width: 100%;
+      height: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 3px; }
+  .mobileSearchBoxContainer .mobileSearchListContainer {
+    padding: 10px;
+    padding-top: 0;
+    height: 90%;
+    overflow: auto; }
+    .mobileSearchBoxContainer .mobileSearchListContainer .mobileSearchListEntity {
+      margin-bottom: 5px; }
+      .mobileSearchBoxContainer .mobileSearchListContainer .mobileSearchListEntity span {
+        font-size: 12px; }
+
+.mobileSearchBox {
+  width: 100%;
+  height: 40px;
+  background-color: white; }
+  .mobileSearchBox .mobileSearchText {
+    color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    font-size: 14px;
+    line-height: 40px; }
+
 @media (max-width: 959px) and (min-width: 600px) {
   .homePageDiv .searchBoxLayout {
     height: 300px; } }
@@ -724,6 +765,53 @@ md-ink-bar {
     background-color: white;
     margin: 10px;
     max-width: 100%; } }
+
+.reviewSubmitForm {
+  background-color: white;
+  padding: 25px; }
+  .reviewSubmitForm .reviewSubmitFormContent {
+    background-color: white; }
+
+.userRatingSection {
+  width: 175px; }
+  .userRatingSection .rating {
+    border: none; }
+    .userRatingSection .rating input {
+      display: none; }
+    .userRatingSection .rating label:before {
+      margin: 5px;
+      font-size: 1.25em;
+      font-family: FontAwesome;
+      display: inline-block;
+      content: "\f005"; }
+    .userRatingSection .rating label {
+      color: rgba(0, 0, 0, 0.5);
+      float: right; }
+    .userRatingSection .rating input:checked ~ label {
+      color: #FFD700; }
+    .userRatingSection .rating:not(:checked) > label:hover {
+      color: #FFD700; }
+      .userRatingSection .rating:not(:checked) > label:hover ~ label {
+        color: #FFD700; }
+    .userRatingSection .rating > input:checked + label:hover, .userRatingSection .rating > input:checked ~ label:hover {
+      color: #FFED85; }
+    .userRatingSection .rating > label:hover ~ input:checked ~ label, .userRatingSection .rating > input:checked ~ label:hover ~ label {
+      color: #FFED85; }
+
+.likeReviewContainer .likeReviewIconContainer {
+  background-color: #eee;
+  padding: 8px 10px; }
+  .likeReviewContainer .likeReviewIconContainer .likeText {
+    margin-left: 5px; }
+
+.likeReviewContainer .likeReviewCountContainer {
+  background-color: white;
+  padding: 7px 9px;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  border-left: none;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px; }
 
 .capital-heading-text {
   text-transform: capitalize;
@@ -1188,6 +1276,34 @@ md-ink-bar {
     font-size: 10px;
     text-transform: capitalize; }
 
+.userPageSections {
+  background-color: white; }
+  .userPageSections .middleTab .imageContainer {
+    float: left;
+    height: 140px;
+    width: 140px;
+    margin: 0 10px; }
+    .userPageSections .middleTab .imageContainer img {
+      width: 100%;
+      height: 100%;
+      border: 1px solid #eee;
+      border-radius: 7px; }
+  .userPageSections .middleTab .textContainer {
+    text-transform: capitalize;
+    margin-left: 180px; }
+    .userPageSections .middleTab .textContainer .nameContainer {
+      text-transform: capitalize; }
+    .userPageSections .middleTab .textContainer .headLineConatiner .headLineHeader {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600; }
+    .userPageSections .middleTab .textContainer .bioContainer h5 {
+      margin-top: 10px;
+      font-size: 16px;
+      font-weight: 300; }
+  .userPageSections .rightTab {
+    background-color: #f3f3f3; }
+
 .userFollowingImage {
   width: 180px;
   height: 180px;
@@ -1197,10 +1313,8 @@ md-ink-bar {
     height: 100%; }
 
 .userProfileImage {
-  width: 180px;
-  height: 180px;
-  border: 15px inset;
   position: relative;
+  height: 100%;
   -webkit-transition: all 1s ease;
           transition: all 1s ease; }
   .userProfileImage img {
@@ -1227,56 +1341,37 @@ md-ink-bar {
   box-sizing: border-box;
   text-align: center;
   color: white;
-  padding: 12px;
   font-size: 20px;
   line-height: 180px;
   visibility: visible;
   height: 100%;
     height-opacity: 1; }
 
-.reviewSubmitForm {
-  background-color: white;
-  padding: 25px; }
-  .reviewSubmitForm .reviewSubmitFormContent {
-    background-color: white; }
-
-.userRatingSection {
-  width: 175px; }
-  .userRatingSection .rating {
-    border: none; }
-    .userRatingSection .rating input {
-      display: none; }
-    .userRatingSection .rating label:before {
-      margin: 5px;
-      font-size: 1.25em;
-      font-family: FontAwesome;
-      display: inline-block;
-      content: "\f005"; }
-    .userRatingSection .rating label {
-      color: rgba(0, 0, 0, 0.5);
-      float: right; }
-    .userRatingSection .rating input:checked ~ label {
-      color: #FFD700; }
-    .userRatingSection .rating:not(:checked) > label:hover {
-      color: #FFD700; }
-      .userRatingSection .rating:not(:checked) > label:hover ~ label {
-        color: #FFD700; }
-    .userRatingSection .rating > input:checked + label:hover, .userRatingSection .rating > input:checked ~ label:hover {
-      color: #FFED85; }
-    .userRatingSection .rating > label:hover ~ input:checked ~ label, .userRatingSection .rating > input:checked ~ label:hover ~ label {
-      color: #FFED85; }
-
-.likeReviewContainer .likeReviewIconContainer {
-  background-color: #eee;
-  padding: 8px 10px; }
-  .likeReviewContainer .likeReviewIconContainer .likeText {
-    margin-left: 5px; }
-
-.likeReviewContainer .likeReviewCountContainer {
-  background-color: white;
-  padding: 7px 9px;
-  border: 1px solid #eee;
-  border-radius: 3px;
-  border-left: none;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px; }
+@media all and (max-width: 599px) {
+  .userPageSections .middleTab .mainContainer .imageContainer {
+    float: left;
+    height: 100px;
+    width: 100px;
+    margin: 0 10px; }
+    .userPageSections .middleTab .mainContainer .imageContainer img {
+      width: 100%;
+      height: 100%;
+      border: 1px solid #eee;
+      border-radius: 7px; }
+  .userPageSections .middleTab .mainContainer .textContainer {
+    margin-left: 10px; }
+    .userPageSections .middleTab .mainContainer .textContainer .nameContainer {
+      min-height: 20px; }
+      .userPageSections .middleTab .mainContainer .textContainer .nameContainer .nameHeader {
+        font-size: 18px;
+        font-weight: 800;
+        margin: 0; }
+    .userPageSections .middleTab .mainContainer .textContainer .headLineConatiner {
+      min-height: 50px;
+      margin-left: 100px; }
+      .userPageSections .middleTab .mainContainer .textContainer .headLineConatiner h4 {
+        font-size: 14px;
+        font-weight: 500; }
+    .userPageSections .middleTab .mainContainer .textContainer .bioContainer h5 {
+      font-size: 14px;
+      font-weight: 400; } }

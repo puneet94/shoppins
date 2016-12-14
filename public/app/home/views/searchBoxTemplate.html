@@ -1,59 +1,70 @@
 <div class="" ng-controller="SearchBoxController as sbc">
-  <!--<div style="position:relative">
-    <inner-loading-directive inner-loading="sbc.loading"></inner-loading-directive>
-  </div>-->
-  <div layout="row" class="searchBoxLayout" layout-align="space-around " layout-xs="column" layout-sm="column" layout-align-sm="space-between stretch" layout-align-xs="space-between stretch">
-     <div flex="25"  flex-sm="100" flex-xs="100" >
-        <md-autocomplete
-           md-search-text="sbc.searchText"
-           md-no-cache = "true"
-           md-items="item in sbc.cities|filter:sbc.searchText"
-           md-selected-item="sbc.selectedItem"
-           md-selected-item-change="sbc.selectedItemChange(item)"
-           md-item-text="item"
-           md-min-length="0"
-           placeholder="Select a city"
-           md-menu-class="autocomplete-custom-template">
-           <md-item-template>
-              <span class="item-title">
-                 <span> {{item}} </span>
-              </span>
-           </md-item-template>
-        </md-autocomplete>
-     </div><!--|filter:sbc.userSearchText-->
-     <div flex="50" flex-sm="100" flex-xs="100">
-
-        <md-autocomplete
-           ng-disabled="!sbc.searchText"
-           md-no-cache = "true"
-           md-search-text-change="sbc.userSearchTextChange(sbc.searchText,sbc.userSearchText)"
-           md-selected-item="sbc.userSearchSelectedItem"
-           md-search-text="sbc.userSearchText"
-           md-selected-item-change="sbc.userSearchItemChange(item)"
-           md-items="item in sbc.userSearches"
-           md-item-text="item.userSearchString.split('#&amp;#').join(' ')"
-           md-min-length="0"
-           placeholder="Select a store, product or brand"
-           md-menu-class="autocomplete-custom-template">
-           <md-item-template>
-              <span class="item-title">
+    <div ng-show="sbc.mobileSearchBoxVisible" class="mobileSearchBoxContainer">
+        <div class="closeMobileSearchBoxContainer">
+            <span ng-click="sbc.mobileSearchBoxVisible=false" class="closeText">Close</span>
+        </div>
+        <div class="searchBoxInputContainer">
+            <input type="text" name="" ng-model="sbc.mobileText" ng-change="sbc.userSearchTextChange(sbc.searchText,sbc.mobileText)" placeholder="Search for store, product, brand">
+        </div>
+        <div class="mobileSearchListContainer">
+            <div ng-repeat="item in sbc.userSearches">
+                <div ng-click="sbc.userSearchItemChange(item)" class="mobileSearchListEntity">
+                    <span class="item-title">
                  <span> {{item.userSearchString.split("#&amp;#")[0]}} </span>
-              </span>
-              <span >
+                    </span>
+                    <span>
                  <span>
                     <span class="chipElement">
                        <strong>{{item.userSearchString.split("#&amp;#")[1]}}</strong>
                     </span>
-                 </span>
-                 <span >
+                    </span>
+                    <span>
                     <strong>{{item.userSearchString.split("#&amp;#")[2]}}</strong>
                  </span>
-              </span>
-           </md-item-template>
-        </md-autocomplete>
-     </div>
-     <div flex="20" flex-sm="100" flex-xs="100">
-        <md-button class="md-raised md-primary" style="width:100%;margin:0;color:white;" ng-click="sbc.locationSearch()">Search</md-button>
-     </div>
-  </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div layout="row" class="searchBoxLayout" layout-align="space-around " layout-xs="column" layout-sm="column" layout-align-sm="space-between stretch" layout-align-xs="space-between stretch">
+        <div flex="25" flex-sm="100" flex-xs="100">
+            <md-autocomplete md-search-text="sbc.searchText" md-no-cache="true" md-items="item in sbc.cities|filter:sbc.searchText" md-selected-item="sbc.selectedItem" md-selected-item-change="sbc.selectedItemChange(item)" md-item-text="item" md-min-length="0" placeholder="Select a city" md-menu-class="autocomplete-custom-template">
+                <md-item-template>
+                    <span class="item-title">
+                 <span> {{item}} </span>
+                    </span>
+                </md-item-template>
+            </md-autocomplete>
+        </div>
+        <!--|filter:sbc.userSearchText-->
+        <div flex="50" flex-sm="100" flex-xs="100">
+            <div hide-gt-xs>
+                <div class="mobileSearchBox" ng-click="sbc.openSearchBox()" md-whiteframe="3">
+                    <span class="mobileSearchText"> Select a store, product or brand</span>
+                </div>
+            </div>
+            <div hide show-gt-xs>
+                <md-autocomplete ng-disabled="!sbc.searchText" md-no-cache="true" md-search-text-change="sbc.userSearchTextChange(sbc.searchText,sbc.userSearchText)" md-selected-item="sbc.userSearchSelectedItem" md-search-text="sbc.userSearchText" md-selected-item-change="sbc.userSearchItemChange(item)" md-items="item in sbc.userSearches" md-item-text="item.userSearchString.split('#&amp;#').join(' ')" md-min-length="0" placeholder="Select a store, product or brand" md-menu-class="autocomplete-custom-template">
+                    <md-item-template>
+                        <span class="item-title">
+                 <span> {{item.userSearchString.split("#&amp;#")[0]}} </span>
+                        </span>
+                        <span>
+                 <span>
+                    <span class="chipElement">
+                       <strong>{{item.userSearchString.split("#&amp;#")[1]}}</strong>
+                    </span>
+                        </span>
+                        <span>
+                    <strong>{{item.userSearchString.split("#&amp;#")[2]}}</strong>
+                 </span>
+                        </span>
+                    </md-item-template>
+                </md-autocomplete>
+            </div>
+        </div>
+        <div flex="20" flex-sm="100" flex-xs="100">
+            <md-button class="md-raised md-primary" style="width:100%;margin:0;color:white;" ng-click="sbc.locationSearch()">Search</md-button>
+        </div>
+    </div>
 </div>

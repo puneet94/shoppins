@@ -1,8 +1,12 @@
-angular.module('app.chat').factory('Socket', ['socketFactory',
-    function(socketFactory) {
+(function(angular){
+'use strict';
+angular.module('app.chat').factory('Socket', ['socketFactory','baseUrlService',SocketFactory]);
+    
+    function SocketFactory(socketFactory,baseUrlService) {
         return socketFactory({
             prefix: '',
-            ioSocket: io.connect('http://localhost:3000')
+            ioSocket: io.connect(baseUrlService)
         });
     }
-]);
+
+})(window.angular);

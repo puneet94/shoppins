@@ -13,7 +13,10 @@ angular.module('app.user')
     upc.deleteUserFollow = deleteUserFollow;
     upc.userFollowed = userFollowed;
     upc.currentProfileUser = $routeParams.userId;
-    upc.loggedUser = userData.getUser()._id;
+    if(upc.authCheck){
+      upc.loggedUser = userData.getUser()._id;  
+    }
+    
     upc.currentUser = currentUser;
 
     function currentUser(){

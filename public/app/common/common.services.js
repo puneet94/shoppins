@@ -10,7 +10,7 @@ angular.module('app.common')
 	.service('arrayObjectMapper',[ArrayObjectMapper])
 	.service('arrayUniqueCopy',[ArrayUniqueCopy])
 	.service('userLocationService',[UserLocationService])
-	.service('baseUrlService',[AjaxURL])
+	.service('baseUrlService',['$location',AjaxURL])
 	.service('getCityLocalitiesService',["$http","baseUrlService",GetCityLocalitiesService])
 	.service('getCityCategoriesService',["$http","baseUrlService",GetCityCategoriesService])
 	.service('getCityProductLocalitiesService',["$http","baseUrlService",GetCityProductLocalitiesService])
@@ -110,8 +110,16 @@ angular.module('app.common')
 		return obj1;
 	}
 
-	function AjaxURL(){
-		this.baseUrl = "http://localhost:3000/";
+	function AjaxURL($location){
+		if($location.host() == 'localhost'){
+			this.baseUrl = this.baseUrl = $location.protocol() + "://" + $location.host()+':3000/';	
+		}
+		else{
+			this.baseUrl = this.baseUrl = $location.protocol() + "://" + $location.host()+'/';	
+		}
+		
+		console.log("base");
+		console.log(this.baseUrl);
 
 		this.getStoresWithCatgeoryLocation = this.baseUrl + "store/storesCollection/category/";//:category/:location?";
 		this.getStoresWithNameLocation = this.baseUrl + "store/storesCollection/storeName/";

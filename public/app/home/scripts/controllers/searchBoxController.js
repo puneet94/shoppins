@@ -23,7 +23,12 @@ function SearchBoxController($scope,$http,$routeParams,cityStorage,citiesService
 		hm.userSearchItemChange = userSearchItemChange;
 		hm.locationSearch = locationSearch;
 		hm.userSearchTextChange = userSearchTextChange;
-
+		hm.openSearchBox = openSearchBox;
+		
+		function openSearchBox(){
+			console.log("clicked");
+			hm.mobileSearchBoxVisible = true;
+		}
 		hm.selectedItemChange(hm.selectedItem);
 		function userSearchItemChange(item){
 

@@ -337,7 +337,7 @@ angular.module('app.common')
 	.service('arrayObjectMapper',[ArrayObjectMapper])
 	.service('arrayUniqueCopy',[ArrayUniqueCopy])
 	.service('userLocationService',[UserLocationService])
-	.service('baseUrlService',[AjaxURL])
+	.service('baseUrlService',['$location',AjaxURL])
 	.service('getCityLocalitiesService',["$http","baseUrlService",GetCityLocalitiesService])
 	.service('getCityCategoriesService',["$http","baseUrlService",GetCityCategoriesService])
 	.service('getCityProductLocalitiesService',["$http","baseUrlService",GetCityProductLocalitiesService])
@@ -437,8 +437,16 @@ angular.module('app.common')
 		return obj1;
 	}
 
-	function AjaxURL(){
-		this.baseUrl = "https://shoppins.herokuapp.com/";
+	function AjaxURL($location){
+		if($location.host() == 'localhost'){
+			this.baseUrl = this.baseUrl = $location.protocol() + "://" + $location.host()+':3000/';	
+		}
+		else{
+			this.baseUrl = this.baseUrl = $location.protocol() + "://" + $location.host()+'/';	
+		}
+		
+		console.log("base");
+		console.log(this.baseUrl);
 
 		this.getStoresWithCatgeoryLocation = this.baseUrl + "store/storesCollection/category/";//:category/:location?";
 		this.getStoresWithNameLocation = this.baseUrl + "store/storesCollection/storeName/";
@@ -1208,6 +1216,41 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
 })(window.angular);
 
 
+
+/**
+ * @ngdoc directive
+ * @name authModApp.directive:sameAs
+ * @description
+ * # sameAs
+ */
+ (function(angular){
+ 'use strict';
+	angular.module('authModApp')
+		.directive('sameAs', function () {
+			return {
+				require: 'ngModel',
+				restrict: 'EA',
+				link: function postLink(scope, element, attrs,ngModelCtrl) {
+          console.log(attrs);
+          console.log(attrs.sameAs);
+					//console.log(scope.$eval(attrs.sameAs));
+					function validateEqual(value){
+						var valid = (value === scope.$eval(attrs.sameAs));
+						ngModelCtrl.$setValidity('equal',valid);
+						return valid ? value : undefined;
+					}
+					ngModelCtrl.$parsers.push(validateEqual);
+					ngModelCtrl.$formatters.push(validateEqual);
+					scope.$watch(attrs.sameAs,function(){
+						ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
+					});
+				}
+			};
+		});
+
+})(window.angular);
+
+
 // 'use strict';
 //
 // /*
@@ -1477,41 +1520,6 @@ angular.module('authModApp')
   }
 })(window.angular);
 
-
-
-/**
- * @ngdoc directive
- * @name authModApp.directive:sameAs
- * @description
- * # sameAs
- */
- (function(angular){
- 'use strict';
-	angular.module('authModApp')
-		.directive('sameAs', function () {
-			return {
-				require: 'ngModel',
-				restrict: 'EA',
-				link: function postLink(scope, element, attrs,ngModelCtrl) {
-          console.log(attrs);
-          console.log(attrs.sameAs);
-					//console.log(scope.$eval(attrs.sameAs));
-					function validateEqual(value){
-						var valid = (value === scope.$eval(attrs.sameAs));
-						ngModelCtrl.$setValidity('equal',valid);
-						return valid ? value : undefined;
-					}
-					ngModelCtrl.$parsers.push(validateEqual);
-					ngModelCtrl.$formatters.push(validateEqual);
-					scope.$watch(attrs.sameAs,function(){
-						ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
-					});
-				}
-			};
-		});
-
-})(window.angular);
-
 (function(angular) {
     angular.module('app.chat')
 
@@ -1636,14 +1644,18 @@ angular.module('authModApp')
       }
 })(window.angular);
 
-angular.module('app.chat').factory('Socket', ['socketFactory',
-    function(socketFactory) {
+(function(angular){
+'use strict';
+angular.module('app.chat').factory('Socket', ['socketFactory','baseUrlService',SocketFactory]);
+    
+    function SocketFactory(socketFactory,baseUrlService) {
         return socketFactory({
             prefix: '',
-            ioSocket: io.connect('https://shoppins.herokuapp.com')
+            ioSocket: io.connect(baseUrlService)
         });
     }
-]);
+
+})(window.angular);
 angular.module('app.chat')
 	.factory('SocketUserService', ['socketFactory','userData',socketFactoryFunction]);
     function socketFactoryFunction(socketFactory,userData) {
@@ -1930,7 +1942,12 @@ function SearchBoxController($scope,$http,$routeParams,cityStorage,citiesService
 		hm.userSearchItemChange = userSearchItemChange;
 		hm.locationSearch = locationSearch;
 		hm.userSearchTextChange = userSearchTextChange;
-
+		hm.openSearchBox = openSearchBox;
+		
+		function openSearchBox(){
+			console.log("clicked");
+			hm.mobileSearchBoxVisible = true;
+		}
 		hm.selectedItemChange(hm.selectedItem);
 		function userSearchItemChange(item){
 
@@ -3817,7 +3834,10 @@ angular.module('app.user')
     upc.deleteUserFollow = deleteUserFollow;
     upc.userFollowed = userFollowed;
     upc.currentProfileUser = $routeParams.userId;
-    upc.loggedUser = userData.getUser()._id;
+    if(upc.authCheck){
+      upc.loggedUser = userData.getUser()._id;  
+    }
+    
     upc.currentUser = currentUser;
 
     function currentUser(){
