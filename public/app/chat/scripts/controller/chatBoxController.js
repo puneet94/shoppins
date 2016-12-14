@@ -56,6 +56,19 @@
                 
             }
         };
+        cbc.clickSubmit = function(){
+          if (cbc.myMsg) {
+                cbc.messageLoading = true;
+                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
+                chatService.sendChatMessage(chatObj).then(function(res){
+                  cbc.myMsg = '';
+                  cbc.messageLoading = false;
+                },function(res){
+                  console.log(res);
+                });
+                
+            }  
+        };
 
     }
 })(window.angular);

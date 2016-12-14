@@ -1,7 +1,7 @@
 <div ng-controller="ChatRoomListController as crl" style="margin-top:5px;">
     <div ng-repeat="chatRoom in crl.chatRoomList">
         <div class="chatRoom" md-whiteframe="3" ng-click="crl.openChatbox(chatRoom)">
-            <div layout="row" >
+            <div layout="row" style="height: 100%">
                 <div flex="20">
                     <div class="creatorImage">
                         <div ng-if="crl.currentUser == chatRoom.creator1._id">

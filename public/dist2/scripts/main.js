@@ -765,6 +765,78 @@ function innerLoadingDirective() {
 })(window.angular);
 
 (function(angular){
+  'use strict';
+
+angular.module('app.admin')
+  .service('adminProductService',["$http","baseUrlService",'changeBrowserURL',AdminProductService]);
+
+/*
+  * This servic has a function to get collection of products`
+*/
+
+function AdminProductService($http,baseUrlService,changeBrowserURL){
+  this.checkProductAdmin = checkProductAdmin;
+  this.createProduct = createProduct;
+  this.getProduct = getProduct;
+  this.updateProduct = updateProduct;
+  this.deleteProduct  = deleteProduct;
+  function checkProductAdmin(userId,productId){
+    return $http.get(baseUrlService.baseUrl);
+  }
+  function createProduct(product,storeId){
+  	return $http.post(baseUrlService.baseUrl+'admin/products/'+storeId,product);
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function updateProduct(productId,product){
+  	return $http.put(baseUrlService.baseUrl+'admin/product/'+productId,product);
+  }
+  function getProduct(productId,obj){
+    return $http.get(baseUrlService.baseUrl+'admin/product/'+productId,{params:obj});       
+  }
+  function deleteProduct(){
+
+  }
+}
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('app.admin')
+  .service('adminStoreService',["$http","baseUrlService",'changeBrowserURL',AdminStoreService]);
+
+/*
+  * This servic has a function to get collection of stores`
+*/
+
+function AdminStoreService($http,baseUrlService,changeBrowserURL){
+  this.checkStoreAdmin = checkStoreAdmin;
+  this.createStore = createStore;
+  this.getStore = getStore;
+  this.updateStore = updateStore;
+  this.deleteStore  = deleteStore;
+  function checkStoreAdmin(userId,storeId){
+    return $http.get(baseUrlService.baseUrl);
+  }
+  function createStore(store){
+  	return $http.post(baseUrlService.baseUrl+'admin/stores',store);
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function updateStore(storeId,store){
+  	return $http.put(baseUrlService.baseUrl+'admin/store/'+storeId,store);
+  }
+  function getStore(storeId,obj){
+    return $http.get(baseUrlService.baseUrl+'admin/store/'+storeId,{params:obj});       
+  }
+  function deleteStore(){
+
+  }
+}
+})(window.angular);
+
+(function(angular){
   angular.module('app.admin')
 
     .controller('AdminStoreController',['$scope','$routeParams','getSingleStore','Upload','baseUrlService',AdminStoreController]);
@@ -1143,113 +1215,6 @@ function innerLoadingDirective() {
     }
 })(window.angular);
 
-(function(angular){
-  'use strict';
-
-angular.module('app.admin')
-  .service('adminProductService',["$http","baseUrlService",'changeBrowserURL',AdminProductService]);
-
-/*
-  * This servic has a function to get collection of products`
-*/
-
-function AdminProductService($http,baseUrlService,changeBrowserURL){
-  this.checkProductAdmin = checkProductAdmin;
-  this.createProduct = createProduct;
-  this.getProduct = getProduct;
-  this.updateProduct = updateProduct;
-  this.deleteProduct  = deleteProduct;
-  function checkProductAdmin(userId,productId){
-    return $http.get(baseUrlService.baseUrl);
-  }
-  function createProduct(product,storeId){
-  	return $http.post(baseUrlService.baseUrl+'admin/products/'+storeId,product);
-    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
-
-  }
-  function updateProduct(productId,product){
-  	return $http.put(baseUrlService.baseUrl+'admin/product/'+productId,product);
-  }
-  function getProduct(productId,obj){
-    return $http.get(baseUrlService.baseUrl+'admin/product/'+productId,{params:obj});       
-  }
-  function deleteProduct(){
-
-  }
-}
-})(window.angular);
-
-(function(angular){
-  'use strict';
-
-angular.module('app.admin')
-  .service('adminStoreService',["$http","baseUrlService",'changeBrowserURL',AdminStoreService]);
-
-/*
-  * This servic has a function to get collection of stores`
-*/
-
-function AdminStoreService($http,baseUrlService,changeBrowserURL){
-  this.checkStoreAdmin = checkStoreAdmin;
-  this.createStore = createStore;
-  this.getStore = getStore;
-  this.updateStore = updateStore;
-  this.deleteStore  = deleteStore;
-  function checkStoreAdmin(userId,storeId){
-    return $http.get(baseUrlService.baseUrl);
-  }
-  function createStore(store){
-  	return $http.post(baseUrlService.baseUrl+'admin/stores',store);
-    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
-
-  }
-  function updateStore(storeId,store){
-  	return $http.put(baseUrlService.baseUrl+'admin/store/'+storeId,store);
-  }
-  function getStore(storeId,obj){
-    return $http.get(baseUrlService.baseUrl+'admin/store/'+storeId,{params:obj});       
-  }
-  function deleteStore(){
-
-  }
-}
-})(window.angular);
-
-
-
-/**
- * @ngdoc directive
- * @name authModApp.directive:sameAs
- * @description
- * # sameAs
- */
- (function(angular){
- 'use strict';
-	angular.module('authModApp')
-		.directive('sameAs', function () {
-			return {
-				require: 'ngModel',
-				restrict: 'EA',
-				link: function postLink(scope, element, attrs,ngModelCtrl) {
-          console.log(attrs);
-          console.log(attrs.sameAs);
-					//console.log(scope.$eval(attrs.sameAs));
-					function validateEqual(value){
-						var valid = (value === scope.$eval(attrs.sameAs));
-						ngModelCtrl.$setValidity('equal',valid);
-						return valid ? value : undefined;
-					}
-					ngModelCtrl.$parsers.push(validateEqual);
-					ngModelCtrl.$formatters.push(validateEqual);
-					scope.$watch(attrs.sameAs,function(){
-						ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
-					});
-				}
-			};
-		});
-
-})(window.angular);
-
 
 // 'use strict';
 //
@@ -1447,6 +1412,41 @@ angular.module('authModApp')
 //     }
 //   }
 
+
+
+/**
+ * @ngdoc directive
+ * @name authModApp.directive:sameAs
+ * @description
+ * # sameAs
+ */
+ (function(angular){
+ 'use strict';
+	angular.module('authModApp')
+		.directive('sameAs', function () {
+			return {
+				require: 'ngModel',
+				restrict: 'EA',
+				link: function postLink(scope, element, attrs,ngModelCtrl) {
+          console.log(attrs);
+          console.log(attrs.sameAs);
+					//console.log(scope.$eval(attrs.sameAs));
+					function validateEqual(value){
+						var valid = (value === scope.$eval(attrs.sameAs));
+						ngModelCtrl.$setValidity('equal',valid);
+						return valid ? value : undefined;
+					}
+					ngModelCtrl.$parsers.push(validateEqual);
+					ngModelCtrl.$formatters.push(validateEqual);
+					scope.$watch(attrs.sameAs,function(){
+						ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
+					});
+				}
+			};
+		});
+
+})(window.angular);
+
 (function(angular){
 'use strict';
 
@@ -1577,6 +1577,19 @@ angular.module('authModApp')
                 });
                 
             }
+        };
+        cbc.clickSubmit = function(){
+          if (cbc.myMsg) {
+                cbc.messageLoading = true;
+                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
+                chatService.sendChatMessage(chatObj).then(function(res){
+                  cbc.myMsg = '';
+                  cbc.messageLoading = false;
+                },function(res){
+                  console.log(res);
+                });
+                
+            }  
         };
 
     }

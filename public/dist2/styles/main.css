@@ -1,21 +1,3 @@
-.capital-heading-text {
-  text-transform: capitalize;
-  font-size: 24px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-sub-heading-text {
-  text-transform: capitalize;
-  font-size: 16px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-normal-text {
-  text-transform: capitalize;
-  font-size: 14px;
-  font-weight: 400;
-  color: #795548; }
-
 .adminStoreBannerImage {
   height: 300px;
   width: 100%;
@@ -112,6 +94,24 @@
     display: inline;
     margin: 2px; }
 
+.capital-heading-text {
+  text-transform: capitalize;
+  font-size: 24px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-sub-heading-text {
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-normal-text {
+  text-transform: capitalize;
+  font-size: 14px;
+  font-weight: 400;
+  color: #795548; }
+
 
 .chatBoxPage {
   position: relative;
@@ -172,10 +172,11 @@
 .chatRoom {
   padding: 10px;
   background-color: #fff;
-  border-bottom: 1px solid #eee; }
+  border-bottom: 1px solid #eee;
+  height: 45px; }
   .chatRoom .creatorImage {
-    width: 50px;
-    height: 50px; }
+    width: 100%;
+    height: 100%; }
     .chatRoom .creatorImage div {
       height: 100%;
       width: 100%; }
@@ -578,7 +579,7 @@ md-ink-bar {
 .mobileSearchBoxContainer {
   background-color: white;
   position: fixed;
-  top: 60px;
+  top: 55px;
   bottom: 0;
   left: 0;
   right: 0;

@@ -3,7 +3,7 @@
 </header>
 <div ng-include="'app/home/searchBox.html'"></div>
 <div layout="row" layout-xs="column" layout-sm="column">
-    <div flex="20" >
+    <div flex="20" hide show-gt-sm>
         
             <div ng-include="'app/chat/views/chatRoomList.html'"></div>      
         
@@ -28,7 +28,8 @@
                 </div>
                 
                 
-                <textarea ng-model="cbc.myMsg" ng-disabled="cbc.messageLoading" style="width:100%" ng-keypress="cbc.sendMsg($event)"></textarea>
+                <textarea ng-model="cbc.myMsg" ng-disabled="cbc.messageLoading" style="width:80%" ng-keypress="cbc.sendMsg($event)"></textarea>
+                <md-button class="md-raised md-primary" ng-click="cbc.clickSubmit()">Send      </md-button>
             </div>
         </div>
     </div>
