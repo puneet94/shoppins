@@ -11,11 +11,11 @@
     </div>
     <div flex="50" flex-sm="100" flex-xs="100">
         <div ng-cloak class="chatBoxPage" md-whiteframe="3">
+
             <ul class="chatBoxUL">
-                <li ng-repeat="chat in cbc.chatList" ng-class="chat.user._id==cbc.currentUser ? 'leftChat':'rightChat' ">
-                    <div ng-class=" chat.user._id==cbc.currentUser ? 'me' : 'you'">
+                <li ng-repeat="chat in cbc.chatList" ng-class="chat.user._id==cbc.currentUser ? 'rightChat':'leftChat' ">
+                    <div ng-class=" chat.user._id==cbc.currentUser ? 'you' : 'me'">
                         <div class="image">
-                            <!--<img ng-src="{{chat.user._id==cbc.currentUser ? 'chat.user.picture':'http://www.clker.com/cliparts/b/1/f/a/1195445301811339265dagobert83_female_user_icon.svg.med.png'}}" alt="" />-->
                             <img ng-src="{{chat.user.picture}}" alt="" />
                         </div>
                         <p>{{chat.message}}</p>

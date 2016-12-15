@@ -1,35 +1,10 @@
 <div  ng-controller="StoreProductListController as splc" style="width:100%;">
   <div class="productContainer" layout="row" layout-wrap layout-align="space-around start">
-    <div class="singleProductContainer" md-whiteframe="1" flex="50"  flex-xs="100" ng-repeat="product in splc.storeProductsList track by product._id">
+    <div class="singleProductContainer" md-whiteframe="1"  flex-xs="100" ng-repeat="product in splc.storeProductsList track by product._id">
 
       <single-product-directive single-product="product"> </single-product-directive>
 
-      <!--
-      <img class="singleProductImage" ng-src="{{::product.images[0]}}">
-      <div class="productDetailsContainer">
-        <div layout="row" layout-align="space-between end">
-          <div class="productName"> {{::product.name}}</div>
-          <div class="productPrice"> {{::product.price.value}} {{::product.price.currency}}</div>
-        </div>
-        
-        <div >
-          <span class="productCategory">{{::product.category.join(",")}}</span>
-          <span class="productSubCatgeory">({{::product.subCategory.join(",")}})
-          </span>
-        </div>
-        <div class="productStatsContainer" layout="row" layout-align="space-between end">
-          <div>
-            <span> {{::product.reviewsCount}}<span><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span> </span>
-          <span > {{::product.upvotesCount}}<span><i class="fa fa-hand-paper-o" aria-hidden="true"></i></span></span>
-          <span > {{::product.visitsCount}}<span><i class="fa fa-cart-arrow-down" aria-hidden="true"></i></span></span>  
-          </div>
-          <div class="viewProductContainer">
-            <span class="viewProductLink" ng-click="splc.getSingleProduct(product._id)">
-              View Product
-            </span>
-          </div>
-        </div>
-      </div>-->
+     
     </div>
   </div>
 </div>

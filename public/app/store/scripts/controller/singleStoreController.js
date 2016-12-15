@@ -13,6 +13,18 @@ angular.module('app.store')
     });
     var ssc = this;
     
+
+    ssc.tab = 1;
+
+    ssc.setTab = function(newTab){
+      ssc.tab = newTab;
+    };
+
+    ssc.isSet = function(tabNum){
+      return ssc.tab === tabNum;
+    };
+
+
     ssc.storeData = {};
     ssc.loading = true;
     ssc.authCheck = $auth.isAuthenticated();

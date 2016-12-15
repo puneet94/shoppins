@@ -95,10 +95,10 @@ io.on('connection', function(socket) {
         console.log(room.roomId);
         socket.join(room.roomId);
     });
-    socket.on('addToSingleRoom', function(room) {
+    socket.on('addToSingleRoom', function(singleRoom) {
       console.log("joined the single room");
-        console.log(room.roomId);
-        socket.join(room.roomId);
+        console.log(singleRoom.roomId);
+        socket.join(singleRoom.roomId);
     });
     socket.on('removeFromRoom', function(room) {
         socket.leave(room.roomId);

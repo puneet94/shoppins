@@ -21,20 +21,16 @@
         }
         function activate() {
             chatService.getChatRoom().then(function(res) {
-                cbc.chatRoomId = res.data[0]._id;
+                console.log("the response");
+                console.log(res);
+                cbc.chatRoomId = res.data._id;
                 socketJoin();
                 getChatMessages();
             }, function(res) {
                 console.log(res);
             });
         }
-        function socketStart() {
-            Socket.on("connect", function() {
-                Socket.on('messageSaved',function(message){
-                  cbc.chatList.push(message);
-                });
-            });
-        }
+        
 
         function socketJoin() {
             Socket.emit('addToRoom', { 'roomId': cbc.chatRoomId });

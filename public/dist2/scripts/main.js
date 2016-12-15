@@ -155,6 +155,10 @@ function redirectIfNotAuthenticated($q,$auth,$route,userData,changeBrowserURL) {
             	if(userData.getUser()._id==creator1 || userData.getUser()._id==creator2){
             		defer.resolve();  
             	}
+                else if (creator2 == creator1) {
+                    defer.reject();
+                    changeBrowserURL.changeBrowserURLMethod('/home');
+                }
             	else{
             		defer.reject();
                 	changeBrowserURL.changeBrowserURLMethod('/home');
@@ -765,78 +769,6 @@ function innerLoadingDirective() {
 })(window.angular);
 
 (function(angular){
-  'use strict';
-
-angular.module('app.admin')
-  .service('adminProductService',["$http","baseUrlService",'changeBrowserURL',AdminProductService]);
-
-/*
-  * This servic has a function to get collection of products`
-*/
-
-function AdminProductService($http,baseUrlService,changeBrowserURL){
-  this.checkProductAdmin = checkProductAdmin;
-  this.createProduct = createProduct;
-  this.getProduct = getProduct;
-  this.updateProduct = updateProduct;
-  this.deleteProduct  = deleteProduct;
-  function checkProductAdmin(userId,productId){
-    return $http.get(baseUrlService.baseUrl);
-  }
-  function createProduct(product,storeId){
-  	return $http.post(baseUrlService.baseUrl+'admin/products/'+storeId,product);
-    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
-
-  }
-  function updateProduct(productId,product){
-  	return $http.put(baseUrlService.baseUrl+'admin/product/'+productId,product);
-  }
-  function getProduct(productId,obj){
-    return $http.get(baseUrlService.baseUrl+'admin/product/'+productId,{params:obj});       
-  }
-  function deleteProduct(){
-
-  }
-}
-})(window.angular);
-
-(function(angular){
-  'use strict';
-
-angular.module('app.admin')
-  .service('adminStoreService',["$http","baseUrlService",'changeBrowserURL',AdminStoreService]);
-
-/*
-  * This servic has a function to get collection of stores`
-*/
-
-function AdminStoreService($http,baseUrlService,changeBrowserURL){
-  this.checkStoreAdmin = checkStoreAdmin;
-  this.createStore = createStore;
-  this.getStore = getStore;
-  this.updateStore = updateStore;
-  this.deleteStore  = deleteStore;
-  function checkStoreAdmin(userId,storeId){
-    return $http.get(baseUrlService.baseUrl);
-  }
-  function createStore(store){
-  	return $http.post(baseUrlService.baseUrl+'admin/stores',store);
-    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
-
-  }
-  function updateStore(storeId,store){
-  	return $http.put(baseUrlService.baseUrl+'admin/store/'+storeId,store);
-  }
-  function getStore(storeId,obj){
-    return $http.get(baseUrlService.baseUrl+'admin/store/'+storeId,{params:obj});       
-  }
-  function deleteStore(){
-
-  }
-}
-})(window.angular);
-
-(function(angular){
   angular.module('app.admin')
 
     .controller('AdminStoreController',['$scope','$routeParams','getSingleStore','Upload','baseUrlService',AdminStoreController]);
@@ -1215,6 +1147,78 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
     }
 })(window.angular);
 
+(function(angular){
+  'use strict';
+
+angular.module('app.admin')
+  .service('adminProductService',["$http","baseUrlService",'changeBrowserURL',AdminProductService]);
+
+/*
+  * This servic has a function to get collection of products`
+*/
+
+function AdminProductService($http,baseUrlService,changeBrowserURL){
+  this.checkProductAdmin = checkProductAdmin;
+  this.createProduct = createProduct;
+  this.getProduct = getProduct;
+  this.updateProduct = updateProduct;
+  this.deleteProduct  = deleteProduct;
+  function checkProductAdmin(userId,productId){
+    return $http.get(baseUrlService.baseUrl);
+  }
+  function createProduct(product,storeId){
+  	return $http.post(baseUrlService.baseUrl+'admin/products/'+storeId,product);
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function updateProduct(productId,product){
+  	return $http.put(baseUrlService.baseUrl+'admin/product/'+productId,product);
+  }
+  function getProduct(productId,obj){
+    return $http.get(baseUrlService.baseUrl+'admin/product/'+productId,{params:obj});       
+  }
+  function deleteProduct(){
+
+  }
+}
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('app.admin')
+  .service('adminStoreService',["$http","baseUrlService",'changeBrowserURL',AdminStoreService]);
+
+/*
+  * This servic has a function to get collection of stores`
+*/
+
+function AdminStoreService($http,baseUrlService,changeBrowserURL){
+  this.checkStoreAdmin = checkStoreAdmin;
+  this.createStore = createStore;
+  this.getStore = getStore;
+  this.updateStore = updateStore;
+  this.deleteStore  = deleteStore;
+  function checkStoreAdmin(userId,storeId){
+    return $http.get(baseUrlService.baseUrl);
+  }
+  function createStore(store){
+  	return $http.post(baseUrlService.baseUrl+'admin/stores',store);
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function updateStore(storeId,store){
+  	return $http.put(baseUrlService.baseUrl+'admin/store/'+storeId,store);
+  }
+  function getStore(storeId,obj){
+    return $http.get(baseUrlService.baseUrl+'admin/store/'+storeId,{params:obj});       
+  }
+  function deleteStore(){
+
+  }
+}
+})(window.angular);
+
 
 // 'use strict';
 //
@@ -1543,20 +1547,16 @@ angular.module('authModApp')
         }
         function activate() {
             chatService.getChatRoom().then(function(res) {
-                cbc.chatRoomId = res.data[0]._id;
+                console.log("the response");
+                console.log(res);
+                cbc.chatRoomId = res.data._id;
                 socketJoin();
                 getChatMessages();
             }, function(res) {
                 console.log(res);
             });
         }
-        function socketStart() {
-            Socket.on("connect", function() {
-                Socket.on('messageSaved',function(message){
-                  cbc.chatList.push(message);
-                });
-            });
-        }
+        
 
         function socketJoin() {
             Socket.emit('addToRoom', { 'roomId': cbc.chatRoomId });
@@ -1920,6 +1920,7 @@ angular.module('app.chat')
 	angular.module('app.home')
 	.controller('HomeLeftController',["$timeout", "$mdSidenav", "$log",LeftCtrl]);
 	function LeftCtrl($timeout, $mdSidenav, $log){
+		console.log("inside the mdSidenav");
 		this.close = function () {
 			// Component lookup should always be available since we are not using `ng-if`
 			$mdSidenav('left').close()
@@ -2883,6 +2884,18 @@ angular.module('app.store')
     });
     var ssc = this;
     
+
+    ssc.tab = 1;
+
+    ssc.setTab = function(newTab){
+      ssc.tab = newTab;
+    };
+
+    ssc.isSet = function(tabNum){
+      return ssc.tab === tabNum;
+    };
+
+
     ssc.storeData = {};
     ssc.loading = true;
     ssc.authCheck = $auth.isAuthenticated();
