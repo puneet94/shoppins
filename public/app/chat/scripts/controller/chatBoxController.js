@@ -6,6 +6,7 @@
     function ChatBoxController($scope, Socket, $routeParams, userData, chatService) {
         var cbc = this;
         cbc.currentUser = userData.getUser()._id;
+        cbc.innerLoading = true;
         cbc.chatRoomId = '';
         cbc.messageLoading = false;
         activate();
@@ -14,6 +15,7 @@
           chatService.getChatMessages(cbc.chatRoomId).then(function(res){
               cbc.chatList = res.data[0].chats;
                $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
+               cbc.innerLoading = false;
             },function(res){
               console.log(res);
             });

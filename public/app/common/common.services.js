@@ -16,7 +16,7 @@ angular.module('app.common')
 	.service('getCityProductLocalitiesService',["$http","baseUrlService",GetCityProductLocalitiesService])
 	.service('getCityProductCategoriesService',["$http","baseUrlService",GetCityProductCategoriesService])
 	.service('getCityProductSubCategoriesService',["$http","baseUrlService",GetCityProductSubCategoriesService])
-	.factory('cityStorage',["$window",cityStorage]);
+	.factory('cityStorage',["$window",'$rootScope',cityStorage]);
 	function CitiesService($http,baseUrlService){
    		this.getCities = function() {
    			var gc = this;
@@ -86,7 +86,7 @@ angular.module('app.common')
 	function UserLocationService(){
 
 	}
-	function cityStorage($window) {
+	function cityStorage($window,$rootScope) {
 		var storage = $window.localStorage;
 
 		var obj1 =  {
@@ -95,6 +95,7 @@ angular.module('app.common')
 				
 				if(city){
 					storage.setItem('city',JSON.stringify(city));
+					$rootScope.$broadcast('city-changed');
 				}
 			},
 			getCity: function(){

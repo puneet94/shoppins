@@ -152,13 +152,13 @@ function redirectIfNotAuthenticated($q,$auth,$route,userData,changeBrowserURL) {
             var creator1 = $route.current.params.creator1;
             var creator2 = $route.current.params.creator2;
             if($auth.isAuthenticated()){
-            	if(userData.getUser()._id==creator1 || userData.getUser()._id==creator2){
-            		defer.resolve();  
-            	}
-                else if (creator2 == creator1) {
+            	if (creator2 == creator1) {
                     defer.reject();
                     changeBrowserURL.changeBrowserURLMethod('/home');
                 }
+                else if(userData.getUser()._id==creator1 || userData.getUser()._id==creator2){
+            		defer.resolve();  
+            	}
             	else{
             		defer.reject();
                 	changeBrowserURL.changeBrowserURLMethod('/home');
@@ -347,7 +347,7 @@ angular.module('app.common')
 	.service('getCityProductLocalitiesService',["$http","baseUrlService",GetCityProductLocalitiesService])
 	.service('getCityProductCategoriesService',["$http","baseUrlService",GetCityProductCategoriesService])
 	.service('getCityProductSubCategoriesService',["$http","baseUrlService",GetCityProductSubCategoriesService])
-	.factory('cityStorage',["$window",cityStorage]);
+	.factory('cityStorage',["$window",'$rootScope',cityStorage]);
 	function CitiesService($http,baseUrlService){
    		this.getCities = function() {
    			var gc = this;
@@ -417,7 +417,7 @@ angular.module('app.common')
 	function UserLocationService(){
 
 	}
-	function cityStorage($window) {
+	function cityStorage($window,$rootScope) {
 		var storage = $window.localStorage;
 
 		var obj1 =  {
@@ -426,6 +426,7 @@ angular.module('app.common')
 				
 				if(city){
 					storage.setItem('city',JSON.stringify(city));
+					$rootScope.$broadcast('city-changed');
 				}
 			},
 			getCity: function(){
@@ -1219,6 +1220,163 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
 }
 })(window.angular);
 
+(function(angular) {
+    angular.module('app.chat')
+
+    .controller('ChatBoxController', ['$scope', 'Socket', '$routeParams', 'userData', 'chatService', ChatBoxController]);
+
+    function ChatBoxController($scope, Socket, $routeParams, userData, chatService) {
+        var cbc = this;
+        cbc.currentUser = userData.getUser()._id;
+        cbc.innerLoading = true;
+        cbc.chatRoomId = '';
+        cbc.messageLoading = false;
+        activate();
+        //socketStart();
+        function getChatMessages(){
+          chatService.getChatMessages(cbc.chatRoomId).then(function(res){
+              cbc.chatList = res.data[0].chats;
+               $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
+               cbc.innerLoading = false;
+            },function(res){
+              console.log(res);
+            });
+
+        }
+        function activate() {
+            chatService.getChatRoom().then(function(res) {
+                console.log("the response");
+                console.log(res);
+                cbc.chatRoomId = res.data._id;
+                socketJoin();
+                getChatMessages();
+            }, function(res) {
+                console.log(res);
+            });
+        }
+        
+
+        function socketJoin() {
+            Socket.emit('addToRoom', { 'roomId': cbc.chatRoomId });
+            Socket.on('messageSaved',function(message){
+                  cbc.chatList.push(message);
+                  $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
+                });
+        }
+        cbc.sendMsg = function($event) {
+            if ($event.which == 13 && !$event.shiftKey && cbc.myMsg) {
+                cbc.messageLoading = true;
+                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
+                chatService.sendChatMessage(chatObj).then(function(res){
+                  cbc.myMsg = '';
+                  cbc.messageLoading = false;
+                },function(res){
+                  console.log(res);
+                });
+                
+            }
+        };
+        cbc.clickSubmit = function(){
+          if (cbc.myMsg) {
+                cbc.messageLoading = true;
+                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
+                chatService.sendChatMessage(chatObj).then(function(res){
+                  cbc.myMsg = '';
+                  cbc.messageLoading = false;
+                },function(res){
+                  console.log(res);
+                });
+                
+            }  
+        };
+
+    }
+})(window.angular);
+
+(function(angular) {
+    angular.module('app.chat')
+
+    .controller('ChatRoomListController', ['$scope','$routeParams', 'userData', 'chatService', 'changeBrowserURL',ChatRoomListController]);
+
+    function ChatRoomListController($scope,$routeParams, userData, chatService,changeBrowserURL) {
+        
+        var cbc = this;
+        cbc.currentUser = userData.getUser()._id;
+        cbc.innerLoading = true;
+        activate();
+        cbc.openChatbox = openChatbox;
+        function openChatbox(chatRoom){
+            changeBrowserURL.changeBrowserURLMethod('/chatBox/'+chatRoom.creator1._id+'/'+chatRoom.creator2._id);
+        }
+        function getChatRoomList(){
+
+          chatService.getChatRoomList(cbc.currentUser).then(function(res){
+              cbc.chatRoomList = res.data;
+                cbc.innerLoading = false;
+            },function(res){
+              console.log(res);
+            });
+
+        }
+
+        function activate() {
+            getChatRoomList();
+        }
+        
+
+    }
+})(window.angular);
+
+(function(angular){
+  'use strict';
+  angular.module('app.chat')
+      .service('chatService',['$http','$routeParams','baseUrlService',ReviewService]);
+      function ReviewService($http,$routeParams,baseUrlService){
+        var rs  = this;
+        rs.sendChatMessage = sendChatMessage;
+        rs.getChatMessages = getChatMessages;
+        rs.getChatRoom = getChatRoom;
+        rs.getChatRoomList = getChatRoomList;
+        function sendChatMessage(chat){
+          return $http.post(baseUrlService.baseUrl+'chat/chats/'+chat.roomId,chat);
+        }
+        function getChatMessages(chatRoomId){
+          
+          return $http.get(baseUrlService.baseUrl+'chat/chats/'+chatRoomId);
+        }
+        function getChatRoom(){
+        	return $http.get(baseUrlService.baseUrl + 'chat/chatBox/' + $routeParams.creator1 + '/' + $routeParams.creator2);
+                
+        }
+        function getChatRoomList(userId){
+          return $http.get(baseUrlService.baseUrl + 'chat/chatRooms/' + userId);
+        }
+        
+
+      }
+})(window.angular);
+
+(function(angular){
+'use strict';
+angular.module('app.chat').factory('Socket', ['socketFactory','baseUrlService',SocketFactory]);
+    
+    function SocketFactory(socketFactory,baseUrlService) {
+        return socketFactory({
+            prefix: '',
+            ioSocket: io.connect(baseUrlService)
+        });
+    }
+
+})(window.angular);
+angular.module('app.chat')
+	.factory('SocketUserService', ['socketFactory','userData',socketFactoryFunction]);
+    function socketFactoryFunction(socketFactory,userData) {
+        return socketFactory({
+            prefix: '',
+            ioSocket: io.connect('/'+userData.getUser()._id)
+        });
+    }
+
 
 // 'use strict';
 //
@@ -1525,160 +1683,6 @@ angular.module('authModApp')
 })(window.angular);
 
 (function(angular) {
-    angular.module('app.chat')
-
-    .controller('ChatBoxController', ['$scope', 'Socket', '$routeParams', 'userData', 'chatService', ChatBoxController]);
-
-    function ChatBoxController($scope, Socket, $routeParams, userData, chatService) {
-        var cbc = this;
-        cbc.currentUser = userData.getUser()._id;
-        cbc.chatRoomId = '';
-        cbc.messageLoading = false;
-        activate();
-        //socketStart();
-        function getChatMessages(){
-          chatService.getChatMessages(cbc.chatRoomId).then(function(res){
-              cbc.chatList = res.data[0].chats;
-               $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
-            },function(res){
-              console.log(res);
-            });
-
-        }
-        function activate() {
-            chatService.getChatRoom().then(function(res) {
-                console.log("the response");
-                console.log(res);
-                cbc.chatRoomId = res.data._id;
-                socketJoin();
-                getChatMessages();
-            }, function(res) {
-                console.log(res);
-            });
-        }
-        
-
-        function socketJoin() {
-            Socket.emit('addToRoom', { 'roomId': cbc.chatRoomId });
-            Socket.on('messageSaved',function(message){
-                  cbc.chatList.push(message);
-                  $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
-                });
-        }
-        cbc.sendMsg = function($event) {
-            if ($event.which == 13 && !$event.shiftKey && cbc.myMsg) {
-                cbc.messageLoading = true;
-                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
-                chatService.sendChatMessage(chatObj).then(function(res){
-                  cbc.myMsg = '';
-                  cbc.messageLoading = false;
-                },function(res){
-                  console.log(res);
-                });
-                
-            }
-        };
-        cbc.clickSubmit = function(){
-          if (cbc.myMsg) {
-                cbc.messageLoading = true;
-                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
-                chatService.sendChatMessage(chatObj).then(function(res){
-                  cbc.myMsg = '';
-                  cbc.messageLoading = false;
-                },function(res){
-                  console.log(res);
-                });
-                
-            }  
-        };
-
-    }
-})(window.angular);
-
-(function(angular) {
-    angular.module('app.chat')
-
-    .controller('ChatRoomListController', ['$scope','$routeParams', 'userData', 'chatService', 'changeBrowserURL',ChatRoomListController]);
-
-    function ChatRoomListController($scope,$routeParams, userData, chatService,changeBrowserURL) {
-        
-        var cbc = this;
-        cbc.currentUser = userData.getUser()._id;
-        activate();
-        cbc.openChatbox = openChatbox;
-        function openChatbox(chatRoom){
-            changeBrowserURL.changeBrowserURLMethod('/chatBox/'+chatRoom.creator1._id+'/'+chatRoom.creator2._id);
-        }
-        function getChatRoomList(){
-
-          chatService.getChatRoomList(cbc.currentUser).then(function(res){
-              cbc.chatRoomList = res.data;
-                
-            },function(res){
-              console.log(res);
-            });
-
-        }
-
-        function activate() {
-            getChatRoomList();
-        }
-        
-
-    }
-})(window.angular);
-
-(function(angular){
-  'use strict';
-  angular.module('app.chat')
-      .service('chatService',['$http','$routeParams','baseUrlService',ReviewService]);
-      function ReviewService($http,$routeParams,baseUrlService){
-        var rs  = this;
-        rs.sendChatMessage = sendChatMessage;
-        rs.getChatMessages = getChatMessages;
-        rs.getChatRoom = getChatRoom;
-        rs.getChatRoomList = getChatRoomList;
-        function sendChatMessage(chat){
-          return $http.post(baseUrlService.baseUrl+'chat/chats/'+chat.roomId,chat);
-        }
-        function getChatMessages(chatRoomId){
-          
-          return $http.get(baseUrlService.baseUrl+'chat/chats/'+chatRoomId);
-        }
-        function getChatRoom(){
-        	return $http.get(baseUrlService.baseUrl + 'chat/chatBox/' + $routeParams.creator1 + '/' + $routeParams.creator2);
-                
-        }
-        function getChatRoomList(userId){
-          return $http.get(baseUrlService.baseUrl + 'chat/chatRooms/' + userId);
-        }
-        
-
-      }
-})(window.angular);
-
-(function(angular){
-'use strict';
-angular.module('app.chat').factory('Socket', ['socketFactory','baseUrlService',SocketFactory]);
-    
-    function SocketFactory(socketFactory,baseUrlService) {
-        return socketFactory({
-            prefix: '',
-            ioSocket: io.connect(baseUrlService)
-        });
-    }
-
-})(window.angular);
-angular.module('app.chat')
-	.factory('SocketUserService', ['socketFactory','userData',socketFactoryFunction]);
-    function socketFactoryFunction(socketFactory,userData) {
-        return socketFactory({
-            prefix: '',
-            ioSocket: io.connect('/'+userData.getUser()._id)
-        });
-    }
-
-(function(angular) {
     'use strict';
 
     angular.module('app.home')
@@ -1737,9 +1741,9 @@ angular.module('app.chat')
 	'use strict';
 
 	angular.module('app.home')
-	.controller('HeaderController',["$scope","userData","changeBrowserURL","$auth","$mdDialog", "$mdMedia","$timeout", "$mdSidenav", "$log",'Socket',HeaderController]);
+	.controller('HeaderController',["$scope","userData","changeBrowserURL","$auth","$mdDialog", "$mdMedia","$timeout", "$mdSidenav", HeaderController]);
 
-	function HeaderController($scope,userData,changeBrowserURL,$auth,$mdDialog, $mdMedia,$timeout, $mdSidenav, $log,Socket){
+	function HeaderController($scope,userData,changeBrowserURL,$auth,$mdDialog, $mdMedia,$timeout, $mdSidenav){
 			var phc = this;
 			phc.toHomePage = toHomePage;
 			phc.authenticate = authenticate;
@@ -1747,26 +1751,7 @@ angular.module('app.chat')
 			phc.showAdvanced = showAdvanced;
 			phc.customFullscreen = undefined;
 			phc.isAuth = $auth.isAuthenticated();
-			function socketStart() {
-            Socket.emit('addToSingleRoom', { 'roomId': userData.getUser()._id });
-            
-        	}
-			if(phc.isAuth){
-				socketStart();
-				Socket.on("connect", function() {
-
-                    Socket.emit('addToSingleRoom', { 'roomId': userData.getUser()._id });
-                });
-				Socket.on('newMessageReceived',function(message){
-					
-					if(message.user._id == userData.getUser()._id){
-
-					}
-					else{
-						
-					}
-				});
-			}
+			
 			phc.isOpenLeft = function(){
 	      return $mdSidenav('left').isOpen();
 	    };
@@ -1778,7 +1763,7 @@ angular.module('app.chat')
 	        $mdSidenav(navID)
 	          .toggle()
 	          .then(function () {
-	            $log.debug("toggle " + navID + " is done");
+	            console.log("toggle " + navID + " is done");
 	          });
 	      };
 	    }
@@ -1826,10 +1811,10 @@ angular.module('app.chat')
 	angular.module('app.home')
 	.controller('HomeController',["$scope","citiesService","searchService","changeBrowserURL",homeController])
 
-	.controller('CategoryListController',["$scope","$http","getCategoryService","arrayUniqueCopy","arrayObjectMapper","userLocationService","changeBrowserURL","baseUrlService",CategoryListController]);
+	.controller('CategoryListController',["$scope","getCityCategoriesService","cityStorage","changeBrowserURL","baseUrlService",CategoryListController]);
 
 
-	function CategoryListController($scope,$http,getCategoryService,arrayUniqueCopy,arrayObjectMapper,userLocationService,changeBrowserURL,baseUrlService){
+	function CategoryListController($scope,getCityCategoriesService,cityStorage,changeBrowserURL,baseUrlService){
 		var clc = this;
 		clc.cateList = [];
 		clc.categLoadMore = false;
@@ -1837,12 +1822,16 @@ angular.module('app.chat')
 		clc.getCategories = getCategories;
 		clc.categoryLinkClicked = categoryLinkClicked;
 		activate();
-
+		clc.innerLoading = true;
 		function activate(){
 			clc.getCategories();
+			
 		}
+		$scope.$on('city-changed',function(){
+			clc.getCategories();
+		});
 		function categoryLinkClicked(category){
-			var location = userLocationService.getUserLocation();
+			var location = cityStorage.getCity();
 			var slug = category + "-stores-in-" + location;
 			var url = "/store/storesCollection/category/"+category+"/"+location+"/"+slug;
 			changeBrowserURL.changeBrowserURLMethod(url);
@@ -1850,23 +1839,16 @@ angular.module('app.chat')
 
 		}
 		function getCategories(){
-			//getCategoryService.getCategoryList
-
-			clc.pageNo = clc.pageNo + 1;
-			var url = baseUrlService.baseUrl+"store/categories/"+""+clc.pageNo;
-			$http.get(url)
-				.then(
-					function(response){
-						angular.forEach(response.data.docs, function(item){
-							clc.cateList = arrayUniqueCopy.getUniqueCopyFunction(item.category,clc.cateList);
-						});
-
-
-					},
-					function(response){
-
-					}
-				);
+			clc.categoryList = [];
+			getCityCategoriesService.getCityCategories(cityStorage.getCity()).then(function(response){
+				console.log("the category response");
+				console.log(response);
+				clc.categoryList = response.data;
+				clc.innerLoading = false;
+			});
+			
+			
+			
 
 		}
 
@@ -1878,7 +1860,6 @@ angular.module('app.chat')
 		hm.searchTextChange = searchTextChange;
 		hm.selectedItemChange = selectedItemChange;
 		hm.userSearchItemChange = userSearchItemChange;
-
 		function userSearchItemChange(item){
 			var url = item.userSearchString.split("#&#")[1]+"/"+item.userSearchString.split("#&#")[0]+"/"+item.userSearchString.split("#&#")[2];
 			changeBrowserURL.changeBrowserURLMethod(url);
@@ -1895,8 +1876,6 @@ angular.module('app.chat')
 				console.log(data);
 			});
 		}
-
-
 	    function activate() {
 	    	citiesService.getCities()
 				.then(function(obj){
@@ -1908,12 +1887,10 @@ angular.module('app.chat')
 					console.log(obj);
 					hm.cities =  obj;
 				});
-
 	    }*/
 	}
 })(window.angular);
 /*git clone https://github.com/mrvautin/adminMongo.git && cd adminMongo*/
-
 (function(angular){
 	'use strict';
 
@@ -1931,162 +1908,161 @@ angular.module('app.chat')
 	}
 })(window.angular);
 
-(function(angular){
-	'use strict';
+(function(angular) {
+    'use strict';
 
-angular.module('app.home')
-	.controller('SearchBoxController',["$scope","$http","$routeParams","cityStorage","citiesService","searchService","changeBrowserURL","userLocationService",SearchBoxController]);
-
-
-function SearchBoxController($scope,$http,$routeParams,cityStorage,citiesService,searchService,changeBrowserURL,userLocationService){
-		var hm= this;
-		if($routeParams.location){
-				hm.selectedItem = $routeParams.location;
-		}
-		else if(cityStorage.isCityExists()){
-			hm.selectedItem = cityStorage.getCity();
-		}
-		else{
-
-			hm.selectedItem = 'hyderabad';
-		}
-		activate();
-		hm.userSearches = [];
-		hm.selectedItemChange = selectedItemChange;
-		hm.userSearchItemChange = userSearchItemChange;
-		hm.locationSearch = locationSearch;
-		hm.userSearchTextChange = userSearchTextChange;
-		hm.openSearchBox = openSearchBox;
-		
-		function openSearchBox(){
-			console.log("clicked");
-			hm.mobileSearchBoxVisible = true;
-		}
-		hm.selectedItemChange(hm.selectedItem);
-		function userSearchItemChange(item){
-
-			var changeEntity = item.userSearchString.split("#&#")[1];
-			var entityName = item.userSearchString.split("#&#")[0];
-			var location = hm.selectedItem;
-			hm.slug = entityName + "-"+changeEntity.split("-")[0]+"s-in-" + location;
-			console.log(changeEntity);
-			if(changeEntity == "store"){
-
-				hm.url = "/store/storesCollection/storeName/";
+    angular.module('app.home')
+        .controller('SearchBoxController', ["$scope", "$http", "$routeParams", "cityStorage", "citiesService", "searchService", "changeBrowserURL", "userLocationService", SearchBoxController]);
 
 
-			}
-			else if(changeEntity == "store-category"){
+    function SearchBoxController($scope, $http, $routeParams, cityStorage, citiesService, searchService, changeBrowserURL, userLocationService) {
+        var hm = this;
+        if ($routeParams.location) {
+            hm.selectedItem = $routeParams.location;
+        } else if (cityStorage.isCityExists()) {
+            hm.selectedItem = cityStorage.getCity();
+        } else {
 
-				hm.url = "/store/storesCollection/category/";
+            hm.selectedItem = 'hyderabad';
+        }
+        activate();
+        hm.userSearches = [];
+        hm.selectedItemChange = selectedItemChange;
+        hm.userSearchItemChange = userSearchItemChange;
+        hm.locationSearch = locationSearch;
+        hm.userSearchTextChange = userSearchTextChange;
+        hm.openSearchBox = openSearchBox;
 
+        function openSearchBox() {
+            console.log("clicked");
+            hm.mobileSearchBoxVisible = true;
+        }
+        hm.selectedItemChange(hm.selectedItem);
 
-			}
-			else if(changeEntity == "product"){
-						  
-				hm.url = "/productsCollectionName/";
+        function userSearchItemChange(item) {
 
-			}
-			else if(changeEntity == "product-category"){
+            var changeEntity = item.userSearchString.split("#&#")[1];
+            var entityName = item.userSearchString.split("#&#")[0];
+            var location = hm.selectedItem;
+            hm.slug = entityName + "-" + changeEntity.split("-")[0] + "s-in-" + location;
+            console.log(changeEntity);
+            if (changeEntity == "store") {
 
-				hm.url = "/productsCollectionCategory/";
-
-
-			}
-			else if(changeEntity == "product-subcategory"){
-
-				hm.url = "/productsCollectionSubCategory/";
-
-			}
-			else if(changeEntity.trim() == "All products in"){
-				
-				locationProductsSearchUrl();
-
-			}
-			else{
-
-				locationStoresSearchUrl();
-			}
-
-			changeBrowserURL.changeBrowserURLMethod(hm.url+entityName+"/"+location+"/"+hm.slug);
-
-
-		}
-		//md-search-text-change="sbc.searchTextChange(sbc.searchText)"
-		function userSearchTextChange(city,userSearchText){
-			if(userSearchText.length>=2){
-				searchService.getAjaxSearches(city,userSearchText)
-					.then(function(resource){
-						hm.loading = true;
-						hm.userSearches = [];
-						var allStoresItem = {"userSearchString":"#&#All stores in #&#"+hm.selectedItem};
-						var allProductsItem = {"userSearchString":"#&#All products in #&#"+hm.selectedItem};
-						hm.userSearches = [allStoresItem,allProductsItem];
-						for (var i = resource.data.length - 1; i >= 0; i--) {
-							hm.userSearches.push(resource.data[i]);
-						}
-						hm.loading = false;
-					});
-			}
-			else{
-				if(hm.selectedItem){
-					selectedItemChange(hm.selectedItem);
-				}
-			}
-		}
-		function selectedItemChange(item){
-			hm.loading = true;
-			cityStorage.setCity(item);
-			searchService.getSearches(item).then(function(resource){
-				var allStoresItem = {"userSearchString":"#&#All stores in #&#"+hm.selectedItem};
-				var allProductsItem = {"userSearchString":"#&#All products in #&#"+hm.selectedItem};
-				hm.userSearches = [allStoresItem,allProductsItem];
-				for (var i = resource.data.length - 1; i >= 0; i--) {
-					hm.userSearches.push(resource.data[i]);
-				}
-				hm.loading = false;
-			},function(data){
-				console.log(data);
-			});
-		}
-		function locationSearch(){
-			if(hm.cities.indexOf(hm.selectedItem)!=-1){
-				if(!hm.userSearchText||hm.userSearchText.length===0){
-					locationStoresSearchUrl();
-				}
-			}
-		}
-		function locationStoresSearchUrl(){
-			hm.url = "/store/storesCollection/location";
-			var myLocation = hm.selectedItem;
-			hm.slug = "stores-in-" + myLocation;
-			changeBrowserURL.changeBrowserURLMethod(hm.url+"/"+myLocation+"/"+hm.slug);
-
-		}
-		function locationProductsSearchUrl(){
-			
-			hm.url = "/productsCollectionLocation";
-			var myLocation = hm.selectedItem;
-			hm.slug = "products-in-" + myLocation;
-			
-			changeBrowserURL.changeBrowserURLMethod(hm.url+"/"+myLocation+"/"+hm.slug);
+                hm.url = "/store/storesCollection/storeName/";
 
 
-		}
+            } else if (changeEntity == "store-category") {
 
-	    function activate() {
+                hm.url = "/store/storesCollection/category/";
 
-	    	citiesService.getCities()
-				.then(function(obj){
 
-					hm.cities = obj.data;
+            } else if (changeEntity == "product") {
 
-				},function(obj){
-					hm.cities =  obj;
-				});
-	    }
+                hm.url = "/productsCollectionName/";
 
-}
+            } else if (changeEntity == "product-category") {
+
+                hm.url = "/productsCollectionCategory/";
+
+
+            } else if (changeEntity == "product-subcategory") {
+
+                hm.url = "/productsCollectionSubCategory/";
+
+            } else if (changeEntity.trim() == "All products in") {
+
+                locationProductsSearchUrl();
+
+            } else {
+
+                locationStoresSearchUrl();
+            }
+
+            changeBrowserURL.changeBrowserURLMethod(hm.url + entityName + "/" + location + "/" + hm.slug);
+
+
+        }
+        //md-search-text-change="sbc.searchTextChange(sbc.searchText)"
+        function userSearchTextChange(city, userSearchText) {
+            console.log("ola");
+            console.log(userSearchText.length);
+            if (userSearchText.length >= 1) {
+                searchService.getAjaxSearches(city, userSearchText)
+                    .then(function(resource) {
+
+                        hm.userSearches = [];
+                        var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
+                        var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
+                        hm.userSearches = [allStoresItem, allProductsItem];
+                        //hm.userSearches = 
+                        for (var i = 0; i < resource.data.length; i++) {
+                            hm.userSearches.push(resource.data[i]);
+                        }
+
+                    });
+            } else {
+                if (hm.selectedItem) {
+                    selectedItemChange(hm.selectedItem);
+                }
+            }
+        }
+
+        function selectedItemChange(item) {
+
+            cityStorage.setCity(item);
+            searchService.getSearches(item).then(function(resource) {
+                var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
+                var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
+                hm.userSearches = [allStoresItem, allProductsItem];
+                for (var i = 0; i < resource.data.length; i++) {
+                    hm.userSearches.push(resource.data[i]);
+                }
+
+            }, function(data) {
+                console.log(data);
+            });
+        }
+
+        function locationSearch() {
+            if (hm.cities.indexOf(hm.selectedItem) != -1) {
+                if (!hm.userSearchText || hm.userSearchText.length === 0) {
+                    locationStoresSearchUrl();
+                }
+            }
+        }
+
+        function locationStoresSearchUrl() {
+            hm.url = "/store/storesCollection/location";
+            var myLocation = hm.selectedItem;
+            hm.slug = "stores-in-" + myLocation;
+            changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
+
+        }
+
+        function locationProductsSearchUrl() {
+
+            hm.url = "/productsCollectionLocation";
+            var myLocation = hm.selectedItem;
+            hm.slug = "products-in-" + myLocation;
+
+            changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
+
+
+        }
+
+        function activate() {
+
+            citiesService.getCities()
+                .then(function(obj) {
+
+                    hm.cities = obj.data;
+
+                }, function(obj) {
+                    hm.cities = obj;
+                });
+        }
+
+    }
 })(window.angular);
 
 //inject angular file upload directives and services.

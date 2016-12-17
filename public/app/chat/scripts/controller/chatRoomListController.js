@@ -7,6 +7,7 @@
         
         var cbc = this;
         cbc.currentUser = userData.getUser()._id;
+        cbc.innerLoading = true;
         activate();
         cbc.openChatbox = openChatbox;
         function openChatbox(chatRoom){
@@ -16,7 +17,7 @@
 
           chatService.getChatRoomList(cbc.currentUser).then(function(res){
               cbc.chatRoomList = res.data;
-                
+                cbc.innerLoading = false;
             },function(res){
               console.log(res);
             });

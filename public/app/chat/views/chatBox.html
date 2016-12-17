@@ -11,7 +11,7 @@
     </div>
     <div flex="50" flex-sm="100" flex-xs="100">
         <div ng-cloak class="chatBoxPage" md-whiteframe="3">
-
+        <inner-loading-directive inner-loading="cbc.innerLoading" container-height="200px"></inner-loading-directive>
             <ul class="chatBoxUL">
                 <li ng-repeat="chat in cbc.chatList" ng-class="chat.user._id==cbc.currentUser ? 'rightChat':'leftChat' ">
                     <div ng-class=" chat.user._id==cbc.currentUser ? 'you' : 'me'">

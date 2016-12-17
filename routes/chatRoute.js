@@ -33,10 +33,13 @@ chatRouter.route('/chatBox/:creator1/:creator2')
         var creator1 = req.params.creator1;
         var creator2 = req.params.creator2;
         var queryObj = {};
+        if(creator1 == creator2){
+            res.send("err");
+        }
         if (creator1 < creator2) {
             queryObj.creator1 = creator1;
             queryObj.creator2 = creator2;
-        } else {
+        } else if (creator1 > creator2) {
 
             queryObj.creator2 = creator1;
             queryObj.creator1 = creator2;
