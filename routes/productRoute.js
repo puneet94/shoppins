@@ -115,12 +115,15 @@ productRouter.route('/products/name/:name/:location/:pageNo')
 		var queryObject = {};
 		queryObject['address.city']=req.params.location;
 		queryObject['name'] = req.params.name;
+		console.log(queryObject);
 		Product.paginate(queryObject,
 			{page: req.params.pageNo, limit: 35 }, function(err, result) {
 		    if(err){
 				res.send(err);
 			}
 			else{
+				console.log("te rejashd");
+				console.log(result);
 				res.json(result);
 			}
 		});

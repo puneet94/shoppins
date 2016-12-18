@@ -2159,6 +2159,7 @@ angular.module('app.product')
       plc.getSingleProduct = getSingleProduct;
       plc.getProductsCollection = getProductsCollection;
       plc.productsSearchHeader = $routeParams.slug;
+      console.log("inside product");
       activate();
       $scope.$on('parent', function (event, data) {
         plc.pageNo = 0;
@@ -2187,8 +2188,11 @@ angular.module('app.product')
            url = 'product/products/subCategory/'+productSubCategory+'/'+location+'/'+plc.pageNo;
         }
         else if($location.absUrl().indexOf("/productsCollectionName/")!=-1){
+
           var productName = $routeParams.productName;
            url = 'product/products/name/'+productName+'/'+location+'/'+plc.pageNo;
+           console.log("desired url");
+           console.log(url);
         }
         else if($location.absUrl().indexOf("/productsCollectionLocation/")!=-1){
           
