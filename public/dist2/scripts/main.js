@@ -518,7 +518,7 @@ angular.module('app.common')
   .directive('followDirective',[followDirective])
   .directive('smallLoadingDirective',[smallLoadingDirective])
   .directive('bindHtmlCompile', ['$compile', bindHtmlCompile])
-  //.directive('imageReplacementDirective',[imageReplacementDirective])
+  .directive('imageReplacementDirective',[imageReplacementDirective])
   .directive('imagesListDirective',[imagesListDirective])
   .directive('singleImageDirective',[singleImageDirective]);
   function imagesListDirective(){
@@ -751,9 +751,16 @@ function innerLoadingDirective() {
       templateUrl: 'app/user/views/userFollow.html'
     };
   }
-
+function imageReplacementDirective(){
+  return {
+    restrict: 'A',
+    link: function(scope,element,attrs){
+      //alert('.'+attrs.class);
+      $(element).css('background-image','url('+attrs.imageReplacementDirective+')');
+    }
+  };
+}
 })(window.angular);
-
 
 (function(angular){
 

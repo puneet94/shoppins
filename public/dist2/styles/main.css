@@ -113,6 +113,95 @@
   color: #795548; }
 
 
+.chatBoxPage {
+  position: relative;
+  padding: 10px;
+  background-color: white;
+  margin: 5px 5px; }
+
+.chatBoxUL {
+  padding: 0;
+  height: 63vh;
+  overflow: auto; }
+  .chatBoxUL li {
+    list-style-type: none;
+    margin-bottom: 5px; }
+    .chatBoxUL li p {
+      display: inline-block;
+      text-align: left;
+      max-width: 75%;
+      margin: 2px 5px;
+      background-color: #eee;
+      padding: 10px 10px;
+      word-wrap: break-word;
+      border: 1px solid #eee;
+      border-radius: 3px; }
+
+.leftChat {
+  clear: both;
+  float: left; }
+
+.rightChat {
+  clear: both;
+  float: right; }
+
+.image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  clear: both; }
+  .image img {
+    width: 100%;
+    height: 100%; }
+
+.you p {
+  float: right;
+  margin-right: 5px; }
+
+.you .image {
+  float: right; }
+
+.me p {
+  float: left;
+  margin-left: 5px; }
+
+.me .image {
+  float: left; }
+
+.msgBox {
+  width: 100%; }
+
+.chatRoom {
+  padding: 10px;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  height: 45px; }
+  .chatRoom .creatorImage {
+    width: 100%;
+    height: 100%; }
+    .chatRoom .creatorImage div {
+      height: 100%;
+      width: 100%; }
+    .chatRoom .creatorImage img {
+      height: 100%;
+      width: 100%; }
+  .chatRoom .chatRoomContent {
+    padding-left: 10px;
+    height: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; }
+    .chatRoom .chatRoomContent .chatCreator {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(0, 0, 0, 0.6);
+      text-transform: capitalize; }
+    .chatRoom .chatRoomContent .chatMessage {
+      font-size: 12px; }
+  .chatRoom .chatMessageTime {
+    height: 100%;
+    font-size: 10px; }
+
 .tabsContent {
   margin-top: 2px; }
 
@@ -333,95 +422,6 @@ md-ink-bar {
     -webkit-transform: rotate(359deg);
     transform: rotate(359deg); } }
 
-.chatBoxPage {
-  position: relative;
-  padding: 10px;
-  background-color: white;
-  margin: 5px 5px; }
-
-.chatBoxUL {
-  padding: 0;
-  height: 63vh;
-  overflow: auto; }
-  .chatBoxUL li {
-    list-style-type: none;
-    margin-bottom: 5px; }
-    .chatBoxUL li p {
-      display: inline-block;
-      text-align: left;
-      max-width: 75%;
-      margin: 2px 5px;
-      background-color: #eee;
-      padding: 10px 10px;
-      word-wrap: break-word;
-      border: 1px solid #eee;
-      border-radius: 3px; }
-
-.leftChat {
-  clear: both;
-  float: left; }
-
-.rightChat {
-  clear: both;
-  float: right; }
-
-.image {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  clear: both; }
-  .image img {
-    width: 100%;
-    height: 100%; }
-
-.you p {
-  float: right;
-  margin-right: 5px; }
-
-.you .image {
-  float: right; }
-
-.me p {
-  float: left;
-  margin-left: 5px; }
-
-.me .image {
-  float: left; }
-
-.msgBox {
-  width: 100%; }
-
-.chatRoom {
-  padding: 10px;
-  background-color: #fff;
-  border-bottom: 1px solid #eee;
-  height: 45px; }
-  .chatRoom .creatorImage {
-    width: 100%;
-    height: 100%; }
-    .chatRoom .creatorImage div {
-      height: 100%;
-      width: 100%; }
-    .chatRoom .creatorImage img {
-      height: 100%;
-      width: 100%; }
-  .chatRoom .chatRoomContent {
-    padding-left: 10px;
-    height: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; }
-    .chatRoom .chatRoomContent .chatCreator {
-      font-size: 12px;
-      font-weight: 600;
-      color: rgba(0, 0, 0, 0.6);
-      text-transform: capitalize; }
-    .chatRoom .chatRoomContent .chatMessage {
-      font-size: 12px; }
-  .chatRoom .chatMessageTime {
-    height: 100%;
-    font-size: 10px; }
-
 .shakeElement {
   animation: shake 2s infinite;
   -webkit-animation: shake 2s infinite;
@@ -521,7 +521,7 @@ md-ink-bar {
   width: 100%;
   height: 50vh;
   position: relative;
-  background-image: url("https://www.ultimatedesignertoolkit.com/wp-content/uploads/2015/11/Background_5.jpg");
+  background-image: url("http://hddesktopwallpapers.in/wp-content/uploads/2015/06/Plain-Wallpapers-HD-A37.jpg");
   background-position: 0 0;
   background-size: cover;
   background-repeat: no-repeat;

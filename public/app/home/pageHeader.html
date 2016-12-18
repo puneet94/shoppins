@@ -1,34 +1,30 @@
 <div ng-controller="HeaderController as phc">
-
-   <md-toolbar md-scroll-shrink ng-if="true" ng-class="{'headerFixed':phc.headerFixed}" class="fixedTopHeader">
-      <div layout-xs="row" layout-align-xs="space-between center" >
-         <div hide show-xs>
-            <div class="menu-icon" ng-click="phc.toggleLeft()" ng-hide="phc.isOpenLeft()">
-               <div class="menu-icon-span"></div>
-               <div class="menu-icon-span"></div>
-               <div class="menu-icon-span"></div>
+    <md-toolbar md-scroll-shrink ng-if="true" ng-class="{'headerFixed':phc.headerFixed}" class="fixedTopHeader">
+        <div layout-xs="row" layout-align-xs="space-between center">
+            <div hide show-xs>
+                <div class="menu-icon" ng-click="phc.toggleLeft()" ng-hide="phc.isOpenLeft()">
+                    <div class="menu-icon-span"></div>
+                    <div class="menu-icon-span"></div>
+                    <div class="menu-icon-span"></div>
+                </div>
             </div>
-         </div>
-         <div layout="row" layout-align="space-between center" layout-xs="column" layout-align-xs="space-between center" >
-            <div class="logoSection">
-               <!--<md-icon md-src={{phc.imgSrc}} class="s24"></md-icon>-->
-               <span class="md-headline" ng-click="phc.toHomePage()">
+            <div layout="row" layout-align="space-between center" layout-xs="column" layout-align-xs="space-between center">
+                <div class="logoSection">
+                    <!--<md-icon md-src={{phc.imgSrc}} class="s24"></md-icon>-->
+                    <span class="md-headline" ng-click="phc.toHomePage()">
                   Shoppins
                </span>
+                </div>
+                <div class="authSection" hide-xs>
+                    <div ng-include="'app/home/views/authenticationNav.html'"></div>
+                </div>
             </div>
-            <div class="authSection" hide-xs>
-               <div ng-include="'app/home/views/authenticationNav.html'"></div>
+            <div hide show-xs class="search-icon-div" toggle-element=".scrollUpSearch">
+                <div class="search-icon">&#128269;</div>
             </div>
-
-         </div>
-         <div hide show-xs class="search-icon-div" toggle-element =".scrollUpSearch">
-               <div class="search-icon">&#128269;</div>
-            </div>
-       </div>
-   </md-toolbar>
-   <md-sidenav class="md-sidenav-left md-whiteframe-4dp" md-component-id="left">
-
-      <div ng-include="'app/home/views/homePageSideNav.html'"></div>
-
+        </div>
+    </md-toolbar>
+    <md-sidenav class="md-sidenav-left md-whiteframe-4dp" md-component-id="left">
+        <div ng-include="'app/home/views/homePageSideNav.html'"></div>
     </md-sidenav>
 </div>
