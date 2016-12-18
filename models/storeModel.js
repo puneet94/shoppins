@@ -43,6 +43,21 @@ var ActivitySchema = new Schema({
 	statement: String,
     time : { type : Date, default: Date.now }
 });
+
+var ReportStoreSchema = new Schema({
+    date  : { type : Date, default: Date.now},
+    time : { type : Date, default: Date.now },
+    store : { type:Schema.ObjectId, ref:"Store",childPath:"reports" },
+    user : { type:Schema.ObjectId, ref:"User",childPath:"storeReports" },
+    description: String,
+    subject: String
+});
+
+ReportStoreSchema.plugin(relationship, { relationshipPathName:'user' });
+ReportStoreSchema.plugin(relationship, { relationshipPathName:'store' });
+
+
+
 var VisitSchema = new Schema({
     date  : { type : Date, default: Date.now},
     time : { type : Date, default: Date.now },
@@ -189,7 +204,7 @@ UserSchema.methods.comparePasswords = function(password,callback){
 var User = mongoose.model('User',UserSchema);
 var Visit = mongoose.model('Visit',VisitSchema);
 var Review = mongoose.model('Review',ReviewSchema);
-
+var ReportStore = mongoose.model('ReportStore',ReportStoreSchema);
 UserSchema.pre('save',function(next){
 	var user = this;
 	if(!user.isModified('password')) return next();
@@ -342,6 +357,7 @@ exports.Review = Review;
 exports.Chat = Chat;
 exports.ChatRoom = ChatRoom;
 exports.Visit = Visit;
+exports.ReportStore = ReportStore;
 exports.Activity = mongoose.model("Activity",ActivitySchema);
 exports.Upvote = mongoose.model('Upvote',UpvoteSchema);
 

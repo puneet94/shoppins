@@ -10,9 +10,9 @@
                       <i class="fa fa-comments" aria-hidden="true"></i>
                     </span>
                 </md-button>
-                <md-menu-content width="4" style="padding:5px;">
+                <md-menu-content width="2" style="padding:5px;" class="mdMenuContainer">
                   <h3 style="margin:0;">My Chats</h3>
-                  <div ng-if="!ucn.messageReceived">
+                  <div ng-if="!ucn.messageReceived" >
                     <div ng-include="'app/chat/views/chatRoomList.html'"></div>
                   </div>
                     

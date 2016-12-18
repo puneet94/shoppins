@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('app.home')
-        .controller('SearchBoxController', ["$scope", "$http", "$routeParams", "cityStorage", "citiesService", "searchService", "changeBrowserURL", "userLocationService", SearchBoxController]);
+        .controller('SearchBoxController', ["$scope", "$window", "$routeParams", "cityStorage", "citiesService", "searchService", "changeBrowserURL", "userLocationService", SearchBoxController]);
 
 
-    function SearchBoxController($scope, $http, $routeParams, cityStorage, citiesService, searchService, changeBrowserURL, userLocationService) {
+    function SearchBoxController($scope, $window, $routeParams, cityStorage, citiesService, searchService, changeBrowserURL, userLocationService) {
         var hm = this;
         if ($routeParams.location) {
             hm.selectedItem = $routeParams.location;
@@ -24,18 +24,21 @@
         hm.openSearchBox = openSearchBox;
 
         function openSearchBox() {
-            console.log("clicked");
             hm.mobileSearchBoxVisible = true;
         }
         hm.selectedItemChange(hm.selectedItem);
 
         function userSearchItemChange(item) {
-
+        	console.log("the item");
+        	console.log(item);
+        	if(!item){
+        		item = {};
+        	}
             var changeEntity = item.userSearchString.split("#&#")[1];
             var entityName = item.userSearchString.split("#&#")[0];
             var location = hm.selectedItem;
             hm.slug = entityName + "-" + changeEntity.split("-")[0] + "s-in-" + location;
-            console.log(changeEntity);
+            
             if (changeEntity == "store") {
 
                 hm.url = "/store/storesCollection/storeName/";
@@ -67,8 +70,11 @@
 
                 locationStoresSearchUrl();
             }
-
-            changeBrowserURL.changeBrowserURLMethod(hm.url + entityName + "/" + location + "/" + hm.slug);
+            $window.location= '#'+hm.url + entityName + "/" + location + "/" + hm.slug;
+            /*$timeout(function(){
+            	changeBrowserURL.changeBrowserURLMethod(hm.url + entityName + "/" + location + "/" + hm.slug);	
+            }, 0);*/
+            
 
 
         }

@@ -1,7 +1,7 @@
 <div ng-controller="ChatRoomListController as crl" style="margin-top:5px;">
     <inner-loading-directive inner-loading="crl.innerLoading" container-height="200px"></inner-loading-directive>
-    <div ng-repeat="chatRoom in crl.chatRoomList" ng-if="chatRoom.creator1._id!=chatRoom.creator2._id">
-        <div class="chatRoom" md-whiteframe="3" ng-click="crl.openChatbox(chatRoom)">
+    <div ng-repeat="chatRoom in crl.chatRoomList" >
+        <div class="chatRoom" ng-if="chatRoom.creator1._id!=chatRoom.creator2._id" md-whiteframe="1" ng-click="crl.openChatbox(chatRoom)">
             <div layout="row" style="height: 100%">
                 <div flex="20">
                     <div class="creatorImage">

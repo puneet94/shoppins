@@ -518,6 +518,7 @@ angular.module('app.common')
   .directive('followDirective',[followDirective])
   .directive('smallLoadingDirective',[smallLoadingDirective])
   .directive('bindHtmlCompile', ['$compile', bindHtmlCompile])
+  //.directive('imageReplacementDirective',[imageReplacementDirective])
   .directive('imagesListDirective',[imagesListDirective])
   .directive('singleImageDirective',[singleImageDirective]);
   function imagesListDirective(){
@@ -1220,163 +1221,6 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
 }
 })(window.angular);
 
-(function(angular) {
-    angular.module('app.chat')
-
-    .controller('ChatBoxController', ['$scope', 'Socket', '$routeParams', 'userData', 'chatService', ChatBoxController]);
-
-    function ChatBoxController($scope, Socket, $routeParams, userData, chatService) {
-        var cbc = this;
-        cbc.currentUser = userData.getUser()._id;
-        cbc.innerLoading = true;
-        cbc.chatRoomId = '';
-        cbc.messageLoading = false;
-        activate();
-        //socketStart();
-        function getChatMessages(){
-          chatService.getChatMessages(cbc.chatRoomId).then(function(res){
-              cbc.chatList = res.data[0].chats;
-               $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
-               cbc.innerLoading = false;
-            },function(res){
-              console.log(res);
-            });
-
-        }
-        function activate() {
-            chatService.getChatRoom().then(function(res) {
-                console.log("the response");
-                console.log(res);
-                cbc.chatRoomId = res.data._id;
-                socketJoin();
-                getChatMessages();
-            }, function(res) {
-                console.log(res);
-            });
-        }
-        
-
-        function socketJoin() {
-            Socket.emit('addToRoom', { 'roomId': cbc.chatRoomId });
-            Socket.on('messageSaved',function(message){
-                  cbc.chatList.push(message);
-                  $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
-                });
-        }
-        cbc.sendMsg = function($event) {
-            if ($event.which == 13 && !$event.shiftKey && cbc.myMsg) {
-                cbc.messageLoading = true;
-                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
-                chatService.sendChatMessage(chatObj).then(function(res){
-                  cbc.myMsg = '';
-                  cbc.messageLoading = false;
-                },function(res){
-                  console.log(res);
-                });
-                
-            }
-        };
-        cbc.clickSubmit = function(){
-          if (cbc.myMsg) {
-                cbc.messageLoading = true;
-                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
-                chatService.sendChatMessage(chatObj).then(function(res){
-                  cbc.myMsg = '';
-                  cbc.messageLoading = false;
-                },function(res){
-                  console.log(res);
-                });
-                
-            }  
-        };
-
-    }
-})(window.angular);
-
-(function(angular) {
-    angular.module('app.chat')
-
-    .controller('ChatRoomListController', ['$scope','$routeParams', 'userData', 'chatService', 'changeBrowserURL',ChatRoomListController]);
-
-    function ChatRoomListController($scope,$routeParams, userData, chatService,changeBrowserURL) {
-        
-        var cbc = this;
-        cbc.currentUser = userData.getUser()._id;
-        cbc.innerLoading = true;
-        activate();
-        cbc.openChatbox = openChatbox;
-        function openChatbox(chatRoom){
-            changeBrowserURL.changeBrowserURLMethod('/chatBox/'+chatRoom.creator1._id+'/'+chatRoom.creator2._id);
-        }
-        function getChatRoomList(){
-
-          chatService.getChatRoomList(cbc.currentUser).then(function(res){
-              cbc.chatRoomList = res.data;
-                cbc.innerLoading = false;
-            },function(res){
-              console.log(res);
-            });
-
-        }
-
-        function activate() {
-            getChatRoomList();
-        }
-        
-
-    }
-})(window.angular);
-
-(function(angular){
-  'use strict';
-  angular.module('app.chat')
-      .service('chatService',['$http','$routeParams','baseUrlService',ReviewService]);
-      function ReviewService($http,$routeParams,baseUrlService){
-        var rs  = this;
-        rs.sendChatMessage = sendChatMessage;
-        rs.getChatMessages = getChatMessages;
-        rs.getChatRoom = getChatRoom;
-        rs.getChatRoomList = getChatRoomList;
-        function sendChatMessage(chat){
-          return $http.post(baseUrlService.baseUrl+'chat/chats/'+chat.roomId,chat);
-        }
-        function getChatMessages(chatRoomId){
-          
-          return $http.get(baseUrlService.baseUrl+'chat/chats/'+chatRoomId);
-        }
-        function getChatRoom(){
-        	return $http.get(baseUrlService.baseUrl + 'chat/chatBox/' + $routeParams.creator1 + '/' + $routeParams.creator2);
-                
-        }
-        function getChatRoomList(userId){
-          return $http.get(baseUrlService.baseUrl + 'chat/chatRooms/' + userId);
-        }
-        
-
-      }
-})(window.angular);
-
-(function(angular){
-'use strict';
-angular.module('app.chat').factory('Socket', ['socketFactory','baseUrlService',SocketFactory]);
-    
-    function SocketFactory(socketFactory,baseUrlService) {
-        return socketFactory({
-            prefix: '',
-            ioSocket: io.connect(baseUrlService)
-        });
-    }
-
-})(window.angular);
-angular.module('app.chat')
-	.factory('SocketUserService', ['socketFactory','userData',socketFactoryFunction]);
-    function socketFactoryFunction(socketFactory,userData) {
-        return socketFactory({
-            prefix: '',
-            ioSocket: io.connect('/'+userData.getUser()._id)
-        });
-    }
-
 
 // 'use strict';
 //
@@ -1683,6 +1527,163 @@ angular.module('authModApp')
 })(window.angular);
 
 (function(angular) {
+    angular.module('app.chat')
+
+    .controller('ChatBoxController', ['$scope', 'Socket', '$routeParams', 'userData', 'chatService', ChatBoxController]);
+
+    function ChatBoxController($scope, Socket, $routeParams, userData, chatService) {
+        var cbc = this;
+        cbc.currentUser = userData.getUser()._id;
+        cbc.innerLoading = true;
+        cbc.chatRoomId = '';
+        cbc.messageLoading = false;
+        activate();
+        //socketStart();
+        function getChatMessages(){
+          chatService.getChatMessages(cbc.chatRoomId).then(function(res){
+              cbc.chatList = res.data[0].chats;
+               $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
+               cbc.innerLoading = false;
+            },function(res){
+              console.log(res);
+            });
+
+        }
+        function activate() {
+            chatService.getChatRoom().then(function(res) {
+                console.log("the response");
+                console.log(res);
+                cbc.chatRoomId = res.data._id;
+                socketJoin();
+                getChatMessages();
+            }, function(res) {
+                console.log(res);
+            });
+        }
+        
+
+        function socketJoin() {
+            Socket.emit('addToRoom', { 'roomId': cbc.chatRoomId });
+            Socket.on('messageSaved',function(message){
+                  cbc.chatList.push(message);
+                  $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
+                });
+        }
+        cbc.sendMsg = function($event) {
+            if ($event.which == 13 && !$event.shiftKey && cbc.myMsg) {
+                cbc.messageLoading = true;
+                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
+                chatService.sendChatMessage(chatObj).then(function(res){
+                  cbc.myMsg = '';
+                  cbc.messageLoading = false;
+                },function(res){
+                  console.log(res);
+                });
+                
+            }
+        };
+        cbc.clickSubmit = function(){
+          if (cbc.myMsg) {
+                cbc.messageLoading = true;
+                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
+                chatService.sendChatMessage(chatObj).then(function(res){
+                  cbc.myMsg = '';
+                  cbc.messageLoading = false;
+                },function(res){
+                  console.log(res);
+                });
+                
+            }  
+        };
+
+    }
+})(window.angular);
+
+(function(angular) {
+    angular.module('app.chat')
+
+    .controller('ChatRoomListController', ['$scope','$routeParams', 'userData', 'chatService', 'changeBrowserURL',ChatRoomListController]);
+
+    function ChatRoomListController($scope,$routeParams, userData, chatService,changeBrowserURL) {
+        
+        var cbc = this;
+        cbc.currentUser = userData.getUser()._id;
+        cbc.innerLoading = true;
+        activate();
+        cbc.openChatbox = openChatbox;
+        function openChatbox(chatRoom){
+            changeBrowserURL.changeBrowserURLMethod('/chatBox/'+chatRoom.creator1._id+'/'+chatRoom.creator2._id);
+        }
+        function getChatRoomList(){
+
+          chatService.getChatRoomList(cbc.currentUser).then(function(res){
+              cbc.chatRoomList = res.data;
+                cbc.innerLoading = false;
+            },function(res){
+              console.log(res);
+            });
+
+        }
+
+        function activate() {
+            getChatRoomList();
+        }
+        
+
+    }
+})(window.angular);
+
+(function(angular){
+  'use strict';
+  angular.module('app.chat')
+      .service('chatService',['$http','$routeParams','baseUrlService',ReviewService]);
+      function ReviewService($http,$routeParams,baseUrlService){
+        var rs  = this;
+        rs.sendChatMessage = sendChatMessage;
+        rs.getChatMessages = getChatMessages;
+        rs.getChatRoom = getChatRoom;
+        rs.getChatRoomList = getChatRoomList;
+        function sendChatMessage(chat){
+          return $http.post(baseUrlService.baseUrl+'chat/chats/'+chat.roomId,chat);
+        }
+        function getChatMessages(chatRoomId){
+          
+          return $http.get(baseUrlService.baseUrl+'chat/chats/'+chatRoomId);
+        }
+        function getChatRoom(){
+        	return $http.get(baseUrlService.baseUrl + 'chat/chatBox/' + $routeParams.creator1 + '/' + $routeParams.creator2);
+                
+        }
+        function getChatRoomList(userId){
+          return $http.get(baseUrlService.baseUrl + 'chat/chatRooms/' + userId);
+        }
+        
+
+      }
+})(window.angular);
+
+(function(angular){
+'use strict';
+angular.module('app.chat').factory('Socket', ['socketFactory','baseUrlService',SocketFactory]);
+    
+    function SocketFactory(socketFactory,baseUrlService) {
+        return socketFactory({
+            prefix: '',
+            ioSocket: io.connect(baseUrlService)
+        });
+    }
+
+})(window.angular);
+angular.module('app.chat')
+	.factory('SocketUserService', ['socketFactory','userData',socketFactoryFunction]);
+    function socketFactoryFunction(socketFactory,userData) {
+        return socketFactory({
+            prefix: '',
+            ioSocket: io.connect('/'+userData.getUser()._id)
+        });
+    }
+
+(function(angular) {
     'use strict';
 
     angular.module('app.home')
@@ -1912,10 +1913,10 @@ angular.module('authModApp')
     'use strict';
 
     angular.module('app.home')
-        .controller('SearchBoxController', ["$scope", "$http", "$routeParams", "cityStorage", "citiesService", "searchService", "changeBrowserURL", "userLocationService", SearchBoxController]);
+        .controller('SearchBoxController', ["$scope", "$window", "$routeParams", "cityStorage", "citiesService", "searchService", "changeBrowserURL", "userLocationService", SearchBoxController]);
 
 
-    function SearchBoxController($scope, $http, $routeParams, cityStorage, citiesService, searchService, changeBrowserURL, userLocationService) {
+    function SearchBoxController($scope, $window, $routeParams, cityStorage, citiesService, searchService, changeBrowserURL, userLocationService) {
         var hm = this;
         if ($routeParams.location) {
             hm.selectedItem = $routeParams.location;
@@ -1934,18 +1935,21 @@ angular.module('authModApp')
         hm.openSearchBox = openSearchBox;
 
         function openSearchBox() {
-            console.log("clicked");
             hm.mobileSearchBoxVisible = true;
         }
         hm.selectedItemChange(hm.selectedItem);
 
         function userSearchItemChange(item) {
-
+        	console.log("the item");
+        	console.log(item);
+        	if(!item){
+        		item = {};
+        	}
             var changeEntity = item.userSearchString.split("#&#")[1];
             var entityName = item.userSearchString.split("#&#")[0];
             var location = hm.selectedItem;
             hm.slug = entityName + "-" + changeEntity.split("-")[0] + "s-in-" + location;
-            console.log(changeEntity);
+            
             if (changeEntity == "store") {
 
                 hm.url = "/store/storesCollection/storeName/";
@@ -1977,8 +1981,11 @@ angular.module('authModApp')
 
                 locationStoresSearchUrl();
             }
-
-            changeBrowserURL.changeBrowserURLMethod(hm.url + entityName + "/" + location + "/" + hm.slug);
+            $window.location= '#'+hm.url + entityName + "/" + location + "/" + hm.slug;
+            /*$timeout(function(){
+            	changeBrowserURL.changeBrowserURLMethod(hm.url + entityName + "/" + location + "/" + hm.slug);	
+            }, 0);*/
+            
 
 
         }
@@ -2845,86 +2852,102 @@ angular.module('app.review')
       }
 })(window.angular);
 
-(function(angular){
-  'use strict';
-angular.module('app.store')
+(function(angular) {
+    'use strict';
+    angular.module('app.store')
 
-  .controller('SingleStoreController',["$scope","$auth",'$location','userData',"$routeParams","storeData","getSingleStore",'$mdDialog','NgMap','getStoreCollectionService',SingleStoreController]);
-  function SingleStoreController($scope,$auth,$location,userData,$routeParams,storeData,getSingleStore,$mdDialog,NgMap,getStoreCollectionService){
-    
-    NgMap.getMap().then(function(map) {
-      //map.setZoom(16);
-      console.log(map.getZoom());
-      console.log('markers', map.markers);
-      console.log('shapes', map.shapes);
-    });
-    var ssc = this;
-    
+    .controller('SingleStoreController', ["$scope", "$auth", '$location', 'userData', "$routeParams", "storeData", "getSingleStore", '$mdDialog', 'NgMap', 'getStoreCollectionService', SingleStoreController]);
 
-    ssc.tab = 1;
+    function SingleStoreController($scope, $auth, $location, userData, $routeParams, storeData, getSingleStore, $mdDialog, NgMap, getStoreCollectionService) {
 
-    ssc.setTab = function(newTab){
-      ssc.tab = newTab;
-    };
-
-    ssc.isSet = function(tabNum){
-      return ssc.tab === tabNum;
-    };
-
-
-    ssc.storeData = {};
-    ssc.loading = true;
-    ssc.authCheck = $auth.isAuthenticated();
-    if(ssc.authCheck){
-      ssc.currentUserId = userData.getUser()._id;
-    }
-    ssc.getAddressString = getAddressString;
-    ssc.storeImagesObj = [];
-    function getAddressString(){
-      return Object.keys(ssc.storeData.address).map(function(key){return ssc.storeData.address[key];}).join(' ');
-    }
-     $scope.showAlert = function(ev) {
-    
-    $mdDialog.show(
-      $mdDialog.alert()
-        .parent(angular.element(document.querySelector('#popupContainer')))
-        .clickOutsideToClose(true)
-        .title('Claim Business')
-        .textContent('If you are the owner of this store,then mail to us at shoppinsmail@gmail.com')
-        .ariaLabel('Alert Dialog Demo')
-        .ok('Got it!')
-        .targetEvent(ev)
-    );
-  };
-    getSingleStore.getStore($routeParams.storeId)
-    .then(function(res){
-      storeData.setStore(res.data);
-        ssc.storeData = res.data;
-        ssc.addressMap = ssc.storeData.address.area;
-        if(ssc.storeData.address.latitude){
-          ssc.pos  =[ssc.storeData.address.latitude, ssc.storeData.address.longitude];  
-        }
-        else{
-          ssc.pos  =[17.361625, 78.474622];  
-        }
-        
-        for (var i = 0; i < ssc.storeData.storeImages.length; i++) {
-          var obj = {};
-          obj.src=ssc.storeData.storeImages[i];
-          ssc.storeImagesObj.push(obj);
-        }
-        
-        ssc.loading = false;
-        
-        getStoreCollectionService.getStoreCollection('store/storesCollection/stores/'+ssc.storeData.address.city+'/1',{'limit':9})
-        .then(function(response){
-          ssc.storeSuggestions = response.data.docs;
+        NgMap.getMap().then(function(map) {
+            
         });
-      });
-    getSingleStore.getStoreRating($routeParams.storeId)
-    .then(function(res){
-      ssc.storeData.storeRatingAvg = res.data;
-    });
+        var ssc = this;
+
+
+        ssc.tab = 1;
+
+        ssc.setTab = function(newTab) {
+            ssc.tab = newTab;
+        };
+
+        ssc.isSet = function(tabNum) {
+            return ssc.tab === tabNum;
+        };
+
+
+        ssc.storeData = {};
+        ssc.loading = true;
+        ssc.authCheck = $auth.isAuthenticated();
+        if (ssc.authCheck) {
+            ssc.currentUserId = userData.getUser()._id;
+        }
+        ssc.getAddressString = getAddressString;
+        ssc.showStoreReportDialog = showStoreReportDialog;
+        ssc.storeImagesObj = [];
+
+        function getAddressString() {
+            return Object.keys(ssc.storeData.address).map(function(key) {
+                return ssc.storeData.address[key]; }).join(' ');
+        }
+        $scope.showAlert = function(ev) {
+
+            $mdDialog.show(
+                $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+                .title('Claim Business')
+                .textContent('If you are the owner of this store,then mail to us at shoppinsmail@gmail.com')
+                .ariaLabel('Alert Dialog Demo')
+                .ok('Got it!')
+                .targetEvent(ev)
+            );
+        };
+        function showStoreReportDialog(ev) {
+            $mdDialog.show({
+                    controller: 'UserStoreReportController',
+                    controllerAs: 'usr',
+                    templateUrl: 'app/store/views/userStoreReportTemplate.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true // Only for -xs, -sm breakpoints.*/
+                })
+                .then(function(answer) {
+                    //$scope.status = 'You said the information was "' + answer + '".';
+                }, function() {
+                    //$scope.status = 'You cancelled the dialog.';
+                });
+        }
+        getSingleStore.getStore($routeParams.storeId)
+            .then(function(res) {
+                storeData.setStore(res.data);
+                ssc.storeData = res.data;
+                ssc.addressMap = ssc.storeData.address.area;
+                if (ssc.storeData.address.latitude) {
+                    ssc.pos = [ssc.storeData.address.latitude, ssc.storeData.address.longitude];
+                } else {
+                    ssc.pos = [17.361625, 78.474622];
+                }
+
+                for (var i = 0; i < ssc.storeData.storeImages.length; i++) {
+                    var obj = {};
+                    obj.src = ssc.storeData.storeImages[i];
+                    ssc.storeImagesObj.push(obj);
+                }
+
+                ssc.loading = false;
+
+                getStoreCollectionService.getStoreCollection('store/storesCollection/stores/' + ssc.storeData.address.city + '/1', { 'limit': 9 })
+                    .then(function(response) {
+                        ssc.storeSuggestions = response.data.docs;
+                    });
+            });
+        getSingleStore.getStoreRating($routeParams.storeId)
+            .then(function(res) {
+                ssc.storeData.storeRatingAvg = res.data;
+            });
 
 
     }
@@ -3218,6 +3241,62 @@ angular.module('app.store')
         
       }
       }
+
+    }
+
+})(window.angular);
+
+(function(angular) {
+    angular.module('app.store')
+
+    .controller('UserStoreReportController', ["$scope", "$auth", "$routeParams", "userData", "userService", '$mdDialog', UserStoreReportController]);
+
+    function UserStoreReportController($scope, $auth, $routeParams, userData, userService, $mdDialog) {
+        var usv = this;
+        usv.report = {};
+
+        usv.getReportParamObj = {};
+        usv.showReportForm = true;
+        usv.submitUserReport = submitUserReport;
+        usv.getReportParamObj.userId = userData.getUser()._id;
+        usv.report.userId = userData.getUser()._id;
+        usv.report.storeId = $routeParams.storeId;
+        usv.hideReportDialog = hideReportDialog;
+        usv.reportDialogCancel = reportDialogCancel;
+
+        function hideReportDialog() {
+            $mdDialog.hide();
+        }
+
+        function reportDialogCancel() {
+            $mdDialog.cancel();
+        }
+
+        $scope.answer = function(answer) {
+            $mdDialog.hide(answer);
+        };
+
+        activate();
+
+        function submitUserReport() {
+            console.log(usv.report);
+            usv.innerLoading = true;
+            userService.submitStoreReport(usv.report)
+                .then(function(res) {
+                        usv.innerLoading = false;
+						usv.showReportForm = false;
+                    },
+                    function(res) {
+                        console.log(res);
+                    });
+        }
+
+
+        function activate() {
+            console.log("the auth");
+            console.log($auth.getPayload().sub);
+
+        }
 
     }
 
@@ -4007,6 +4086,7 @@ function UserService($http,baseUrlService){
   this.getSingleUser = getSingleUser;
   this.getStoreRating = getStoreRating;
   this.submitUserFollow = submitUserFollow;
+  this.submitStoreReport = submitStoreReport;
   this.deleteUserFollow = deleteUserFollow;
   this.checkUserFollow = checkUserFollow;
   this.getUserFollowers = getUserFollowers;
@@ -4019,7 +4099,10 @@ function UserService($http,baseUrlService){
   function getStoreRating(id){
   	return $http.get(baseUrlService.baseUrl+"review/ratings/store/"+id);
   }
+  function submitStoreReport(report){
 
+    return $http.post(baseUrlService.baseUrl+"user/submitStoreReport/",report);
+  }
   function submitUserFollow(userId,followedId){
 
     return $http.post(baseUrlService.baseUrl+"user/submitFollow/"+userId+'/'+followedId);

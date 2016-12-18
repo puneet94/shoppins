@@ -13,6 +13,7 @@ cloudinary.config({
 });
 
 var Store = models.Store;
+var ReportStore = models.ReportStore;
 var User = models.User;
 var Review = models.Review;
 var Activity = models.Activity;
@@ -188,7 +189,21 @@ userRouter.route('/checkFollow/:user_id/:followedUser_id')
 
 	})
 
+userRouter.route('/submitStoreReport')
+	.post(commons.ensureAuthenticated,function(req,res){
+		var recData = req.body;
+		var reportStore = new ReportStore();
+		reportStore.description = recData.description;
+		reportStore.store = recData.storeId;
+		reportStore.user = recData.userId;
+		reportStore.save(function(err,savedReportStore){
+			if(err){
+				res.send(err);
+			}
+			res.json(savedReportStore);
+		})
 
+	});
 
 	var multiparty = require('connect-multiparty');
 	var multipartyMiddleware = multiparty();

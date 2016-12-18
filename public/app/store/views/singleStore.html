@@ -34,18 +34,18 @@
                     <div class="" layout="row">
                         <div class="userStoreVisitCheck userInteractionContainers" ng-controller="UserStoreVisitController as usv">
                             <span class="chipType" ng-if="!usv.userStoreVisited" ng-click="usv.submitVisit()">
-                     <span>
-                     <i aria-hidden="true" class="fa fa-bookmark-o"></i>
-                     </span>
-                            <span class="chipText">Visit</span>
+                                <span>
+                                    <i aria-hidden="true" class="fa fa-bookmark-o"></i>
+                                </span>
+                                <span class="chipText">Visit</span>
                             </span>
                             <span class="chipType" ng-if="usv.userStoreVisited" ng-click="usv.deleteVisit()">
-                     <span>
-                     <i aria-hidden="true" class="fa fa-bookmark"></i>
-                     </span>
-                            <span class="chipText">
-                     Visited
-                     </span>
+                                <span>
+                                    <i aria-hidden="true" class="fa fa-bookmark"></i>
+                                </span>
+                                <span class="chipText">
+                                    Visited
+                                </span>
                             </span>
                         </div>
                         <div class="userStoreVisitCheck userInteractionContainers" ng-controller="UserStoreFollowController as usf">
@@ -64,6 +64,15 @@
                            Followed
                         </span>
                             </span>
+                        </div>
+                        <div class="userStoreVisitCheck userInteractionContainers" >
+                            <span class="chipType"  ng-click="ssc.showStoreReportDialog($event)">
+                                <span>
+                                    <i aria-hidden="true" class="fa fa-exclamation-triangle"></i>
+                                </span>
+                                <span class="chipText">Report</span>
+                            </span>
+                            
                         </div>
                     </div>
                 </div>
@@ -95,7 +104,8 @@
                 <div layout="row" class="storeImagesCollection">
                     <images-list-directive images-list="ssc.storeData.storeImages"></images-list-directive>
                 </div>
-            </div><!--
+            </div>
+            <!--
             <md-content class="tabsContent">
                 <md-tabs md-selected="selectedIndex" md-stretch-tabs="always" md-border-bottom="" md-autoselect="" md-dynamic-height="">
                     <md-tab>

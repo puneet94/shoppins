@@ -11,6 +11,7 @@
   .directive('followDirective',[followDirective])
   .directive('smallLoadingDirective',[smallLoadingDirective])
   .directive('bindHtmlCompile', ['$compile', bindHtmlCompile])
+  //.directive('imageReplacementDirective',[imageReplacementDirective])
   .directive('imagesListDirective',[imagesListDirective])
   .directive('singleImageDirective',[singleImageDirective]);
   function imagesListDirective(){

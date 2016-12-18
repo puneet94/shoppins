@@ -13,6 +13,7 @@ function UserService($http,baseUrlService){
   this.getSingleUser = getSingleUser;
   this.getStoreRating = getStoreRating;
   this.submitUserFollow = submitUserFollow;
+  this.submitStoreReport = submitStoreReport;
   this.deleteUserFollow = deleteUserFollow;
   this.checkUserFollow = checkUserFollow;
   this.getUserFollowers = getUserFollowers;
@@ -25,7 +26,10 @@ function UserService($http,baseUrlService){
   function getStoreRating(id){
   	return $http.get(baseUrlService.baseUrl+"review/ratings/store/"+id);
   }
+  function submitStoreReport(report){
 
+    return $http.post(baseUrlService.baseUrl+"user/submitStoreReport/",report);
+  }
   function submitUserFollow(userId,followedId){
 
     return $http.post(baseUrlService.baseUrl+"user/submitFollow/"+userId+'/'+followedId);

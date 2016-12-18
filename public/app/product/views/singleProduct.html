@@ -12,7 +12,7 @@
                         <div class="productTopContainer">
                             <div layout="row" layout-xs="column" layout-sm="column" class="productDetailsContainer">
                                 <div flex-xs="100" flex-sm="100" flex="60" class="productImageContainer">
-                                    <img ng-src="{{::spc.product.images[0] || product.bannerImage||'https://d152j5tfobgaot.cloudfront.net/wp-content/uploads/2016/08/125-fall-in-love.png'}}" class="productImage" />
+                                    <img ng-src="{{spc.product.images[0] || spc.product.bannerImage||spc.product.productImages[0]||'https://d152j5tfobgaot.cloudfront.net/wp-content/uploads/2016/08/125-fall-in-love.png'}}" class="productImage" />
                                 </div>
                                 <div flex-xs="100" flex-sm="100" flex="40" class="productBriefContainer">
                                     <div layout="row" layout-align="space-between center">
