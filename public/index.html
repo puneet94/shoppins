@@ -47,6 +47,14 @@ font-family: 'Source Sans Pro', sans-serif;
   width:30px;
   height:3px;
 }
+.stickyMobileFooter{
+  width: 100%;
+  background-color: black;
+  color: white;
+  position: fixed;
+  bottom:0;
+  
+}
 body,md-content{
 	background-color: #f3f3f3;
 }
@@ -67,7 +75,10 @@ body,md-content{
 			<!--<div ng-view style="height:100%"></div>-->
 		</div>
 	</md-content>
-	
+	<div hide-gt-xs class="stickyMobileFooter">
+		
+		<div ng-include='"app/home/views/mobileFooter.html"'></div>
+	</div>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 		<script src="https://maps.google.com/maps/api/js?key=AIzaSyDGTEBHgF0pPjYvmmrlHYLUyksDW70lNWU"></script>

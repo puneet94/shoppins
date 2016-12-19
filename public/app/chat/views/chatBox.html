@@ -27,11 +27,13 @@
                     <small-loading-directive small-loading="cbc.messageLoading"></small-loading-directive>        
                 </div>
                 
-                
-                <textarea ng-model="cbc.myMsg" ng-disabled="cbc.messageLoading" style="width:80%" ng-keypress="cbc.sendMsg($event)"></textarea>
+                <div layout="row" layout-align="space-between center">
+                    <textarea class="chatBoxTextArea" ng-model="cbc.myMsg" ng-disabled="cbc.messageLoading"  ng-keypress="cbc.sendMsg($event)"></textarea>
                 <md-button class="md-raised md-primary" ng-click="cbc.clickSubmit()">Send      </md-button>
+                </div>
+                
             </div>
         </div>
     </div>
-    <div flex="30">whatever</div>
+    <div flex="30" hide show-gt-sm>whatever</div>
 </div>

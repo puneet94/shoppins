@@ -10,6 +10,10 @@ angular.module('app.chat',[]).config(['$routeProvider',
           redirectIfNotAuthenticated: redirectIfNotAuthenticated
         }
         
+      }).
+      when('/chatRooms', {
+        templateUrl: 'app/chat/views/chatRoomListPage.html'
+        
       });
   }]);
 

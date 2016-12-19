@@ -1,0 +1,49 @@
+<div class="" ng-controller="MobileFooterController as mfc">
+    <div layout="row" layout-align="space-around center"  class="mobileFooterContainer">
+        <div class="mobileFooterEntity">
+            <a ng-href="#/home">
+                <div class="mobileFooterEntityIcon">
+                    <span>
+        			<i class="fa fa-home" aria-hidden="true"></i>
+        		</span>
+                </div>
+                <div class="mobileFooterEntityText">
+                    Home
+                </div>
+            </a>
+        </div>
+        <div class="mobileFooterEntity">
+            <div>
+                <span>
+        			<i class="fa fa-credit-card" aria-hidden="true"></i>
+        		</span>
+            </div>
+            <div class="mobileFooterEntityText">
+                Account
+            </div>
+        </div>
+        <div class="mobileFooterEntity">
+            <div>
+                <span>
+        			<i class="fa fa-id-card" aria-hidden="true"></i>
+        			
+        		</span>
+            </div>
+            <div class="mobileFooterEntityText">
+                Feed
+            </div>
+        </div>
+        <div class="mobileFooterEntity">
+        	<a ng-href="{{mfc.authCheck?'#/chatRooms':'#/login'}}">
+	            <div class="mobileFooterEntityIcon">
+	                <span>
+	        			<i class="fa fa-weixin" aria-hidden="true"></i>
+	        		</span>
+	            </div>
+	            <div class="mobileFooterEntityText">
+	                Chat
+	            </div>
+            </a>
+        </div>
+    </div>
+</div>

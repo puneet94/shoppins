@@ -144,6 +144,10 @@ angular.module('app.chat',[]).config(['$routeProvider',
           redirectIfNotAuthenticated: redirectIfNotAuthenticated
         }
         
+      }).
+      when('/chatRooms', {
+        templateUrl: 'app/chat/views/chatRoomListPage.html'
+        
       });
   }]);
 
@@ -1915,6 +1919,20 @@ angular.module('app.chat')
 		};
 	}
 })(window.angular);
+
+(function(angular) {
+    'use strict';
+
+    angular.module('app.home')
+        .controller('MobileFooterController', ["$scope", '$auth',"changeBrowserURL", MobileFooterController]);
+
+    function MobileFooterController($scope,$auth ,changeBrowserURL) {
+        var mfc = this;
+        mfc.authCheck = $auth.isAuthenticated();
+    }
+
+})(window.angular);
+/*git clone https://github.com/mrvautin/adminMongo.git && cd adminMongo*/
 
 (function(angular) {
     'use strict';

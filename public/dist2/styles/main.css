@@ -118,6 +118,9 @@
   padding: 10px;
   background-color: white;
   margin: 5px 5px; }
+  .chatBoxPage .chatBoxTextArea {
+    border: 1px solid black;
+    width: 80%; }
 
 .chatBoxUL {
   padding: 0;
@@ -171,6 +174,14 @@
 .msgBox {
   width: 100%; }
 
+@media (max-width: 600px) {
+  .chatBoxPage {
+    position: relative;
+    padding: 10px;
+    background-color: white;
+    margin: 5px;
+    margin-top: 60px; } }
+
 .chatRoom {
   padding: 10px;
   background-color: #fff;
@@ -201,6 +212,10 @@
   .chatRoom .chatMessageTime {
     height: 100%;
     font-size: 10px; }
+
+@media (max-width: 600px) {
+  .mobileChatRoomList {
+    margin-top: 60px; } }
 
 .tabsContent {
   margin-top: 2px; }
@@ -598,6 +613,24 @@ md-ink-bar {
     .cityCategoryList .cityCategoryListEntity .iconClass {
       float: right;
       font-size: 16px; }
+
+.mobileFooterContainer {
+  background-color: #33373d; }
+  .mobileFooterContainer .mobileFooterEntity {
+    padding-top: 10px;
+    text-align: center;
+    color: #eee;
+    font-family: 'Lato', sans-serif; }
+    .mobileFooterContainer .mobileFooterEntity a {
+      padding: 0;
+      margin: 0;
+      text-decoration: none; }
+    .mobileFooterContainer .mobileFooterEntity .mobileFooterEntityIcon {
+      color: #eee; }
+    .mobileFooterContainer .mobileFooterEntity .mobileFooterEntityText {
+      font-size: 12px;
+      padding: 3px;
+      color: #eee; }
 
 .mobileSearchBoxContainer {
   background-color: white;
