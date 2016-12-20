@@ -310,6 +310,11 @@ angular.module('app.store',[]).config(['$routeProvider',
                 templateUrl: 'app/user/views/userSettingsPage.html',
                 controller: 'UserSettingsController',
                 controllerAs: 'usc'
+            }).
+            when('/userMobileFeed', {
+                templateUrl: 'app/user/views/userMobileFeed.html',
+                controller: 'UserMobileFeedController',
+                controllerAs: 'umfc'
             });
         }
     ]);
@@ -3788,6 +3793,34 @@ angular.module('app.user')
 
 })(window.angular);
 
+(function(angular) {
+    'use strict';
+    angular.module('app.user')
+
+    .controller('UserCustomFeedController', ["$scope", "$auth", "activityService", UserCustomFeedController]);
+
+    function UserCustomFeedController($scope, $auth, activityService) {
+
+        var ual = this;
+        ual.loading = true;
+        ual.authCheck = $auth.isAuthenticated();
+        activate();
+
+        function activate() {
+            ual.loading = true;
+            if (ual.authCheck) {
+                activityService.getUserFollowingActivity($auth.getPayload().sub).then(function(result) {
+                    ual.activityData = result.data;
+                    ual.loading = false;
+                });
+            }
+        }
+
+
+    }
+
+})(window.angular);
+
 (function(angular){
   'use strict';
 angular.module('app.user')
@@ -3924,6 +3957,64 @@ angular.module('app.user')
       }
       return true;
     }
+
+    }
+
+})(window.angular);
+
+(function(angular) {
+    'use strict';
+    angular.module('app.user')
+
+    .controller('UserLocalFeedController', ["$scope", "$auth", "activityService", UserLocalFeedController]);
+
+    function UserLocalFeedController($scope, $auth, activityService) {
+
+        var ual = this;
+        ual.loading = true;
+        ual.authCheck = $auth.isAuthenticated();
+        activate();
+
+        function activate() {
+            ual.loading = true;
+            activityService.getAllActivity().then(function(result) {
+                ual.activityData = result.data;
+                ual.loading = false;
+            });
+        }
+    }
+
+})(window.angular);
+
+(function(angular) {
+    'use strict';
+    angular.module('app.user')
+
+    .controller('UserMobileFeedController', ["$scope", "$auth",  UserMobileFeedController]);
+
+    function UserMobileFeedController($scope, $auth) {
+
+        var umfc = this;
+        umfc.loading = true;
+        umfc.authCheck = $auth.isAuthenticated();
+        activate();
+
+        umfc.tab = 1;
+
+        umfc.setTab = function(newTab) {
+            umfc.tab = newTab;
+            console.log("the tab");
+            console.log(umfc.tab);
+        };
+
+        umfc.isSet = function(tabNum) {
+            return umfc.tab === tabNum;
+        };
+
+        function activate() {
+            
+        }
+
 
     }
 

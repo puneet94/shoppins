@@ -255,6 +255,9 @@ md-ink-bar {
     margin-left: 3px;
     font-size: 14px; }
 
+.customTabActive {
+  border-bottom: 5px solid red; }
+
 .singleImageDirective {
   width: 100%;
   height: 100%; }

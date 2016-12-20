@@ -79,10 +79,10 @@
             </div>
             <div class="customTabsContainer">
                 <ul class="tabsList">
-                    <li ng-click="ssc.setTab(1)">Info</li>
-                    <li ng-click="ssc.setTab(2)">Reviews</li>
-                    <li ng-click="ssc.setTab(3)">Products</li>
-                    <li ng-click="ssc.setTab(4)">Images</li>
+                    <li ng-click="ssc.setTab(1)" ng-class="{customTabActive:ssc.isSet(1)}">Info</li>
+                    <li ng-click="ssc.setTab(2)" ng-class="{customTabActive:ssc.isSet(2)}">Reviews</li>
+                    <li ng-click="ssc.setTab(3)" ng-class="{customTabActive:ssc.isSet(3)}">Products</li>
+                    <li ng-click="ssc.setTab(4)" ng-class="{customTabActive:ssc.isSet(4)}">Images</li>
                 </ul>
             </div>
             <div ng-show="ssc.isSet(1)">

@@ -113,17 +113,16 @@ productRouter.route('/products/subCategory/:subCategory/:location/:pageNo')
 productRouter.route('/products/name/:name/:location/:pageNo')
 	.get(function(req,res){
 		var queryObject = {};
-		queryObject['address.city']=req.params.location;
-		queryObject['name'] = req.params.name;
+		queryObject['address.city']=req.params.location.toLowerCase();
+		queryObject['name'] = req.params.name.toLowerCase();
 		console.log(queryObject);
 		Product.paginate(queryObject,
-			{page: req.params.pageNo, limit: 35 }, function(err, result) {
+			{page: req.params.pageNo, limit: 35,populate: { path: 'store', select: 'name bannerImage', model: 'Store' } }, function(err, result) {
 		    if(err){
 				res.send(err);
 			}
 			else{
-				console.log("te rejashd");
-				console.log(result);
+				
 				res.json(result);
 			}
 		});

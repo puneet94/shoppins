@@ -11,6 +11,11 @@
                 templateUrl: 'app/user/views/userSettingsPage.html',
                 controller: 'UserSettingsController',
                 controllerAs: 'usc'
+            }).
+            when('/userMobileFeed', {
+                templateUrl: 'app/user/views/userMobileFeed.html',
+                controller: 'UserMobileFeedController',
+                controllerAs: 'umfc'
             });
         }
     ]);
