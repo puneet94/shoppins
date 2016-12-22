@@ -6,7 +6,10 @@
     <div class="customTabsContainer">
         <ul class="tabsList">
             <li ng-click="umfc.setTab(1)" ng-class="{customTabActive:umfc.isSet(1)}">Local Feed</li>
-            <li ng-click="umfc.setTab(2)" ng-class="{customTabActive:umfc.isSet(2)}">My Feed</li>
+            
+            <li ng-if="umfc.authCheck" ng-click="umfc.setTab(2)" ng-class="{customTabActive:umfc.isSet(2)}">
+                My Feed
+            </li>
         </ul>
         <div ng-show="umfc.isSet(1)">
             <div ng-include="'app/user/views/userLocalFeed.html'"></div>

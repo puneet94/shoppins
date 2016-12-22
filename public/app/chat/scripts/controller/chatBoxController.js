@@ -10,7 +10,7 @@
         cbc.chatRoomId = '';
         cbc.messageLoading = false;
         activate();
-        //socketStart();
+        
         function getChatMessages(){
           chatService.getChatMessages(cbc.chatRoomId).then(function(res){
               cbc.chatList = res.data[0].chats;

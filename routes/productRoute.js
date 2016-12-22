@@ -112,17 +112,26 @@ productRouter.route('/products/subCategory/:subCategory/:location/:pageNo')
 
 productRouter.route('/products/name/:name/:location/:pageNo')
 	.get(function(req,res){
+		var limit = 35;
+		console.log("the query");
+		console.log(req.query);
+		if(req.query.limit){
+			limit = parseInt(req.query.limit);
+		}
 		var queryObject = {};
 		queryObject['address.city']=req.params.location.toLowerCase();
 		queryObject['name'] = req.params.name.toLowerCase();
 		console.log(queryObject);
 		Product.paginate(queryObject,
-			{page: req.params.pageNo, limit: 35,populate: { path: 'store', select: 'name bannerImage', model: 'Store' } }, function(err, result) {
+			{page: req.params.pageNo, limit: limit,populate: { path: 'store', select: 'name bannerImage', model: 'Store' } }, function(err, result) {
 		    if(err){
+		    	console.log("the err");
+				console.log(err);
 				res.send(err);
 			}
 			else{
-				
+				console.log("the result");
+				console.log(result);
 				res.json(result);
 			}
 		});

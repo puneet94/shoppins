@@ -13,7 +13,36 @@ angular.module('myApp',
       otherwise({
         redirectTo: '/home'
       });
-  }]);
+  }]).run(function ($rootScope, $location,$route, $timeout) {
+
+    $rootScope.config = {};
+    $rootScope.config.app_url = $location.url();
+    $rootScope.config.app_path = $location.path();
+    $rootScope.layout = {};
+    $rootScope.layout.loading = false;
+
+    $rootScope.$on('$routeChangeStart', function () {
+        
+        //show loading gif
+        $timeout(function(){
+          $rootScope.layout.loading = true;          
+        });
+    });
+    $rootScope.$on('$routeChangeSuccess', function () {
+        
+        //hide loading gif
+        $timeout(function(){
+          $rootScope.layout.loading = false;
+        }, 1000);
+    });
+    $rootScope.$on('$routeChangeError', function () {
+
+        //hide loading gif
+        alert('wtff');
+        $rootScope.layout.loading = false;
+
+    });
+});
 
 // red, pink, purple, deep-purple, indigo, blue, light-blue, cyan, teal, green,,
 //light-green, lime, yellow, amber, orange, deep-orange, brown, grey, blue-grey
@@ -84,52 +113,72 @@ function redirectIfNotStoreAuthenticated($q, $route, userData, adminStoreService
 
 })(window.angular);
 
-(function(angular){
-'use strict';
+(function(angular) {
+    'use strict';
 
-/**
- * @ngdoc overview
- * @name authModApp
- * @description
- * # authModApp
- *
- * Main module of the application.
- */
-angular
-  .module('authModApp', [
-    'ngCookies',
-    'ngRoute',
-    'satellizer'
-  ])
-  .config(["$routeProvider","$httpProvider","$authProvider",authConfig]);
-  function authConfig($routeProvider,$httpProvider,$authProvider) {
-    //shopuae
-    //var fbClientId = '991629147629579';
-    //shoppins
-    var fbClientId = '1068203956594250';
-    var authenticateUrl = 'https://shoppins.herokuapp.com/authenticate';
-    $routeProvider
-      .when('/signup',{
-        templateUrl:'app/authentication/views/register.html',
-        controller: 'RegisterCtrl',
-        controllerAs: 'rcl'
-      })
-      .when('/logout',{
-        controller: 'LogoutCtrl'
-      })
-      .when('/login', {
-        templateUrl: 'app/authentication/views/login.html',
-        controller: 'LoginController',
-        controllerAs: 'login'
-      });
-      $authProvider.loginUrl =authenticateUrl + "/login";
-      $authProvider.signupUrl = authenticateUrl+"/signup";
+    /**
+     * @ngdoc overview
+     * @name authModApp
+     * @description
+     * # authModApp
+     *
+     * Main module of the application.
+     */
+    angular
+        .module('authModApp', [
+            'ngCookies',
+            'ngRoute',
+            'satellizer'
+        ])
+        .config(["$routeProvider", "$httpProvider", "$authProvider", authConfig]);
 
-      $authProvider.facebook({
-        clientId: fbClientId,
-        url:authenticateUrl+'/auth/facebook'
-      });
-  }
+    function authConfig($routeProvider, $httpProvider, $authProvider) {
+        //shopuae
+        //var fbClientId = '991629147629579';
+        //shoppins
+        var fbClientId = '1068203956594250';
+        var authenticateUrl = 'https://shoppins.herokuapp.com/authenticate';
+        $routeProvider
+            .when('/signup', {
+                templateUrl: 'app/authentication/views/register.html',
+                controller: 'RegisterCtrl',
+                controllerAs: 'rcl',
+                resolve: {
+                    redirectIfNotAuthenticated: redirectIfNotAuthenticated
+                }
+            })
+            .when('/logout', {
+                controller: 'LogoutCtrl'
+            })
+            .when('/login', {
+                templateUrl: 'app/authentication/views/login.html',
+                controller: 'LoginController',
+                controllerAs: 'login',
+                resolve: {
+                    redirectIfNotAuthenticated: redirectIfNotAuthenticated
+                }
+
+
+            });
+        $authProvider.loginUrl = authenticateUrl + "/login";
+        $authProvider.signupUrl = authenticateUrl + "/signup";
+
+        $authProvider.facebook({
+            clientId: fbClientId,
+            url: authenticateUrl + '/auth/facebook'
+        });
+    }
+
+    function redirectIfNotAuthenticated($q, $auth, $route, userData, changeBrowserURL) {
+        var defer = $q.defer();
+        if ($auth.isAuthenticated()) {
+            defer.reject();
+            changeBrowserURL.changeBrowserURLMethod('/home');
+        } else {
+            defer.resolve();
+        }
+        return defer.promise;
+    }
 })(window.angular);
 
 (function(angular){
@@ -1542,933 +1591,6 @@ angular.module('authModApp')
   }
 })(window.angular);
 
-(function(angular) {
-    angular.module('app.chat')
-
-    .controller('ChatBoxController', ['$scope', 'Socket', '$routeParams', 'userData', 'chatService', ChatBoxController]);
-
-    function ChatBoxController($scope, Socket, $routeParams, userData, chatService) {
-        var cbc = this;
-        cbc.currentUser = userData.getUser()._id;
-        cbc.innerLoading = true;
-        cbc.chatRoomId = '';
-        cbc.messageLoading = false;
-        activate();
-        //socketStart();
-        function getChatMessages(){
-          chatService.getChatMessages(cbc.chatRoomId).then(function(res){
-              cbc.chatList = res.data[0].chats;
-               $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
-               cbc.innerLoading = false;
-            },function(res){
-              console.log(res);
-            });
-
-        }
-        function activate() {
-            chatService.getChatRoom().then(function(res) {
-                console.log("the response");
-                console.log(res);
-                cbc.chatRoomId = res.data._id;
-                socketJoin();
-                getChatMessages();
-            }, function(res) {
-                console.log(res);
-            });
-        }
-        
-
-        function socketJoin() {
-            Socket.emit('addToRoom', { 'roomId': cbc.chatRoomId });
-            Socket.on('messageSaved',function(message){
-                  cbc.chatList.push(message);
-                  $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
-                });
-        }
-        cbc.sendMsg = function($event) {
-            if ($event.which == 13 && !$event.shiftKey && cbc.myMsg) {
-                cbc.messageLoading = true;
-                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
-                chatService.sendChatMessage(chatObj).then(function(res){
-                  cbc.myMsg = '';
-                  cbc.messageLoading = false;
-                },function(res){
-                  console.log(res);
-                });
-                
-            }
-        };
-        cbc.clickSubmit = function(){
-          if (cbc.myMsg) {
-                cbc.messageLoading = true;
-                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
-                chatService.sendChatMessage(chatObj).then(function(res){
-                  cbc.myMsg = '';
-                  cbc.messageLoading = false;
-                },function(res){
-                  console.log(res);
-                });
-                
-            }  
-        };
-
-    }
-})(window.angular);
-
-(function(angular) {
-    angular.module('app.chat')
-
-    .controller('ChatRoomListController', ['$scope','$routeParams', 'userData', 'chatService', 'changeBrowserURL',ChatRoomListController]);
-
-    function ChatRoomListController($scope,$routeParams, userData, chatService,changeBrowserURL) {
-        
-        var cbc = this;
-        cbc.currentUser = userData.getUser()._id;
-        cbc.innerLoading = true;
-        activate();
-        cbc.openChatbox = openChatbox;
-        function openChatbox(chatRoom){
-            changeBrowserURL.changeBrowserURLMethod('/chatBox/'+chatRoom.creator1._id+'/'+chatRoom.creator2._id);
-        }
-        function getChatRoomList(){
-
-          chatService.getChatRoomList(cbc.currentUser).then(function(res){
-              cbc.chatRoomList = res.data;
-                cbc.innerLoading = false;
-            },function(res){
-              console.log(res);
-            });
-
-        }
-
-        function activate() {
-            getChatRoomList();
-        }
-        
-
-    }
-})(window.angular);
-
-(function(angular){
-  'use strict';
-  angular.module('app.chat')
-      .service('chatService',['$http','$routeParams','baseUrlService',ReviewService]);
-      function ReviewService($http,$routeParams,baseUrlService){
-        var rs  = this;
-        rs.sendChatMessage = sendChatMessage;
-        rs.getChatMessages = getChatMessages;
-        rs.getChatRoom = getChatRoom;
-        rs.getChatRoomList = getChatRoomList;
-        function sendChatMessage(chat){
-          return $http.post(baseUrlService.baseUrl+'chat/chats/'+chat.roomId,chat);
-        }
-        function getChatMessages(chatRoomId){
-          
-          return $http.get(baseUrlService.baseUrl+'chat/chats/'+chatRoomId);
-        }
-        function getChatRoom(){
-        	return $http.get(baseUrlService.baseUrl + 'chat/chatBox/' + $routeParams.creator1 + '/' + $routeParams.creator2);
-                
-        }
-        function getChatRoomList(userId){
-          return $http.get(baseUrlService.baseUrl + 'chat/chatRooms/' + userId);
-        }
-        
-
-      }
-})(window.angular);
-
-(function(angular){
-'use strict';
-angular.module('app.chat').factory('Socket', ['socketFactory','baseUrlService',SocketFactory]);
-    
-    function SocketFactory(socketFactory,baseUrlService) {
-        return socketFactory({
-            prefix: '',
-            ioSocket: io.connect(baseUrlService)
-        });
-    }
-
-})(window.angular);
-angular.module('app.chat')
-	.factory('SocketUserService', ['socketFactory','userData',socketFactoryFunction]);
-    function socketFactoryFunction(socketFactory,userData) {
-        return socketFactory({
-            prefix: '',
-            ioSocket: io.connect('/'+userData.getUser()._id)
-        });
-    }
-
-(function(angular) {
-    'use strict';
-
-    angular.module('app.home')
-        .controller("AuthController", ["$scope", "changeBrowserURL", "$auth", "$window", "$route", "userData", 'Socket', AuthController]);
-
-    function AuthController($scope, changeBrowserURL, $auth, $window, $route, userData, Socket) {
-        var phc = this;
-        phc.toHomePage = toHomePage;
-        phc.authenticate = authenticate;
-        phc.authLogout = authLogout;
-        phc.loginPage = loginPage;
-
-        phc.isAuth = $auth.isAuthenticated();
-
-        function toHomePage() {
-            changeBrowserURL.changeBrowserURLMethod('/');
-        }
-
-        function socketStart() {
-            if (phc.isAuth) {
-                Socket.on("connect", function() {
-
-                    Socket.emit('addToSingleRoom', { 'roomId': userData.getUser()._id });
-                });
-            }
-
-        }
-
-        function loginPage() {
-            changeBrowserURL.changeBrowserURLMethod('/login');
-        }
-
-        function authenticate(provider) {
-            $auth.authenticate(provider).then(function(response) {
-            	console.log("for facebook login");
-            	console.log(response);
-                userData.setUser(response.data.user);
-                alert('login with facebook successfull');
-                //socketStart();
-                //$route.reload();
-                $window.location.reload();
-            });
-        }
-
-        function authLogout() {
-            $auth.logout();
-            userData.removeUser();
-            toHomePage();
-        }
-    }
-
-
-})(window.angular);
-
-(function(angular){
-	'use strict';
-
-	angular.module('app.home')
-	.controller('HeaderController',["$scope","userData","changeBrowserURL","$auth","$mdDialog", "$mdMedia","$timeout", "$mdSidenav", HeaderController]);
-
-	function HeaderController($scope,userData,changeBrowserURL,$auth,$mdDialog, $mdMedia,$timeout, $mdSidenav){
-			var phc = this;
-			phc.toHomePage = toHomePage;
-			phc.authenticate = authenticate;
-			phc.authLogout = authLogout;
-			phc.showAdvanced = showAdvanced;
-			phc.customFullscreen = undefined;
-			phc.isAuth = $auth.isAuthenticated();
-			
-			phc.isOpenLeft = function(){
-	      return $mdSidenav('left').isOpen();
-	    };
-	   phc.toggleLeft = buildToggler('left');
-
-	  function buildToggler(navID) {
-	      return function() {
-	        // Component lookup should always be available since we are not using `ng-if`.
-	        $mdSidenav(navID)
-	          .toggle()
-	          .then(function () {
-	            console.log("toggle " + navID + " is done");
-	          });
-	      };
-	    }
-			function toHomePage(){
-				changeBrowserURL.changeBrowserURLMethod('/');
-			}
-			function authenticate(provider) {
-		    	$auth.authenticate(provider);
-		    	toHomePage();
-	    	}
-	    	function authLogout(){
-	    		$auth.logout();toHomePage();
-	    	}
-	    	function showAdvanced(ev) {
-			    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-			    $mdDialog.show({
-			      controller: 'ModalFormLoginController',
-			      templateUrl: 'app/home/views/modalFormLogin.html',
-			      parent: angular.element(document.body),
-			      targetEvent: ev,
-			      clickOutsideToClose:true,
-			      fullscreen: phc.customFullscreen
-			    })
-			    .then(function(answer) {
-			      $scope.status = 'You said the information was "' + answer + '".';
-			    }, function() {
-			      $scope.status = 'You cancelled the dialog.';
-			    });
-			    $scope.$watch(function() {
-
-	      			return $mdMedia('md') || $mdMedia('xl');
-	    		}, function(wantsFullScreen) {
-		      		phc.customFullscreen = (wantsFullScreen === true);
-
-	    		});
-
-	  		}
-	}
-
-})(window.angular);
-
-(function(angular){
-	'use strict';
-
-	angular.module('app.home')
-	.controller('HomeController',["$scope","citiesService","searchService","changeBrowserURL",homeController])
-
-	.controller('CategoryListController',["$scope","getCityCategoriesService","cityStorage","changeBrowserURL","baseUrlService",CategoryListController]);
-
-
-	function CategoryListController($scope,getCityCategoriesService,cityStorage,changeBrowserURL,baseUrlService){
-		var clc = this;
-		clc.cateList = [];
-		clc.categLoadMore = false;
-		clc.pageNo = 0; //for fetching categories
-		clc.getCategories = getCategories;
-		clc.categoryLinkClicked = categoryLinkClicked;
-		activate();
-		clc.innerLoading = true;
-		function activate(){
-			clc.getCategories();
-			
-		}
-		$scope.$on('city-changed',function(){
-			clc.getCategories();
-		});
-		function categoryLinkClicked(category){
-			var location = cityStorage.getCity();
-			var slug = category + "-stores-in-" + location;
-			var url = "/store/storesCollection/category/"+category+"/"+location+"/"+slug;
-			changeBrowserURL.changeBrowserURLMethod(url);
-
-
-		}
-		function getCategories(){
-			clc.categoryList = [];
-			getCityCategoriesService.getCityCategories(cityStorage.getCity()).then(function(response){
-				console.log("the category response");
-				console.log(response);
-				clc.categoryList = response.data;
-				clc.innerLoading = false;
-			});
-			
-			
-			
-
-		}
-
-	}
-	function homeController($scope,citiesService,searchService,changeBrowserURL){
-		/*var hm= this;
-		activate();
-		console.log("home controller");
-		hm.searchTextChange = searchTextChange;
-		hm.selectedItemChange = selectedItemChange;
-		hm.userSearchItemChange = userSearchItemChange;
-		function userSearchItemChange(item){
-			var url = item.userSearchString.split("#&#")[1]+"/"+item.userSearchString.split("#&#")[0]+"/"+item.userSearchString.split("#&#")[2];
-			changeBrowserURL.changeBrowserURLMethod(url);
-		}
-		function searchTextChange(searchText){
-			console.log(searchText);
-		}
-		function selectedItemChange(item){
-			console.log(item);
-			searchService.getSearches(item.location).then(function(resource){
-				console.log(resource);
-				hm.userSearches = resource.data;
-			},function(data){
-				console.log(data);
-			});
-		}
-	    function activate() {
-	    	citiesService.getCities()
-				.then(function(obj){
-					console.log(obj);
-					hm.cities =  obj.data;
-					console.log("then");
-					console.log(hm.cities);
-				},function(obj){
-					console.log(obj);
-					hm.cities =  obj;
-				});
-	    }*/
-	}
-})(window.angular);
-/*git clone https://github.com/mrvautin/adminMongo.git && cd adminMongo*/
-(function(angular){
-	'use strict';
-
-	angular.module('app.home')
-	.controller('HomeLeftController',["$timeout", "$mdSidenav", "$log",LeftCtrl]);
-	function LeftCtrl($timeout, $mdSidenav, $log){
-		console.log("inside the mdSidenav");
-		this.close = function () {
-			// Component lookup should always be available since we are not using `ng-if`
-			$mdSidenav('left').close()
-			.then(function () {
-				$log.debug("close RIGHT is done");
-			});
-		};
-	}
-})(window.angular);
-
-(function(angular) {
-    'use strict';
-
-    angular.module('app.home')
-        .controller('MobileFooterController', ["$scope", '$auth',"changeBrowserURL", MobileFooterController]);
-
-    function MobileFooterController($scope,$auth ,changeBrowserURL) {
-        var mfc = this;
-        mfc.authCheck = $auth.isAuthenticated();
-    }
-
-})(window.angular);
-/*git clone https://github.com/mrvautin/adminMongo.git && cd adminMongo*/
-
-(function(angular) {
-    'use strict';
-
-    angular.module('app.home')
-        .controller('SearchBoxController', ["$scope", "$window", "$routeParams", "cityStorage", "citiesService", "searchService", "changeBrowserURL", "userLocationService", SearchBoxController]);
-
-
-    function SearchBoxController($scope, $window, $routeParams, cityStorage, citiesService, searchService, changeBrowserURL, userLocationService) {
-        var hm = this;
-        if ($routeParams.location) {
-            hm.selectedItem = $routeParams.location;
-        } else if (cityStorage.isCityExists()) {
-            hm.selectedItem = cityStorage.getCity();
-        } else {
-
-            hm.selectedItem = 'hyderabad';
-        }
-        activate();
-        hm.userSearches = [];
-        hm.selectedItemChange = selectedItemChange;
-        hm.userSearchItemChange = userSearchItemChange;
-        hm.locationSearch = locationSearch;
-        hm.userSearchTextChange = userSearchTextChange;
-        hm.openSearchBox = openSearchBox;
-
-        function openSearchBox() {
-            hm.mobileSearchBoxVisible = true;
-        }
-        hm.selectedItemChange(hm.selectedItem);
-
-        function userSearchItemChange(item) {
-        	console.log("the item");
-        	console.log(item);
-        	if(!item){
-        		item = {};
-        	}
-            var changeEntity = item.userSearchString.split("#&#")[1];
-            var entityName = item.userSearchString.split("#&#")[0];
-            var location = hm.selectedItem;
-            hm.slug = entityName + "-" + changeEntity.split("-")[0] + "s-in-" + location;
-            
-            if (changeEntity == "store") {
-
-                hm.url = "/store/storesCollection/storeName/";
-
-
-            } else if (changeEntity == "store-category") {
-
-                hm.url = "/store/storesCollection/category/";
-
-
-            } else if (changeEntity == "product") {
-
-                hm.url = "/productsCollectionName/";
-
-            } else if (changeEntity == "product-category") {
-
-                hm.url = "/productsCollectionCategory/";
-
-
-            } else if (changeEntity == "product-subcategory") {
-
-                hm.url = "/productsCollectionSubCategory/";
-
-            } else if (changeEntity.trim() == "All products in") {
-
-                locationProductsSearchUrl();
-
-            } else {
-
-                locationStoresSearchUrl();
-            }
-            $window.location= '#'+hm.url + entityName + "/" + location + "/" + hm.slug;
-            /*$timeout(function(){
-            	changeBrowserURL.changeBrowserURLMethod(hm.url + entityName + "/" + location + "/" + hm.slug);	
-            }, 0);*/
-            
-
-
-        }
-        //md-search-text-change="sbc.searchTextChange(sbc.searchText)"
-        function userSearchTextChange(city, userSearchText) {
-            console.log("ola");
-            console.log(userSearchText.length);
-            if (userSearchText.length >= 1) {
-                searchService.getAjaxSearches(city, userSearchText)
-                    .then(function(resource) {
-
-                        hm.userSearches = [];
-                        var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
-                        var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
-                        hm.userSearches = [allStoresItem, allProductsItem];
-                        //hm.userSearches = 
-                        for (var i = 0; i < resource.data.length; i++) {
-                            hm.userSearches.push(resource.data[i]);
-                        }
-
-                    });
-            } else {
-                if (hm.selectedItem) {
-                    selectedItemChange(hm.selectedItem);
-                }
-            }
-        }
-
-        function selectedItemChange(item) {
-
-            cityStorage.setCity(item);
-            searchService.getSearches(item).then(function(resource) {
-                var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
-                var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
-                hm.userSearches = [allStoresItem, allProductsItem];
-                for (var i = 0; i < resource.data.length; i++) {
-                    hm.userSearches.push(resource.data[i]);
-                }
-
-            }, function(data) {
-                console.log(data);
-            });
-        }
-
-        function locationSearch() {
-            if (hm.cities.indexOf(hm.selectedItem) != -1) {
-                if (!hm.userSearchText || hm.userSearchText.length === 0) {
-                    locationStoresSearchUrl();
-                }
-            }
-        }
-
-        function locationStoresSearchUrl() {
-            hm.url = "/store/storesCollection/location";
-            var myLocation = hm.selectedItem;
-            hm.slug = "stores-in-" + myLocation;
-            changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
-
-        }
-
-        function locationProductsSearchUrl() {
-
-            hm.url = "/productsCollectionLocation";
-            var myLocation = hm.selectedItem;
-            hm.slug = "products-in-" + myLocation;
-
-            changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
-
-
-        }
-
-        function activate() {
-
-            citiesService.getCities()
-                .then(function(obj) {
-
-                    hm.cities = obj.data;
-
-                }, function(obj) {
-                    hm.cities = obj;
-                });
-        }
-
-    }
-})(window.angular);
-
-//inject angular file upload directives and services.
-(function(angular){
-  'use strict';
-angular.module('app.user')
-  .controller('UserActionListController', ['$scope','userData','changeBrowserURL',UserActionListController]);
-  function UserActionListController($scope,userData,changeBrowserURL ) {
-  		var originatorEv;
-      var ualc = this;
-      ualc.openMenu = openMenu;
-      ualc.getUserPage = getUserPage;
-      ualc.getAdminStore = getAdminStore;
-      ualc.createNewStore = createNewStore; 
-      activate();
-      function getAdminStore(storeId){
-        changeBrowserURL.changeBrowserURLMethod('/admin/adminStorePage/'+storeId);
-      }
-      function getUserPage(){
-      	userData.getUserPage(userData.getUser()._id);
-      }
-      function openMenu($mdOpenMenu, ev) {
-	      originatorEv = ev;
-	      $mdOpenMenu(ev);
-		  }
-      function createNewStore(){
-
-        changeBrowserURL.changeBrowserURLMethod('/admin/createStore/'); 
-      }
-
-
-      function activate(){
-        ualc.user = userData.getUser();
-        ualc.userProfilePic = userData.getUser().picture;
-        ualc.userStoresList = userData.getUser().storeId;
-      	
-      }
-  }
-})(window.angular);
-
-(function(angular) {
-    'use strict';
-
-    angular.module('app.home')
-        .controller('UserChatNotificationController', ['userData', 'Socket', UserChatNotificationController]);
-
-    function UserChatNotificationController(userData, Socket) {
-        var ucn = this;
-        var originatorEv;
-        Socket.on("connect", function() {
-
-             Socket.emit('addToSingleRoom', { 'roomId': userData.getUser()._id });
-                });
-        Socket.on('newMessageReceived', function(message) {
-
-            if (message.user._id == userData.getUser()._id) {
-
-            } else {
-                ucn.messageReceived = true;
-            }
-        });
-        ucn.openMenu = function($mdOpenMenu, ev) {
-            originatorEv = ev;
-            $mdOpenMenu(ev);
-            ucn.messageReceived = false;
-        };
-    }
-})(window.angular);
-
-(function(angular){
-  angular.module('app.product')
-
-    .controller('ProductCategoryCollectionController',[productCategoryCollectionController]);
-    function productCategoryCollectionController(){
-    	
-    }
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.product')
-  .controller('ProductListController',["$scope","$auth",'$location',"$routeParams","changeBrowserURL","baseUrlService","getProductCollectionService",ProductListController]);
-  function ProductListController($scope,$auth,$location,$routeParams,changeBrowserURL,baseUrlService,getProductCollectionService){
-  	 var plc = this;
-      plc.pageNo = 0;
-      plc.productsList = [];
-      plc.getSingleProduct = getSingleProduct;
-      plc.getProductsCollection = getProductsCollection;
-      plc.productsSearchHeader = $routeParams.slug;
-      console.log("inside product");
-      activate();
-      $scope.$on('parent', function (event, data) {
-        plc.pageNo = 0;
-        plc.paramData = data;
-        plc.getProductsCollection();
-        
-      });
-      function getSingleProduct(product,scrollId){
-        var url = "product/singleProduct/"+product._id;//+"/"+product.myslug;
-        if(scrollId){
-          changeBrowserURL.changeBrowserURLMethod(url,scrollId);
-        }
-        changeBrowserURL.changeBrowserURLMethod(url);
-      }
-      function getProductsCollection(){
-        plc.loading = true;
-        plc.pageNo = plc.pageNo + 1;
-        var location = $routeParams.location;
-        var url ='';
-        if($location.absUrl().indexOf("/productsCollectionCategory/")!=-1){
-          var category = $routeParams.category;           
-           url = 'product/products/category/'+category+'/'+location+'/'+plc.pageNo;
-        }
-        else if($location.absUrl().indexOf("/productsCollectionSubCategory/")!=-1){
-          var productSubCategory = $routeParams.subCategory;
-           url = 'product/products/subCategory/'+productSubCategory+'/'+location+'/'+plc.pageNo;
-        }
-        else if($location.absUrl().indexOf("/productsCollectionName/")!=-1){
-
-          var productName = $routeParams.productName;
-           url = 'product/products/name/'+productName+'/'+location+'/'+plc.pageNo;
-           console.log("desired url");
-           console.log(url);
-        }
-        else if($location.absUrl().indexOf("/productsCollectionLocation/")!=-1){
-          
-           url = 'product/products/location'+'/'+location+'/'+plc.pageNo;
-        }
-        /*
-          * This will work with mongoose-paginate only because the existencce of the button
-            in html is dependant on the total documents retrieved
-          * I check the total documents available to the length of array displayed.. if they both are equal
-            then the button is hidden
-        */
-        getProductCollectionService.getProductCollection(url,plc.paramData)
-        .then(function(response){
-          plc.totalProducts = response.data.total;
-          if(plc.productsList.length===0){
-            var tempProductList = [];
-            for (var i = response.data.docs.length - 1; i >= 0; i--) {
-              tempProductList.push(response.data.docs[i]);
-
-            }
-            plc.productsList = tempProductList;
-          }
-          else{
-
-            if(plc.paramData&&plc.pageNo==1){
-              plc.productsList = [];
-            }
-            for (var j = response.data.docs.length - 1; j >= 0; j--) {
-              plc.productsList.push(response.data.docs[j]);
-            }
-
-          }
-          plc.loading = false;
-        },function(response){
-          console.log(response);
-        });
-      }
-      function activate(){
-        plc.getProductsCollection();
-      }
-
-    }						
-    
-
-  
-
-})(window.angular);
-
-(function(angular){
-  angular.module('app.product')
-
-    .controller('ProductNameCollectionController',[productNameCollectionController]);
-    function productNameCollectionController(){
-    	
-    }
-})(window.angular);
-
-(function(angular){
-  angular.module('app.product')
-    .controller('ProductsLocationController',["$scope","$routeParams","getCityProductLocalitiesService","getCityProductCategoriesService","getCityProductSubCategoriesService",ProductsLocationController]);
-
-  function ProductsLocationController($scope,$routeParams,getCityProductLocalitiesService,getCityProductCategoriesService,getCityProductSubCategoriesService){
-    var plc = this;
-    plc.areaModel = {};
-    plc.categoryModel = {};
-    plc.launchFilterEvent = launchFilterEvent;
-    plc.areaRadioClicked = areaRadioClicked;
-    plc.categoryRadioClicked = categoryRadioClicked;
-    plc.majorFilter = {};
-    plc.clearAreaFilters = clearAreaFilters;
-    plc.clearCategoryFilters = clearCategoryFilters;
-    function areaRadioClicked(){
-      plc.majorFilter.area=plc.areaModel.area;
-      launchFilterEvent(plc.majorFilter);
-    }
-    function clearAreaFilters(){
-      delete plc.majorFilter.area;
-      plc.areaModel = {};
-      launchFilterEvent(plc.majorFilter);
-    }
-    function categoryRadioClicked(){
-      plc.majorFilter.category=plc.categoryModel.category;
-      launchFilterEvent(plc.majorFilter);
-    }
-    function clearCategoryFilters(){
-      delete plc.majorFilter.category;
-      plc.categoryModel = {};
-      launchFilterEvent(plc.majorFilter);
-    }
-    var location = $routeParams.location;
-    getCityProductLocalitiesService.getCityLocalities(location)
-      .then(function(res){
-        plc.areas = res.data;
-      },function(res){
-        
-      });
-      getCityProductCategoriesService.getCityCategories(location)
-        .then(function(res){
-          plc.categories = res.data;
-          
-        },function(res){
-          console.log(res);
-        });
-    function launchFilterEvent(obj){
-        $scope.$broadcast('parent', obj);
-    }
-
-  }
-})(window.angular);
-
-(function(angular){
-  angular.module('app.product')
-
-    .controller('ProductSubCategoryCollectionController',[productSubCategoryCollectionController]);
-    function productSubCategoryCollectionController(){
-    	
-    }
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.product')
-
-  .controller('SingleProductController',["$scope","$auth",'getProductsService','$location','scrollToIdService',"$routeParams",SingleProductController]);
-  function SingleProductController($scope,$auth,getProductsService,$location,scrollToIdService,$routeParams){
-    
-    var spc = this;
-    spc.authCheck = $auth.isAuthenticated();
-    activate();
-    
-
-
-
-    function activate(){
-    	getProductsService.getSingleProduct($routeParams.productId).then(function(res){
-    		
-    		spc.product = res.data;	
-    	});
-		
-    }
-  }
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.product')
-  .controller('StoreProductListController',["$scope","$auth",'$location','scrollToIdService',"$routeParams","getProductsService","changeBrowserURL",StoreProductListController]);
-  function StoreProductListController($scope,$auth,$location,scrollToIdService,$routeParams,getProductsService,changeBrowserURL){
-    var splc = this;
-    splc.storeProductsList = [];
-    splc.pageNo = 0;
-    splc.getSingleProduct = getSingleProduct;
-    activate();
-
-    function getSingleProduct(productId){
-      var url = "/product/singleProduct/"+productId;
-      changeBrowserURL.changeBrowserURLMethod(url);
-    }
-    function activate(){
-    	getProductsService.getStoreProductsList($routeParams.storeId).then(function(response){
-        
-        splc.storeProductsList = response.data.docs;
-      });
-    }
-
-  }
-
-})(window.angular);
-
-
-(function(angular){
-  angular.module('app.product')
-  .directive('singleProductDirective',[singleProductDirective]);
-  
-  function singleProductDirective(){
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl:'app/product/views/singleProductTemplate.html',
-      scope:{
-        product:'=singleProduct'
-      },
-      link: function(scope,element,attrs){
-
-      }
-    };
-  }
-  
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-
-angular.module('app.product')
-  .service('getProductCollectionService',["$http","baseUrlService",GetProductCollectionService]);
-
-/*
-  * This servic has a function to get collection of products`
-*/
-function GetProductCollectionService($http,baseUrlService){
-  this.getProductCollection = getProductCollection;
-
-  function getProductCollection(url,paramData){
-    return $http.get(baseUrlService.baseUrl+url,{params:paramData});
-
-  }
-}
-})(window.angular);
-
-(function(angular){
-  'use strict';
-
-angular.module('app.product')
-  .service('getProductsService',["$http","storeData","baseUrlService",'changeBrowserURL',GetProductsService]);
-
-/*
-  * This servic has a function to get collection of stores`
-*/
-function GetProductsService($http,storeData,baseUrlService,changeBrowserURL){
-  this.getStoreProductsList = getStoreProductsList;
-  this.getSingleProduct = getSingleProduct;
-this.getSingleProductPage = getSingleProductPage;
-  function getStoreProductsList(storeId){
-  	var pageNo = 1;
-  	return $http.get(baseUrlService.baseUrl+'product/products/store/'+storeId+"/"+pageNo);
-    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
-
-  }
-  function getSingleProduct(productId){
-  	return $http.get(baseUrlService.baseUrl+'product/products/singleProduct/'+productId);
-    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
-
-  }
-  function getSingleProductPage(product,scrollId){
-        var url = "product/singleProduct/"+product._id+"/"+(product.myslug || ' ');
-        if(scrollId){
-          //url = url + "?scrollId="+scrollId;
-          changeBrowserURL.changeBrowserURLMethod(url,scrollId);
-        }
-        changeBrowserURL.changeBrowserURLMethod(url);
-      }
-}
-})(window.angular);
-
 (function(angular){
   'use strict';
 angular.module('app.review')
@@ -2884,6 +2006,793 @@ angular.module('app.review')
         
 
       }
+})(window.angular);
+
+(function(angular){
+  angular.module('app.product')
+
+    .controller('ProductCategoryCollectionController',[productCategoryCollectionController]);
+    function productCategoryCollectionController(){
+    	
+    }
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.product')
+  .controller('ProductListController',["$scope","$auth",'$location',"$routeParams","changeBrowserURL","baseUrlService","getProductCollectionService",ProductListController]);
+  function ProductListController($scope,$auth,$location,$routeParams,changeBrowserURL,baseUrlService,getProductCollectionService){
+  	 var plc = this;
+      plc.pageNo = 0;
+      plc.productsList = [];
+      plc.getSingleProduct = getSingleProduct;
+      plc.getProductsCollection = getProductsCollection;
+      plc.productsSearchHeader = $routeParams.slug;
+      console.log("inside product");
+      activate();
+      $scope.$on('parent', function (event, data) {
+        plc.pageNo = 0;
+        plc.paramData = data;
+        plc.getProductsCollection();
+        
+      });
+      function getSingleProduct(product,scrollId){
+        var url = "product/singleProduct/"+product._id;//+"/"+product.myslug;
+        if(scrollId){
+          changeBrowserURL.changeBrowserURLMethod(url,scrollId);
+        }
+        changeBrowserURL.changeBrowserURLMethod(url);
+      }
+      function getProductsCollection(){
+        plc.loading = true;
+        plc.pageNo = plc.pageNo + 1;
+        var location = $routeParams.location;
+        var url ='';
+        if($location.absUrl().indexOf("/productsCollectionCategory/")!=-1){
+          var category = $routeParams.category;           
+           url = 'product/products/category/'+category+'/'+location+'/'+plc.pageNo;
+        }
+        else if($location.absUrl().indexOf("/productsCollectionSubCategory/")!=-1){
+          var productSubCategory = $routeParams.subCategory;
+           url = 'product/products/subCategory/'+productSubCategory+'/'+location+'/'+plc.pageNo;
+        }
+        else if($location.absUrl().indexOf("/productsCollectionName/")!=-1){
+
+          var productName = $routeParams.productName;
+           url = 'product/products/name/'+productName+'/'+location+'/'+plc.pageNo;
+           //plc.paramData = {'limit':10};
+        }
+        else if($location.absUrl().indexOf("/productsCollectionLocation/")!=-1){
+          
+           url = 'product/products/location'+'/'+location+'/'+plc.pageNo;
+        }
+
+
+        /*
+          * This will work with mongoose-paginate only because the existencce of the button
+            in html is dependant on the total documents retrieved
+          * I check the total documents available to the length of array displayed.. if they both are equal
+            then the button is hidden
+        */
+        getProductCollectionService.getProductCollection(url,plc.paramData)
+        .then(function(response){
+          plc.totalProducts = response.data.total;
+          if(plc.productsList.length===0){
+            var tempProductList = [];
+            for (var i = response.data.docs.length - 1; i >= 0; i--) {
+              tempProductList.push(response.data.docs[i]);
+
+            }
+            plc.productsList = tempProductList;
+          }
+          else{
+
+            if(plc.paramData&&plc.pageNo==1){
+              plc.productsList = [];
+            }
+            for (var j = response.data.docs.length - 1; j >= 0; j--) {
+              plc.productsList.push(response.data.docs[j]);
+            }
+
+          }
+          plc.loading = false;
+        },function(response){
+          console.log(response);
+        });
+      }
+      function activate(){
+        plc.getProductsCollection();
+      }
+
+    }						
+    
+
+  
+
+})(window.angular);
+
+(function(angular){
+  angular.module('app.product')
+
+    .controller('ProductNameCollectionController',[productNameCollectionController]);
+    function productNameCollectionController(){
+    	
+    }
+})(window.angular);
+
+(function(angular){
+  angular.module('app.product')
+    .controller('ProductsLocationController',["$scope","$routeParams","getCityProductLocalitiesService","getCityProductCategoriesService","getCityProductSubCategoriesService",ProductsLocationController]);
+
+  function ProductsLocationController($scope,$routeParams,getCityProductLocalitiesService,getCityProductCategoriesService,getCityProductSubCategoriesService){
+    var plc = this;
+    plc.areaModel = {};
+    plc.categoryModel = {};
+    plc.launchFilterEvent = launchFilterEvent;
+    plc.areaRadioClicked = areaRadioClicked;
+    plc.categoryRadioClicked = categoryRadioClicked;
+    plc.majorFilter = {};
+    plc.clearAreaFilters = clearAreaFilters;
+    plc.clearCategoryFilters = clearCategoryFilters;
+    function areaRadioClicked(){
+      plc.majorFilter.area=plc.areaModel.area;
+      launchFilterEvent(plc.majorFilter);
+    }
+    function clearAreaFilters(){
+      delete plc.majorFilter.area;
+      plc.areaModel = {};
+      launchFilterEvent(plc.majorFilter);
+    }
+    function categoryRadioClicked(){
+      plc.majorFilter.category=plc.categoryModel.category;
+      launchFilterEvent(plc.majorFilter);
+    }
+    function clearCategoryFilters(){
+      delete plc.majorFilter.category;
+      plc.categoryModel = {};
+      launchFilterEvent(plc.majorFilter);
+    }
+    var location = $routeParams.location;
+    getCityProductLocalitiesService.getCityLocalities(location)
+      .then(function(res){
+        plc.areas = res.data;
+      },function(res){
+        
+      });
+      getCityProductCategoriesService.getCityCategories(location)
+        .then(function(res){
+          plc.categories = res.data;
+          
+        },function(res){
+          console.log(res);
+        });
+    function launchFilterEvent(obj){
+        $scope.$broadcast('parent', obj);
+    }
+
+  }
+})(window.angular);
+
+(function(angular){
+  angular.module('app.product')
+
+    .controller('ProductSubCategoryCollectionController',[productSubCategoryCollectionController]);
+    function productSubCategoryCollectionController(){
+    	
+    }
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.product')
+
+  .controller('SingleProductController',["$scope","$auth",'getProductsService','$location','scrollToIdService',"$routeParams",SingleProductController]);
+  function SingleProductController($scope,$auth,getProductsService,$location,scrollToIdService,$routeParams){
+    
+    var spc = this;
+    spc.authCheck = $auth.isAuthenticated();
+    activate();
+    
+
+
+
+    function activate(){
+    	getProductsService.getSingleProduct($routeParams.productId).then(function(res){
+    		
+    		spc.product = res.data;	
+    	});
+		
+    }
+  }
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.product')
+  .controller('StoreProductListController',["$scope","$auth",'$location','scrollToIdService',"$routeParams","getProductsService","changeBrowserURL",StoreProductListController]);
+  function StoreProductListController($scope,$auth,$location,scrollToIdService,$routeParams,getProductsService,changeBrowserURL){
+    var splc = this;
+    splc.storeProductsList = [];
+    splc.pageNo = 0;
+    splc.getSingleProduct = getSingleProduct;
+    activate();
+
+    function getSingleProduct(productId){
+      var url = "/product/singleProduct/"+productId;
+      changeBrowserURL.changeBrowserURLMethod(url);
+    }
+    function activate(){
+    	getProductsService.getStoreProductsList($routeParams.storeId).then(function(response){
+        
+        splc.storeProductsList = response.data.docs;
+      });
+    }
+
+  }
+
+})(window.angular);
+
+
+(function(angular){
+  angular.module('app.product')
+  .directive('singleProductDirective',[singleProductDirective]);
+  
+  function singleProductDirective(){
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl:'app/product/views/singleProductTemplate.html',
+      scope:{
+        product:'=singleProduct'
+      },
+      link: function(scope,element,attrs){
+
+      }
+    };
+  }
+  
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('app.product')
+  .service('getProductCollectionService',["$http","baseUrlService",GetProductCollectionService]);
+
+/*
+  * This servic has a function to get collection of products`
+*/
+function GetProductCollectionService($http,baseUrlService){
+  this.getProductCollection = getProductCollection;
+  this.getProductNameCollection = getProductNameCollection;
+  function getProductCollection(url,paramData){
+  	console.log(paramData);
+    return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function getProductNameCollection(){
+	return $http.get(baseUrlService.baseUrl+'product/products/name/:name/:location/:pageNo',{params:paramData});  	
+  }
+}
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('app.product')
+  .service('getProductsService',["$http","storeData","baseUrlService",'changeBrowserURL',GetProductsService]);
+
+/*
+  * This servic has a function to get collection of stores`
+*/
+function GetProductsService($http,storeData,baseUrlService,changeBrowserURL){
+  this.getStoreProductsList = getStoreProductsList;
+  this.getSingleProduct = getSingleProduct;
+this.getSingleProductPage = getSingleProductPage;
+  function getStoreProductsList(storeId){
+  	var pageNo = 1;
+  	return $http.get(baseUrlService.baseUrl+'product/products/store/'+storeId+"/"+pageNo);
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function getSingleProduct(productId){
+  	return $http.get(baseUrlService.baseUrl+'product/products/singleProduct/'+productId);
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function getSingleProductPage(product,scrollId){
+        var url = "product/singleProduct/"+product._id+"/"+(product.myslug || ' ');
+        if(scrollId){
+          //url = url + "?scrollId="+scrollId;
+          changeBrowserURL.changeBrowserURLMethod(url,scrollId);
+        }
+        changeBrowserURL.changeBrowserURLMethod(url);
+      }
+}
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.user')
+
+  .controller('UserActivityListController',["$scope",'$routeParams',"activityService",UserActivityListController]);
+  function UserActivityListController($scope,$routeParams,activityService){
+    var ual = this;
+    ual.loading = true;
+    activate();
+    function activate(){
+
+      ual.loading = true;
+        activityService.getSingleUserActivity($routeParams.userId).then(function(result){        
+        ual.activityData= result.data;
+
+        ual.loading = false;
+      }); 
+      
+    }
+
+
+    }
+
+})(window.angular);
+
+(function(angular) {
+    'use strict';
+    angular.module('app.user')
+
+    .controller('UserCustomFeedController', ["$scope", "$auth", "activityService", UserCustomFeedController]);
+
+    function UserCustomFeedController($scope, $auth, activityService) {
+
+        var ual = this;
+        ual.loading = true;
+        ual.authCheck = $auth.isAuthenticated();
+        activate();
+
+        function activate() {
+            ual.loading = true;
+            if (ual.authCheck) {
+                activityService.getUserFollowingActivity($auth.getPayload().sub).then(function(result) {
+                    ual.activityData = result.data;
+                    ual.loading = false;
+                });
+            }
+        }
+
+
+    }
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.user')
+
+  .controller('UserFeedController',["$scope","$auth","activityService",'NgMap',UserFeedController]);
+  function UserFeedController($scope,$auth,activityService){
+    
+    var ual = this;
+    ual.loading = true;
+    ual.authCheck = $auth.isAuthenticated();
+    activate();
+    function activate(){
+
+      ual.loading = true;
+      if(ual.authCheck){
+        activityService.getUserFollowingActivity($auth.getPayload().sub).then(function(result){
+        ual.activityData= result.data;
+        ual.loading = false;
+      });  
+      }
+      else{
+       activityService.getAllActivity().then(function(result){
+        console.log("from the activity");
+        console.log(result);
+       ual.activityData= result.data;
+       ual.loading = false;
+      }); 
+      }
+      
+      
+    }
+
+
+    }
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.user')
+
+  .controller('UserFollowersController',["$scope","$auth",'$location','$routeParams',"userData","userService",UserFollowersController]);
+  function UserFollowersController($scope,$auth,$location,$routeParams,userData,userService){
+    var ufc = this;
+    activate();
+
+    ufc.loading = true;
+    ufc.authCheck = $auth.isAuthenticated();
+    ufc.followersList = [];
+    ufc.currentUserFollowed = currentUserFollowed;
+    ufc.submitUserFollow = submitUserFollow;
+    ufc.deleteUserFollow = deleteUserFollow;
+    ufc.getUserPage = userData.getUserPage;
+
+    function activate(){
+      ufc.loading = true;
+
+      userService.getUserFollowers($routeParams.userId)
+    .then(function(res){
+        ufc.followersList = res.data;
+        
+        ufc.loading = false;
+      });
+    }
+    function submitUserFollow(followerId){
+      userService.submitUserFollow(userData.getUser()._id,followerId).then(function(response){
+
+        
+        userData.setUser();
+      });
+    }
+    function deleteUserFollow(followerId){
+      userService.deleteUserFollow(userData.getUser()._id,followerId).then(function(response){
+        
+        userData.setUser();
+      });
+    }
+    function currentUserFollowed(follower){
+
+      if(userData.getUser().following.indexOf(follower)==-1){
+        return false;
+      }
+      return true;
+    }
+
+    }
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.user')
+
+  .controller('UserFollowingController',["$scope","$auth",'$location','$routeParams',"userData","userService",UserFollowingController]);
+  function UserFollowingController($scope,$auth,$location,$routeParams,userData,userService){
+    var ufc = this;
+    activate();
+
+    ufc.loading = true;
+    ufc.authCheck = $auth.isAuthenticated();
+    ufc.followersList = [];
+    ufc.currentUserFollowed = currentUserFollowed;
+    ufc.submitUserFollow = submitUserFollow;
+    ufc.deleteUserFollow = deleteUserFollow;
+    ufc.getUserPage = userData.getUserPage;
+
+    function activate(){
+      ufc.loading = true;
+
+      userService.getUserFollowing($routeParams.userId)
+    .then(function(res){
+        ufc.followersList = res.data;
+        
+        ufc.loading = false;
+      });
+    }
+    function submitUserFollow(followerId){
+      userService.submitUserFollow(userData.getUser()._id,followerId).then(function(response){
+
+        
+        userData.setUser();
+      });
+    }
+    function deleteUserFollow(followerId){
+      userService.deleteUserFollow(userData.getUser()._id,followerId).then(function(response){
+        
+        userData.setUser();
+      });
+    }
+    function currentUserFollowed(follower){
+
+      if(userData.getUser().following.indexOf(follower)==-1){
+        return false;
+      }
+      return true;
+    }
+
+    }
+
+})(window.angular);
+
+(function(angular) {
+    'use strict';
+    angular.module('app.user')
+
+    .controller('UserLocalFeedController', ["$scope", "$auth", "activityService", UserLocalFeedController]);
+
+    function UserLocalFeedController($scope, $auth, activityService) {
+
+        var ual = this;
+        ual.loading = true;
+        ual.authCheck = $auth.isAuthenticated();
+        activate();
+
+        function activate() {
+            ual.loading = true;
+            activityService.getAllActivity().then(function(result) {
+                ual.activityData = result.data;
+                ual.loading = false;
+            });
+        }
+    }
+
+})(window.angular);
+
+(function(angular) {
+    'use strict';
+    angular.module('app.user')
+
+    .controller('UserMobileFeedController', ["$scope", "$auth",  UserMobileFeedController]);
+
+    function UserMobileFeedController($scope, $auth) {
+
+        var umfc = this;
+        umfc.loading = true;
+        umfc.authCheck = $auth.isAuthenticated();
+        activate();
+
+        umfc.tab = 1;
+
+        umfc.setTab = function(newTab) {
+            umfc.tab = newTab;
+            console.log("the tab");
+            console.log(umfc.tab);
+        };
+
+        umfc.isSet = function(tabNum) {
+            return umfc.tab === tabNum;
+        };
+
+        function activate() {
+            
+        }
+
+
+    }
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.user')
+
+  .controller('UserPageController',["$scope","$auth",'$routeParams',"userData","userService",UserPageController]);
+  function UserPageController($scope,$auth,$routeParams,userData,userService){
+    var upc = this;
+    activate();
+    upc.currentUserData = {};
+    upc.loading = true;
+    upc.authCheck = $auth.isAuthenticated();
+    upc.submitUserFollow = submitUserFollow;
+    upc.deleteUserFollow = deleteUserFollow;
+    upc.userFollowed = userFollowed;
+    upc.currentProfileUser = $routeParams.userId;
+    if(upc.authCheck){
+      upc.loggedUser = userData.getUser()._id;  
+    }
+    
+    upc.currentUser = currentUser;
+
+    function currentUser(){
+      return ($routeParams.userId == userData.getUser()._id);
+    }
+    function submitUserFollow(userId){
+      userService.submitUserFollow(userData.getUser()._id,userId).then(function(res){
+        userData.setUser();
+      },function(res){
+
+      });
+    }
+
+    function deleteUserFollow(userId){
+      userService.deleteUserFollow(userData.getUser()._id,userId).then(function(res){
+        var index = userData.getUser().following.indexOf(userId);
+        userData.setUser();
+
+      },function(res){
+
+      });
+    }
+
+    function userFollowed(userId){
+
+      if(userData.getUser().following.indexOf(userId)!=-1){
+
+        return true;
+      }
+      return false;
+    }
+    function activate(){
+      upc.loading = true;
+      userService.getSingleUser($routeParams.userId)
+    .then(function(res){
+        upc.currentUserData = res.data;
+        upc.loading = false;
+        
+      });
+    }
+
+
+    }
+
+})(window.angular);
+
+//inject angular file upload directives and services.
+(function(angular){
+  'use strict';
+angular.module('app.user')
+  .controller('UserProfileImageController', ['$scope', 'Upload', 'userData','baseUrlService',UserProfileImageController]);
+  function UserProfileImageController($scope, Upload,userData, baseUrlService) {
+      var upc = this;
+      upc.spinnerLoading = false;
+      upc.uploadFiles = function(file, errFiles) {
+          console.log("Enterd file uploading");
+          upc.f = file;
+          upc.errFile = errFiles && errFiles[0];
+          if (file) {
+              file.upload = Upload.upload({
+                  url: baseUrlService.baseUrl+'user/upload/profileImage/'+userData.getUser()._id,
+                  data: {file: file}
+              });
+              upc.spinnerLoading = true;
+              file.upload.then(function (response) {
+                  
+                      file.result = response.data;
+                      userData.setUser();
+                      userData.getUser().picture = response.data;
+                      console.log("the image received");
+                      console.log(response.data);
+                      $('.userProfileImage').find('img').attr('src',response.data);
+                      upc.spinnerLoading = false;
+              });
+          }
+      };
+  }
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.user')
+
+  .controller('UserSettingsController',["$scope","$auth",'userData',UserSettingsController]);
+  function UserSettingsController($scope,$auth,userData){
+    
+    var usl = this;
+    usl.authCheck = $auth.isAuthenticated();
+    activate();
+    function activate(){
+
+      usl.userForm = userData.getUser();
+      console.log("dataaaa");
+      console.log(usl.userForm);
+    }
+      
+      
+      
+    }
+
+
+    
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.user')
+
+  .controller('UserStatisticsController',["$scope","$auth",'$location','$routeParams',"userData","userService",UserStatisticsController]);
+  function UserStatisticsController($scope,$auth,$location,$routeParams,userData,userService){
+    var upc = this;
+    activate();
+    function activate(){
+      
+    }
+
+
+    }
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+/*
+  *Service for getting a single store with its id
+*/
+angular.module('app.user')
+  .service('activityService',["$http","baseUrlService",ActivityService]);
+
+/*
+  * This servic has a function names getStore which takes id as parameter and returns a promise
+*/
+function ActivityService($http,baseUrlService){
+  this.getSingleUserActivity = getSingleUserActivity;
+  this.getAllActivity = getAllActivity;
+  this.getUserFollowingActivity = getUserFollowingActivity;
+  function getSingleUserActivity(id){
+    return $http.get(baseUrlService.baseUrl+'activity/singleUserActivity/'+id);
+  }
+  function getAllActivity(){
+    return $http.get(baseUrlService.baseUrl+'activity/allActivity/');
+  }
+  function getUserFollowingActivity(userId){
+    return $http.get(baseUrlService.baseUrl+'activity/userFollowingActivity/'+userId);
+  }
+
+
+
+}
+})(window.angular);
+
+(function(angular){
+  'use strict';
+/*
+  *Service for getting a single store with its id
+*/
+angular.module('app.user')
+  .service('userService',["$http","baseUrlService",UserService]);
+
+/*
+  * This servic has a function names getStore which takes id as parameter and returns a promise
+*/
+function UserService($http,baseUrlService){
+  this.getSingleUser = getSingleUser;
+  this.getStoreRating = getStoreRating;
+  this.submitUserFollow = submitUserFollow;
+  this.submitStoreReport = submitStoreReport;
+  this.deleteUserFollow = deleteUserFollow;
+  this.checkUserFollow = checkUserFollow;
+  this.getUserFollowers = getUserFollowers;
+  this.getUserFollowing = getUserFollowing;
+  this.getUserStores = getUserStores;
+  function getSingleUser(id){
+    return $http.get(baseUrlService.baseUrl+"user/singleUser/"+id);
+
+  }
+  function getStoreRating(id){
+  	return $http.get(baseUrlService.baseUrl+"review/ratings/store/"+id);
+  }
+  function submitStoreReport(report){
+
+    return $http.post(baseUrlService.baseUrl+"user/submitStoreReport/",report);
+  }
+  function submitUserFollow(userId,followedId){
+
+    return $http.post(baseUrlService.baseUrl+"user/submitFollow/"+userId+'/'+followedId);
+  }
+  function deleteUserFollow(userId,followedId){
+
+    return $http.post(baseUrlService.baseUrl+"user/deleteFollow/"+userId+'/'+followedId);
+  }
+  function checkUserFollow(userId,followedId){
+    
+    return $http.get(baseUrlService.baseUrl+"user/checkFollow/"+userId+'/'+followedId);
+  }
+  function getUserFollowers(userId){
+    return $http.get(baseUrlService.baseUrl+"user/userFollowers/"+userId);
+  }
+  function getUserFollowing(userId){
+    return $http.get(baseUrlService.baseUrl+"user/userFollowing/"+userId);
+  }
+  function getUserStores(userId){
+    return $http.get(baseUrlService.baseUrl+"user/singleUser/"+userId,{params: { 'select': 'name address.area address.locality' }});
+  }
+
+
+
+}
 })(window.angular);
 
 (function(angular) {
@@ -3768,484 +3677,629 @@ function UserVisitService($http,baseUrlService){
 }
 })(window.angular);
 
+(function(angular) {
+    angular.module('app.chat')
+
+    .controller('ChatBoxController', ['$scope', 'Socket', '$routeParams', 'userData', 'chatService', ChatBoxController]);
+
+    function ChatBoxController($scope, Socket, $routeParams, userData, chatService) {
+        var cbc = this;
+        cbc.currentUser = userData.getUser()._id;
+        cbc.innerLoading = true;
+        cbc.chatRoomId = '';
+        cbc.messageLoading = false;
+        activate();
+        
+        function getChatMessages(){
+          chatService.getChatMessages(cbc.chatRoomId).then(function(res){
+              cbc.chatList = res.data[0].chats;
+               $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
+               cbc.innerLoading = false;
+            },function(res){
+              console.log(res);
+            });
+
+        }
+        function activate() {
+            chatService.getChatRoom().then(function(res) {
+                console.log("the response");
+                console.log(res);
+                cbc.chatRoomId = res.data._id;
+                socketJoin();
+                getChatMessages();
+            }, function(res) {
+                console.log(res);
+            });
+        }
+        
+
+        function socketJoin() {
+            Socket.emit('addToRoom', { 'roomId': cbc.chatRoomId });
+            Socket.on('messageSaved',function(message){
+                  cbc.chatList.push(message);
+                  $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
+                });
+        }
+        cbc.sendMsg = function($event) {
+            if ($event.which == 13 && !$event.shiftKey && cbc.myMsg) {
+                cbc.messageLoading = true;
+                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
+                chatService.sendChatMessage(chatObj).then(function(res){
+                  cbc.myMsg = '';
+                  cbc.messageLoading = false;
+                },function(res){
+                  console.log(res);
+                });
+                
+            }
+        };
+        cbc.clickSubmit = function(){
+          if (cbc.myMsg) {
+                cbc.messageLoading = true;
+                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
+                chatService.sendChatMessage(chatObj).then(function(res){
+                  cbc.myMsg = '';
+                  cbc.messageLoading = false;
+                },function(res){
+                  console.log(res);
+                });
+                
+            }  
+        };
+
+    }
+})(window.angular);
+
+(function(angular) {
+    angular.module('app.chat')
+
+    .controller('ChatRoomListController', ['$scope','$routeParams', 'userData', 'chatService', 'changeBrowserURL',ChatRoomListController]);
+
+    function ChatRoomListController($scope,$routeParams, userData, chatService,changeBrowserURL) {
+        
+        var cbc = this;
+        cbc.currentUser = userData.getUser()._id;
+        cbc.innerLoading = true;
+        activate();
+        cbc.openChatbox = openChatbox;
+        function openChatbox(chatRoom){
+            changeBrowserURL.changeBrowserURLMethod('/chatBox/'+chatRoom.creator1._id+'/'+chatRoom.creator2._id);
+        }
+        function getChatRoomList(){
+
+          chatService.getChatRoomList(cbc.currentUser).then(function(res){
+              cbc.chatRoomList = res.data;
+                cbc.innerLoading = false;
+            },function(res){
+              console.log(res);
+            });
+
+        }
+
+        function activate() {
+            getChatRoomList();
+        }
+        
+
+    }
+})(window.angular);
+
 (function(angular){
   'use strict';
-angular.module('app.user')
+  angular.module('app.chat')
+      .service('chatService',['$http','$routeParams','baseUrlService',ReviewService]);
+      function ReviewService($http,$routeParams,baseUrlService){
+        var rs  = this;
+        rs.sendChatMessage = sendChatMessage;
+        rs.getChatMessages = getChatMessages;
+        rs.getChatRoom = getChatRoom;
+        rs.getChatRoomList = getChatRoomList;
+        function sendChatMessage(chat){
+          return $http.post(baseUrlService.baseUrl+'chat/chats/'+chat.roomId,chat);
+        }
+        function getChatMessages(chatRoomId){
+          
+          return $http.get(baseUrlService.baseUrl+'chat/chats/'+chatRoomId);
+        }
+        function getChatRoom(){
+        	return $http.get(baseUrlService.baseUrl + 'chat/chatBox/' + $routeParams.creator1 + '/' + $routeParams.creator2);
+                
+        }
+        function getChatRoomList(userId){
+          return $http.get(baseUrlService.baseUrl + 'chat/chatRooms/' + userId);
+        }
+        
 
-  .controller('UserActivityListController',["$scope",'$routeParams',"activityService",UserActivityListController]);
-  function UserActivityListController($scope,$routeParams,activityService){
-    var ual = this;
-    ual.loading = true;
-    activate();
-    function activate(){
+      }
+})(window.angular);
 
-      ual.loading = true;
-        activityService.getSingleUserActivity($routeParams.userId).then(function(result){        
-        ual.activityData= result.data;
+(function(angular){
+'use strict';
+angular.module('app.chat').factory('Socket', ['socketFactory','baseUrlService',SocketFactory]);
+    
+    function SocketFactory(socketFactory,baseUrlService) {
+        return socketFactory({
+            prefix: '',
+            ioSocket: io.connect(baseUrlService)
+        });
+    }
 
-        ual.loading = false;
-      }); 
-      
+})(window.angular);
+angular.module('app.chat')
+	.factory('SocketUserService', ['socketFactory','userData',socketFactoryFunction]);
+    function socketFactoryFunction(socketFactory,userData) {
+        return socketFactory({
+            prefix: '',
+            ioSocket: io.connect('/'+userData.getUser()._id)
+        });
+    }
+
+(function(angular) {
+    'use strict';
+
+    angular.module('app.home')
+        .controller("AuthController", ["$scope", "changeBrowserURL", "$auth", "$window", "$route", "userData", 'Socket', AuthController]);
+
+    function AuthController($scope, changeBrowserURL, $auth, $window, $route, userData, Socket) {
+        var phc = this;
+        phc.toHomePage = toHomePage;
+        phc.authenticate = authenticate;
+        phc.authLogout = authLogout;
+        phc.loginPage = loginPage;
+
+        phc.isAuth = $auth.isAuthenticated();
+
+        function toHomePage() {
+            changeBrowserURL.changeBrowserURLMethod('/');
+        }
+
+        function socketStart() {
+            if (phc.isAuth) {
+                Socket.on("connect", function() {
+
+                    Socket.emit('addToSingleRoom', { 'roomId': userData.getUser()._id });
+                });
+            }
+
+        }
+
+        function loginPage() {
+            changeBrowserURL.changeBrowserURLMethod('/login');
+        }
+
+        function authenticate(provider) {
+            $auth.authenticate(provider).then(function(response) {
+            	console.log("for facebook login");
+            	console.log(response);
+                userData.setUser(response.data.user);
+                alert('login with facebook successfull');
+                //socketStart();
+                //$route.reload();
+                $window.location.reload();
+            });
+        }
+
+        function authLogout() {
+            $auth.logout();
+            userData.removeUser();
+            toHomePage();
+        }
     }
 
 
-    }
+})(window.angular);
 
+(function(angular){
+	'use strict';
+
+	angular.module('app.home')
+	.controller('HeaderController',["$scope","userData","changeBrowserURL","$auth","$mdDialog", "$mdMedia","$timeout", "$mdSidenav", HeaderController]);
+
+	function HeaderController($scope,userData,changeBrowserURL,$auth,$mdDialog, $mdMedia,$timeout, $mdSidenav){
+			var phc = this;
+			phc.toHomePage = toHomePage;
+			phc.authenticate = authenticate;
+			phc.authLogout = authLogout;
+			phc.showAdvanced = showAdvanced;
+			phc.customFullscreen = undefined;
+			phc.isAuth = $auth.isAuthenticated();
+			
+			phc.isOpenLeft = function(){
+	      return $mdSidenav('left').isOpen();
+	    };
+	   phc.toggleLeft = buildToggler('left');
+
+	  function buildToggler(navID) {
+	      return function() {
+	        // Component lookup should always be available since we are not using `ng-if`.
+	        $mdSidenav(navID)
+	          .toggle()
+	          .then(function () {
+	            console.log("toggle " + navID + " is done");
+	          });
+	      };
+	    }
+			function toHomePage(){
+				changeBrowserURL.changeBrowserURLMethod('/');
+			}
+			function authenticate(provider) {
+		    	$auth.authenticate(provider);
+		    	toHomePage();
+	    	}
+	    	function authLogout(){
+	    		$auth.logout();toHomePage();
+	    	}
+	    	function showAdvanced(ev) {
+			    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+			    $mdDialog.show({
+			      controller: 'ModalFormLoginController',
+			      templateUrl: 'app/home/views/modalFormLogin.html',
+			      parent: angular.element(document.body),
+			      targetEvent: ev,
+			      clickOutsideToClose:true,
+			      fullscreen: phc.customFullscreen
+			    })
+			    .then(function(answer) {
+			      $scope.status = 'You said the information was "' + answer + '".';
+			    }, function() {
+			      $scope.status = 'You cancelled the dialog.';
+			    });
+			    $scope.$watch(function() {
+
+	      			return $mdMedia('md') || $mdMedia('xl');
+	    		}, function(wantsFullScreen) {
+		      		phc.customFullscreen = (wantsFullScreen === true);
+
+	    		});
+
+	  		}
+	}
+
+})(window.angular);
+
+(function(angular){
+	'use strict';
+
+	angular.module('app.home')
+	.controller('HomeController',["$scope","citiesService","searchService","changeBrowserURL",homeController])
+
+	.controller('CategoryListController',["$scope","getCityCategoriesService","cityStorage","changeBrowserURL","baseUrlService",CategoryListController]);
+
+
+	function CategoryListController($scope,getCityCategoriesService,cityStorage,changeBrowserURL,baseUrlService){
+		var clc = this;
+		clc.cateList = [];
+		clc.categLoadMore = false;
+		clc.pageNo = 0; //for fetching categories
+		clc.getCategories = getCategories;
+		clc.categoryLinkClicked = categoryLinkClicked;
+		activate();
+		clc.innerLoading = true;
+		function activate(){
+			clc.getCategories();
+			
+		}
+		$scope.$on('city-changed',function(){
+			clc.getCategories();
+		});
+		function categoryLinkClicked(category){
+			var location = cityStorage.getCity();
+			var slug = category + "-stores-in-" + location;
+			var url = "/store/storesCollection/category/"+category+"/"+location+"/"+slug;
+			changeBrowserURL.changeBrowserURLMethod(url);
+
+
+		}
+		function getCategories(){
+			clc.categoryList = [];
+			getCityCategoriesService.getCityCategories(cityStorage.getCity()).then(function(response){
+				console.log("the category response");
+				console.log(response);
+				clc.categoryList = response.data;
+				clc.innerLoading = false;
+			});
+			
+			
+			
+
+		}
+
+	}
+	function homeController($scope,citiesService,searchService,changeBrowserURL){
+		/*var hm= this;
+		activate();
+		console.log("home controller");
+		hm.searchTextChange = searchTextChange;
+		hm.selectedItemChange = selectedItemChange;
+		hm.userSearchItemChange = userSearchItemChange;
+		function userSearchItemChange(item){
+			var url = item.userSearchString.split("#&#")[1]+"/"+item.userSearchString.split("#&#")[0]+"/"+item.userSearchString.split("#&#")[2];
+			changeBrowserURL.changeBrowserURLMethod(url);
+		}
+		function searchTextChange(searchText){
+			console.log(searchText);
+		}
+		function selectedItemChange(item){
+			console.log(item);
+			searchService.getSearches(item.location).then(function(resource){
+				console.log(resource);
+				hm.userSearches = resource.data;
+			},function(data){
+				console.log(data);
+			});
+		}
+	    function activate() {
+	    	citiesService.getCities()
+				.then(function(obj){
+					console.log(obj);
+					hm.cities =  obj.data;
+					console.log("then");
+					console.log(hm.cities);
+				},function(obj){
+					console.log(obj);
+					hm.cities =  obj;
+				});
+	    }*/
+	}
+})(window.angular);
+/*git clone https://github.com/mrvautin/adminMongo.git && cd adminMongo*/
+(function(angular){
+	'use strict';
+
+	angular.module('app.home')
+	.controller('HomeLeftController',["$timeout", "$mdSidenav", "$log",LeftCtrl]);
+	function LeftCtrl($timeout, $mdSidenav, $log){
+		console.log("inside the mdSidenav");
+		this.close = function () {
+			// Component lookup should always be available since we are not using `ng-if`
+			$mdSidenav('left').close()
+			.then(function () {
+				$log.debug("close RIGHT is done");
+			});
+		};
+	}
 })(window.angular);
 
 (function(angular) {
     'use strict';
-    angular.module('app.user')
 
-    .controller('UserCustomFeedController', ["$scope", "$auth", "activityService", UserCustomFeedController]);
+    angular.module('app.home')
+        .controller('MobileFooterController', ["$scope", '$auth',"changeBrowserURL", MobileFooterController]);
 
-    function UserCustomFeedController($scope, $auth, activityService) {
+    function MobileFooterController($scope,$auth ,changeBrowserURL) {
+        var mfc = this;
+        mfc.authCheck = $auth.isAuthenticated();
+    }
 
-        var ual = this;
-        ual.loading = true;
-        ual.authCheck = $auth.isAuthenticated();
+})(window.angular);
+/*git clone https://github.com/mrvautin/adminMongo.git && cd adminMongo*/
+
+(function(angular) {
+    'use strict';
+
+    angular.module('app.home')
+        .controller('SearchBoxController', ["$scope", "$window", "$routeParams", "cityStorage", "citiesService", "searchService", "changeBrowserURL", "userLocationService", SearchBoxController]);
+
+
+    function SearchBoxController($scope, $window, $routeParams, cityStorage, citiesService, searchService, changeBrowserURL, userLocationService) {
+        var hm = this;
+        if ($routeParams.location) {
+            hm.selectedItem = $routeParams.location;
+        } else if (cityStorage.isCityExists()) {
+            hm.selectedItem = cityStorage.getCity();
+        } else {
+
+            hm.selectedItem = 'hyderabad';
+        }
         activate();
+        hm.userSearches = [];
+        hm.selectedItemChange = selectedItemChange;
+        hm.userSearchItemChange = userSearchItemChange;
+        hm.locationSearch = locationSearch;
+        hm.userSearchTextChange = userSearchTextChange;
+        hm.openSearchBox = openSearchBox;
 
-        function activate() {
-            ual.loading = true;
-            if (ual.authCheck) {
-                activityService.getUserFollowingActivity($auth.getPayload().sub).then(function(result) {
-                    ual.activityData = result.data;
-                    ual.loading = false;
-                });
+        function openSearchBox() {
+            hm.mobileSearchBoxVisible = true;
+        }
+        hm.selectedItemChange(hm.selectedItem);
+
+        function userSearchItemChange(item) {
+        	console.log("the item");
+        	console.log(item);
+        	if(!item){
+        		item = {};
+        	}
+            var changeEntity = item.userSearchString.split("#&#")[1];
+            var entityName = item.userSearchString.split("#&#")[0];
+            var location = hm.selectedItem;
+            hm.slug = entityName + "-" + changeEntity.split("-")[0] + "s-in-" + location;
+            
+            if (changeEntity == "store") {
+
+                hm.url = "/store/storesCollection/storeName/";
+
+
+            } else if (changeEntity == "store-category") {
+
+                hm.url = "/store/storesCollection/category/";
+
+
+            } else if (changeEntity == "product") {
+
+                hm.url = "/productsCollectionName/";
+
+            } else if (changeEntity == "product-category") {
+
+                hm.url = "/productsCollectionCategory/";
+
+
+            } else if (changeEntity == "product-subcategory") {
+
+                hm.url = "/productsCollectionSubCategory/";
+
+            } else if (changeEntity.trim() == "All products in") {
+
+                locationProductsSearchUrl();
+
+            } else {
+
+                locationStoresSearchUrl();
+            }
+            $window.location= '#'+hm.url + entityName + "/" + location + "/" + hm.slug;
+            /*$timeout(function(){
+            	changeBrowserURL.changeBrowserURLMethod(hm.url + entityName + "/" + location + "/" + hm.slug);	
+            }, 0);*/
+            
+
+
+        }
+        //md-search-text-change="sbc.searchTextChange(sbc.searchText)"
+        function userSearchTextChange(city, userSearchText) {
+            console.log("ola");
+            console.log(userSearchText.length);
+            if (userSearchText.length >= 1) {
+                searchService.getAjaxSearches(city, userSearchText)
+                    .then(function(resource) {
+
+                        hm.userSearches = [];
+                        var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
+                        var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
+                        hm.userSearches = [allStoresItem, allProductsItem];
+                        //hm.userSearches = 
+                        for (var i = 0; i < resource.data.length; i++) {
+                            hm.userSearches.push(resource.data[i]);
+                        }
+
+                    });
+            } else {
+                if (hm.selectedItem) {
+                    selectedItemChange(hm.selectedItem);
+                }
             }
         }
 
+        function selectedItemChange(item) {
 
-    }
+            cityStorage.setCity(item);
+            searchService.getSearches(item).then(function(resource) {
+                var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
+                var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
+                hm.userSearches = [allStoresItem, allProductsItem];
+                for (var i = 0; i < resource.data.length; i++) {
+                    hm.userSearches.push(resource.data[i]);
+                }
 
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.user')
-
-  .controller('UserFeedController',["$scope","$auth","activityService",'NgMap',UserFeedController]);
-  function UserFeedController($scope,$auth,activityService){
-    
-    var ual = this;
-    ual.loading = true;
-    ual.authCheck = $auth.isAuthenticated();
-    activate();
-    function activate(){
-
-      ual.loading = true;
-      if(ual.authCheck){
-        activityService.getUserFollowingActivity($auth.getPayload().sub).then(function(result){
-        ual.activityData= result.data;
-        ual.loading = false;
-      });  
-      }
-      else{
-       activityService.getAllActivity().then(function(result){
-        console.log("from the activity");
-        console.log(result);
-       ual.activityData= result.data;
-       ual.loading = false;
-      }); 
-      }
-      
-      
-    }
-
-
-    }
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.user')
-
-  .controller('UserFollowersController',["$scope","$auth",'$location','$routeParams',"userData","userService",UserFollowersController]);
-  function UserFollowersController($scope,$auth,$location,$routeParams,userData,userService){
-    var ufc = this;
-    activate();
-
-    ufc.loading = true;
-    ufc.authCheck = $auth.isAuthenticated();
-    ufc.followersList = [];
-    ufc.currentUserFollowed = currentUserFollowed;
-    ufc.submitUserFollow = submitUserFollow;
-    ufc.deleteUserFollow = deleteUserFollow;
-    ufc.getUserPage = userData.getUserPage;
-
-    function activate(){
-      ufc.loading = true;
-
-      userService.getUserFollowers($routeParams.userId)
-    .then(function(res){
-        ufc.followersList = res.data;
-        
-        ufc.loading = false;
-      });
-    }
-    function submitUserFollow(followerId){
-      userService.submitUserFollow(userData.getUser()._id,followerId).then(function(response){
-
-        
-        userData.setUser();
-      });
-    }
-    function deleteUserFollow(followerId){
-      userService.deleteUserFollow(userData.getUser()._id,followerId).then(function(response){
-        
-        userData.setUser();
-      });
-    }
-    function currentUserFollowed(follower){
-
-      if(userData.getUser().following.indexOf(follower)==-1){
-        return false;
-      }
-      return true;
-    }
-
-    }
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.user')
-
-  .controller('UserFollowingController',["$scope","$auth",'$location','$routeParams',"userData","userService",UserFollowingController]);
-  function UserFollowingController($scope,$auth,$location,$routeParams,userData,userService){
-    var ufc = this;
-    activate();
-
-    ufc.loading = true;
-    ufc.authCheck = $auth.isAuthenticated();
-    ufc.followersList = [];
-    ufc.currentUserFollowed = currentUserFollowed;
-    ufc.submitUserFollow = submitUserFollow;
-    ufc.deleteUserFollow = deleteUserFollow;
-    ufc.getUserPage = userData.getUserPage;
-
-    function activate(){
-      ufc.loading = true;
-
-      userService.getUserFollowing($routeParams.userId)
-    .then(function(res){
-        ufc.followersList = res.data;
-        
-        ufc.loading = false;
-      });
-    }
-    function submitUserFollow(followerId){
-      userService.submitUserFollow(userData.getUser()._id,followerId).then(function(response){
-
-        
-        userData.setUser();
-      });
-    }
-    function deleteUserFollow(followerId){
-      userService.deleteUserFollow(userData.getUser()._id,followerId).then(function(response){
-        
-        userData.setUser();
-      });
-    }
-    function currentUserFollowed(follower){
-
-      if(userData.getUser().following.indexOf(follower)==-1){
-        return false;
-      }
-      return true;
-    }
-
-    }
-
-})(window.angular);
-
-(function(angular) {
-    'use strict';
-    angular.module('app.user')
-
-    .controller('UserLocalFeedController', ["$scope", "$auth", "activityService", UserLocalFeedController]);
-
-    function UserLocalFeedController($scope, $auth, activityService) {
-
-        var ual = this;
-        ual.loading = true;
-        ual.authCheck = $auth.isAuthenticated();
-        activate();
-
-        function activate() {
-            ual.loading = true;
-            activityService.getAllActivity().then(function(result) {
-                ual.activityData = result.data;
-                ual.loading = false;
+            }, function(data) {
+                console.log(data);
             });
         }
-    }
 
-})(window.angular);
-
-(function(angular) {
-    'use strict';
-    angular.module('app.user')
-
-    .controller('UserMobileFeedController', ["$scope", "$auth",  UserMobileFeedController]);
-
-    function UserMobileFeedController($scope, $auth) {
-
-        var umfc = this;
-        umfc.loading = true;
-        umfc.authCheck = $auth.isAuthenticated();
-        activate();
-
-        umfc.tab = 1;
-
-        umfc.setTab = function(newTab) {
-            umfc.tab = newTab;
-            console.log("the tab");
-            console.log(umfc.tab);
-        };
-
-        umfc.isSet = function(tabNum) {
-            return umfc.tab === tabNum;
-        };
-
-        function activate() {
-            
+        function locationSearch() {
+            if (hm.cities.indexOf(hm.selectedItem) != -1) {
+                if (!hm.userSearchText || hm.userSearchText.length === 0) {
+                    locationStoresSearchUrl();
+                }
+            }
         }
 
+        function locationStoresSearchUrl() {
+            hm.url = "/store/storesCollection/location";
+            var myLocation = hm.selectedItem;
+            hm.slug = "stores-in-" + myLocation;
+            changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
+
+        }
+
+        function locationProductsSearchUrl() {
+
+            hm.url = "/productsCollectionLocation";
+            var myLocation = hm.selectedItem;
+            hm.slug = "products-in-" + myLocation;
+
+            changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
+
+
+        }
+
+        function activate() {
+
+            citiesService.getCities()
+                .then(function(obj) {
+
+                    hm.cities = obj.data;
+
+                }, function(obj) {
+                    hm.cities = obj;
+                });
+        }
 
     }
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.user')
-
-  .controller('UserPageController',["$scope","$auth",'$routeParams',"userData","userService",UserPageController]);
-  function UserPageController($scope,$auth,$routeParams,userData,userService){
-    var upc = this;
-    activate();
-    upc.currentUserData = {};
-    upc.loading = true;
-    upc.authCheck = $auth.isAuthenticated();
-    upc.submitUserFollow = submitUserFollow;
-    upc.deleteUserFollow = deleteUserFollow;
-    upc.userFollowed = userFollowed;
-    upc.currentProfileUser = $routeParams.userId;
-    if(upc.authCheck){
-      upc.loggedUser = userData.getUser()._id;  
-    }
-    
-    upc.currentUser = currentUser;
-
-    function currentUser(){
-      return ($routeParams.userId == userData.getUser()._id);
-    }
-    function submitUserFollow(userId){
-      userService.submitUserFollow(userData.getUser()._id,userId).then(function(res){
-        userData.setUser();
-      },function(res){
-
-      });
-    }
-
-    function deleteUserFollow(userId){
-      userService.deleteUserFollow(userData.getUser()._id,userId).then(function(res){
-        var index = userData.getUser().following.indexOf(userId);
-        userData.setUser();
-
-      },function(res){
-
-      });
-    }
-
-    function userFollowed(userId){
-
-      if(userData.getUser().following.indexOf(userId)!=-1){
-
-        return true;
-      }
-      return false;
-    }
-    function activate(){
-      upc.loading = true;
-      userService.getSingleUser($routeParams.userId)
-    .then(function(res){
-        upc.currentUserData = res.data;
-        upc.loading = false;
-        
-      });
-    }
-
-
-    }
-
 })(window.angular);
 
 //inject angular file upload directives and services.
 (function(angular){
   'use strict';
 angular.module('app.user')
-  .controller('UserProfileImageController', ['$scope', 'Upload', 'userData','baseUrlService',UserProfileImageController]);
-  function UserProfileImageController($scope, Upload,userData, baseUrlService) {
-      var upc = this;
-      upc.spinnerLoading = false;
-      upc.uploadFiles = function(file, errFiles) {
-          console.log("Enterd file uploading");
-          upc.f = file;
-          upc.errFile = errFiles && errFiles[0];
-          if (file) {
-              file.upload = Upload.upload({
-                  url: baseUrlService.baseUrl+'user/upload/profileImage/'+userData.getUser()._id,
-                  data: {file: file}
-              });
-              upc.spinnerLoading = true;
-              file.upload.then(function (response) {
-                  
-                      file.result = response.data;
-                      userData.setUser();
-                      userData.getUser().picture = response.data;
-                      console.log("the image received");
-                      console.log(response.data);
-                      $('.userProfileImage').find('img').attr('src',response.data);
-                      upc.spinnerLoading = false;
-              });
-          }
-      };
+  .controller('UserActionListController', ['$scope','userData','changeBrowserURL',UserActionListController]);
+  function UserActionListController($scope,userData,changeBrowserURL ) {
+  		var originatorEv;
+      var ualc = this;
+      ualc.openMenu = openMenu;
+      ualc.getUserPage = getUserPage;
+      ualc.getAdminStore = getAdminStore;
+      ualc.createNewStore = createNewStore; 
+      activate();
+      function getAdminStore(storeId){
+        changeBrowserURL.changeBrowserURLMethod('/admin/adminStorePage/'+storeId);
+      }
+      function getUserPage(){
+      	userData.getUserPage(userData.getUser()._id);
+      }
+      function openMenu($mdOpenMenu, ev) {
+	      originatorEv = ev;
+	      $mdOpenMenu(ev);
+		  }
+      function createNewStore(){
+
+        changeBrowserURL.changeBrowserURLMethod('/admin/createStore/'); 
+      }
+
+
+      function activate(){
+        ualc.user = userData.getUser();
+        ualc.userProfilePic = userData.getUser().picture;
+        ualc.userStoresList = userData.getUser().storeId;
+      	
+      }
   }
 })(window.angular);
 
-(function(angular){
-  'use strict';
-angular.module('app.user')
+(function(angular) {
+    'use strict';
 
-  .controller('UserSettingsController',["$scope","$auth",'userData',UserSettingsController]);
-  function UserSettingsController($scope,$auth,userData){
-    
-    var usl = this;
-    usl.authCheck = $auth.isAuthenticated();
-    activate();
-    function activate(){
+    angular.module('app.home')
+        .controller('UserChatNotificationController', ['userData', 'Socket', UserChatNotificationController]);
 
-      usl.userForm = userData.getUser();
-      console.log("dataaaa");
-      console.log(usl.userForm);
+    function UserChatNotificationController(userData, Socket) {
+        var ucn = this;
+        var originatorEv;
+        Socket.on("connect", function() {
+
+             Socket.emit('addToSingleRoom', { 'roomId': userData.getUser()._id });
+                });
+        Socket.on('newMessageReceived', function(message) {
+
+            if (message.user._id == userData.getUser()._id) {
+
+            } else {
+                ucn.messageReceived = true;
+            }
+        });
+        ucn.openMenu = function($mdOpenMenu, ev) {
+            originatorEv = ev;
+            $mdOpenMenu(ev);
+            ucn.messageReceived = false;
+        };
     }
-      
-      
-      
-    }
-
-
-    
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.user')
-
-  .controller('UserStatisticsController',["$scope","$auth",'$location','$routeParams',"userData","userService",UserStatisticsController]);
-  function UserStatisticsController($scope,$auth,$location,$routeParams,userData,userService){
-    var upc = this;
-    activate();
-    function activate(){
-      
-    }
-
-
-    }
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-/*
-  *Service for getting a single store with its id
-*/
-angular.module('app.user')
-  .service('activityService',["$http","baseUrlService",ActivityService]);
-
-/*
-  * This servic has a function names getStore which takes id as parameter and returns a promise
-*/
-function ActivityService($http,baseUrlService){
-  this.getSingleUserActivity = getSingleUserActivity;
-  this.getAllActivity = getAllActivity;
-  this.getUserFollowingActivity = getUserFollowingActivity;
-  function getSingleUserActivity(id){
-    return $http.get(baseUrlService.baseUrl+'activity/singleUserActivity/'+id);
-  }
-  function getAllActivity(){
-    return $http.get(baseUrlService.baseUrl+'activity/allActivity/');
-  }
-  function getUserFollowingActivity(userId){
-    return $http.get(baseUrlService.baseUrl+'activity/userFollowingActivity/'+userId);
-  }
-
-
-
-}
-})(window.angular);
-
-(function(angular){
-  'use strict';
-/*
-  *Service for getting a single store with its id
-*/
-angular.module('app.user')
-  .service('userService',["$http","baseUrlService",UserService]);
-
-/*
-  * This servic has a function names getStore which takes id as parameter and returns a promise
-*/
-function UserService($http,baseUrlService){
-  this.getSingleUser = getSingleUser;
-  this.getStoreRating = getStoreRating;
-  this.submitUserFollow = submitUserFollow;
-  this.submitStoreReport = submitStoreReport;
-  this.deleteUserFollow = deleteUserFollow;
-  this.checkUserFollow = checkUserFollow;
-  this.getUserFollowers = getUserFollowers;
-  this.getUserFollowing = getUserFollowing;
-  this.getUserStores = getUserStores;
-  function getSingleUser(id){
-    return $http.get(baseUrlService.baseUrl+"user/singleUser/"+id);
-
-  }
-  function getStoreRating(id){
-  	return $http.get(baseUrlService.baseUrl+"review/ratings/store/"+id);
-  }
-  function submitStoreReport(report){
-
-    return $http.post(baseUrlService.baseUrl+"user/submitStoreReport/",report);
-  }
-  function submitUserFollow(userId,followedId){
-
-    return $http.post(baseUrlService.baseUrl+"user/submitFollow/"+userId+'/'+followedId);
-  }
-  function deleteUserFollow(userId,followedId){
-
-    return $http.post(baseUrlService.baseUrl+"user/deleteFollow/"+userId+'/'+followedId);
-  }
-  function checkUserFollow(userId,followedId){
-    
-    return $http.get(baseUrlService.baseUrl+"user/checkFollow/"+userId+'/'+followedId);
-  }
-  function getUserFollowers(userId){
-    return $http.get(baseUrlService.baseUrl+"user/userFollowers/"+userId);
-  }
-  function getUserFollowing(userId){
-    return $http.get(baseUrlService.baseUrl+"user/userFollowing/"+userId);
-  }
-  function getUserStores(userId){
-    return $http.get(baseUrlService.baseUrl+"user/singleUser/"+userId,{params: { 'select': 'name address.area address.locality' }});
-  }
-
-
-
-}
 })(window.angular);

@@ -41,13 +41,14 @@ angular.module('app.product')
 
           var productName = $routeParams.productName;
            url = 'product/products/name/'+productName+'/'+location+'/'+plc.pageNo;
-           console.log("desired url");
-           console.log(url);
+           //plc.paramData = {'limit':10};
         }
         else if($location.absUrl().indexOf("/productsCollectionLocation/")!=-1){
           
            url = 'product/products/location'+'/'+location+'/'+plc.pageNo;
         }
+
+
         /*
           * This will work with mongoose-paginate only because the existencce of the button
             in html is dependant on the total documents retrieved
