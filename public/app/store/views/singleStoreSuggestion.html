@@ -1,0 +1,13 @@
+<div>
+    <div class="suggestedStoreImage">
+        <img ng-src="{{suggestedStore.bannerImage}}">
+    </div>
+    <div class="suggestedStoreInfo">
+        <a ng-href="#/store/singleStore/{{suggestedStore._id}}">
+            <h5 class="suggestedStoreName">{{suggestedStore.name}}</h5>
+        </a>
+        <p class="suggestedStoreAddress">
+        	{{suggestedStore.address.area+" "}}{{suggestedStore.address.locality}}
+        </p>
+    </div>
+</div>
