@@ -37,13 +37,13 @@
                                 <span>
                                     <i aria-hidden="true" class="fa fa-bookmark-o"></i>
                                 </span>
-                                <span class="chipText">Visit</span>
+                            <span class="chipText">Visit</span>
                             </span>
                             <span class="chipType" ng-if="usv.userStoreVisited" ng-click="usv.deleteVisit()">
                                 <span>
                                     <i aria-hidden="true" class="fa fa-bookmark"></i>
                                 </span>
-                                <span class="chipText">
+                            <span class="chipText">
                                     Visited
                                 </span>
                             </span>
@@ -65,14 +65,13 @@
                         </span>
                             </span>
                         </div>
-                        <div class="userStoreVisitCheck userInteractionContainers" >
-                            <span class="chipType"  ng-click="ssc.showStoreReportDialog($event)">
+                        <div class="userStoreVisitCheck userInteractionContainers">
+                            <span class="chipType" ng-click="ssc.showStoreReportDialog($event)">
                                 <span>
                                     <i aria-hidden="true" class="fa fa-exclamation-triangle"></i>
                                 </span>
-                                <span class="chipText">Report</span>
+                            <span class="chipText">Report</span>
                             </span>
-                            
                         </div>
                     </div>
                 </div>
@@ -173,34 +172,23 @@
             </md-content>-->
         </div>
         <div flex="35" flex-sm="100" flex-xs="100">
-            <div class="mapContainer" style="margin-top:20px;margin-left:20px;">
-                <ng-map zoom='15' center="{{ssc.pos}}" scrollwheel="false">
-                    <marker position="{{ssc.pos}}" animation="Animation.BOUNCE">
-                    </marker>
-                </ng-map>
-            </div>
-            <div class="storeSuggestionsContainer">
-                <h3 class="storeSuggestionHeader">Few More</h3>
-                <div layout="row" layout-wrap layout-align="space-between">
-                    <div flex="30" class="singleStoreSuggestion" ng-repeat="suggestedStore in ssc.storeSuggestions">
-                        <single-store-suggestion suggested-store="suggestedStore">
-                            
-                        </single-store-suggestion>
-                        <!--<div class="suggestedStoreImage">
-                            <img ng-src="{{suggestedStore.bannerImage}}">
+            <aside style="margin-top:20px;margin-left:20px;">
+                <div class="mapContainer" >
+                    <ng-map zoom='15' center="{{ssc.pos}}" scrollwheel="false">
+                        <marker position="{{ssc.pos}}" animation="Animation.BOUNCE">
+                        </marker>
+                    </ng-map>
+                </div>
+                <div class="storeSuggestionsContainer">
+                    <h3 class="storeSuggestionHeader">Few More</h3>
+                    <div layout="row" layout-wrap layout-align="space-between">
+                        <div flex="30" class="singleStoreSuggestion" ng-repeat="suggestedStore in ssc.storeSuggestions">
+                            <single-store-suggestion suggested-store="suggestedStore">
+                            </single-store-suggestion>
                         </div>
-                        <div class="suggestedStoreInfo">
-                            <a ng-href="#/store/singleStore/{{suggestedStore._id}}">
-                                <h5 class="suggestedStoreName">{{suggestedStore.name}}</h5>
-                            </a>
-                            <p class="suggestedStoreAddress">{{suggestedStore.address.area+" "}}{{suggestedStore.address.locality}}</p>
-                        </div>-->
-                        <!--<suggestion-store> 
-                     
-                     </suggestion-store>      -->
                     </div>
                 </div>
-            </div>
+            </aside>
         </div>
     </div>
 </main>

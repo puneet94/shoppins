@@ -7,7 +7,10 @@
             <h5 class="suggestedStoreName">{{suggestedStore.name}}</h5>
         </a>
         <p class="suggestedStoreAddress">
-        	{{suggestedStore.address.area+" "}}{{suggestedStore.address.locality}}
+        	{{suggestedStore.address.area+" "}}
+        </p>
+        <p class="suggestedStoreCategories">
+            {{suggestedStore.category.join(" | ")}}
         </p>
     </div>
 </div>

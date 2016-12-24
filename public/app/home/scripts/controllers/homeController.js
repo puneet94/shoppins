@@ -34,8 +34,7 @@
 		function getCategories(){
 			clc.categoryList = [];
 			getCityCategoriesService.getCityCategories(cityStorage.getCity()).then(function(response){
-				console.log("the category response");
-				console.log(response);
+				
 				clc.categoryList = response.data;
 				clc.innerLoading = false;
 			});

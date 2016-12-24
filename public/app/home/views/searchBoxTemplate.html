@@ -8,7 +8,7 @@
         </div>
         <div class="mobileSearchListContainer">
             <div ng-repeat="item in sbc.userSearches">
-                <div ng-click="sbc.userSearchItemChange(item)" class="mobileSearchListEntity">
+                <div ng-click="sbc.userSearchItemChange(item)" class="mobileSearchListEntity" layout="row"       layout-align="space-between none">
                     <span class="item-title">
                  <span> {{item.userSearchString.split("#&amp;#")[0]}} </span>
                     </span>
@@ -19,7 +19,7 @@
                     </span>
                     </span>
                     <span>
-                    <strong>{{item.userSearchString.split("#&amp;#")[2]}}</strong>
+                    <!--<strong>{{item.userSearchString.split("#&amp;#")[2]}}</strong>-->
                  </span>
                     </span>
                 </div>

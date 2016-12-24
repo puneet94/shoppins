@@ -173,8 +173,37 @@ storeRouter.route('/localities/:city')
 
         });
     });
+storeRouter.route('/collection')
+    .get(function(req, res, next) {
+        var queryObj = {};
+        console.log('******************************');
+        console.log("inside the category List");
+        console.log(req.query);
+        if (req.query.location) {
+            queryObj['address.city'] = req.query.location.toLowerCase();
+        }
+        if (req.query.category) {
+            queryObj.category = req.query.category.toLowerCase();
+        }
+        if (req.query.subCategory) {
+            queryObj.subCategory = req.query.subCategory.toLowerCase();
+        }
+        var options = {};
+        options.limit = req.query.limit ? parseInt(req.query.limit) : null;
+        options.sort = req.query.sort || null;
+        options.page = req.query.page || null;
+        options.select = req.query.fields || null;
+
+        Store.paginate(queryObj, options).then(function(storeList) {
+            res.json(storeList);
+
+        })
+
+    });
+
 storeRouter.route('/userSearch/storeCategories')
     .get(function(req, res, next) {
+
         var queryObj = {};
         if (req.query.location) {
             queryObj.location = req.query.location.toLowerCase();

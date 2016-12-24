@@ -1,14 +1,14 @@
 
-<!--<div class="homePageDiv">
+<div class="homePageDiv">
 
   <header layout="row">
      <div ng-include="'app/home/pageHeader.html'" flex></div>
   </header>
-  <div ng-include="'app/home/views/mobileHomePage.html'" flex></div>
+  
   <main>
      <div layout="row">
         <div class="search-banner" layout="column" layout-align="center center" image-replacement-directive='https://www.ultimatedesignertoolkit.com/wp-content/uploads/2015/11/Background_5.jpg' >
-          
+          <!--<div class="dark-mask-absolute"></div>-->
           <div layout="row" layout-align="center center">
               <div class="search-content">
                  <div class="content-header md-title">
@@ -36,14 +36,14 @@
         </div>
       </md-tab>
 
-      <md-tab  label="Offers">
+      <md-tab  label="Top Collections">
         <div class="demo-tab" >
-          <div ng-include="''" flex></div>
+          <div ng-include="'app/store/views/categoryBoxList.html'"></div>
           <br>
 
         </div>
       </md-tab>
-      <md-tab  label="Deals of the Day">
+      <md-tab  label="Offers">
         <div class="demo-tab" >
           
           <div  ng-include="''" >
@@ -56,16 +56,8 @@
 
        
      </div>
-     <div flex="20" flex-xs="100" flex-sm="100"></div>
+     <div flex="20" flex-xs="100" flex-sm="100"><!--Most reviewed--></div>
      </div>
 
   </main>
-</div>-->
-
-
-<div  hide show-gt-xs ng-include="'app/home/views/desktopHomePage.html'">
-  
-</div>
-<div hide-gt-xs ng-include="'app/home/views/mobileHomePage.html'">
-  
 </div>

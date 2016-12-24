@@ -1,0 +1,26 @@
+<div ng-controller="MobileHomePageController as mhpc">
+    <header layout="row">
+        <div ng-include="'app/home/pageHeader.html'" flex></div>
+    </header>
+    <div ng-include="'app/home/searchBox.html'"></div>
+    <main>
+        <div layout="row">
+            <div class="search-banner" layout="column" layout-align="center center" image-replacement-directive='https://www.ultimatedesignertoolkit.com/wp-content/uploads/2015/11/Background_5.jpg'>
+                <!--<div class="dark-mask-absolute"></div>-->
+                <div layout="row" layout-align="center center">
+                    <div class="search-content">
+                        <div class="content-header md-title">
+                            <h3>Search for stores, products and brands</h3>
+                        </div>
+                    </div>
+                </div>
+                <div style="width:100%" ng-include="'app/home/searchBoxHome.html'"></div>
+            </div>
+        </div>
+        <div layout="column" layout-wrap>
+            <div class="categoryBoxListContainer">
+                <div ng-include="'app/store/views/categoryBoxList.html'"></div>
+            </div>
+        </div>
+    </main>
+</div>

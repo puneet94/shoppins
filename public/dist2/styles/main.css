@@ -617,6 +617,19 @@ md-ink-bar {
       float: right;
       font-size: 16px; }
 
+.categoryBoxList {
+  font-family: 'Lato', sans-serif; }
+  .categoryBoxList .storeSuggestionHeader {
+    text-transform: capitalize; }
+  .categoryBoxList .categoryBoxViewMore {
+    height: 20px;
+    font-weight: 600; }
+    .categoryBoxList .categoryBoxViewMore a {
+      text-decoration: none;
+      display: block;
+      float: right;
+      font-size: 12px; }
+
 .mobileFooterContainer {
   background-color: #33373d; }
   .mobileFooterContainer .mobileFooterEntity {
@@ -1084,7 +1097,6 @@ md-ink-bar {
 
 .storeSuggestionsContainer {
   margin-top: 20px;
-  margin-left: 15px;
   background-color: white;
   padding: 10px;
   border: 1px solid #eee;
@@ -1096,14 +1108,20 @@ md-ink-bar {
     width: 100%;
     margin-bottom: 10px; }
     .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreImage {
-      width: 100%; }
+      width: 100%;
+      position: relative; }
+      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreImage:after {
+        content: "";
+        display: block;
+        padding-bottom: 75%; }
       .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreImage img {
         width: 100%;
-        height: 100px;
+        height: 100%;
+        position: absolute;
         border: 1px solid #eee;
-        border-radius: 5px; }
+        border-radius: 3px; }
     .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo {
-      padding: 0 5px;
+      padding: 5px;
       word-wrap: break-word; }
       .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo a {
         text-decoration: none; }
@@ -1113,8 +1131,14 @@ md-ink-bar {
         margin-bottom: 0; }
       .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo .suggestedStoreAddress {
         margin-top: 2px;
-        font-size: 12px;
-        margin-bottom: 0; }
+        font-size: 10px;
+        margin-bottom: 0;
+        text-transform: capitalize; }
+      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo .suggestedStoreCategories {
+        margin-top: 2px;
+        font-size: 10px;
+        margin-bottom: 0;
+        text-transform: capitalize; }
 
 .storeDetailsContainer {
   padding: 10px;

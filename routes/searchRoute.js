@@ -16,7 +16,6 @@ searchRouter.route('/searches/:location_name')
 					.select('userSearchString -_id')
 					.limit(20).exec(function(err,searches){
 			if(err){
-				
 				console.log(err);
 				res.send(err);
 			}
@@ -33,11 +32,10 @@ searchRouter.route('/searches/:location_name/:partial')
 		console.log(partial);
 		UserSearch.find({ 'location':city ,'userSearchString': new RegExp(partial, "i")},'userSearchString -_id',function(err,searches){
 			if(err){
-				console.log("--------");
 				console.log(err);
 				res.send(err);
 			}
-			console.log(searches);
+			
 			res.json(searches);
 		})
 	})
