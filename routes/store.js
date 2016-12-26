@@ -176,9 +176,9 @@ storeRouter.route('/localities/:city')
 storeRouter.route('/collection')
     .get(function(req, res, next) {
         var queryObj = {};
-        console.log('******************************');
-        console.log("inside the category List");
-        console.log(req.query);
+        if (req.query.area) {
+            queryObj['address.area'] = req.query.area.toLowerCase();
+        }
         if (req.query.location) {
             queryObj['address.city'] = req.query.location.toLowerCase();
         }

@@ -17,7 +17,6 @@ function GetStoreCollectionService($http,storeData,baseUrlService){
   }
 
   function storesCollection(paramData){
-  	console.log(paramData);
   	return $http.get(baseUrlService.baseUrl+'store/collection',{params:paramData});
   }
   function categoryCollection(paramData){

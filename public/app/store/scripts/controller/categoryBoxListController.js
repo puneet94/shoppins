@@ -28,8 +28,7 @@
 				getStoreCollectionService
 					.categoryCollection(params)
 					.then(function(res){
-						console.log("categories");
-						console.log(res);
+						
 						cblc.categoryBoxList = res.data.docs.map(function(item){
 							var categoryBox = {};
 							categoryBox.category = item;
@@ -50,7 +49,7 @@
 				getStoreCollectionService
 					.storesCollection(params)
 					.then(function(res){
-						console.log(res);
+						
 						categoryBox.storesList = res.data.docs;
 					});
 			}

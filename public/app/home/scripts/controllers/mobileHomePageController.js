@@ -2,9 +2,9 @@
 	'use strict';
 
 	angular.module('app.home')
-	.controller('MobileHomePageController',["$scope","changeBrowserURL",'cityStorage',"$auth", 'getStoreCollectionService',MobileHomePageController]);
+	.controller('MobileHomePageController',["$scope","changeBrowserURL",'cityStorage',"$auth", MobileHomePageController]);
 
-	function MobileHomePageController($scope,changeBrowserURL,cityStorage,$auth,getStoreCollectionService){
+	function MobileHomePageController($scope,changeBrowserURL,cityStorage,$auth){
 			var mhpc = this;
 			mhpc.isAuth = $auth.isAuthenticated();
 			

@@ -14,6 +14,17 @@ function GetSingleStoreWithId($http,storeData,baseUrlService,changeBrowserURL){
   this.getStoreRating = getStoreRating;
   this.getSingleStorePage = getSingleStorePage;
   function getStore(id){
+    var params = {
+      'page': '1',
+      'limit':'10',
+      obj:{
+        'x':'y'
+      }
+    };
+    $http.get(baseUrlService.baseUrl+'search/collections',{params:params}).then(function(res){
+      console.log("testing basis");
+      console.log(res);
+    });
     return $http.get(baseUrlService.baseUrl+"store/singleStore/"+id);
     
   }

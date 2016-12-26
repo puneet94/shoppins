@@ -16,6 +16,7 @@
             if (ual.authCheck) {
                 activityService.getUserFollowingActivity($auth.getPayload().sub).then(function(result) {
                     ual.activityData = result.data;
+                    console.log(typeof result.data);
                     ual.loading = false;
                 });
             }

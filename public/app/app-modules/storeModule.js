@@ -1,4 +1,6 @@
 (function(angular){
+  'use strict';
+  
 angular.module('app.store',[]).config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.

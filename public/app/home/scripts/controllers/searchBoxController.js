@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('app.home')
-        .controller('SearchBoxController', ["$scope", "$window", "$routeParams", "cityStorage", "citiesService", "searchService", "changeBrowserURL", "userLocationService", SearchBoxController]);
+        .controller('SearchBoxController', ["$scope", "$window", "$routeParams", "cityStorage", "citiesService", "searchService", "changeBrowserURL", SearchBoxController]);
 
 
-    function SearchBoxController($scope, $window, $routeParams, cityStorage, citiesService, searchService, changeBrowserURL, userLocationService) {
+    function SearchBoxController($scope, $window, $routeParams, cityStorage, citiesService, searchService, changeBrowserURL) {
         var hm = this;
         if ($routeParams.location) {
             hm.selectedItem = $routeParams.location;
@@ -28,17 +28,21 @@
         }
         hm.selectedItemChange(hm.selectedItem);
 
+        $scope.$watch(function() {
+            return hm.userSearchText;
+        }, function(value) {
+            
+        });
+
         function userSearchItemChange(item) {
-        	console.log("the item");
-        	console.log(item);
-        	if(!item){
-        		item = {};
-        	}
+            if (!item) {
+                item = {};
+            }
             var changeEntity = item.userSearchString.split("#&#")[1];
             var entityName = item.userSearchString.split("#&#")[0];
             var location = hm.selectedItem;
             hm.slug = entityName + "-" + changeEntity.split("-")[0] + "s-in-" + location;
-            
+
             if (changeEntity == "store") {
 
                 hm.url = "/store/storesCollection/storeName/";
@@ -70,18 +74,14 @@
 
                 locationStoresSearchUrl();
             }
-            $window.location= '#'+hm.url + entityName + "/" + location + "/" + hm.slug;
-            /*$timeout(function(){
-            	changeBrowserURL.changeBrowserURLMethod(hm.url + entityName + "/" + location + "/" + hm.slug);	
-            }, 0);*/
+            $window.location = '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
             
 
 
         }
         //md-search-text-change="sbc.searchTextChange(sbc.searchText)"
         function userSearchTextChange(city, userSearchText) {
-            console.log("ola");
-            console.log(userSearchText.length);
+
             if (userSearchText.length >= 1) {
                 searchService.getAjaxSearches(city, userSearchText)
                     .then(function(resource) {
@@ -89,11 +89,13 @@
                         hm.userSearches = [];
                         var allStoresItem = { "userSearchString": "All stores  #&#" + hm.selectedItem };
                         var allProductsItem = { "userSearchString": "All products  #&#" + hm.selectedItem };
-                        hm.userSearches = [allStoresItem, allProductsItem];
+                        hm.userSearches = resource.data;
+                        hm.userSearches.unshift(allStoresItem, allProductsItem);
                         //hm.userSearches = 
+                        /*
                         for (var i = 0; i < resource.data.length; i++) {
-                            hm.userSearches.push(resource.data[i]);
-                        }
+                            hm.userSearches.push([i]);
+                        }*/
 
                     });
             } else {

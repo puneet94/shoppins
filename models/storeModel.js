@@ -35,6 +35,7 @@ var Chat = mongoose.model("Chat", ChatSchema);
 var ActivitySchema = new Schema({
 	//activityFor:{ type:Schema.ObjectId, ref:"User"},
 	creator: { type:Schema.ObjectId, ref:"User"}, //created by person
+	creatorStore: { type:Schema.ObjectId, ref:"Store"}, //created by store
 	offer:{ type:Schema.ObjectId, ref:"Offer" },
 	review:{ type:Schema.ObjectId, ref:"Review" },
 	followed: { type:Schema.ObjectId, ref:"User"},

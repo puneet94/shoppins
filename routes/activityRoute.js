@@ -21,7 +21,8 @@ activityRouter.use(function(req, res, next) {
 function getActivity(res, usersList) {
     var queryObj = {};
     if (usersList) {
-        queryObj.creator = { $in: usersList };
+        queryObj = { $or: [{ creator: { $in: usersList } }, { creatorStore: { $in: usersList } }] }
+        //queryObj.creator = { $in: usersList };
     }
     Activity
         .find(queryObj)
@@ -33,6 +34,7 @@ function getActivity(res, usersList) {
         .populate({ path: 'review', model: 'Review', populate: { path: 'store', select: 'name bannerImage', model: 'Store' } })
         .populate({ path: 'review', model: 'Review', populate: { path: 'product', select: 'name images', model: 'Product' } })
         .populate({ path: 'review', model: 'Review', populate: { path: 'user', select: 'displayName', model: 'User' } })
+        //.lean()
         .exec(function(err, activities) {
             if (err) {
                 res.send(err);
@@ -55,10 +57,10 @@ activityRouter.route('/userFollowingActivity/:userId')
         var followingList = [];
         User
             .findById(req.params.userId)
-            .select('following')
+            .select('following storeFollowing')
             .exec(function(err, result) {
                 console.log(result);
-                followingList = result.following;
+                followingList = result.following.concat(result.storeFollowing);
                 getActivity(res, followingList);
             });
 

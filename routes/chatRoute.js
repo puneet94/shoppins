@@ -1,13 +1,14 @@
+'use strict';
 var express = require('express');
 var models = require('..//models/storeModel');
-var User = models.User;
-var Store = models.Store;
+
+
 var Chat = models.Chat;
 var ChatRoom = models.ChatRoom;
-var mongoose = require('mongoose');
+
 var chatRouter = express.Router();
 var commons = require('./commonRouteFunctions');
-var ObjectId = require('mongoose').Schema.ObjectId;
+
 var commons = require('./commonRouteFunctions');
 chatRouter.use(function(req, res, next) {
     console.log("chat");
@@ -27,7 +28,7 @@ chatRouter.route('/chatRooms/:creatorId')
             .exec(function(err, result) {
                 res.json(result);
             });
-    })
+    });
 chatRouter.route('/chatBox/:creator1/:creator2')
     .get(function(req, res) {
         var creator1 = req.params.creator1;
@@ -55,7 +56,7 @@ chatRouter.route('/chatBox/:creator1/:creator2')
                 } else {
 
                     console.log(result);
-                    if (result.length == 0) {
+                    if (result.length === 0) {
                         console.log("chat not found");
                         var chatRoom = new ChatRoom();
                         chatRoom.creator1 = queryObj.creator1;
@@ -73,7 +74,7 @@ chatRouter.route('/chatBox/:creator1/:creator2')
 
                 }
             });
-    })
+    });
 chatRouter.route('/chats/:roomId')
     .get(function(req, res) {
 
@@ -102,7 +103,6 @@ chatRouter.route('/chats/:roomId')
         var chat = new Chat();
         var recData = req.body;
         var io = req.io;
-        var lastMessage;
         console.log(recData);
         chat.user = recData.user;
         chat.chatRoom = req.params.roomId;
@@ -133,9 +133,9 @@ chatRouter.route('/chats/:roomId')
                             res.json({ message: "Chat createdess" });
                         });
 
-                    })
+                    });
                 }
-            })
+            });
 
         });
     });

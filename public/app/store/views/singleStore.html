@@ -85,16 +85,19 @@
                 </ul>
             </div>
             <div ng-show="ssc.isSet(1)">
-                <div ng-include="'app/store/views/storeAddressDetails.html'"></div>
+                <div class="animated slideInLeft" ng-include="'app/store/views/storeAddressDetails.html'"></div>
             </div>
             <div ng-show="ssc.isSet(2)">
-                <div ng-include="'app/reviews/views/storeReviewList.html'">
+                <div class="animated slideInLeft">
+                    <div ng-include="'app/reviews/views/storeReviewList.html'">
                 </div>
                 <div ng-include="'app/reviews/views/storeReviewSubmit.html'" ng-if="ssc.authCheck">
+                </div>    
                 </div>
+                
             </div>
             <div ng-show="ssc.isSet(3)">
-                <div ng-include="'app/product/views/productsStoreCollection.html'"></div>
+                <div class="animated slideInLeft" ng-include="'app/product/views/productsStoreCollection.html'"></div>
             </div>
             <div ng-show="ssc.isSet(4)">
                 <div>
