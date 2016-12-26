@@ -31,7 +31,7 @@
         $scope.$watch(function() {
             return hm.userSearchText;
         }, function(value) {
-            
+
         });
 
         function userSearchItemChange(item) {
@@ -75,7 +75,7 @@
                 locationStoresSearchUrl();
             }
             $window.location = '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
-            
+
 
 
         }
@@ -87,8 +87,8 @@
                     .then(function(resource) {
 
                         hm.userSearches = [];
-                        var allStoresItem = { "userSearchString": "All stores  #&#" + hm.selectedItem };
-                        var allProductsItem = { "userSearchString": "All products  #&#" + hm.selectedItem };
+                        var allStoresItem = { "userSearchString": "Browse#&#All stores in #&#" + hm.selectedItem };
+                        var allProductsItem = { "userSearchString": "Browse#&#All products in #&#" + hm.selectedItem };
                         hm.userSearches = resource.data;
                         hm.userSearches.unshift(allStoresItem, allProductsItem);
                         //hm.userSearches = 
@@ -109,8 +109,8 @@
 
             cityStorage.setCity(item);
             searchService.getSearches(item).then(function(resource) {
-                var allStoresItem = { "userSearchString": "All stores  #&#" + hm.selectedItem };
-                var allProductsItem = { "userSearchString": "All products  #&#" + hm.selectedItem };
+                var allStoresItem = { "userSearchString": "Browse#&#All stores in #&#" + hm.selectedItem };
+                var allProductsItem = { "userSearchString": "Browse#&#All products in #&#" + hm.selectedItem };
                 hm.userSearches = [allStoresItem, allProductsItem];
                 for (var i = 0; i < resource.data.length; i++) {
                     hm.userSearches.push(resource.data[i]);

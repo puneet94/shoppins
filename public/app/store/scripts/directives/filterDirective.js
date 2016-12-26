@@ -1,10 +1,11 @@
 (function(angular){
+  'use strict';
   angular.module('app.store')
-  .directive('filterDirective',["$window","$location", filterDirective])
-  .directive('addClass',["$window","$location", addClassDirective])
-  .directive('removeClass',["$window","$location", removeClassDirective])
-  .directive('siblingRemoveClass',["$window","$location", siblingRemoveClassDirective]);
-  function filterDirective($window,$location) {
+  .directive('filterDirective',[ filterDirective])
+  .directive('addClass',[ addClassDirective])
+  .directive('removeClass',[ removeClassDirective])
+  .directive('siblingRemoveClass',[ siblingRemoveClassDirective]);
+  function filterDirective() {
     return {
       restrict: 'E',
       templateUrl:'app/store/views/filterDirectiveTemplate.html',
@@ -15,11 +16,10 @@
         radioRepeat:"=radioRepeat",
         clearClick:"&clearClick"
       },
-      link: function(scope, element, attrs) {
-      }
+      
     };
   }
-  function addClassDirective($window,$location) {
+  function addClassDirective() {
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
@@ -32,7 +32,7 @@
       }
     };
   }
-  function siblingRemoveClassDirective($window,$location) {
+  function siblingRemoveClassDirective() {
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
@@ -44,7 +44,7 @@
     };
   }
 
-  function removeClassDirective($window,$location) {
+  function removeClassDirective() {
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {

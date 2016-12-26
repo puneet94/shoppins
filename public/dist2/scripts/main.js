@@ -2037,7 +2037,7 @@ angular.module('app.chat')
         $scope.$watch(function() {
             return hm.userSearchText;
         }, function(value) {
-            
+
         });
 
         function userSearchItemChange(item) {
@@ -2081,7 +2081,7 @@ angular.module('app.chat')
                 locationStoresSearchUrl();
             }
             $window.location = '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
-            
+
 
 
         }
@@ -2093,8 +2093,8 @@ angular.module('app.chat')
                     .then(function(resource) {
 
                         hm.userSearches = [];
-                        var allStoresItem = { "userSearchString": "All stores  #&#" + hm.selectedItem };
-                        var allProductsItem = { "userSearchString": "All products  #&#" + hm.selectedItem };
+                        var allStoresItem = { "userSearchString": "Browse#&#All stores in #&#" + hm.selectedItem };
+                        var allProductsItem = { "userSearchString": "Browse#&#All products in #&#" + hm.selectedItem };
                         hm.userSearches = resource.data;
                         hm.userSearches.unshift(allStoresItem, allProductsItem);
                         //hm.userSearches = 
@@ -2115,8 +2115,8 @@ angular.module('app.chat')
 
             cityStorage.setCity(item);
             searchService.getSearches(item).then(function(resource) {
-                var allStoresItem = { "userSearchString": "All stores  #&#" + hm.selectedItem };
-                var allProductsItem = { "userSearchString": "All products  #&#" + hm.selectedItem };
+                var allStoresItem = { "userSearchString": "Browse#&#All stores in #&#" + hm.selectedItem };
+                var allProductsItem = { "userSearchString": "Browse#&#All products in #&#" + hm.selectedItem };
                 hm.userSearches = [allStoresItem, allProductsItem];
                 for (var i = 0; i < resource.data.length; i++) {
                     hm.userSearches.push(resource.data[i]);
@@ -3121,47 +3121,50 @@ angular.module('app.review')
 
 })(window.angular);
 
-(function(angular){
+(function(angular) {
+  'use strict';
   angular.module('app.store')
 
-    .controller('StoreCategoryCollectionController',["$scope","$routeParams","getCityLocalitiesService","getCityCategoriesService",StoreCategoryCollectionController]);
+  .controller('StoreCategoryCollectionController', ["$scope", "$routeParams", "getCityLocalitiesService", "getCityCategoriesService", StoreCategoryCollectionController]);
 
-    function StoreCategoryCollectionController($scope,$routeParams,getCityLocalitiesService,getCityCategoriesService){
-      var slcc = this;
-      slcc.areaModel = {};
-      slcc.launchFilterEvent = launchFilterEvent;
-      slcc.areaRadioClicked = areaRadioClicked;
-      slcc.majorFilter = {};
-      slcc.clearAreaFilters = clearAreaFilters;
-      function areaRadioClicked(){
-        
-        slcc.majorFilter.area=slcc.areaModel.area;
-        launchFilterEvent(slcc.majorFilter);
-      }
-      function clearAreaFilters(){
-        delete slcc.majorFilter.area;
-        slcc.areaModel = {};
-        launchFilterEvent(slcc.majorFilter);
-      }
+  function StoreCategoryCollectionController($scope, $routeParams, getCityLocalitiesService, getCityCategoriesService) {
+    var slcc = this;
+    slcc.areaModel = {};
+    slcc.launchFilterEvent = launchFilterEvent;
+    slcc.areaRadioClicked = areaRadioClicked;
+    slcc.majorFilter = {};
+    slcc.clearAreaFilters = clearAreaFilters;
 
-      var location = $routeParams.location;
-      getCityLocalitiesService.getCityLocalities(location)
-        .then(function(res){
-          slcc.areas = res.data;
-        },function(res){
-
-        });
-        getCityCategoriesService.getCityCategories(location)
-          .then(function(res){
-            slcc.categories = res.data;
-
-          },function(res){
-            console.log(res);
-          });
-      function launchFilterEvent(obj){
-          $scope.$broadcast('parent', obj);
-      }
+    function areaRadioClicked() {
+      slcc.majorFilter.area = slcc.areaModel.area;
+      launchFilterEvent(slcc.majorFilter);
     }
+
+    function clearAreaFilters() {
+      delete slcc.majorFilter.area;
+      slcc.areaModel = {};
+      launchFilterEvent(slcc.majorFilter);
+    }
+
+    var location = $routeParams.location;
+    getCityLocalitiesService.getCityLocalities(location)
+      .then(function(res) {
+        slcc.areas = res.data;
+      }, function(res) {
+        console.log(res);
+      });
+    getCityCategoriesService.getCityCategories(location)
+      .then(function(res) {
+        slcc.categories = res.data;
+
+      }, function(res) {
+        console.log(res);
+      });
+
+    function launchFilterEvent(obj) {
+      $scope.$broadcast('parent', obj);
+    }
+  }
 
 })(window.angular);
 
@@ -3285,6 +3288,7 @@ angular.module('app.review')
 })(window.angular);
 
 (function(angular){
+  'use strict';
   angular.module('app.store')
     .controller('StoreLocationCollectionController',["$scope","$routeParams","getCityLocalitiesService","getCityCategoriesService",StoreLocationCollectionController]);
 
@@ -3321,7 +3325,7 @@ angular.module('app.review')
       .then(function(res){
         slcc.areas = res.data;
       },function(res){
-        
+        console.log(res);
       });
       getCityCategoriesService.getCityCategories(location)
         .then(function(res){
@@ -3622,12 +3626,13 @@ angular.module('app.review')
 })(window.angular);
 
 (function(angular){
+  'use strict';
   angular.module('app.store')
-  .directive('filterDirective',["$window","$location", filterDirective])
-  .directive('addClass',["$window","$location", addClassDirective])
-  .directive('removeClass',["$window","$location", removeClassDirective])
-  .directive('siblingRemoveClass',["$window","$location", siblingRemoveClassDirective]);
-  function filterDirective($window,$location) {
+  .directive('filterDirective',[ filterDirective])
+  .directive('addClass',[ addClassDirective])
+  .directive('removeClass',[ removeClassDirective])
+  .directive('siblingRemoveClass',[ siblingRemoveClassDirective]);
+  function filterDirective() {
     return {
       restrict: 'E',
       templateUrl:'app/store/views/filterDirectiveTemplate.html',
@@ -3638,11 +3643,10 @@ angular.module('app.review')
         radioRepeat:"=radioRepeat",
         clearClick:"&clearClick"
       },
-      link: function(scope, element, attrs) {
-      }
+      
     };
   }
-  function addClassDirective($window,$location) {
+  function addClassDirective() {
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
@@ -3655,7 +3659,7 @@ angular.module('app.review')
       }
     };
   }
-  function siblingRemoveClassDirective($window,$location) {
+  function siblingRemoveClassDirective() {
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
@@ -3667,7 +3671,7 @@ angular.module('app.review')
     };
   }
 
-  function removeClassDirective($window,$location) {
+  function removeClassDirective() {
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {

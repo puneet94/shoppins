@@ -9,19 +9,19 @@
         <div class="mobileSearchListContainer">
             <div ng-repeat="item in sbc.userSearches">
                 <div ng-click="sbc.userSearchItemChange(item)" class="mobileSearchListEntity" layout="row"       layout-align="space-between none">
-                    <span class="item-title">
-                 <span> {{item.userSearchString.split("#&amp;#")[0]}} </span>
-                    </span>
-                    <span>
-                 <span>
-                    <span class="chipElement">
-                       <strong>{{item.userSearchString.split("#&amp;#")[1]}}</strong>
-                    </span>
-                    </span>
-                    <span>
-                    <!--<strong>{{item.userSearchString.split("#&amp;#")[2]}}</strong>-->
-                 </span>
-                    </span>
+                    <div class="item-title">
+                        <span style="vertical-align: sub;"> {{item.userSearchString.split("#&amp;#")[0]}} </span>
+                    </div>
+                    <div>
+                         <span>
+                            <span class="chipElement">
+                               <strong>{{item.userSearchString.split("#&amp;#")[1]}}</strong>
+                            </span>
+                            </span>
+                            <span>
+                            <strong>{{item.userSearchString.split("#&amp;#")[2]}}</strong>
+                         </span>
+                    </div>
                 </div>
             </div>
         </div>

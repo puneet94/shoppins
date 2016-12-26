@@ -1,4 +1,5 @@
 (function(angular){
+  'use strict';
   angular.module('app.store')
     .controller('StoreLocationCollectionController',["$scope","$routeParams","getCityLocalitiesService","getCityCategoriesService",StoreLocationCollectionController]);
 
@@ -35,7 +36,7 @@
       .then(function(res){
         slcc.areas = res.data;
       },function(res){
-        
+        console.log(res);
       });
       getCityCategoriesService.getCityCategories(location)
         .then(function(res){
