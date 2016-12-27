@@ -2093,8 +2093,8 @@ angular.module('app.chat')
                     .then(function(resource) {
 
                         hm.userSearches = [];
-                        var allStoresItem = { "userSearchString": "Browse#&#All stores in #&#" + hm.selectedItem };
-                        var allProductsItem = { "userSearchString": "Browse#&#All products in #&#" + hm.selectedItem };
+                        var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
+                        var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
                         hm.userSearches = resource.data;
                         hm.userSearches.unshift(allStoresItem, allProductsItem);
                         //hm.userSearches = 
@@ -2115,12 +2115,14 @@ angular.module('app.chat')
 
             cityStorage.setCity(item);
             searchService.getSearches(item).then(function(resource) {
-                var allStoresItem = { "userSearchString": "Browse#&#All stores in #&#" + hm.selectedItem };
-                var allProductsItem = { "userSearchString": "Browse#&#All products in #&#" + hm.selectedItem };
-                hm.userSearches = [allStoresItem, allProductsItem];
+                var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
+                var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
+                hm.userSearches = resource.data;
+                hm.userSearches.unshift(allStoresItem, allProductsItem);
+                /*hm.userSearches = [allStoresItem, allProductsItem];
                 for (var i = 0; i < resource.data.length; i++) {
                     hm.userSearches.push(resource.data[i]);
-                }
+                }*/
 
             }, function(data) {
                 console.log(data);
