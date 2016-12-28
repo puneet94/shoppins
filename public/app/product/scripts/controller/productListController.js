@@ -57,6 +57,12 @@ angular.module('app.product')
         */
         getProductCollectionService.getProductCollection(url,plc.paramData)
         .then(function(response){
+          if(response.data.docs.length===0){
+            plc.noProductsToShow = true;
+          }
+          else{
+           plc.noProductsToShow = false; 
+          }
           plc.totalProducts = response.data.total;
           if(plc.productsList.length===0){
             var tempProductList = [];

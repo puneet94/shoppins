@@ -1,7 +1,7 @@
 <div ng-controller='AuthController as ahc'>
     <div ng-if="ahc.isAuth" layout="row">
         <div ng-controller="UserChatNotificationController as ucn" layout="column" layout-align="center start">
-            <md-menu md-offset="-140 60">
+            <md-menu md-offset="-220 60">
                 <md-button aria-label="Open phone interactions menu" class="md-icon-button" style="padding:0;" ng-click="ucn.openMenu($mdOpenMenu, $event)">
                     <span style="font-size:30px;color:white" ng-if="!ucn.messageReceived">
                       <i class="fa fa-comments" aria-hidden="true"></i>
@@ -58,7 +58,7 @@
         </div>
     </div>
     <div ng-if="!ahc.isAuth " layout-xs="column " layout-align-xs="space-between center ">
-        <md-button class="md-raised " aria-label="login " ng-click="ahc.loginPage() ">
+        <md-button class="md-raised " aria-label="login" ng-click="ahc.showAuthenticationDialog($event)">
             Login
         </md-button>
         <md-button class="md-raised " aria-label="Login with facebook " ng-click="ahc.authenticate( 'facebook') ">

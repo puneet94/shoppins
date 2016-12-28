@@ -25,8 +25,9 @@ angular.module('app.user')
     function submitUserFollow(userId){
       userService.submitUserFollow(userData.getUser()._id,userId).then(function(res){
         userData.setUser();
+        console.log(res);
       },function(res){
-
+        console.log(res);
       });
     }
 
@@ -36,7 +37,7 @@ angular.module('app.user')
         userData.setUser();
 
       },function(res){
-
+        console.log(res);
       });
     }
 

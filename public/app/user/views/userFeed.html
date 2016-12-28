@@ -3,4 +3,7 @@
     	<inner-loading-directive inner-loading="ufl.loading" container-height="200px"></inner-loading-directive>
   	
   	<p bind-html-compile="ufl.activityData"></p>	
+  	<p style="text-align: center" ng-show="!ufl.loading">
+  		End of activity
+  	</p>
 </div>

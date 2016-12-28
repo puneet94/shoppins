@@ -1,4 +1,5 @@
 (function(angular){
+    'use strict';
 angular.module('app.chat',[]).config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
@@ -12,10 +13,25 @@ angular.module('app.chat',[]).config(['$routeProvider',
         
       }).
       when('/chatRooms', {
-        templateUrl: 'app/chat/views/chatRoomListPage.html'
-        
+        templateUrl: 'app/chat/views/chatRoomListPage.html',
+        resolve:{
+          redirectIfNotUserAuthenticated: redirectIfNotUserAuthenticated
+        }
       });
   }]);
+function redirectIfNotUserAuthenticated($q,$auth,changeBrowserURL) {
+            var defer = $q.defer();
+            
+            if($auth.isAuthenticated()){
+                defer.resolve();  
+                    
+            }
+            else{
+                defer.reject();
+                changeBrowserURL.changeBrowserURLMethod('/home');
+            } 
+            return defer.promise;
+}
 
 function redirectIfNotAuthenticated($q,$auth,$route,userData,changeBrowserURL) {
             var defer = $q.defer();

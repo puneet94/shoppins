@@ -37,7 +37,7 @@
                 <article class="userProfileSection">
                     <section class="userProfileImageContainer">
                         
-                        <div class="userFollowSection" ng-if="upc.authCheck">
+                        <div class="userFollowSection" ng-if="upc.authCheck && !upc.currentUser()">
                             <follow-directive up-fn="upc.submitUserFollow(upc.currentUserData._id)" down-fn="upc.deleteUserFollow(upc.currentUserData._id)" upv-chk="upc.userFollowed(upc.currentUserData._id)" small-loading="upc.smallLoadingModel">
                             </follow-directive>
                         </div>

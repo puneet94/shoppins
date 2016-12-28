@@ -1,35 +1,21 @@
-<div layout="row" layout-align="center center">
-        <form name="loginForm" novalidate="novalidate" flex>
-                <md-toolbar>
-                        <div class="md-toolbar-tools">
-                                <h2>Login</h2>
-                                <span flex="flex"></span>
-                        </div>
-                </md-toolbar>
+<div ng-controller="LoginController as login">
+        <form name="loginForm" class="loginForm" novalidate="novalidate">
                 <div layout="column">
-                        <div class="formEntity" flex="100">
-                        		<div>
-                        			<label class="formEntityLabel" for="email">Email</label>
-                                <input class="formEntityInput" ng-model="login.user.email" type="email" name="email" placeholder="Email (required)" ng-required="true" />
-                                <div ng-messages="loginForm.email.$error" style="">
-                                        <div ng-message="required" class="" style="">This field is required</div>
-                                </div>		
-                        		</div>
-                                
-                        </div>
-                        <div class="formEntity" flex="100">
-                                <label class="formEntityLabel" for="password">Password</label>
-                                <input class="formEntityInput" ng-model="login.user.password" type="password" name="password" placeholder="Password (required)" ng-required="true" />
-                                <div ng-messages="loginForm.password.$error" style="">
-                                        <div ng-message="required" class="" style="">This field is required</div>
+                        <div class="authenticateFormContainer">
+                                <div class="authenticateFormEntity">
+                                        <div class="autheticateFormInputContainer">
+                                                <input type="email" placeholder="Email" ng-model="login.user.email" type="email" name="email" ng-required="true" />
+                                        </div>
                                 </div>
+                                <div class="authenticateFormEntity">
+                                        <div class="autheticateFormInputContainer">
+                                                <input type="password" placeholder="Password" ng-model="login.user.password" name="password" ng-required="true" />
+                                        </div>
+                                </div>
+                                <section>
+                                        <md-button style=" width:100%;margin:0;" ng-click="login.submitLogin()" type="submit" class="md-raised md-primary" ng-disabled="loginForm.$invalid">Login</md-button>
+                                </section>
                         </div>
-                        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap="layout-wrap">
-                                <md-button ng-click="login.submitLogin()" type="submit" class="md-raised md-primary" ng-disabled="loginForm.$invalid">Login</md-button>
-                        </section>
-                        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap="layout-wrap">
-                                <md-button ng-click="login.signUp()" class="md-raised md-primary">Signup</md-button>
-                        </section>
                 </div>
         </form>
 </div>

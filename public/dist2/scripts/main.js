@@ -182,6 +182,7 @@ function redirectIfNotStoreAuthenticated($q, $route, userData, adminStoreService
 })(window.angular);
 
 (function(angular){
+    'use strict';
 angular.module('app.chat',[]).config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
@@ -195,10 +196,25 @@ angular.module('app.chat',[]).config(['$routeProvider',
         
       }).
       when('/chatRooms', {
-        templateUrl: 'app/chat/views/chatRoomListPage.html'
-        
+        templateUrl: 'app/chat/views/chatRoomListPage.html',
+        resolve:{
+          redirectIfNotUserAuthenticated: redirectIfNotUserAuthenticated
+        }
       });
   }]);
+function redirectIfNotUserAuthenticated($q,$auth,changeBrowserURL) {
+            var defer = $q.defer();
+            
+            if($auth.isAuthenticated()){
+                defer.resolve();  
+                    
+            }
+            else{
+                defer.reject();
+                changeBrowserURL.changeBrowserURLMethod('/home');
+            } 
+            return defer.promise;
+}
 
 function redirectIfNotAuthenticated($q,$auth,$route,userData,changeBrowserURL) {
             var defer = $q.defer();
@@ -1288,6 +1304,63 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
 }
 })(window.angular);
 
+(function(angular) {
+    'use strict';
+
+    angular.module('app.home')
+        .controller("AuthenticationModalController", ["$scope", "changeBrowserURL", 'userAuthService',"$auth", "$window", "$route", '$mdDialog', "userData",  AuthenticationModalController]);
+
+    function AuthenticationModalController($scope, changeBrowserURL, userAuthService,$auth, $window, $route, $mdDialog, userData) {
+        var phc = this;
+        phc.toHomePage = toHomePage;
+        phc.authenticate = authenticate;
+        phc.authLogout = authLogout;
+        phc.loginPage = loginPage;
+        phc.socialAuthenticate = socialAuthenticate;
+
+        function socialAuthenticate(provider) {
+            console.log("entered auth");
+            userAuthService.socialAuthenticate(provider);
+            
+        }
+        phc.tab = 1;
+
+        phc.setTab = function(newTab) {
+            phc.tab = newTab;
+        };
+
+        phc.isSet = function(tabNum) {
+            return phc.tab === tabNum;
+        };
+
+        phc.isAuth = $auth.isAuthenticated();
+
+        function toHomePage() {
+            changeBrowserURL.changeBrowserURLMethod('/');
+        }
+
+
+        function loginPage() {
+            changeBrowserURL.changeBrowserURLMethod('/login');
+        }
+
+        function authenticate(provider) {
+            $auth.authenticate(provider).then(function(response) {
+                userData.setUser(response.data.user);
+                alert('login with facebook successfull');
+                $window.location.reload();
+            });
+        }
+
+        function authLogout() {
+            $auth.logout();
+            userData.removeUser();
+            toHomePage();
+        }
+    }
+
+
+})(window.angular);
 
 // 'use strict';
 //
@@ -1328,9 +1401,9 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
  * Controller of the authModApp
  */
 angular.module('authModApp')
-  .controller('LoginController', ["$location","$window","$auth","userData","baseUrlService",'Socket',LoginCtrl]);
+  .controller('LoginController', ["$location","$window","$auth","userData",LoginCtrl]);
 
-  function LoginCtrl($location,$window,$auth,userData,baseUrlService,Socket) {
+  function LoginCtrl($location,$window,$auth,userData) {
     var logCl = this;
     logCl.user = {};
     logCl.submitLogin = submitLogin;
@@ -1341,15 +1414,7 @@ angular.module('authModApp')
       $location.path("/");
 
     };
-    function socketStart() {
-        if($auth.isAuthenticated()){
-            Socket.on("connect", function() {
-                
-                Socket.emit('addToSingleRoom', { 'roomId': userData.getUser()._id });
-            });
-        }
-          
-        }
+    
     function signUp(){
       $location.path("/signup");
     }
@@ -1361,7 +1426,7 @@ angular.module('authModApp')
           userData.setUser(response.data.user);    
           alert("Login successfull");
           //socketStart();
-          window.history.back();
+          $window.location.reload();
     		},function(response){
     			console.log(response);
     		});
@@ -1518,6 +1583,48 @@ angular.module('authModApp')
 			};
 		});
 
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('authModApp')
+  .service('userAuthService',["$http",'$auth',"baseUrlService",'$mdDialog','userData','$window',UserAuthService]);
+
+/*
+  * This servic has a function to get collection of stores`
+*/
+function UserAuthService($http,$auth,baseUrlService,$mdDialog,userData,$window){
+  this.socialAuthenticate = socialAuthenticate;
+  this.showAuthenticationDialog = showAuthenticationDialog;
+
+  function showAuthenticationDialog(ev) {
+            $mdDialog.show({
+                    controller: 'AuthenticationModalController',
+                    controllerAs: 'amc',
+                    templateUrl: 'app/authentication/views/authenticationModalTemplate.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true // Only for -xs, -sm breakpoints.*/
+                })
+                .then(function(answer) {
+                    
+                }, function() {
+
+                });
+        }
+
+
+        function socialAuthenticate(provider) {
+        	console.log("entered authwww");
+            $auth.authenticate(provider).then(function(response) {
+                userData.setUser(response.data.user);
+                alert('login with facebook successfull');
+                $window.location.reload();
+            });
+        }
+}
 })(window.angular);
 
 (function(angular){
@@ -1754,52 +1861,32 @@ angular.module('app.chat')
     'use strict';
 
     angular.module('app.home')
-        .controller("AuthController", ["$scope", "changeBrowserURL", "$auth", "$window", "$route", "userData", 'Socket', AuthController]);
+        .controller("AuthController", ["$scope",  "$auth",   'userAuthService', '$window','userData',AuthController]);
 
-    function AuthController($scope, changeBrowserURL, $auth, $window, $route, userData, Socket) {
+    function AuthController($scope, $auth,  userAuthService,$window,userData) {
         var phc = this;
-        phc.toHomePage = toHomePage;
+        
         phc.authenticate = authenticate;
         phc.authLogout = authLogout;
-        phc.loginPage = loginPage;
-
+        
+        phc.showAuthenticationDialog = showAuthenticationDialog;
         phc.isAuth = $auth.isAuthenticated();
 
-        function toHomePage() {
-            changeBrowserURL.changeBrowserURLMethod('/');
+        function showAuthenticationDialog(ev) {
+            userAuthService.showAuthenticationDialog(ev);
         }
-
-        function socketStart() {
-            if (phc.isAuth) {
-                Socket.on("connect", function() {
-
-                    Socket.emit('addToSingleRoom', { 'roomId': userData.getUser()._id });
-                });
-            }
-
-        }
-
-        function loginPage() {
-            changeBrowserURL.changeBrowserURLMethod('/login');
-        }
-
-        function authenticate(provider) {
-            $auth.authenticate(provider).then(function(response) {
-            	console.log("for facebook login");
-            	console.log(response);
-                userData.setUser(response.data.user);
-                alert('login with facebook successfull');
-                //socketStart();
-                //$route.reload();
-                $window.location.reload();
-            });
-        }
-
+        
         function authLogout() {
             $auth.logout();
             userData.removeUser();
-            toHomePage();
+            $window.location.reload();
         }
+
+        function authenticate(provider) {
+            userAuthService.socialAuthenticate(provider);
+        }
+
+
     }
 
 
@@ -2306,6 +2393,12 @@ angular.module('app.product')
         */
         getProductCollectionService.getProductCollection(url,plc.paramData)
         .then(function(response){
+          if(response.data.docs.length===0){
+            plc.noProductsToShow = true;
+          }
+          else{
+           plc.noProductsToShow = false; 
+          }
           plc.totalProducts = response.data.total;
           if(plc.productsList.length===0){
             var tempProductList = [];
@@ -2454,8 +2547,13 @@ angular.module('app.product')
     }
     function activate(){
     	getProductsService.getStoreProductsList($routeParams.storeId).then(function(response){
-        
         splc.storeProductsList = response.data.docs;
+        if(response.data.docs.length === 0){
+          splc.noProductsInStore  = true;
+        }
+        else{
+          splc.noProductsInStore  = false; 
+        }
       });
     }
 
@@ -4224,8 +4322,9 @@ angular.module('app.user')
     function submitUserFollow(userId){
       userService.submitUserFollow(userData.getUser()._id,userId).then(function(res){
         userData.setUser();
+        console.log(res);
       },function(res){
-
+        console.log(res);
       });
     }
 
@@ -4235,7 +4334,7 @@ angular.module('app.user')
         userData.setUser();
 
       },function(res){
-
+        console.log(res);
       });
     }
 

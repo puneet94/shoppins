@@ -15,8 +15,13 @@ angular.module('app.product')
     }
     function activate(){
     	getProductsService.getStoreProductsList($routeParams.storeId).then(function(response){
-        
         splc.storeProductsList = response.data.docs;
+        if(response.data.docs.length === 0){
+          splc.noProductsInStore  = true;
+        }
+        else{
+          splc.noProductsInStore  = false; 
+        }
       });
     }
 

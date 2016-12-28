@@ -2,52 +2,32 @@
     'use strict';
 
     angular.module('app.home')
-        .controller("AuthController", ["$scope", "changeBrowserURL", "$auth", "$window", "$route", "userData", 'Socket', AuthController]);
+        .controller("AuthController", ["$scope",  "$auth",   'userAuthService', '$window','userData',AuthController]);
 
-    function AuthController($scope, changeBrowserURL, $auth, $window, $route, userData, Socket) {
+    function AuthController($scope, $auth,  userAuthService,$window,userData) {
         var phc = this;
-        phc.toHomePage = toHomePage;
+        
         phc.authenticate = authenticate;
         phc.authLogout = authLogout;
-        phc.loginPage = loginPage;
-
+        
+        phc.showAuthenticationDialog = showAuthenticationDialog;
         phc.isAuth = $auth.isAuthenticated();
 
-        function toHomePage() {
-            changeBrowserURL.changeBrowserURLMethod('/');
+        function showAuthenticationDialog(ev) {
+            userAuthService.showAuthenticationDialog(ev);
         }
-
-        function socketStart() {
-            if (phc.isAuth) {
-                Socket.on("connect", function() {
-
-                    Socket.emit('addToSingleRoom', { 'roomId': userData.getUser()._id });
-                });
-            }
-
-        }
-
-        function loginPage() {
-            changeBrowserURL.changeBrowserURLMethod('/login');
-        }
-
-        function authenticate(provider) {
-            $auth.authenticate(provider).then(function(response) {
-            	console.log("for facebook login");
-            	console.log(response);
-                userData.setUser(response.data.user);
-                alert('login with facebook successfull');
-                //socketStart();
-                //$route.reload();
-                $window.location.reload();
-            });
-        }
-
+        
         function authLogout() {
             $auth.logout();
             userData.removeUser();
-            toHomePage();
+            $window.location.reload();
         }
+
+        function authenticate(provider) {
+            userAuthService.socialAuthenticate(provider);
+        }
+
+
     }
 
 
