@@ -365,6 +365,7 @@ angular.module('app.store',[]).config(['$routeProvider',
 
 
 (function(angular) {
+    'use strict';
     angular.module('app.user', []).config(['$routeProvider',
         function($routeProvider) {
             $routeProvider.
@@ -373,10 +374,11 @@ angular.module('app.store',[]).config(['$routeProvider',
                 controller: 'UserPageController',
                 controllerAs: 'upc'
             }).
-            when('/user/userSettings/:userId', {
-                templateUrl: 'app/user/views/userSettingsPage.html',
-                controller: 'UserSettingsController',
-                controllerAs: 'usc'
+            when('/userProfileSettings', {
+                templateUrl: 'app/user/views/userProfileSettingsPage.html'
+            }).
+            when('/userAccountSettings', {
+                templateUrl: 'app/user/views/userAccountSettingsPage.html'
             }).
             when('/userMobileFeed', {
                 templateUrl: 'app/user/views/userMobileFeed.html',
@@ -4402,8 +4404,8 @@ angular.module('app.user')
   'use strict';
 angular.module('app.user')
 
-  .controller('UserSettingsController',["$scope","$auth",'userData',UserSettingsController]);
-  function UserSettingsController($scope,$auth,userData){
+  .controller('UserProfileSettingsController',["$scope","$auth",'userData',UserProfileSettingsController]);
+  function UserProfileSettingsController($scope,$auth,userData){
     
     var usl = this;
     usl.authCheck = $auth.isAuthenticated();
@@ -4411,8 +4413,7 @@ angular.module('app.user')
     function activate(){
 
       usl.userForm = userData.getUser();
-      console.log("dataaaa");
-      console.log(usl.userForm);
+      
     }
       
       
@@ -4423,7 +4424,6 @@ angular.module('app.user')
     
 
 })(window.angular);
-
 (function(angular){
   'use strict';
 angular.module('app.user')

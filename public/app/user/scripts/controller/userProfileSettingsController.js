@@ -2,8 +2,8 @@
   'use strict';
 angular.module('app.user')
 
-  .controller('UserSettingsController',["$scope","$auth",'userData',UserSettingsController]);
-  function UserSettingsController($scope,$auth,userData){
+  .controller('UserProfileSettingsController',["$scope","$auth",'userData',UserProfileSettingsController]);
+  function UserProfileSettingsController($scope,$auth,userData){
     
     var usl = this;
     usl.authCheck = $auth.isAuthenticated();
@@ -11,8 +11,7 @@ angular.module('app.user')
     function activate(){
 
       usl.userForm = userData.getUser();
-      console.log("dataaaa");
-      console.log(usl.userForm);
+      
     }
       
       

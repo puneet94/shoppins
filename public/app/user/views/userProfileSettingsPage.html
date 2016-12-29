@@ -1,38 +1,48 @@
-<div ng-controller="UserSettingsController as usc">
-	<div class="layout-column flex">
+<div ng-controller="UserProfileSettingsController as usc">
     
-    <div layout="row">
+    <div layout="row" layout-align="center center">
+        
+    <div flex="20"></div>
+    <div  flex="80">
+        <h3 class="formSectionHeaders">User Details</h3>
         <div style="background: #FFF;" md-whiteframe="2">
             <form name="userForm">
                 <div class="userIntroSection">
-                    <h3 class="formSectionHeaders">Store Details</h3>
-                    <div layout="row" layout-align="space-around" layout-wrap layout-margin>
-                         <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
+                    
+                    <div layout="column" layout-align="space-around" layout-wrap layout-margin>
+                        <div class="formEntity" flex="100" flex-sm="100" flex-xs="100">
                             <label class="formEntityLabel" for="userDisplayName">Display Name</label>
                             <input class="formEntityInput" ng-model="usc.userForm.displayName" type="text" name="userDisplayName" required="required" />
                             <div ng-messages="" style="">
                                 <div ng-message="required" class="" style="">This field is required</div>
                             </div>
                         </div>
-                        <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
-                            <label class="formEntityLabel" for="userFirstName">First Name</label>
+                        <div class="formEntity" flex="100" flex-sm="100" flex-xs="100">
+                            <label class="formEntityLabel" for="userEmail">Email</label>
+                            <input class="formEntityInput" ng-model="usc.userForm.email" ng-disabled="usc.userForm.email" type="email" name="userEmail"  />
+                            <div ng-messages="" style="">
+                                <div ng-message="required" class="" style="">This field is required</div>
+                            </div>
+                        </div>
+                        <div class="formEntity" flex="100" flex-sm="100" flex-xs="100">
+                            <label class="formEntityLabel" for="userFirstName">Your First Name</label>
                             <input class="formEntityInput" ng-model="usc.userForm.firstName" type="text" name="userFirstName" required="required" />
                             <div ng-messages="" style="">
                                 <div ng-message="required" class="" style="">This field is required</div>
                             </div>
                         </div>
-                        <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
-                            <label class="formEntityLabel" for="userLastName">Last Name</label>
+                        <div class="formEntity" flex="100" flex-sm="100" flex-xs="100">
+                            <label class="formEntityLabel" for="userLastName">Your Last Name</label>
                             <input class="formEntityInput" ng-model="usc.userForm.lastName" type="text" name="userLastName" required="required" />
                             <div ng-messages="" style="">
                                 <div ng-message="required" class="" style="">This field is required</div>
                             </div>
                         </div>
-                        <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
-                            <label class="formEntityLabel" for="userPhone">Phone</label>
+                        <div class="formEntity" flex="100" flex-sm="100" flex-xs="100">
+                            <label class="formEntityLabel" for="userPhone">Your mobile number</label>
                             <input class="formEntityInput" type="tel" ng-model="usc.userForm.phone" name="userPhone" />
                         </div>
-                        <div class="formEntity" flex="45" flex-sm="100" flex-xs="100">
+                        <div class="formEntity" flex="100" flex-sm="100" flex-xs="100">
                             <md-button class="md-raised md-primary" type="file" ngf-select="usc.uploadSingleImage($file, $invalidFiles)" accept="image/*" ngf-max-height="5000" ngf-max-size="10MB">
                                 Upload banner Image
                             </md-button>
@@ -41,7 +51,7 @@
                                 <img ng-src="{{usc.userForm.bannerImage || usc.uploadedImage}}" style="width:100%;height:100%;">
                             </div>
                         </div>
-                        <div flex="45" flex-sm="100" flex-xs="100" class="formEntity">
+                        <div flex="100" flex-sm="100" flex-xs="100" class="formEntity">
                             <div>
                                 <md-button class="md-raised md-primary" ngf-select="usc.uploadMultipleImages($files)" multiple accept="image/*">Upload Images</md-button>
                                 {{usc.errorMsg}}
@@ -50,6 +60,14 @@
                             <div layout="row" class="userImagesCollection">
                                 <images-list-directive images-list="usc.userForm.userImages"></images-list-directive>
                             </div>
+                        </div>
+                        <div class="formEntity" flex="100" flex-sm="100" flex-xs="100">
+                            <label class="formEntityLabel" for="userStatus">Status <em style="font-weight:400;font-size:10px;">(What are you upto these days?)</em> </label>
+                            <textarea class="formEntityInput"  ng-model="usc.userForm.status" name="userStatus"></textarea> 
+                        </div>
+                        <div class="formEntity" flex="100" flex-sm="100" flex-xs="100">
+                            <label class="formEntityLabel" for="userBio">A little bit about yourself</label>
+                            <textarea class="formEntityInput" rows="7" style="height:auto;" ng-model="usc.userForm.bio" name="userBio"></textarea> 
                         </div>
                     </div>
                 </div>

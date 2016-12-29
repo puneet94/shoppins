@@ -1,4 +1,5 @@
 (function(angular) {
+    'use strict';
     angular.module('app.user', []).config(['$routeProvider',
         function($routeProvider) {
             $routeProvider.
@@ -7,10 +8,11 @@
                 controller: 'UserPageController',
                 controllerAs: 'upc'
             }).
-            when('/user/userSettings/:userId', {
-                templateUrl: 'app/user/views/userSettingsPage.html',
-                controller: 'UserSettingsController',
-                controllerAs: 'usc'
+            when('/userProfileSettings', {
+                templateUrl: 'app/user/views/userProfileSettingsPage.html'
+            }).
+            when('/userAccountSettings', {
+                templateUrl: 'app/user/views/userAccountSettingsPage.html'
             }).
             when('/userMobileFeed', {
                 templateUrl: 'app/user/views/userMobileFeed.html',

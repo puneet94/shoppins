@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
 
-var compression = require('compression')
+var compression = require('compression');
 var qs = require('querystring');
 var moment = require('moment');
 var io = require('socket.io');
@@ -89,7 +89,6 @@ mongoose.connect(urlStrings.connectionString);//"mongodb://shop_dir:shop_dir@ds0
 //mongoose.connect("mongodb://shopdb:shopdb1234@ds029476.mlab.com:29476/shopdb");
 
 io.on('connection', function(socket) {
-    // We're connected to someone now. Let's listen for events from them
     
     socket.on('addToRoom', function(room) {
       console.log("joined the room");

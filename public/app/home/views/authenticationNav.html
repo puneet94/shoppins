@@ -37,17 +37,25 @@
                             {{ualc.user.displayName}}
                         </md-button>
                     </md-menu-item>
+                    <md-menu-item >
+                        <a ng-href="#/userProfileSettings">Profile Settings</a>
+                    </md-menu-item>
+                    <md-menu-item >
+                        <a ng-href="#/userAccountSettings">Account Settings</a>
+                    </md-menu-item>
                     <h3 class="menuHeading ">My Stores</h3>
                     <md-menu-item ng-repeat="userStore in ualc.userStoresList ">
                         <md-button aria-label="User store " ng-click="ualc.getAdminStore(userStore._id) ">
                             {{userStore.name}}-{{userStore.address.locality}}
                         </md-button>
                     </md-menu-item>
+
                     <md-menu-item>
                         <md-button aria-label="Create new store " ng-click="ualc.createNewStore() ">
                             Create Store
                         </md-button>
                     </md-menu-item>
+                    
                     <md-menu-item>
                         <md-button aria-label="Logout " ng-click="ahc.authLogout() ">
                             Logout
