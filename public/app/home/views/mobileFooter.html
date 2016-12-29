@@ -36,7 +36,17 @@
             </a>
         </div>
         <div class="mobileFooterEntity">
-            <a ng-href="{{mfc.authCheck?'#/chatRooms':'#/login'}}">
+            <div ng-if="!mfc.authCheck" ng-click="mfc.showAuthenticationDialog($event)">
+                <div class="mobileFooterEntityIcon">
+                    <span>
+                        <i class="fa fa-user-circle" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <div class="mobileFooterEntityText">
+                    Login
+                </div>
+            </div>
+            <a ng-href='#/chatRooms' ng-if="mfc.authCheck">
                 <div class="mobileFooterEntityIcon">
                     <span>
                         <i class="fa fa-weixin" aria-hidden="true"></i>

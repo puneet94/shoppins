@@ -2066,11 +2066,15 @@ angular.module('app.chat')
     'use strict';
 
     angular.module('app.home')
-        .controller('MobileFooterController', ["$scope", '$auth',"changeBrowserURL", MobileFooterController]);
+        .controller('MobileFooterController', ["$scope", '$auth',"userAuthService", MobileFooterController]);
 
-    function MobileFooterController($scope,$auth ,changeBrowserURL) {
+    function MobileFooterController($scope,$auth ,userAuthService) {
         var mfc = this;
         mfc.authCheck = $auth.isAuthenticated();
+        mfc.showAuthenticationDialog = showAuthenticationDialog;
+        function showAuthenticationDialog(ev) {
+            userAuthService.showAuthenticationDialog(ev);
+        }
     }
 
 })(window.angular);
@@ -2325,6 +2329,28 @@ angular.module('app.user')
     }
 })(window.angular);
 
+
+(function(angular){
+  angular.module('app.product')
+  .directive('singleProductDirective',[singleProductDirective]);
+  
+  function singleProductDirective(){
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl:'app/product/views/singleProductTemplate.html',
+      scope:{
+        product:'=singleProduct'
+      },
+      link: function(scope,element,attrs){
+
+      }
+    };
+  }
+  
+
+})(window.angular);
+
 (function(angular){
   angular.module('app.product')
 
@@ -2558,28 +2584,6 @@ angular.module('app.product')
     }
 
   }
-
-})(window.angular);
-
-
-(function(angular){
-  angular.module('app.product')
-  .directive('singleProductDirective',[singleProductDirective]);
-  
-  function singleProductDirective(){
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl:'app/product/views/singleProductTemplate.html',
-      scope:{
-        product:'=singleProduct'
-      },
-      link: function(scope,element,attrs){
-
-      }
-    };
-  }
-  
 
 })(window.angular);
 
