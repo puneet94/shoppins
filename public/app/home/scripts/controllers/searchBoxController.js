@@ -28,11 +28,7 @@
         }
         hm.selectedItemChange(hm.selectedItem);
 
-        $scope.$watch(function() {
-            return hm.userSearchText;
-        }, function(value) {
-
-        });
+        
 
         function userSearchItemChange(item) {
             if (!item) {

@@ -1317,7 +1317,11 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
         phc.authLogout = authLogout;
         phc.loginPage = loginPage;
         phc.socialAuthenticate = socialAuthenticate;
+        phc.cancelDialog = cancelDialog;
 
+      function cancelDialog() {
+            $mdDialog.cancel();
+        }
         function socialAuthenticate(provider) {
             console.log("entered auth");
             userAuthService.socialAuthenticate(provider);
@@ -2125,11 +2129,7 @@ angular.module('app.chat')
         }
         hm.selectedItemChange(hm.selectedItem);
 
-        $scope.$watch(function() {
-            return hm.userSearchText;
-        }, function(value) {
-
-        });
+        
 
         function userSearchItemChange(item) {
             if (!item) {
@@ -2327,28 +2327,6 @@ angular.module('app.user')
             ucn.messageReceived = false;
         };
     }
-})(window.angular);
-
-
-(function(angular){
-  angular.module('app.product')
-  .directive('singleProductDirective',[singleProductDirective]);
-  
-  function singleProductDirective(){
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl:'app/product/views/singleProductTemplate.html',
-      scope:{
-        product:'=singleProduct'
-      },
-      link: function(scope,element,attrs){
-
-      }
-    };
-  }
-  
-
 })(window.angular);
 
 (function(angular){
@@ -2584,6 +2562,28 @@ angular.module('app.product')
     }
 
   }
+
+})(window.angular);
+
+
+(function(angular){
+  angular.module('app.product')
+  .directive('singleProductDirective',[singleProductDirective]);
+  
+  function singleProductDirective(){
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl:'app/product/views/singleProductTemplate.html',
+      scope:{
+        product:'=singleProduct'
+      },
+      link: function(scope,element,attrs){
+
+      }
+    };
+  }
+  
 
 })(window.angular);
 

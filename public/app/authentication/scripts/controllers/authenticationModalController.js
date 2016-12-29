@@ -11,7 +11,11 @@
         phc.authLogout = authLogout;
         phc.loginPage = loginPage;
         phc.socialAuthenticate = socialAuthenticate;
+        phc.cancelDialog = cancelDialog;
 
+      function cancelDialog() {
+            $mdDialog.cancel();
+        }
         function socialAuthenticate(provider) {
             console.log("entered auth");
             userAuthService.socialAuthenticate(provider);

@@ -4,6 +4,11 @@
                         <div class="authenticateFormContainer">
                                 <div class="authenticateFormEntity">
                                         <div class="autheticateFormInputContainer">
+                                                <div class="iconContainer">
+                                                        <span>
+                                        <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                                </span>
+                                                </div>
                                                 <input ng-model="rcl.user.email" type="email" name="email" placeholder="Email " required="true" />
                                         </div>
                                         <div ng-messages="registerForm.email.$error &amp;&amp; registerForm.email.$dirty">
@@ -29,6 +34,11 @@
                                 </div>
                                 <div class="authenticateFormEntity">
                                         <div class="autheticateFormInputContainer">
+                                                <div class="iconContainer">
+                                                        <span>
+                                <i class="fa fa-lock" aria-hidden="true"></i>
+                                                </span>
+                                                </div>
                                                 <input ng-model="rcl.user.password" type="password" name="password" md-minlength="6" placeholder="Password " required="true" />
                                         </div>
                                         <div ng-messages="registerForm.password.$error &amp;&amp; registerForm.password.$dirty">
@@ -38,6 +48,11 @@
                                 </div>
                                 <div class="authenticateFormEntity">
                                         <div class="autheticateFormInputContainer">
+                                                <div class="iconContainer">
+                                                        <span>
+                                <i class="fa fa-lock" aria-hidden="true"></i>
+                                                </span>
+                                                </div>
                                                 <input ng-model="rcl.user.password_confirm" type="password" name="password_confirm" same-as="rcl.user.password" md-minlength="6" placeholder="Password " required="true" />
                                                 <p ng-show="registerForm.password_confirm.$dirty &amp;&amp; registerForm.password_confirm.$invalid" class="help-block">please match the passwords</p>
                                         </div>

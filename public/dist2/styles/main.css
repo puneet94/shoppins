@@ -124,6 +124,15 @@
 .autheticateFormInputContainer {
   position: relative;
   margin-bottom: 15px; }
+  .autheticateFormInputContainer .iconContainer {
+    position: absolute;
+    right: 5px;
+    top: 10px;
+    width: 30px;
+    text-align: center; }
+    .autheticateFormInputContainer .iconContainer span {
+      font-size: 24px;
+      color: teal; }
   .autheticateFormInputContainer input {
     height: 50px;
     font-size: 16px;
@@ -132,10 +141,6 @@
     font-weight: 500;
     padding-left: 10px;
     padding-right: 10px;
-    background-image: url("http://www.w3schools.com/css/trolltunga.jpg");
-    background-repeat: no-repeat;
-    background-position: right 10px top 45%;
-    background-size: 32px 32px;
     -webkit-transition: border-color 0.2s;
             transition: border-color 0.2s;
     border: 1px solid #aaa;
@@ -772,8 +777,7 @@ md-ink-bar {
 @media (max-width: 599px) {
   .fixedTopHeader {
     position: fixed;
-    top: 0px;
-    z-index: 99999; }
+    top: 0px; }
   .scrollUpSearch {
     position: fixed;
     top: 55px;
