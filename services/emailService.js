@@ -16,18 +16,23 @@ var smtpTransport = nodemailer.createTransport("SMTP", {
 });
 
 function sendEmail(req, res, userEmail) {
+	console.log("********************************************");
 	var currentTime = new Date();
 	currentTime = currentTime.toString();
 	var token = Math.floor((Math.random() * 100) + 789) + ' ' + currentTime;
 	var host = req.get('host');
 	var encryptEmail = cryptService.encrypt(userEmail);
 	var encryptToken = cryptService.encrypt(token);
+
 	var link = req.protocol + "://" + host + "/email/verify?id=" + encryptEmail + '&token=' + encryptToken;
+	console.log('*********link************');
+	console.log(link);
 	var mailOptions = {
 		to: userEmail,
 		subject: 'Email Verification Link From Ofline',
 		html: "Hello,<br> Please Click on the link to verify your email.<br><a href=" + link + ">Click here to verify</a>"
 	};
+	console.log('*********link******options******');
 	console.log(mailOptions);
 	smtpTransport.sendMail(mailOptions, function(error, response) {
 		if (error) {

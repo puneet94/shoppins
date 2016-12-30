@@ -93,20 +93,18 @@ mongoose.connect(urlStrings.connectionString);//"mongodb://shop_dir:shop_dir@ds0
 io.on('connection', function(socket) {
     
     socket.on('addToRoom', function(room) {
-      console.log("joined the room");
-        console.log(room.roomId);
+      
         socket.join(room.roomId);
     });
     socket.on('addToSingleRoom', function(singleRoom) {
-      console.log("joined the single room");
-        console.log(singleRoom.roomId);
+      
         socket.join(singleRoom.roomId);
     });
     socket.on('removeFromRoom', function(room) {
         socket.leave(room.roomId);
     });
     socket.on('disconnect', function() {
-        console.log('user disconnected');
+        
     });
 });
 server.listen(app.get('port'), function() {
