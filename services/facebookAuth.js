@@ -1,3 +1,4 @@
+'use strict';
 var qs = require('querystring');
 var request = require('request');
 var jwt = require('jwt-simple');
@@ -44,6 +45,7 @@ module.exports =  function(req, res) {
               return res.status(400).send({ message: 'User not found' });
             }
             user.facebook = profile.id;
+            user.verified = true;
             user.picture = user.picture || 'https://graph.facebook.com/v2.3/' + profile.id + '/picture?type=large';
             user.displayName = user.displayName || profile.name;
             user.save(function() {

@@ -1,3 +1,4 @@
+'use strict';
 var express = require('express');
 var models = require('..//models/storeModel');
 var Review = models.Review;
@@ -47,9 +48,9 @@ function getActivity(res, usersList) {
                     }
                     res.send(html);
 
-                })
+                });
             }
-        })
+        });
 }
 activityRouter.route('/userFollowingActivity/:userId')
     .get(function(req, res) {

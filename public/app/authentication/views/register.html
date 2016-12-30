@@ -20,10 +20,12 @@
                                 <div layout="row" layout-align="space-between center">
                                         <div class="authenticateFormEntity">
                                                 <div class="autheticateFormInputContainer">
-                                                        <input type="text" placeholder="FirstName" ng-model="rcl.user.firstName" type="text" name="firstName" placeholder="Firstname " required="true" pattern="[a-zA-Z\s]+" />
+                                                        <input type="text" placeholder="FirstName" ng-model="rcl.user.firstName" type="text" name="firstName" placeholder="Firstname " required="true" ng-pattern="/[a-zA-Z\s]+/" />
                                                 </div>
                                                 <div ng-messages="registerForm.firstName.$error &amp;&amp; registerForm.firstName.$dirty">
                                                         <div ng-message="required">This is required.....</div>
+                                                        <div ng-message="pattern">Must be a valid name</div>
+
                                                 </div>
                                         </div>
                                         <div class="authenticateFormEntity">
@@ -64,6 +66,7 @@
                                 <section>
                                         <md-button style=" width:100%;margin:0;" type="submit" class="md-raised md-primary" ng-disabled="registerForm.$invalid">register</md-button>
                                 </section>
+                                <h3>{{rcl.message}}</h3>
                         </div>
                 </div>
         </form>

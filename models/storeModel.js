@@ -151,7 +151,8 @@ ReviewSchema.plugin(relationship, { relationshipPathName:'product' });
 var UserSchema = new Schema({
 	"firstName":String,
 	"lastName":String,
-	"email":String,
+	'verified': Boolean,
+	'email':{ type: String, unique: true },
 	"password":String,
 	"facebook": String,
 	"picture":{type:String,default:'https://cdn3.iconfinder.com/data/icons/black-easy/512/538303-user_512x512.png'},
@@ -351,6 +352,14 @@ StoreSchema.plugin(URLSlugs("name address.area address.city address.state addres
 StoreSchema.plugin(mongoosePaginate);
 ProductSchema.plugin(mongoosePaginate);
 
+var MailVerifySchema = new Schema({
+	email:{ type: String, unique: true },
+	token:String,
+	date  : { type : Date, default: Date.now}
+	
+});
+
+exports.MailVerify = mongoose.model('MailVerify',MailVerifySchema);
 exports.Store = mongoose.model('Store',StoreSchema);
 exports.Product = mongoose.model("Product", ProductSchema);
 exports.User = User;

@@ -36,6 +36,7 @@ angular.module('authModApp')
           //socketStart();
           $window.location.reload();
     		},function(response){
+                  logCl.message = response.data.message;
     			console.log(response);
     		});
     }

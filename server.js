@@ -36,6 +36,7 @@ var productRouter = require('./routes/productRoute');
 var authenticateRouter = require('./routes/authenticateRoute');
 var reviewRouter = require('./routes/reviewRoute');
 var visitRouter = require('./routes/visitRoute');
+var emailRouter = require('./routes/emailRoute');
 var adminRouter = require('./routes/adminRoute');
 var chatRouter = require('./routes/chatRoute');
 var urlStrings = require('./routes/url');
@@ -67,6 +68,7 @@ if (app.get('env') === 'production') {
 app.use('/store',storeRouter);
 app.use('/search',searchRouter);
 app.use('/product',productRouter);
+app.use('/email',emailRouter);
 app.use('/authenticate',authenticateRouter);
 app.use('/review',reviewRouter);
 app.use('/visit',visitRouter);
