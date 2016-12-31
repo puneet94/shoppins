@@ -1,3 +1,7 @@
+(function(angular){
+
+'use strict';
+
 angular.module('myApp',
   ['ngRoute','ngCookies','ngMessages','ngSanitize','afkl.lazyImage','satellizer','ngFileUpload','ngMap','btford.socket-io',
   'authModApp',
@@ -38,12 +42,12 @@ angular.module('myApp',
     $rootScope.$on('$routeChangeError', function () {
 
         //hide loading gif
-        alert('wtff');
+        alert('you are not authorized to view this page');
         $rootScope.layout.loading = false;
 
     });
 });
-
+})(window.angular);
 // red, pink, purple, deep-purple, indigo, blue, light-blue, cyan, teal, green,,
 //light-green, lime, yellow, amber, orange, deep-orange, brown, grey, blue-grey
 // .config(function($mdThemingProvider) {

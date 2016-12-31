@@ -38,10 +38,8 @@ userRouter.route('/singleUser/:user_id')
             .exec(function(err, user) {
                 if (err) {
                     res.send(err);
-                } else {
-                    user.reviews = null;
-                    user.upvotes = null;
-
+                } if(user) {
+                    
                     res.json(user);
                 }
             })

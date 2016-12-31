@@ -24,7 +24,7 @@ function sendEmail(req, res, userObj) {
 	var mailOptions = {
 		to: userObj.email,
 		subject: 'Email Verification Link From Ofline',
-		html: "<h3>Hello"+userObj.name+" ,</h3><br> Please Click on the link to verify your email.<br><a href=" + link + ">Click here to verify</a>"
+		html: "<h3>Hello "+userObj.name+" ,</h3><br> Please Click on the link to verify your email.<br><a href=" + link + ">Click here to verify</a>"
 	};
 	var to_email = new helper.Email(userObj.email);
 	var subject = mailOptions.subject;

@@ -23,7 +23,7 @@ function getActivity(res, usersList) {
     var queryObj = {};
     if (usersList) {
         queryObj = { $or: [{ creator: { $in: usersList } }, { creatorStore: { $in: usersList } }] }
-        //queryObj.creator = { $in: usersList };
+            //queryObj.creator = { $in: usersList };
     }
     Activity
         .find(queryObj)
@@ -56,16 +56,25 @@ activityRouter.route('/userFollowingActivity/:userId')
     .get(function(req, res) {
 
         var followingList = [];
-        User
-            .findById(req.params.userId)
-            .select('following storeFollowing')
-            .exec(function(err, result) {
-                console.log(result);
-                followingList = result.following.concat(result.storeFollowing);
-                getActivity(res, followingList);
-            });
+        try {
+            User
+                .findById(req.params.userId)
+                .select('following storeFollowing')
+                .exec(function(err, result) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    if (result) {
+                        followingList = result.following.concat(result.storeFollowing);
+                        getActivity(res, followingList);
+                    }
 
-        console.log(followingList);
+                });
+
+            console.log(followingList);
+        } catch (e) {
+            console.log(e);
+        }
     });
 activityRouter.route('/singleUserActivity/:userId')
     .get(function(req, res) {
