@@ -33,7 +33,7 @@ authenticateRouter.route('/signup')
 				if (err) {
 					res.status(500).send({ message: err.message });
 				}
-				emailService.sendEmail(req, res,req.body.email);
+				emailService.sendEmail(req, res,{'email':req.body.email,'name': req.body.firstName + " " + req.body.lastName});
 				//res.send({ user: result.toJSON(), token: createJWT(result) });
 			});
 		});

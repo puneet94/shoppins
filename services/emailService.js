@@ -9,33 +9,25 @@ var from_email = new helper.Email('app59858998@heroku.com');
 var models = require('..//models/storeModel');
 var MailVerify = models.MailVerify;
 
-var smtpTransport = nodemailer.createTransport("SMTP", {
-	service: "Gmail",
-	auth: {
-		user: "shoppinsmail@gmail.com",
-		pass: "charchas1994$"
-	}
-});
-
-function sendEmail(req, res, userEmail) {
+function sendEmail(req, res, userObj) {
 	console.log("********************************************");
 	var currentTime = new Date();
 	currentTime = currentTime.toString();
 	var token = Math.floor((Math.random() * 100) + 789) + ' ' + currentTime;
 	var host = req.get('host');
-	var encryptEmail = cryptService.encrypt(userEmail);
+	var encryptEmail = cryptService.encrypt(userObj.email);
 	var encryptToken = cryptService.encrypt(token);
 
 	var link = req.protocol + "://" + host + "/email/verify?id=" + encryptEmail + '&token=' + encryptToken;
 	console.log('*********link************');
 	console.log(link);
 	var mailOptions = {
-		to: userEmail,
+		to: userObj.email,
 		subject: 'Email Verification Link From Ofline',
-		html: "Hello,<br> Please Click on the link to verify your email.<br><a href=" + link + ">Click here to verify</a>"
+		html: "<h3>Hello"+userObj.name+" ,</h3><br> Please Click on the link to verify your email.<br><a href=" + link + ">Click here to verify</a>"
 	};
-	var to_email = new helper.Email(userEmail);
-	var subject = 'Hello World from the SendGrid Node.js Library!';
+	var to_email = new helper.Email(userObj.email);
+	var subject = mailOptions.subject;
 	var content = new helper.Content('text/html', mailOptions.html);
 	var mail = new helper.Mail(from_email, subject, to_email, content);
 
@@ -53,13 +45,13 @@ function sendEmail(req, res, userEmail) {
 		console.log(response.headers);
 		var mailVerify = new MailVerify();
 		mailVerify.token = token;
-		mailVerify.email = userEmail;
+		mailVerify.email = userObj.email;
 		mailVerify.save(function(err, result) {
 			if (err) {
 				console.log(err);
 				res.send(err);
 			}
-			res.send({ 'message': 'An email has been sent to ' + userEmail + 'for verification. Check your email or spam folder and login again' });
+			res.send({ 'message': 'An email has been sent to ' + userObj.email + 'for verification. Check your email or spam folder and login again' });
 		});
 	});
 
@@ -72,16 +64,16 @@ function sendEmail(req, res, userEmail) {
 			res.send(error);
 		} else {
 			console.log("Message sent: " + response.message);
-			//res.send({ 'message': 'An email has been sent to ' + userEmail + 'for verification. Check your email and login again' });
+			//res.send({ 'message': 'An email has been sent to ' + userObj.email + 'for verification. Check your email and login again' });
 			var mailVerify = new MailVerify();
 			mailVerify.token = token;
-			mailVerify.email = userEmail;
+			mailVerify.email = userObj.email;
 			mailVerify.save(function(err, result) {
 				if (err) {
 					console.log(err);
 					res.send(err);
 				}
-				res.send({ 'message': 'An email has been sent to ' + userEmail + 'for verification. Check your email or spam folder and login again' });
+				res.send({ 'message': 'An email has been sent to ' + userObj.email + 'for verification. Check your email or spam folder and login again' });
 			});
 		}
 	});*/
