@@ -19,7 +19,7 @@ function sendEmail(req, res, userObj) {
 	var encryptToken = cryptService.encrypt(token);
 
 	var link = req.protocol + "://" + host + "/email/verify?id=" + encryptEmail + '&token=' + encryptToken;
-	console.log('*********link************');
+	console.log('*********link**********');
 	console.log(link);
 	var mailOptions = {
 		to: userObj.email,
