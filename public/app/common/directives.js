@@ -1,5 +1,6 @@
 /*common directives like scroll...*/
 (function(angular){
+  'use strict';
   angular.module('app.common')
   .directive('toggleElement',["$window","$location", toggleElement])
   .directive('scrollDown', ["$window","$location", scrollDown])
@@ -14,6 +15,7 @@
   .directive('imageReplacementDirective',[imageReplacementDirective])
   .directive('imagesListDirective',[imagesListDirective])
   .directive('singleImageDirective',[singleImageDirective]);
+
   function imagesListDirective(){
     return {
       restrict: 'E',

@@ -1,7 +1,7 @@
 <loading-directive loading="ssc.loading"></loading-directive>
-<header layout="row" meta-tags data-keywords="" data-description="">
+<!--<header layout="row" meta-tags data-keywords="" data-description="">
     <div ng-include="'app/home/pageHeader.html'" flex></div>
-</header>
+</header>-->
 <div ng-include="'app/home/searchBox.html'"></div>
 <main flex class="fixedHeaderMain">
     <div class="" layout="row" layout-xs="column" layout-sm="column">
@@ -175,7 +175,7 @@
             </md-content>-->
         </div>
         <div flex="35" flex-sm="100" flex-xs="100">
-            <aside style="margin-top:20px;margin-left:20px;">
+            <aside class="storeSuggestionsMainContainer" >
                 <div class="mapContainer" >
                     <ng-map zoom='15' center="{{ssc.pos}}" scrollwheel="false">
                         <marker position="{{ssc.pos}}" animation="Animation.BOUNCE">

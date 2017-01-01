@@ -4,7 +4,7 @@ var models = require('..//models/storeModel');
 var cloudinary = require('cloudinary').v2;
 var multer = require('multer');
 var upload = multer({ dest: './uploads/' });
-
+var userController = require('../controller/userController');
 
 
 cloudinary.config({
@@ -18,13 +18,10 @@ var ReportStore = models.ReportStore;
 var User = models.User;
 var Review = models.Review;
 var Activity = models.Activity;
-var UserSearch = require('..//models/user_search');
 var userRouter = express.Router();
 var commons = require('./commonRouteFunctions');
 
-function updateStore(req, res) {
 
-}
 userRouter.use(function(req, res, next) {
     console.log("user");
     console.log(req.method, req.url);
@@ -42,7 +39,7 @@ userRouter.route('/singleUser/:user_id')
                     
                     res.json(user);
                 }
-            })
+            });
     });
 userRouter.route('/userReviews/:user_id')
     .get(function(req, res) {
@@ -57,7 +54,7 @@ userRouter.route('/userReviews/:user_id')
                     return res.json(reviews);
                 }
 
-            })
+            });
     });
 
 
@@ -68,12 +65,12 @@ userRouter.route('/userFollowing/:user_id')
             .populate('following', 'displayName picture followers')
             .exec(function(err, followers) {
                 if (err) {
-                    console.log(err)
+                    console.log(err);
                 } else {
                     return res.json(followers.following);
                 }
 
-            })
+            });
     });
 userRouter.route('/userFollowers/:user_id')
     .get(function(req, res) {
@@ -88,7 +85,7 @@ userRouter.route('/userFollowers/:user_id')
                     return res.json(followers.followers);
                 }
 
-            })
+            });
     });
 
 userRouter.route('/submitFollow/:user_id/:followedUser_id')
@@ -112,11 +109,11 @@ userRouter.route('/submitFollow/:user_id/:followedUser_id')
                             }
                         })
                     }
-                })
-            })
+                });
+            });
         });
 
-    })
+    });
 
 userRouter.route('/deleteFollow/:user_id/:followedUser_id')
     .post(commons.ensureAuthenticated, function(req, res) {
@@ -127,7 +124,7 @@ userRouter.route('/deleteFollow/:user_id/:followedUser_id')
 
                 User.update({ _id: user_id }, { $pull: { 'following': fold_id } }, { upsert: true }, function(err, data) {
                     if (err) {
-
+                        console.log(err);
                     } else {
                         User.update({ _id: fold_id }, { $pull: { 'followers': user_id } }, { upsert: true }, function(err, data) {
                             if (err) {
@@ -174,7 +171,7 @@ userRouter.route('/checkFollow/:user_id/:followedUser_id')
             })
         });
 
-    })
+    });
 
 userRouter.route('/submitStoreReport')
     .post(commons.ensureAuthenticated, function(req, res) {
@@ -188,7 +185,46 @@ userRouter.route('/submitStoreReport')
                 res.send(err);
             }
             res.json(savedReportStore);
-        })
+        });
+
+    });
+
+userRouter.route('/checkPassword/:user_id')
+    .post(commons.ensureAuthenticated, function(req, res) {
+        var recData = req.body;
+        var password = recData.password;
+        User.findById(req.params.user_id).exec(function(err,user){
+            user.comparePasswords(password, function(err, isMatch) {
+                    if(err){
+                        console.log("the error");
+                        console.log(err);
+                        
+                    }
+                    res.send(isMatch);
+                    
+                    
+                });
+        });
+
+    });
+
+userRouter.route('/changePassword/:user_id')
+    .post(commons.ensureAuthenticated, function(req, res) {
+        var recData = req.body;
+        var password = recData.password;
+        User.findById(req.params.user_id).exec(function(err,user){
+            user.password = password;
+            user.save(function(err,result){
+                if(err){
+                    console.log(err);
+                }
+                if(result){
+                    console.log("password changed");
+                    res.send({'message':'password changed'});
+                    
+                }
+            });
+        });
 
     });
 
@@ -243,7 +279,7 @@ userRouter.route('/upload/profileImage/:userId')
 
 
 
-
+userRouter.route('/updateUser/:user_id').post(commons.ensureAuthenticated, userController.updateUser);
 
 module.exports = userRouter;
 

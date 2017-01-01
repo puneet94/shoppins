@@ -1,0 +1,10 @@
+<div ng-controller="UserAccountSettingsController as uasc">
+		<h3>My Stores</h3>
+		<div ng-repeat="userStore in uasc.userStoresList ">
+				<div aria-label="User store " ng-click="uasc.getAdminStore(userStore._id) ">
+						{{userStore.name}}-{{userStore.address.locality}}
+				</div>
+		</div>
+		<h3>Change Password</h3>
+		<change-password></change-password>
+</div>

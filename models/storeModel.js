@@ -1,6 +1,7 @@
+'use strict';
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
-URLSlugs = require('mongoose-url-slugs');
+var URLSlugs = require('mongoose-url-slugs');
 var mongoosePaginate = require('mongoose-paginate');
 var relationship = require("mongoose-relationship"); //Refer https://www.npmjs.com/package/mongoose-relationship
 var Schema  = mongoose.Schema;
@@ -151,6 +152,8 @@ ReviewSchema.plugin(relationship, { relationshipPathName:'product' });
 var UserSchema = new Schema({
 	"firstName":String,
 	"lastName":String,
+	"status":String,
+	"bio":String,
 	'verified': Boolean,
 	'email':{ type: String, unique: true },
 	"password":String,
@@ -179,7 +182,7 @@ var FollowSchema = new Schema({
 	productId: { type:Schema.ObjectId, ref:"Product" },
 	userId: { type:Schema.ObjectId, ref:"User" },
 	type: String
-})
+});
 /*Nuber of Followers a single user has*/
 var FollowersSchema = new Schema({
 	user:{ type:Schema.ObjectId, ref:"User" },
@@ -196,12 +199,12 @@ UserSchema.methods.toJSON = function(){
 	delete user.password;
 	return user;
 
-}
+};
 
 UserSchema.methods.comparePasswords = function(password,callback){
 	bcrypt.compare(password,this.password,callback);
 
-}
+};
 
 var User = mongoose.model('User',UserSchema);
 var Visit = mongoose.model('Visit',VisitSchema);
@@ -341,8 +344,6 @@ this.reviewsCount = this.reviews.length || 0;
   
   //next();
 });
-
-
 ProductSchema.plugin(relationship, { relationshipPathName:'store' });
 
 

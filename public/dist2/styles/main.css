@@ -261,7 +261,7 @@
     padding: 10px;
     background-color: white;
     margin: 5px;
-    margin-top: 60px; } }
+    /*margin-top: 60px*/ } }
 
 .chatRoom {
   padding: 10px;
@@ -296,7 +296,7 @@
 
 @media (max-width: 600px) {
   .mobileChatRoomList {
-    margin-top: 60px; } }
+    /*margin-top: 60px*/ } }
 
 .tabsContent {
   margin-top: 2px; }
@@ -774,7 +774,7 @@ md-ink-bar {
   .homePageDiv .searchBoxLayout {
     height: 300px; } }
 
-@media (max-width: 599px) {
+@media (max-width: 600px) {
   .fixedTopHeader {
     position: fixed;
     top: 0px; }
@@ -787,7 +787,7 @@ md-ink-bar {
   .search-icon-div {
     padding: 10px; }
   .fixedHeaderMain {
-    margin-top: 65px; }
+    /*margin-top: 65px*/ }
   .homePageDiv .searchBoxLayout {
     height: 200px; }
   .homePageDiv .search-box-container {
@@ -913,60 +913,13 @@ md-ink-bar {
         .productContainer .singleProductContainer .productDetailsContainer .productStatsContainer .productStatsEntity {
           margin: 0 2px; }
 
-@media (max-width: 599px) {
+@media (max-width: 600px) {
   .productContainer .singleProductContainer {
     background-color: white;
     margin: 10px;
     max-width: 100%; } }
 
-.reviewSubmitForm {
-  background-color: white;
-  padding: 25px; }
-  .reviewSubmitForm .reviewSubmitFormContent {
-    background-color: white; }
-
-.userRatingSection {
-  width: 175px; }
-  .userRatingSection .rating {
-    border: none; }
-    .userRatingSection .rating input {
-      display: none; }
-    .userRatingSection .rating label:before {
-      margin: 5px;
-      font-size: 1.25em;
-      font-family: FontAwesome;
-      display: inline-block;
-      content: "\f005"; }
-    .userRatingSection .rating label {
-      color: rgba(0, 0, 0, 0.5);
-      float: right; }
-    .userRatingSection .rating input:checked ~ label {
-      color: #FFD700; }
-    .userRatingSection .rating:not(:checked) > label:hover {
-      color: #FFD700; }
-      .userRatingSection .rating:not(:checked) > label:hover ~ label {
-        color: #FFD700; }
-    .userRatingSection .rating > input:checked + label:hover, .userRatingSection .rating > input:checked ~ label:hover {
-      color: #FFED85; }
-    .userRatingSection .rating > label:hover ~ input:checked ~ label, .userRatingSection .rating > input:checked ~ label:hover ~ label {
-      color: #FFED85; }
-
-.likeReviewContainer .likeReviewIconContainer {
-  background-color: #eee;
-  padding: 8px 10px; }
-  .likeReviewContainer .likeReviewIconContainer .likeText {
-    margin-left: 5px; }
-
-.likeReviewContainer .likeReviewCountContainer {
-  background-color: white;
-  padding: 7px 9px;
-  border: 1px solid #eee;
-  border-radius: 3px;
-  border-left: none;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px; }
-
-@media (max-width: 599px) {
+@media (max-width: 600px) {
   .customTabsContainer ul.tabsList li {
     -webkit-box-flex: 1;
         -ms-flex-positive: 1;
@@ -1086,6 +1039,10 @@ md-ink-bar {
   font-size: 14px;
   font-weight: 400;
   color: #795548; }
+
+.storeSuggestionsMainContainer {
+  margin-left: 20px;
+  margin-top: 20px; }
 
 .storeImagesCollection {
   background-color: white;
@@ -1219,6 +1176,10 @@ md-ink-bar {
         font-size: 10px;
         margin-bottom: 0;
         text-transform: capitalize; }
+
+@media (max-width: 600px) {
+  .storeSuggestionsMainContainer {
+    margin-left: 0px; } }
 
 .storeDetailsContainer {
   padding: 10px;
@@ -1554,7 +1515,7 @@ md-ink-bar {
   height: 100%;
     height-opacity: 1; }
 
-@media all and (max-width: 599px) {
+@media all and (max-width: 600px) {
   .userPageSections .middleTab .mainContainer .imageContainer {
     float: left;
     height: 100px;
@@ -1582,3 +1543,50 @@ md-ink-bar {
     .userPageSections .middleTab .mainContainer .textContainer .bioContainer h5 {
       font-size: 14px;
       font-weight: 400; } }
+
+.reviewSubmitForm {
+  background-color: white;
+  padding: 25px; }
+  .reviewSubmitForm .reviewSubmitFormContent {
+    background-color: white; }
+
+.userRatingSection {
+  width: 175px; }
+  .userRatingSection .rating {
+    border: none; }
+    .userRatingSection .rating input {
+      display: none; }
+    .userRatingSection .rating label:before {
+      margin: 5px;
+      font-size: 1.25em;
+      font-family: FontAwesome;
+      display: inline-block;
+      content: "\f005"; }
+    .userRatingSection .rating label {
+      color: rgba(0, 0, 0, 0.5);
+      float: right; }
+    .userRatingSection .rating input:checked ~ label {
+      color: #FFD700; }
+    .userRatingSection .rating:not(:checked) > label:hover {
+      color: #FFD700; }
+      .userRatingSection .rating:not(:checked) > label:hover ~ label {
+        color: #FFD700; }
+    .userRatingSection .rating > input:checked + label:hover, .userRatingSection .rating > input:checked ~ label:hover {
+      color: #FFED85; }
+    .userRatingSection .rating > label:hover ~ input:checked ~ label, .userRatingSection .rating > input:checked ~ label:hover ~ label {
+      color: #FFED85; }
+
+.likeReviewContainer .likeReviewIconContainer {
+  background-color: #eee;
+  padding: 8px 10px; }
+  .likeReviewContainer .likeReviewIconContainer .likeText {
+    margin-left: 5px; }
+
+.likeReviewContainer .likeReviewCountContainer {
+  background-color: white;
+  padding: 7px 9px;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  border-left: none;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px; }
