@@ -2,11 +2,12 @@
     'use strict';
 
     angular.module('app.home')
-        .controller('SearchBoxController', ["$scope", "$window", "$routeParams", "cityStorage", "citiesService", "searchService", "changeBrowserURL", SearchBoxController]);
+        .controller('SearchBoxController', ["$scope", "$window", "$routeParams", "cityStorage", "citiesService", "searchService", "changeBrowserURL", 'baseUrlService',SearchBoxController]);
 
 
-    function SearchBoxController($scope, $window, $routeParams, cityStorage, citiesService, searchService, changeBrowserURL) {
+    function SearchBoxController($scope, $window, $routeParams, cityStorage, citiesService, searchService, changeBrowserURL,baseUrlService) {
         var hm = this;
+        
         if ($routeParams.location) {
             hm.selectedItem = $routeParams.location;
         } else if (cityStorage.isCityExists()) {
@@ -22,6 +23,16 @@
         hm.locationSearch = locationSearch;
         hm.userSearchTextChange = userSearchTextChange;
         hm.openSearchBox = openSearchBox;
+        
+        $scope.$watch(function () {
+            return hm.userSearchSelectedItem;
+            },function(value){
+                
+            if(value){
+                userSearchItemChange(value);                
+            }
+        });
+        
 
         function openSearchBox() {
             hm.mobileSearchBoxVisible = true;
@@ -70,7 +81,7 @@
 
                 locationStoresSearchUrl();
             }
-            $window.location = '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
+            $window.location.href =baseUrlService.baseUrl+ '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
 
 
 

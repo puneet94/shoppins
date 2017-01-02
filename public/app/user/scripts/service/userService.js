@@ -11,6 +11,7 @@ angular.module('app.user')
 */
 function UserService($http,baseUrlService,userData){
   this.getSingleUser = getSingleUser;
+  this.getUserDetails = getUserDetails;
   this.getStoreRating = getStoreRating;
   this.submitUserFollow = submitUserFollow;
   this.submitStoreReport = submitStoreReport;
@@ -22,6 +23,10 @@ function UserService($http,baseUrlService,userData){
   this.updateUser = updateUser;
   this.checkUserPassword = checkUserPassword;
   this.changeUserPassword = changeUserPassword;
+  function getUserDetails(id,params){
+    return $http.get(baseUrlService.baseUrl+"user/user/"+id,{params:params});
+
+  }
   function getSingleUser(id){
     return $http.get(baseUrlService.baseUrl+"user/singleUser/"+id);
 

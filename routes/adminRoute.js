@@ -1,3 +1,4 @@
+'use strict';
 var express = require('express');
 var models = require('..//models/storeModel');
 var mongoose = require('mongoose');
@@ -30,5 +31,5 @@ adminRouter.route('/offer/:offerId/:storeId')
 adminRouter.route('/store/products')
 .get(commons.ensureAuthenticated,function(req,res){
   res.send('store');
-})
+});
 module.exports = adminRouter;

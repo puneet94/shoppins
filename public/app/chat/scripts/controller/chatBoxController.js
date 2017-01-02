@@ -1,11 +1,13 @@
 (function(angular) {
+    'use strict';
     angular.module('app.chat')
 
-    .controller('ChatBoxController', ['$scope', 'Socket', '$routeParams', 'userData', 'chatService', ChatBoxController]);
+    .controller('ChatBoxController', ['$scope', 'Socket', '$routeParams', 'userData', 'chatService', 'userService',ChatBoxController]);
 
-    function ChatBoxController($scope, Socket, $routeParams, userData, chatService) {
+    function ChatBoxController($scope, Socket, $routeParams, userData, chatService,userService) {
         var cbc = this;
         cbc.currentUser = userData.getUser()._id;
+        cbc.receiverUser = '';
         cbc.innerLoading = true;
         cbc.chatRoomId = '';
         cbc.messageLoading = false;
@@ -22,12 +24,21 @@
 
         }
         function activate() {
+            
             chatService.getChatRoom().then(function(res) {
-                console.log("the response");
+                console.log("the response the room");
                 console.log(res);
                 cbc.chatRoomId = res.data._id;
+                cbc.receiverUserId = res.data.creator1 == cbc.currentUser ? res.data.creator2: res.data.creator1;
+                console.log("the reciver id"+cbc.receiverUserId);
                 socketJoin();
                 getChatMessages();
+
+                userService.getUserDetails(cbc.receiverUserId,{'fields':'displayName firstName'}).then(function(response){
+                  console.log("the receiver");
+                  console.log(response.data);
+                  cbc.receiverUser = response.data.displayName || (response.data.firstName);
+                });
             }, function(res) {
                 console.log(res);
             });

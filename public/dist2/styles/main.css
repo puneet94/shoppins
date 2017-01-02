@@ -205,7 +205,7 @@
 
 .chatBoxUL {
   padding: 0;
-  height: 63vh;
+  height: 58vh;
   overflow: auto; }
   .chatBoxUL li {
     list-style-type: none;
@@ -297,6 +297,9 @@
 @media (max-width: 600px) {
   .mobileChatRoomList {
     /*margin-top: 60px*/ } }
+
+textarea {
+  border: 1px solid black; }
 
 .tabsContent {
   margin-top: 2px; }
@@ -1487,7 +1490,8 @@ md-ink-bar {
 
 .followersList .followerContainer {
   border: 1px solid #e9ebee;
-  margin-top: 3px; }
+  margin-top: 3px;
+  background-color: white; }
   .followersList .followerContainer .followerImage {
     height: 80px;
     max-width: 80px; }
@@ -1512,33 +1516,39 @@ md-ink-bar {
     font-size: 10px;
     text-transform: capitalize; }
 
-.userPageSections {
+.userPageSections .middleTab .mainContainer {
   background-color: white; }
-  .userPageSections .middleTab .imageContainer {
-    float: left;
-    height: 140px;
-    width: 140px;
-    margin: 0 10px; }
-    .userPageSections .middleTab .imageContainer img {
-      width: 100%;
-      height: 100%;
-      border: 1px solid #eee;
-      border-radius: 7px; }
-  .userPageSections .middleTab .textContainer {
-    text-transform: capitalize;
-    margin-left: 180px; }
-    .userPageSections .middleTab .textContainer .nameContainer {
-      text-transform: capitalize; }
-    .userPageSections .middleTab .textContainer .headLineConatiner .headLineHeader {
-      margin: 0;
-      font-size: 16px;
-      font-weight: 600; }
-    .userPageSections .middleTab .textContainer .bioContainer h5 {
-      margin-top: 10px;
-      font-size: 16px;
-      font-weight: 300; }
-  .userPageSections .rightTab {
-    background-color: #f3f3f3; }
+
+.userPageSections .middleTab .userProfileSection {
+  background-color: white; }
+
+.userPageSections .middleTab .imageContainer {
+  float: left;
+  height: 140px;
+  width: 140px;
+  margin: 0 10px; }
+  .userPageSections .middleTab .imageContainer img {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #eee;
+    border-radius: 7px; }
+
+.userPageSections .middleTab .textContainer {
+  text-transform: capitalize;
+  margin-left: 180px; }
+  .userPageSections .middleTab .textContainer .nameContainer {
+    text-transform: capitalize; }
+  .userPageSections .middleTab .textContainer .headLineConatiner .headLineHeader {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600; }
+  .userPageSections .middleTab .textContainer .bioContainer h5 {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 300; }
+
+.userPageSections .rightTab {
+  background-color: #f3f3f3; }
 
 .userFollowingImage {
   width: 180px;
@@ -1611,3 +1621,6 @@ md-ink-bar {
     .userPageSections .middleTab .mainContainer .textContainer .bioContainer h5 {
       font-size: 14px;
       font-weight: 400; } }
+
+.userContent {
+  margin-top: 10px; }

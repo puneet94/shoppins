@@ -27,6 +27,22 @@ userRouter.use(function(req, res, next) {
     console.log(req.method, req.url);
     next();
 });
+userRouter.route('/user/:user_id')
+    .get(function(req, res ) {
+        var options = {};
+        console.log("the query for user");
+        console.log(req.query.fields);
+        options.select = req.query.fields || null;
+        User.findById(req.params.user_id,options.select).exec(function(err,user) {
+            if(err){
+                console.log(err);
+            }
+            res.send(user);
+
+        });
+
+    });
+
 userRouter.route('/singleUser/:user_id')
     .get(function(req, res) {
         console.log(req.query.select);
