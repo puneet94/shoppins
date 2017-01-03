@@ -55,7 +55,18 @@
               <div class="" ng-include="'app/user/views/userStatisticsPage.html'"></div>
             </div>
       </div>
-      <div class="rightTab" flex="40">
+      <div class="rightTab" flex="40" flex-xs="100">
+        <div ng-controller="UserPageSuggestionController as upsc">
+          <div class="userSuggestions">
+            <h3>User Suggestions</h3>
+          <div  class="userSuggestionsContainer">
+
+            <user-suggestion-list users-list="upsc.usersList"></user-suggestion-list>  
+          </div>  
+          </div>
+          
+          
+        </div>
       </div>
 
     </div>

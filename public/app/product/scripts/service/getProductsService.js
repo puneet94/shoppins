@@ -11,6 +11,7 @@ function GetProductsService($http,storeData,baseUrlService,changeBrowserURL){
   this.getStoreProductsList = getStoreProductsList;
   this.getSingleProduct = getSingleProduct;
 this.getSingleProductPage = getSingleProductPage;
+this.getSingleProductStores = getSingleProductStores;
   function getStoreProductsList(storeId){
   	var pageNo = 1;
   	return $http.get(baseUrlService.baseUrl+'product/products/store/'+storeId+"/"+pageNo);
@@ -19,6 +20,11 @@ this.getSingleProductPage = getSingleProductPage;
   }
   function getSingleProduct(productId){
   	return $http.get(baseUrlService.baseUrl+'product/products/singleProduct/'+productId);
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function getSingleProductStores(params){
+    return $http.get(baseUrlService.baseUrl+'product/collection',{params:params});
     //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
 
   }

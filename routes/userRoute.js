@@ -292,6 +292,38 @@ userRouter.route('/upload/profileImage/:userId')
 
 
     });
+    userRouter.route('/collection')
+    .get(function(req, res) {
+        var queryObj = {};
+        if(req.query.userSearch){
+            var userRe = new RegExp(req.query.userSearch.toLowerCase(), "i");
+        queryObj.$or = [{ 'firstName': { $regex: userRe }}, { 'lastName': { $regex: userRe }},{ 'displayName': { $regex: userRe }}];
+        }
+        
+        /*if (req.query.firstName) {
+            queryObj.firstName = new RegExp(req.query.firstName.toLowerCase(), "i");
+        }
+        if (req.query.lastName) {
+            queryObj.lastName = new RegExp(req.query.lastName.toLowerCase(), "i");
+        }
+        if (req.query.displayName) {
+            queryObj.displayName = new RegExp(req.query.displayName.toLowerCase(), "i");
+        }*/
+        
+        var options = {};
+        options.limit = req.query.limit ? parseInt(req.query.limit) : null;
+        options.sort = req.query.sort || null;
+        options.page = req.query.page || null;
+        options.select = req.query.fields || null;
+        options.populate = req.query.populate || null;
+
+        User.paginate(queryObj, options).then(function(userList) {
+            res.json(userList);
+
+        });
+
+    });
+
 
 
 

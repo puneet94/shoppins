@@ -94,24 +94,6 @@
     display: inline;
     margin: 2px; }
 
-.capital-heading-text {
-  text-transform: capitalize;
-  font-size: 24px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-sub-heading-text {
-  text-transform: capitalize;
-  font-size: 16px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-normal-text {
-  text-transform: capitalize;
-  font-size: 14px;
-  font-weight: 400;
-  color: #795548; }
-
 .authenticationModalContainer {
   padding: 24px; }
 
@@ -193,6 +175,24 @@
   border: 1px solid teal;
   border-radius: 3px; }
 
+
+.capital-heading-text {
+  text-transform: capitalize;
+  font-size: 24px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-sub-heading-text {
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-normal-text {
+  text-transform: capitalize;
+  font-size: 14px;
+  font-weight: 400;
+  color: #795548; }
 
 .chatBoxPage {
   position: relative;
@@ -524,6 +524,111 @@ md-ink-bar {
     -webkit-transform: rotate(359deg);
     transform: rotate(359deg); } }
 
+.productPageContainer .singleProductContainer .productTopContainer .productImageContainer {
+  padding: 10px;
+  background-color: white;
+  margin: 10px; }
+  .productPageContainer .singleProductContainer .productTopContainer .productImageContainer .productImage {
+    width: 100%; }
+
+.productPageContainer .singleProductContainer .productTopContainer .productBriefContainer {
+  padding: 10px;
+  background-color: white;
+  margin: 10px; }
+  .productPageContainer .singleProductContainer .productTopContainer .productBriefContainer .productName {
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: capitalize; }
+  .productPageContainer .singleProductContainer .productTopContainer .productBriefContainer .productPrice {
+    font-size: 16px; }
+
+.productPageContainer .singleProductContainer .productMiddleContainer .productReviewsBrief .productReviewsBriefIcons .iconContainer {
+  text-align: center;
+  margin: 5px;
+  padding: 15px;
+  width: 100%;
+  cursor: pointer;
+  background-color: white;
+  -webkit-transition: all 1s;
+          transition: all 1s; }
+  .productPageContainer .singleProductContainer .productMiddleContainer .productReviewsBrief .productReviewsBriefIcons .iconContainer:hover {
+    color: red; }
+  .productPageContainer .singleProductContainer .productMiddleContainer .productReviewsBrief .productReviewsBriefIcons .iconContainer .iconClass {
+    font-size: 32px;
+    text-align: center; }
+
+.capital-heading-text {
+  text-transform: capitalize;
+  font-size: 24px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-sub-heading-text {
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-normal-text {
+  text-transform: capitalize;
+  font-size: 14px;
+  font-weight: 400;
+  color: #795548; }
+
+.productContainer {
+  padding: 10px; }
+  .productContainer .singleProductContainer {
+    background-color: white;
+    margin: 5px;
+    width: 48%; }
+    .productContainer .singleProductContainer .productImageContainer {
+      width: 100%;
+      padding: 5px;
+      height: 100%; }
+      .productContainer .singleProductContainer .productImageContainer .singleProductImage {
+        width: 100%;
+        height: 180px; }
+    .productContainer .singleProductContainer .productDetailsContainer {
+      padding: 5px;
+      text-transform: capitalize; }
+      .productContainer .singleProductContainer .productDetailsContainer .productName {
+        font-size: 16px;
+        font-weight: 700;
+        text-transform: capitalize;
+        margin: 3px 0;
+        cursor: pointer; }
+      .productContainer .singleProductContainer .productDetailsContainer .productCategory {
+        font-size: 11px;
+        padding: 2px 5px;
+        background-color: green;
+        margin: 2px;
+        color: white;
+        border-radius: 2px; }
+      .productContainer .singleProductContainer .productDetailsContainer .productSubCategory {
+        font-size: 11px;
+        padding: 2px 5px;
+        background-color: blue;
+        margin: 2px;
+        color: white;
+        border-radius: 2px; }
+      .productContainer .singleProductContainer .productDetailsContainer .productPrice {
+        font-size: 12px;
+        padding: 5px 10px;
+        border-radius: 2px;
+        color: white;
+        background-color: #cb202d; }
+      .productContainer .singleProductContainer .productDetailsContainer .productStatsContainer {
+        font-size: 14px;
+        font-weight: 600; }
+        .productContainer .singleProductContainer .productDetailsContainer .productStatsContainer .productStatsEntity {
+          margin: 0 2px; }
+
+@media (max-width: 600px) {
+  .productContainer .singleProductContainer {
+    background-color: white;
+    margin: 10px;
+    max-width: 100%; } }
+
 .shakeElement {
   animation: shake 2s infinite;
   -webkit-animation: shake 2s infinite;
@@ -837,111 +942,6 @@ md-ink-bar {
     padding: 0;
     height: 100%; } }
 
-
-.productPageContainer .singleProductContainer .productTopContainer .productImageContainer {
-  padding: 10px;
-  background-color: white;
-  margin: 10px; }
-  .productPageContainer .singleProductContainer .productTopContainer .productImageContainer .productImage {
-    width: 100%; }
-
-.productPageContainer .singleProductContainer .productTopContainer .productBriefContainer {
-  padding: 10px;
-  background-color: white;
-  margin: 10px; }
-  .productPageContainer .singleProductContainer .productTopContainer .productBriefContainer .productName {
-    font-size: 18px;
-    font-weight: 600;
-    text-transform: capitalize; }
-  .productPageContainer .singleProductContainer .productTopContainer .productBriefContainer .productPrice {
-    font-size: 16px; }
-
-.productPageContainer .singleProductContainer .productMiddleContainer .productReviewsBrief .productReviewsBriefIcons .iconContainer {
-  text-align: center;
-  margin: 5px;
-  padding: 15px;
-  width: 100%;
-  cursor: pointer;
-  background-color: white;
-  -webkit-transition: all 1s;
-          transition: all 1s; }
-  .productPageContainer .singleProductContainer .productMiddleContainer .productReviewsBrief .productReviewsBriefIcons .iconContainer:hover {
-    color: red; }
-  .productPageContainer .singleProductContainer .productMiddleContainer .productReviewsBrief .productReviewsBriefIcons .iconContainer .iconClass {
-    font-size: 32px;
-    text-align: center; }
-
-.capital-heading-text {
-  text-transform: capitalize;
-  font-size: 24px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-sub-heading-text {
-  text-transform: capitalize;
-  font-size: 16px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-normal-text {
-  text-transform: capitalize;
-  font-size: 14px;
-  font-weight: 400;
-  color: #795548; }
-
-.productContainer {
-  padding: 10px; }
-  .productContainer .singleProductContainer {
-    background-color: white;
-    margin: 5px;
-    width: 48%; }
-    .productContainer .singleProductContainer .productImageContainer {
-      width: 100%;
-      padding: 5px;
-      height: 100%; }
-      .productContainer .singleProductContainer .productImageContainer .singleProductImage {
-        width: 100%;
-        height: 180px; }
-    .productContainer .singleProductContainer .productDetailsContainer {
-      padding: 5px;
-      text-transform: capitalize; }
-      .productContainer .singleProductContainer .productDetailsContainer .productName {
-        font-size: 16px;
-        font-weight: 700;
-        text-transform: capitalize;
-        margin: 3px 0;
-        cursor: pointer; }
-      .productContainer .singleProductContainer .productDetailsContainer .productCategory {
-        font-size: 11px;
-        padding: 2px 5px;
-        background-color: green;
-        margin: 2px;
-        color: white;
-        border-radius: 2px; }
-      .productContainer .singleProductContainer .productDetailsContainer .productSubCategory {
-        font-size: 11px;
-        padding: 2px 5px;
-        background-color: blue;
-        margin: 2px;
-        color: white;
-        border-radius: 2px; }
-      .productContainer .singleProductContainer .productDetailsContainer .productPrice {
-        font-size: 12px;
-        padding: 5px 10px;
-        border-radius: 2px;
-        color: white;
-        background-color: #cb202d; }
-      .productContainer .singleProductContainer .productDetailsContainer .productStatsContainer {
-        font-size: 14px;
-        font-weight: 600; }
-        .productContainer .singleProductContainer .productDetailsContainer .productStatsContainer .productStatsEntity {
-          margin: 0 2px; }
-
-@media (max-width: 600px) {
-  .productContainer .singleProductContainer {
-    background-color: white;
-    margin: 10px;
-    max-width: 100%; } }
 
 .reviewSubmitForm {
   background-color: white;
@@ -1624,3 +1624,20 @@ md-ink-bar {
 
 .userContent {
   margin-top: 10px; }
+
+.userSuggestions {
+  margin-left: 20px;
+  margin-top: 20px; }
+
+.userSuggestionsContainer {
+  max-height: 300px;
+  overflow: auto;
+  width: 80%; }
+
+@media (max-width: 600px) {
+  .userSuggestions {
+    margin: 5px; }
+  .userSuggestionsContainer {
+    max-height: 400px;
+    overflow: auto;
+    width: 100%; } }

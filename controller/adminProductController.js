@@ -1,3 +1,4 @@
+'use strict';
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
@@ -6,8 +7,7 @@ var models = require('..//models/storeModel');
 var Product = models.Product;
 var Store = models.Store;
 var User = models.User;
-var jwt = require('jsonwebtoken');
-var common = require('../routes/commonRouteFunctions');;
+
 var adminProductController = {
   createProduct: createProduct,
   editProduct: editProduct,

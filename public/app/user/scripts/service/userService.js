@@ -23,6 +23,12 @@ function UserService($http,baseUrlService,userData){
   this.updateUser = updateUser;
   this.checkUserPassword = checkUserPassword;
   this.changeUserPassword = changeUserPassword;
+  this.getUsers = getUsers;
+
+  function getUsers(params){
+    return $http.get(baseUrlService.baseUrl+"user/collection",{params:params});
+
+  }
   function getUserDetails(id,params){
     return $http.get(baseUrlService.baseUrl+"user/user/"+id,{params:params});
 
