@@ -20,7 +20,8 @@ angular.module('app.user')
     upc.currentUser = currentUser;
 
     function currentUser(){
-      return ($routeParams.userId == userData.getUser()._id);
+      if(upc.authCheck){
+      return ($routeParams.userId == userData.getUser()._id);}
     }
     function submitUserFollow(userId){
       userService.submitUserFollow(userData.getUser()._id,userId).then(function(res){
@@ -42,12 +43,12 @@ angular.module('app.user')
     }
 
     function userFollowed(userId){
-
+if(upc.authCheck){
       if(userData.getUser().following.indexOf(userId)!=-1){
 
         return true;
       }
-      return false;
+      return false;}
     }
     function activate(){
       upc.loading = true;

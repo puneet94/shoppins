@@ -21,10 +21,9 @@
         vm.user = {};
 
         vm.loading = true;
-        vm.usersList  =$scope.usersList;
-        console.log("directive called");
-        console.log($scope.usersList);
-    vm.authCheck = $auth.isAuthenticated();
+        vm.authCheck =$auth.isAuthenticated();
+        
+
     
     vm.currentUserFollowed = currentUserFollowed;
     vm.submitUserFollow = submitUserFollow;
@@ -44,18 +43,21 @@
       });
     }
     function deleteUserFollow(followerId){
-      userService.deleteUserFollow(userData.getUser()._id,followerId).then(function(response){
+    	if(vm.authCheck){
+    		userService.deleteUserFollow(userData.getUser()._id,followerId).then(function(response){
         
         userData.setUser();
-      });
+      });		
+    	}
+      
     }
     function currentUserFollowed(follower){
-
+if(vm.authCheck){
       if(userData.getUser().following.indexOf(follower)==-1){
         return false;
       }
       return true;
-    }
+    }}
       }],
     };
   }

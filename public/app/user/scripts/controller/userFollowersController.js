@@ -39,12 +39,12 @@ angular.module('app.user')
       });
     }
     function currentUserFollowed(follower){
-
+if(ufc.authCheck){
       if(userData.getUser().following.indexOf(follower)==-1){
         return false;
       }
       return true;
-    }
+    }}
 
     }
 
