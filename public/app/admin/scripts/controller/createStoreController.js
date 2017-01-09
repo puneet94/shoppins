@@ -1,4 +1,5 @@
 (function(angular) {
+    'use strict';
     angular.module('app.admin')
         .controller('CreateStoreController', ['$auth', 'adminStoreService', 'Upload', 'userData', '$timeout', 'baseUrlService', '$location', '$mdDialog', CreateStoreController]);
 
@@ -24,9 +25,10 @@
 
                 file.upload.then(function(response) {
                     file.result = response.data;
-
-
                     csc.uploadedImage = response.data;
+                    csc.storeForm.bannerImage = csc.uploadedImage;
+                    console.log("the banner image");
+                    console.log(csc.storeForm);
                     $('.adminStoreBannerImage').css('background-image', 'url(' + response.data + ')');
                     csc.formBannerLoading = false;
 
@@ -63,7 +65,7 @@
         };
 
         function createStore() {
-            csc.storeForm.bannerImage = csc.storeForm.storeImages[0];
+            csc.storeForm.bannerImage =csc.storeForm.bannerImage|| csc.storeForm.storeImages[0];
             adminStoreService.createStore(csc.storeForm)
                 .then(function(response) {
                     console.log(response.data._id);

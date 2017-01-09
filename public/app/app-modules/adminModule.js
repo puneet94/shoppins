@@ -1,4 +1,5 @@
 (function(angular){
+    'use strict';
 angular.module('app.admin', []).config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.
@@ -13,6 +14,18 @@ angular.module('app.admin', []).config(['$routeProvider',
             templateUrl: 'app/admin/views/adminStorePage.html',
             controller: 'AdminStoreController',
             controllerAs: 'asc',
+            resolve: {
+                redirectIfNotAuthenticated2: redirectIfNotAuthenticated2,
+                redirectIfNotStoreAuthenticated: redirectIfNotStoreAuthenticated
+            }
+        }).when('/admin/adminCreateOffer/:storeId', {
+            templateUrl: 'app/admin/views/adminCreateOffer.html',
+            resolve: {
+                redirectIfNotAuthenticated2: redirectIfNotAuthenticated2,
+                redirectIfNotStoreAuthenticated: redirectIfNotStoreAuthenticated
+            }
+        }).when('/admin/adminEditOffer/:storeId/:offerId', {
+            templateUrl: 'app/admin/views/adminEditOffer.html',
             resolve: {
                 redirectIfNotAuthenticated2: redirectIfNotAuthenticated2,
                 redirectIfNotStoreAuthenticated: redirectIfNotStoreAuthenticated

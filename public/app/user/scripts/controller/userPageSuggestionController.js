@@ -8,10 +8,19 @@ angular.module('app.user')
     activate();
     
     upc.loading = true;
-
+    $scope.$watch(function(){
+      return upc.userSuggestionsModel;
+    },function(value){
+      if(value && value.length>=2){
+        getUsers({'userSearch':value,'limit':20,'page':1});
+      }
+      else{
+       getUsers({'limit':20,'page':1}); 
+      }
+    });
     
     function activate(){
-      getUsers({'limit':20,'page':1});
+      
       
     }
     function getUsers(params){

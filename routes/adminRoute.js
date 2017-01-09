@@ -23,7 +23,7 @@ adminRouter.route('/product/:productId/:storeId')
 	.delete(commons.ensureAuthenticated,commons.ensureStoreAdminAuthenticated,productController.deleteProduct);
 
 adminRouter.route('/offers/:storeId').post(commons.ensureAuthenticated,offerController.createOffer);
-adminRouter.route('/offer/:offerId/:storeId')
+adminRouter.route('/offer/:offerId/')
 	.get(commons.ensureAuthenticated,commons.ensureStoreAdminAuthenticated,offerController.editOffer)
 	.put(commons.ensureAuthenticated,commons.ensureStoreAdminAuthenticated,offerController.updateOffer)
 	.delete(commons.ensureAuthenticated,commons.ensureStoreAdminAuthenticated,offerController.deleteOffer);

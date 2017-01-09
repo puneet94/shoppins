@@ -1,4 +1,5 @@
 (function(angular){
+  'use strict';
   angular.module('app.admin')
 
     .controller('AdminStoreController',['$scope','$routeParams','getSingleStore','Upload','baseUrlService',AdminStoreController]);

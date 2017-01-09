@@ -1,13 +1,8 @@
 'use strict';
-var express = require('express');
-var app = express();
-var mongoose = require('mongoose');
-var cloudinary = require('cloudinary').v2;
 var models = require('..//models/storeModel');
 var Store = models.Store;
 var User = models.User;
-var jwt = require('jsonwebtoken');
-var common = require('../routes/commonRouteFunctions');;
+var common = require('../routes/commonRouteFunctions');
 var adminStoreController = {
     createStore: createStore,
     editStore: editStore,
@@ -18,7 +13,7 @@ var adminStoreController = {
 function createStore(req, res) {
     var store = new Store();
     var address = {};
-    item = req.body;
+    var item = req.body;
     store.name = item.name.toLowerCase();
     for (var key in item.address) {
         if (item.address.hasOwnProperty(key)) {
@@ -50,7 +45,7 @@ function createStore(req, res) {
             common.saveSearchList(store.name.toLowerCase(), "store", address.city.toLowerCase(), req, res);
             for (var i = 0; i < store.category.length; i++) {
                 common.saveSearchList(store.category[i].toLowerCase(), "store-category", address.city.toLowerCase(), req, res);
-            };
+            }
             res.json(result);
         }
     });
@@ -101,7 +96,7 @@ function updateStore(req, res) {
                 common.saveSearchList(store.name.toLowerCase(), "store", address.city.toLowerCase(), req, res);
                 for (var i = 0; i < store.category.length; i++) {
                     common.saveSearchList(store.category[i].toLowerCase(), "store-category", address.city.toLowerCase(), req, res);
-                };
+                }
                 res.json(result);
             });
         }
@@ -110,11 +105,12 @@ function updateStore(req, res) {
 
 function deleteStore(req, res) {
 
-    Store.findById(req.params.storeId, function(err, store) {
+    Store.findById(req.params.storeId).remove().exec(function(err, store) {
         if (err) {
-            callback(err, null);
+            console.log(err);
         } else {
-
+            console.log("deleted");
+            
         }
     });
 }

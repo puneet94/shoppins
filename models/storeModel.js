@@ -45,6 +45,20 @@ var ActivitySchema = new Schema({
 	statement: String,
 	time: { type: Date, default: Date.now }
 });
+var Address = new Schema({
+	doorNo: String,
+	city: String,
+	state: String,
+	zone: String,
+	country: String,
+	district: String,
+	zipCode: String,
+	area: String,
+	locality: String,
+	landmark: String,
+	latitude: Number,
+	longitude: Number
+});
 
 var ReportStoreSchema = new Schema({
 	date: { type: Date, default: Date.now },
@@ -90,17 +104,17 @@ UpvoteSchema.plugin(relationship, { relationshipPathName: 'product' });
 UpvoteSchema.plugin(relationship, { relationshipPathName: 'review' });
 
 var OfferSchema = new Schema({
-	headline: String,
+	tagline: String,
 	description: String,
+	address: Address,
 	startDate: { type: Date, default: Date.now },
 	endDate: { type: Date, default: Date.now },
 	time: { type: Date, default: Date.now },
 	store: { type: Schema.ObjectId, ref: "Store", childPath: "offers" },
 	category: [String],
-	subCategory: [String],
 	bannerImage: { type: String },
-	images: [String],
-	imagesMin: [String]
+	offerImages: [String],
+	type: String
 
 }, { collection: 'offers' });
 OfferSchema.plugin(relationship, { relationshipPathName: 'store' });
@@ -240,20 +254,6 @@ UserSchema.post('init', function() {
 });
 
 
-var Address = new Schema({
-	doorNo: String,
-	city: String,
-	state: String,
-	zone: String,
-	country: String,
-	district: String,
-	zipCode: String,
-	area: String,
-	locality: String,
-	landmark: String,
-	latitude: Number,
-	longitude: Number
-});
 
 var Price = new Schema({
 	value: Number,
@@ -318,7 +318,6 @@ var ProductSchema = new Schema({
 });
 var autoPopulateStore = function(next) {
 	this.populate('store');
-	//this.cityName = this.store.address.city;
 	next();
 };
 

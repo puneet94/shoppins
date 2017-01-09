@@ -59,6 +59,11 @@
         <div ng-controller="UserPageSuggestionController as upsc">
           <div class="userSuggestions">
             <h3>User Suggestions</h3>
+            <div class="userSuggestionsSearchContainer">
+              <div class="userSuggestionsSearchBox formEntity">
+                <input type="text" ng-model="upsc.userSuggestionsModel" class="formEntityInput"/>
+              </div>
+            </div>
           <div  class="userSuggestionsContainer">
 
             <user-suggestion-list users-list="upsc.usersList"></user-suggestion-list>  

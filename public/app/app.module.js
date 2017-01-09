@@ -5,7 +5,7 @@
 angular.module('myApp',
   ['ngRoute','ngCookies','ngMessages','ngSanitize','afkl.lazyImage','satellizer','ngFileUpload','ngMap','btford.socket-io',
   'authModApp',
-  'app.common','app.home','app.store','app.chat','app.admin','ngMaterial','app.review','app.product','app.user']
+  'app.common','app.home','app.store','app.chat','app.admin','ngMaterial','app.review','app.product','app.user','app.offer']
   ).config(['$routeProvider','$mdThemingProvider',
   function($routeProvider,$mdThemingProvider) {
       $mdThemingProvider.theme('default')

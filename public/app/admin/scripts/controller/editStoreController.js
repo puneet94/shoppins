@@ -1,4 +1,5 @@
 (function(angular) {
+    'use strict';
     angular.module('app.admin')
 
     .controller('EditStoreController', ['$auth', '$route', 'adminStoreService', 'Upload', '$routeParams', '$timeout', 'baseUrlService', '$mdDialog', EditStoreController]);
@@ -65,7 +66,6 @@
                         .textContent('Your Store has been edited.')
                         .ariaLabel('Alert Dialog Demo')
                         .ok('Got it!')
-
                     );
                     $route.reload();
                 }, function(response) {

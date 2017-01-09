@@ -1,0 +1,30 @@
+<div  class="singleofferContainer">
+
+        <div class="offerImageContainer">
+          <div class="suggestedStoreImage">
+            <img src="http://windows10wall.com/wp-content/uploads/2014/09/space_light_ipad_background_wallpaper.jpg" alt="" />
+          </div>
+          <div class="offerImageDate" md-whiteframe="5">
+            {{offer.startDate}}
+          </div>
+        </div>
+        <div class="offerDetailsContainer" layout="column" layout-align="space-between center">
+          <div >
+            <h3 class="offerDetailsHeader">{{offer.tagline}}</h3>
+          </div>
+          <div class="offerCategoryContainer">
+            <span ng-repeat="category in offer.category" class="customChip">
+                {{category}}
+              </span>
+          </div>
+          <div class="offerLocation">
+            <h5><span ng-repeat = "add in offer.store.address">
+              {{add}}
+            </span></h5>
+          </div>
+          <div class="offerMore">
+            <button class="md-raised md-primary">View More </button>
+          </div>
+        </div>
+        <div style="clear:both;"></div>
+      </div>
