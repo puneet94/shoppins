@@ -2,9 +2,9 @@
 	'use strict';
 	angular.module('app.admin')
 
-	.controller('CreateOfferController', ['$scope', 'Upload', '$timeout', 'baseUrlService', '$mdDialog','$location','adminOfferService',CreateOfferController]);
+	.controller('CreateOfferController', ['$scope', 'Upload', '$timeout', 'baseUrlService', '$mdDialog','$location','adminOfferService','$routeParams',CreateOfferController]);
 
-	function CreateOfferController($scope, Upload, $timeout, baseUrlService,$mdDialog,$location,adminOfferService) {
+	function CreateOfferController($scope, Upload, $timeout, baseUrlService,$mdDialog,$location,adminOfferService,$routeParams) {
 		var coc = this;
 		coc.offerForm = {};
 		coc.offerForm.offerImages = [];

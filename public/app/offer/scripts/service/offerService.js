@@ -16,7 +16,7 @@ function OfferService($http,baseUrlService){
 
   }
   function getSingleOffer(id,params){
-	return $http.get(baseUrlService.baseUrl+'offer/singleOffer/'+id,{params:params});  	
+	return $http.get(baseUrlService.baseUrl+'offer/offer/'+id,{params:params});  	
   }
 }
 })(window.angular);

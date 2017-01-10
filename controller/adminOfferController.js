@@ -12,6 +12,7 @@ var adminOfferController = {
 };
 
 function createOffer(req, res) {
+  console.log("cretae offer hit");
   var offer = new Offer();
   var item = req.body;
   offer.tagline = item.tagline;
@@ -24,10 +25,10 @@ function createOffer(req, res) {
     });
   offer.bannerImage = item.bannerImage;
   offer.images = item.images;
-  offer.type = item.type.toLowerCase() || 'offer';
+  offer.type = item.type ? item.type.toLowerCase() : 'offer';
 
 
-  Store.findById(req.params.storeid, function(err, store) {
+  Store.findById(req.params.storeId, function(err, store) {
     if (err) {
       console.log(err);
     } else {

@@ -22,6 +22,16 @@ offerRouter.route('/offers')
 			res.json(offers);
 		});
 	});
+offerRouter.route('/offer/:offerId')
+	.get(function(req, res) {
+		Offer.findById(req.params.offerId,function(err, offer) {
+			if (err) {
+				res.send(err);
+			}
+
+			res.json(offer);
+		});
+	});
 
 /*get all the offers of a single store*/
 offerRouter.route('/store/:storeId')
@@ -54,6 +64,7 @@ offerRouter.route('/store/:storeId')
 offerRouter.route('/collection')
 	.get(function(req, res) {
 		var queryObj = {};
+		console.log(req.query);
 		if (req.query.area) {
 			queryObj['address.area'] = req.query.area.toLowerCase();
 		}

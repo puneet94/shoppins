@@ -88,10 +88,11 @@
 
 
 		function activate() {
-			adminOfferService.getOffer($routeParams.offerId).then(function(response) {
-				response.data.category = response.data.category;
-				response.data.subCategory = response.data.subCategory;
-				response.data.keywords = response.data.keywords.join(",");
+			adminOfferService.getOffer($routeParams.offerId,$routeParams.storeId).then(function(response) {
+				//response.data.category = response.data.category;
+				
+				response.data.startDate = new Date(response.data.startDate);
+				response.data.endDate = new Date(response.data.endDate);
 				console.log(response);
 				eoc.offerForm = response.data;
 			});

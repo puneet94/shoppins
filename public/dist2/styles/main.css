@@ -838,6 +838,88 @@ md-ink-bar {
     height: 100%; } }
 
 
+.singleofferContainer {
+  float: left;
+  display: block;
+  width: 49%;
+  height: 200px;
+  box-sizing: border-box;
+  border: 1px solid #e1e8ed;
+  border-radius: 3px;
+  margin: 2px; }
+  .singleofferContainer .offerImageContainer {
+    display: block;
+    float: left;
+    width: 50%;
+    height: 100%;
+    box-sizing: border-box;
+    position: relative; }
+    .singleofferContainer .offerImageContainer .offerImageDate {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+      background-color: #5BC199;
+      padding: 5px;
+      border: 1px solid #5BC199;
+      border-radius: 3px;
+      font-size: 10px; }
+    .singleofferContainer .offerImageContainer .adminOfferTag {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: white;
+      background-color: #5BC199;
+      padding: 5px;
+      border: 1px solid #5BC199;
+      border-radius: 3px;
+      font-size: 10px; }
+  .singleofferContainer .offerDetailsContainer {
+    display: block;
+    float: left;
+    width: 50%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 2%; }
+    .singleofferContainer .offerDetailsContainer .offerDetailsHeader {
+      margin-top: 0; }
+
+@media (max-width: 600px) {
+  .singleofferContainer {
+    float: left;
+    display: block;
+    width: 100%;
+    min-height: 400px; }
+    .singleofferContainer .offerImageContainer {
+      display: block;
+      float: left;
+      width: 100%;
+      height: 50%; }
+    .singleofferContainer .offerDetailsContainer {
+      display: block;
+      float: left;
+      width: 100%; } }
+
+.suggestedStoreImage {
+  width: 100%;
+  position: relative;
+  height: 100%;
+  box-sizing: border-box; }
+  .suggestedStoreImage img {
+    width: 100%;
+    height: 100%;
+    position: absolute; }
+
+.customChip {
+  font-size: 12px;
+  color: white;
+  background-color: #669999;
+  margin-right: 5px;
+  padding: 5px 10px;
+  text-transform: capitalize;
+  border: 1px solid #eee;
+  border-radius: 3px; }
+
 .productPageContainer .singleProductContainer .productTopContainer .productImageContainer {
   padding: 10px;
   background-color: white;
@@ -942,6 +1024,53 @@ md-ink-bar {
     background-color: white;
     margin: 10px;
     max-width: 100%; } }
+
+.reviewSubmitForm {
+  background-color: white;
+  padding: 25px; }
+  .reviewSubmitForm .reviewSubmitFormContent {
+    background-color: white; }
+
+.userRatingSection {
+  width: 175px; }
+  .userRatingSection .rating {
+    border: none; }
+    .userRatingSection .rating input {
+      display: none; }
+    .userRatingSection .rating label:before {
+      margin: 5px;
+      font-size: 1.25em;
+      font-family: FontAwesome;
+      display: inline-block;
+      content: "\f005"; }
+    .userRatingSection .rating label {
+      color: rgba(0, 0, 0, 0.5);
+      float: right; }
+    .userRatingSection .rating input:checked ~ label {
+      color: #FFD700; }
+    .userRatingSection .rating:not(:checked) > label:hover {
+      color: #FFD700; }
+      .userRatingSection .rating:not(:checked) > label:hover ~ label {
+        color: #FFD700; }
+    .userRatingSection .rating > input:checked + label:hover, .userRatingSection .rating > input:checked ~ label:hover {
+      color: #FFED85; }
+    .userRatingSection .rating > label:hover ~ input:checked ~ label, .userRatingSection .rating > input:checked ~ label:hover ~ label {
+      color: #FFED85; }
+
+.likeReviewContainer .likeReviewIconContainer {
+  background-color: #eee;
+  padding: 8px 10px; }
+  .likeReviewContainer .likeReviewIconContainer .likeText {
+    margin-left: 5px; }
+
+.likeReviewContainer .likeReviewCountContainer {
+  background-color: white;
+  padding: 7px 9px;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  border-left: none;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px; }
 
 @media (max-width: 600px) {
   .customTabsContainer ul.tabsList li {
@@ -1594,50 +1723,3 @@ md-ink-bar {
     max-height: 400px;
     overflow: auto;
     width: 100%; } }
-
-.reviewSubmitForm {
-  background-color: white;
-  padding: 25px; }
-  .reviewSubmitForm .reviewSubmitFormContent {
-    background-color: white; }
-
-.userRatingSection {
-  width: 175px; }
-  .userRatingSection .rating {
-    border: none; }
-    .userRatingSection .rating input {
-      display: none; }
-    .userRatingSection .rating label:before {
-      margin: 5px;
-      font-size: 1.25em;
-      font-family: FontAwesome;
-      display: inline-block;
-      content: "\f005"; }
-    .userRatingSection .rating label {
-      color: rgba(0, 0, 0, 0.5);
-      float: right; }
-    .userRatingSection .rating input:checked ~ label {
-      color: #FFD700; }
-    .userRatingSection .rating:not(:checked) > label:hover {
-      color: #FFD700; }
-      .userRatingSection .rating:not(:checked) > label:hover ~ label {
-        color: #FFD700; }
-    .userRatingSection .rating > input:checked + label:hover, .userRatingSection .rating > input:checked ~ label:hover {
-      color: #FFED85; }
-    .userRatingSection .rating > label:hover ~ input:checked ~ label, .userRatingSection .rating > input:checked ~ label:hover ~ label {
-      color: #FFED85; }
-
-.likeReviewContainer .likeReviewIconContainer {
-  background-color: #eee;
-  padding: 8px 10px; }
-  .likeReviewContainer .likeReviewIconContainer .likeText {
-    margin-left: 5px; }
-
-.likeReviewContainer .likeReviewCountContainer {
-  background-color: white;
-  padding: 7px 9px;
-  border: 1px solid #eee;
-  border-radius: 3px;
-  border-left: none;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px; }

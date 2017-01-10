@@ -15,7 +15,8 @@ function AdminOfferService($http,baseUrlService){
   this.updateOffer = updateOffer;
   this.deleteOffer  = deleteOffer;
   
-  function createOffer(offer,storeId){
+  function createOffer(storeId, offer){
+
   	return $http.post(baseUrlService.baseUrl+'admin/offers/'+storeId,offer);
     //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
 
@@ -23,8 +24,8 @@ function AdminOfferService($http,baseUrlService){
   function updateOffer(offerId,offer){
   	return $http.put(baseUrlService.baseUrl+'admin/offer/'+offerId,offer);
   }
-  function getOffer(offerId,obj){
-    return $http.get(baseUrlService.baseUrl+'admin/offer/'+offerId,{params:obj});       
+  function getOffer(offerId,storeId,obj){
+    return $http.get(baseUrlService.baseUrl+'admin/offer/'+storeId+'/'+offerId,{params:obj});       
   }
   function deleteOffer(){
 

@@ -10,10 +10,11 @@
       replace: true,
       templateUrl:'app/offer/views/singleofferTemplate.html',
       scope:{
-        offer:'=singleoffer'
+        offer:'=singleOffer',
+        'isAdminOffer': '@adminOffer'
       },
       link: function(scope,element,attrs){
-
+        
       }
     };
   }

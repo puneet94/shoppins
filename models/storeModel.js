@@ -118,6 +118,7 @@ var OfferSchema = new Schema({
 
 }, { collection: 'offers' });
 OfferSchema.plugin(relationship, { relationshipPathName: 'store' });
+OfferSchema.plugin(mongoosePaginate);
 var ReviewSchema = new Schema({
 	description: String,
 	date: { type: Date, default: Date.now },
@@ -358,6 +359,7 @@ var MailVerifySchema = new Schema({
 
 exports.MailVerify = mongoose.model('MailVerify', MailVerifySchema);
 exports.Store = mongoose.model('Store', StoreSchema);
+exports.Offer = mongoose.model('Offer', OfferSchema);
 exports.Product = mongoose.model("Product", ProductSchema);
 exports.User = User;
 exports.Review = Review;

@@ -1,3 +1,4 @@
+'use strict';
 var UserSearch = require('..//models/user_search');
 var moment = require('moment');
 var mongoose = require('mongoose');
@@ -92,6 +93,12 @@ cob.ensureStoreAdminAuthenticated = function ensureStoreAdminAuthenticated(req, 
         .findById(req.params.storeId)
         .select('admin')
         .exec(function(err, store) {
+            if(err){
+                console.log('store authentication error');
+                console.log(err);
+            }
+            console.log('****************************************');
+            console.log("correct***********");
             if (store.admin == req.user) {
                 console.log("this is used");
             }
