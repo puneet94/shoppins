@@ -21,8 +21,8 @@ function AdminOfferService($http,baseUrlService){
     //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
 
   }
-  function updateOffer(offerId,offer){
-  	return $http.put(baseUrlService.baseUrl+'admin/offer/'+offerId,offer);
+  function updateOffer(offerId,storeId,offer){
+  	return $http.put(baseUrlService.baseUrl+'admin/offer/'+storeId+'/'+offerId,offer);
   }
   function getOffer(offerId,storeId,obj){
     return $http.get(baseUrlService.baseUrl+'admin/offer/'+storeId+'/'+offerId,{params:obj});       

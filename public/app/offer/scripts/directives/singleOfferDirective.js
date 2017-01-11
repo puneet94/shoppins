@@ -1,23 +1,37 @@
-
-(function(angular){
+(function(angular) {
   'use strict';
   angular.module('app.offer')
-  .directive('singleOfferDirective',[singleOfferDirective]);
-  
-  function singleOfferDirective(){
+    .directive('singleOfferDirective', [singleOfferDirective]);
+
+  function singleOfferDirective() {
     return {
       restrict: 'E',
       replace: true,
-      templateUrl:'app/offer/views/singleofferTemplate.html',
-      scope:{
-        offer:'=singleOffer',
+      templateUrl: 'app/offer/views/singleofferTemplate.html',
+      scope: {
+        offer: '=singleOffer',
         'isAdminOffer': '@adminOffer'
       },
-      link: function(scope,element,attrs){
-        
+      link: function(scope, element, attrs) {
+
+      },
+      controller: function($scope) {
+        $scope.offerDir = {
+          mapAddress: mapAddress
+        };
+
+        function mapAddress(addressObj) {
+          return Object.keys(addressObj).map(function(key, index) {
+            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
+              console.log(key);
+              return addressObj[key];  
+            }
+            
+          });
+        }
       }
     };
   }
-  
+
 
 })(window.angular);

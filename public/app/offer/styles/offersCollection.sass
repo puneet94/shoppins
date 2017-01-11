@@ -1,3 +1,6 @@
+a
+  color: white
+  text-decoration: none
 .singleofferContainer
   float: left
   display: block
@@ -7,6 +10,8 @@
   border: 1px solid #e1e8ed
   border-radius: 3px  
   margin: 2px
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,.2), 0 6px 20px 0 rgba(0,0,0,.19)
+  font-family: 'Roboto'
   .offerImageContainer
     display: block
     float: left
@@ -14,26 +19,31 @@
     height: 100%
     box-sizing: border-box
     position: relative
+    img
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,.2), 0 6px 20px 0 rgba(0,0,0,.19)
     .offerImageDate
       position: absolute
-      top: 10px
-      left: 10px
+      top: 5px
+      left: 5px
       color: white
       background-color: #5BC199
-      padding: 5px
+      padding: 5px 10px
       border: 1px solid #5BC199
       border-radius: 3px
       font-size: 10px
     .adminOfferTag
       position: absolute
-      top: 10px
-      right: 10px
+      top: 5px
+      right: 5px
       color: white
       background-color: #5BC199
-      padding: 5px
+      padding: 5px 10px
       border: 1px solid #5BC199
       border-radius: 3px
       font-size: 10px
+      a
+        color: white
+        text-decoration: none
       
   .offerDetailsContainer
     display: block
@@ -42,8 +52,27 @@
     height: 100%
     box-sizing: border-box
     padding: 2%
+    background-color: white
+    position: relative
+    
     .offerDetailsHeader
       margin-top: 0
+      margin-bottom: 0
+      text-transform: capitalize
+    .offerLocation
+      width: 100%
+      word-wrap: break-word
+      font-size: 12px
+      text-transform: capitalize
+    .offerAddressEntity
+      margin: 2px
+    .offerViewMore
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,.2), 0 6px 20px 0 rgba(0,0,0,.19)
+      padding: 5px 8px
+      background-color: rgb(0,188,212)
+      font-size: 11px
+      a
+        color: white
 @media (max-width: 600px)
   .singleofferContainer
     float: left
@@ -71,14 +100,14 @@
     position: absolute
     
 .customChip
-  font-size: 12px
+  font-size: 11px
   color: white
   background-color: rgb(102, 153, 153)
   margin-right: 5px
-  padding: 5px 10px
+  padding: 5px 8px
   text-transform: capitalize
-  border: 1px solid #eee
-  border-radius: 3px
+  border: 1px solid rgb(102, 153, 153)
+  border-radius: 4px
   
     
     

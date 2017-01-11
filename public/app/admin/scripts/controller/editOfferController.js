@@ -66,7 +66,7 @@
 
 		function createOffer() {
 			eoc.offerForm.bannerImage = eoc.offerForm.bannerImage || eoc.offerForm.offerImages[0];
-			adminOfferService.createOffer(eoc.offerForm)
+			adminOfferService.updateOffer($routeParams.offerId,$routeParams.storeId,eoc.offerForm)
 				.then(function(response) {
 					console.log(response.data._id);
 					
@@ -74,12 +74,12 @@
 						$mdDialog.alert()
 						.clickOutsideToClose(true)
 						.title('Offer created')
-						.textContent('Your Offer has been created.')
+						.textContent('Your Offer has been edited.')
 						.ariaLabel('Alert Dialog Demo')
 						.ok('Got it!')
 
 					);
-					$location.url('/admin/adminOfferPage/' + response.data._id);
+					$location.url('/offer/' + response.data._id);
 					//$window.location.reload();
 				}, function(response) {
 					console.log(response);

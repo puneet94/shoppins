@@ -156,7 +156,7 @@ function redirectIfNotStoreAuthenticated($q, $route, userData, adminStoreService
         //var fbClientId = '991629147629579';
         //shoppins
         var fbClientId = '1068203956594250';
-        var authenticateUrl = 'http://ofline.in/authenticate';
+        var authenticateUrl = 'http://www.ofline.in/authenticate';
         $routeProvider
             .when('/signup', {
                 templateUrl: 'app/authentication/views/register.html',
@@ -1370,7 +1370,7 @@ function imageReplacementDirective(){
 
 		function createOffer() {
 			eoc.offerForm.bannerImage = eoc.offerForm.bannerImage || eoc.offerForm.offerImages[0];
-			adminOfferService.createOffer(eoc.offerForm)
+			adminOfferService.updateOffer($routeParams.offerId,$routeParams.storeId,eoc.offerForm)
 				.then(function(response) {
 					console.log(response.data._id);
 					
@@ -1378,12 +1378,12 @@ function imageReplacementDirective(){
 						$mdDialog.alert()
 						.clickOutsideToClose(true)
 						.title('Offer created')
-						.textContent('Your Offer has been created.')
+						.textContent('Your Offer has been edited.')
 						.ariaLabel('Alert Dialog Demo')
 						.ok('Got it!')
 
 					);
-					$location.url('/admin/adminOfferPage/' + response.data._id);
+					$location.url('/offer/' + response.data._id);
 					//$window.location.reload();
 				}, function(response) {
 					console.log(response);
@@ -1580,8 +1580,8 @@ function AdminOfferService($http,baseUrlService){
     //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
 
   }
-  function updateOffer(offerId,offer){
-  	return $http.put(baseUrlService.baseUrl+'admin/offer/'+offerId,offer);
+  function updateOffer(offerId,storeId,offer){
+  	return $http.put(baseUrlService.baseUrl+'admin/offer/'+storeId+'/'+offerId,offer);
   }
   function getOffer(offerId,storeId,obj){
     return $http.get(baseUrlService.baseUrl+'admin/offer/'+storeId+'/'+offerId,{params:obj});       
@@ -2825,27 +2825,41 @@ angular.module('app.user')
 
 })(window.angular);
 
-
-(function(angular){
+(function(angular) {
   'use strict';
   angular.module('app.offer')
-  .directive('singleOfferDirective',[singleOfferDirective]);
-  
-  function singleOfferDirective(){
+    .directive('singleOfferDirective', [singleOfferDirective]);
+
+  function singleOfferDirective() {
     return {
       restrict: 'E',
       replace: true,
-      templateUrl:'app/offer/views/singleofferTemplate.html',
-      scope:{
-        offer:'=singleOffer',
+      templateUrl: 'app/offer/views/singleofferTemplate.html',
+      scope: {
+        offer: '=singleOffer',
         'isAdminOffer': '@adminOffer'
       },
-      link: function(scope,element,attrs){
-        
+      link: function(scope, element, attrs) {
+
+      },
+      controller: function($scope) {
+        $scope.offerDir = {
+          mapAddress: mapAddress
+        };
+
+        function mapAddress(addressObj) {
+          return Object.keys(addressObj).map(function(key, index) {
+            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
+              console.log(key);
+              return addressObj[key];  
+            }
+            
+          });
+        }
       }
     };
   }
-  
+
 
 })(window.angular);
 
@@ -2870,6 +2884,29 @@ function OfferService($http,baseUrlService){
 	return $http.get(baseUrlService.baseUrl+'offer/offer/'+id,{params:params});  	
   }
 }
+})(window.angular);
+
+
+(function(angular){
+  'use strict';
+  angular.module('app.product')
+  .directive('singleProductDirective',[singleProductDirective]);
+  
+  function singleProductDirective(){
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl:'app/product/views/singleProductTemplate.html',
+      scope:{
+        product:'=singleProduct'
+      },
+      link: function(scope,element,attrs){
+
+      }
+    };
+  }
+  
+
 })(window.angular);
 
 (function(angular){
@@ -3119,29 +3156,6 @@ angular.module('app.product')
     }
 
   }
-
-})(window.angular);
-
-
-(function(angular){
-  'use strict';
-  angular.module('app.product')
-  .directive('singleProductDirective',[singleProductDirective]);
-  
-  function singleProductDirective(){
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl:'app/product/views/singleProductTemplate.html',
-      scope:{
-        product:'=singleProduct'
-      },
-      link: function(scope,element,attrs){
-
-      }
-    };
-  }
-  
 
 })(window.angular);
 
