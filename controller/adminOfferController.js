@@ -37,6 +37,7 @@ function createOffer(req, res) {
         if (error) {
           console.log("error" + error);
         } else {
+          common.saveSearchList(offer.tagline.toLowerCase(),"offer",offer.address.city,req,res);
           for (var i = 0; i < offer.category.length; i++) {
                     common.saveSearchList(offer.category[i].toLowerCase(), "offer-category", store.address.city.toLowerCase(), req, res);
                 }
@@ -96,6 +97,7 @@ function updateOffer(req, res) {
             if (error) {
               console.log("error" + error);
             } else {
+              common.saveSearchList(offer.tagline.toLowerCase(),"offer",offer.address.city,req,res);
               for (var i = 0; i < offer.category.length; i++) {
                     common.saveSearchList(offer.category[i].toLowerCase(), "offer-category", store.address.city.toLowerCase(), req, res);
                 }

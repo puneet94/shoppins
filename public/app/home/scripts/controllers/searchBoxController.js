@@ -77,6 +77,10 @@
 
                 locationProductsSearchUrl();
 
+            } else if (changeEntity.trim() == "All offers in") {
+
+                locationOffersSearchUrl();
+
             } else {
 
                 locationStoresSearchUrl();
@@ -96,8 +100,9 @@
                         hm.userSearches = [];
                         var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
                         var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
+                        var allOffersItem = { "userSearchString": "#&#All offers in #&#" + hm.selectedItem };
                         hm.userSearches = resource.data;
-                        hm.userSearches.unshift(allStoresItem, allProductsItem);
+                        hm.userSearches.unshift(allStoresItem, allProductsItem,allOffersItem);
                         //hm.userSearches = 
                         /*
                         for (var i = 0; i < resource.data.length; i++) {
@@ -118,8 +123,9 @@
             searchService.getSearches(item).then(function(resource) {
                 var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
                 var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
+                var allOffersItem = { "userSearchString": "#&#All offers in #&#" + hm.selectedItem };
                 hm.userSearches = resource.data;
-                hm.userSearches.unshift(allStoresItem, allProductsItem);
+                hm.userSearches.unshift(allStoresItem, allProductsItem,allOffersItem);
                 /*hm.userSearches = [allStoresItem, allProductsItem];
                 for (var i = 0; i < resource.data.length; i++) {
                     hm.userSearches.push(resource.data[i]);
@@ -151,6 +157,16 @@
             hm.url = "/productsCollectionLocation";
             var myLocation = hm.selectedItem;
             hm.slug = "products-in-" + myLocation;
+
+            changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
+
+
+        }
+        function locationOffersSearchUrl() {
+
+            hm.url = "/offers";
+            var myLocation = hm.selectedItem;
+            hm.slug = "offers-in-" + myLocation;
 
             changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
 

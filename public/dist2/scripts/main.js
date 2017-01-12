@@ -2551,6 +2551,10 @@ angular.module('app.chat')
 
                 locationProductsSearchUrl();
 
+            } else if (changeEntity.trim() == "All offers in") {
+
+                locationOffersSearchUrl();
+
             } else {
 
                 locationStoresSearchUrl();
@@ -2570,8 +2574,9 @@ angular.module('app.chat')
                         hm.userSearches = [];
                         var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
                         var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
+                        var allOffersItem = { "userSearchString": "#&#All offers in #&#" + hm.selectedItem };
                         hm.userSearches = resource.data;
-                        hm.userSearches.unshift(allStoresItem, allProductsItem);
+                        hm.userSearches.unshift(allStoresItem, allProductsItem,allOffersItem);
                         //hm.userSearches = 
                         /*
                         for (var i = 0; i < resource.data.length; i++) {
@@ -2592,8 +2597,9 @@ angular.module('app.chat')
             searchService.getSearches(item).then(function(resource) {
                 var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
                 var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
+                var allOffersItem = { "userSearchString": "#&#All offers in #&#" + hm.selectedItem };
                 hm.userSearches = resource.data;
-                hm.userSearches.unshift(allStoresItem, allProductsItem);
+                hm.userSearches.unshift(allStoresItem, allProductsItem,allOffersItem);
                 /*hm.userSearches = [allStoresItem, allProductsItem];
                 for (var i = 0; i < resource.data.length; i++) {
                     hm.userSearches.push(resource.data[i]);
@@ -2625,6 +2631,16 @@ angular.module('app.chat')
             hm.url = "/productsCollectionLocation";
             var myLocation = hm.selectedItem;
             hm.slug = "products-in-" + myLocation;
+
+            changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
+
+
+        }
+        function locationOffersSearchUrl() {
+
+            hm.url = "/offers";
+            var myLocation = hm.selectedItem;
+            hm.slug = "offers-in-" + myLocation;
 
             changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
 
@@ -2805,9 +2821,9 @@ angular.module('app.user')
 (function(angular) {
 	'use strict';
 	angular.module('app.offer')
-		.controller('OffersPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", "baseUrlService", "getofferPageService", OffersPageController]);
+		.controller('OffersPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", "baseUrlService", OffersPageController]);
 
-	function OffersPageController($scope, $auth, $routeParams, changeBrowserURL, baseUrlService, getofferPageService) {
+	function OffersPageController($scope, $auth, $routeParams, changeBrowserURL, baseUrlService) {
 		var opc = this;
 
 		activate();
@@ -2828,13 +2844,14 @@ angular.module('app.user')
 (function(angular) {
   'use strict';
   angular.module('app.offer')
+    .directive('singleOfferVertDirective', [singleOfferVertDirective])
     .directive('singleOfferDirective', [singleOfferDirective]);
 
   function singleOfferDirective() {
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: 'app/offer/views/singleofferTemplate.html',
+      templateUrl: 'app/offer/views/singleOfferTemplate.html',
       scope: {
         offer: '=singleOffer',
         'isAdminOffer': '@adminOffer'
@@ -2860,6 +2877,35 @@ angular.module('app.user')
     };
   }
 
+function singleOfferVertDirective() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/offer/views/singleOfferVertTemplate.html',
+      scope: {
+        offer: '=singleOffer',
+        
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: function($scope) {
+        $scope.offerDir = {
+          mapAddress: mapAddress
+        };
+
+        function mapAddress(addressObj) {
+          return Object.keys(addressObj).map(function(key, index) {
+            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
+              console.log(key);
+              return addressObj[key];  
+            }
+            
+          });
+        }
+      }
+    };
+  }
 
 })(window.angular);
 
@@ -2884,29 +2930,6 @@ function OfferService($http,baseUrlService){
 	return $http.get(baseUrlService.baseUrl+'offer/offer/'+id,{params:params});  	
   }
 }
-})(window.angular);
-
-
-(function(angular){
-  'use strict';
-  angular.module('app.product')
-  .directive('singleProductDirective',[singleProductDirective]);
-  
-  function singleProductDirective(){
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl:'app/product/views/singleProductTemplate.html',
-      scope:{
-        product:'=singleProduct'
-      },
-      link: function(scope,element,attrs){
-
-      }
-    };
-  }
-  
-
 })(window.angular);
 
 (function(angular){
@@ -3156,6 +3179,29 @@ angular.module('app.product')
     }
 
   }
+
+})(window.angular);
+
+
+(function(angular){
+  'use strict';
+  angular.module('app.product')
+  .directive('singleProductDirective',[singleProductDirective]);
+  
+  function singleProductDirective(){
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl:'app/product/views/singleProductTemplate.html',
+      scope:{
+        product:'=singleProduct'
+      },
+      link: function(scope,element,attrs){
+
+      }
+    };
+  }
+  
 
 })(window.angular);
 

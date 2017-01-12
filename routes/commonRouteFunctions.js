@@ -45,22 +45,28 @@ cob.saveSearchList = function(query, kind, location, req, res) {
         .findOne(queryObj)
         .exec(function(findErr, userSearchFind) {
             if (findErr) {
-                var userSearch = new UserSearch();
-                userSearch.userSearchString = userSearchString;
-                userSearch.location = location;
-                userSearch.save(function(err) {
-                    if (err) {
-                        console.log(err)
-                    }
-                });
+                console.log(findErr);
+                
             }
+            
             if (userSearchFind) {
+                
                 userSearchFind.count = userSearchFind.count + 1;
                 userSearchFind.save(function(saveErr) {
                     if (saveErr) {
                         console.log(saveErr);
                     }
-                })
+                });
+            }
+            else{
+                var userSearch = new UserSearch();
+                userSearch.userSearchString = userSearchString;
+                userSearch.location = location;
+                userSearch.save(function(err) {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
             }
         });
 
