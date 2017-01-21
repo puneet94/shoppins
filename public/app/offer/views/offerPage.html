@@ -1,1 +1,62 @@
-<h1>Offer Page</h1>
+<div class="offerPage">
+        <div class="offerBannerSection">
+                <div class="offerBannerImage" flex>
+                        <img ng-src="{{opc.offerData.bannerImage}}" alt="" />
+                </div>
+        </div>
+        <a href="#" socialshare socialshare-provider="facebook" socialshare-text="Offline Offers"  socialshare-url="http://720kb.net" socialshare-via="1068203956594250">
+Share me
+</a>
+        <div layout="row">
+                <div flex="50" flex-offset-gt-sm="5" flex-sm="100" flex-xs="100" class="offerDetailsSection">
+                        <div class="offerTitle">
+                                <h2> {{opc.offerData.tagline}} </h2>
+                        </div>
+                        <div class="offerDescription">
+                                <p>
+                                        {{opc.offerData.description}}
+                                </p>
+                        </div>
+                        <div class="offerDetailsContent">
+                                <div layout="column">
+                                        <div layout="row" class="offerDetailsEntity">
+                                                <div flex="30" flex-sm="100" flex-xs="100" class="offerDetailsEntityLabel">Start Date</div>
+                                                <div flex="70" flex-sm="100" flex-xs="100">{{ opc.offerData.startDate | date: 'd MMM yyyy'}}</div>
+                                        </div>
+                                        <div layout="row" class="offerDetailsEntity">
+                                                <div flex="30" flex-sm="100" flex-xs="100" class="offerDetailsEntityLabel">End Date</div>
+                                                <div flex="70" flex-sm="100" flex-xs="100">{{ opc.offerData.endDate | date: 'd MMM yyyy'}}</div>
+                                        </div>
+                                        <div layout="row" class="offerDetailsEntity">
+                                                <div flex="30" flex-sm="100" flex-xs="100" class="offerDetailsEntityLabel">Venue</div>
+                                                <div flex="70" flex-sm="100" flex-xs="100">{{ opc.offerData.address.area+", "+opc.offerData.address.locality+", "+opc.offerData.address.city}}</div>
+                                        </div>
+                                        <div layout="row" class="offerDetailsEntity">
+                                                <div flex="30" flex-sm="100" flex-xs="100" class="offerDetailsEntityLabel">Category</div>
+                                                <div flex="70" flex-sm="100" flex-xs="100">{{ opc.offerData.category.join(", ")}}</div>
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="offerMapContainer">
+                                <div class="mapContainer">
+                                        <ng-map zoom='15' center="{{opc.pos}}" scrollwheel="false">
+                                                <marker position="{{opc.pos}}" animation="Animation.BOUNCE">
+                                                </marker>
+                                        </ng-map>
+                                </div>
+                        </div>
+                </div>
+                <div flex="30" flex-sm="100" flex-xs="100" class="offerSuggestionSection">
+                        <div class="similarOfferSection">
+                        </div>
+                        <div class="moreOfferSection">
+                                <div layout="row" layout-wrap layout-align="space-between">
+                                        <div flex="30" class="singleStoreSuggestion" ng-repeat="suggestedStore in ssc.storeSuggestions">
+                                                <single-store-suggestion suggested-store="suggestedStore">
+                                                </single-store-suggestion>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </div>
+</div>

@@ -5,7 +5,7 @@ for i,index in activity
 				- var userLink = "#/user/"+i.review.user._id
 				div(class="creatorImageContainer")
 					a(ng-href='#{userLink}')
-						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}')
+						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}' afkl-lazy-image-options="{'offset': 20}")
 				div(class="activityHeadingTextContainer")
 					h5(class="activityHeadingText")
 						span(class="activityHeadingTextInfo")
@@ -27,7 +27,7 @@ for i,index in activity
 				div( class="activityContentText")
 					div
 						div(class="activityReviewStoreImageContainer")
-							div(class="reviewStoreImage" afkl-lazy-image="#{i.review.store.bannerImage}")
+							div(class="reviewStoreImage" afkl-lazy-image="#{i.review.store.bannerImage}" afkl-lazy-image-options="{'offset': 20}")
 						div(class="activityReviewContentContainer")
 							div(class="activityReviewRating")
 								- var rating = parseInt(i.review.rating)
@@ -41,7 +41,7 @@ for i,index in activity
 				- var userLink = "#/user/"+i.review.user._id
 				div(class="creatorImageContainer")
 					a(ng-href='#{userLink}')
-						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}')
+						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}' afkl-lazy-image-options="{'offset': 20}")
 				div(class="activityHeadingTextContainer")
 					h5(class="activityHeadingText")
 						span(class="activityHeadingTextInfo")
@@ -63,7 +63,7 @@ for i,index in activity
 				div( class="activityContentText")
 					div
 						div(class="activityReviewProductImageContainer")
-							div(class="reviewProductImage" afkl-lazy-image="#{i.review.product.images[0]}")
+							div(class="reviewProductImage" afkl-lazy-image="#{i.review.product.images[0]}" afkl-lazy-image-options="{'offset': 20}")
 						div(class="activityReviewContentContainer")
 							div(class="activityReviewRating")
 								- var rating = parseInt(i.review.rating)
@@ -77,7 +77,7 @@ for i,index in activity
 				- var userLink = "#/user/"+i.creator._id
 				div(class="creatorImageContainer")
 					a(ng-href='#{userLink}')
-						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}')
+						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}' afkl-lazy-image-options="{'offset': 20}")
 				div(class="activityHeadingTextContainer")
 					h5(class="activityHeadingText")
 						span(class="activityHeadingTextInfo")
@@ -98,7 +98,7 @@ for i,index in activity
 				div( class="activityContentText")
 					div
 						div(class="activityFollowCreatorImageContainer")
-							div(class="followCreatorImage" afkl-lazy-image="#{i.creator.picture}")
+							div(class="followCreatorImage" afkl-lazy-image="#{i.creator.picture}" afkl-lazy-image-options="{'offset': 20}")
 						div(class="activityFollowFollowedImageContainer")
 							div(class="followFollowedImage" afkl-lazy-image="#{i.followed.picture}")
 						div(class="clearBoth")
@@ -108,7 +108,7 @@ for i,index in activity
 				- var userLink = "#/user/"+i.creator._id
 				div(class="creatorImageContainer")
 					a(ng-href='#{userLink}')
-						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}')
+						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}' afkl-lazy-image-options="{'offset': 20}")
 				div(class="activityHeadingTextContainer")
 					h5(class="activityHeadingText")
 						span(class="activityHeadingTextInfo")
@@ -159,7 +159,7 @@ for i,index in activity
 				div( class="activityContentText")
 					div
 						div(class="activityReviewProductImageContainer")
-							div(class="reviewProductImage" afkl-lazy-image="#{i.product.images[0]}")
+							div(class="reviewProductImage" afkl-lazy-image="#{i.product.images[0]}" afkl-lazy-image-options="{'offset': 20}")
 		else if i.statement == "followed store"
 			div(class="activityHeading")
 				- var userLink = "#/user/"+i.creator._id
@@ -187,7 +187,7 @@ for i,index in activity
 				div( class="activityContentText")
 					div
 						div(class="activityReviewStoreImageContainer")
-							div(class="reviewStoreImage" afkl-lazy-image="#{i.store.bannerImage}")
+							div(class="reviewStoreImage" afkl-lazy-image="#{i.store.bannerImage}" afkl-lazy-image-options="{'offset': 20}")
 		else if i.statement == "upvoted store review"
 			div(class="activityHeading")
 				- var userLink = "#/user/"+i.creator._id
@@ -227,7 +227,7 @@ for i,index in activity
 				- var userLink = "#/user/"+i.creator._id
 				div(class="creatorImageContainer")
 					a(ng-href='#{userLink}')
-						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}')
+						div(class="creatorImage" afkl-lazy-image='#{i.creator.picture}' afkl-lazy-image-options="{'offset': 20}")
 				div(class="activityHeadingTextContainer")
 					h5(class="activityHeadingText")
 						span(class="activityHeadingTextInfo")

@@ -3,7 +3,7 @@
 'use strict';
 
 angular.module('myApp',
-  ['ngRoute','ngCookies','ngMessages','ngSanitize','afkl.lazyImage','satellizer','ngFileUpload','ngMap','btford.socket-io',
+  ['ngRoute','ngCookies','ngMessages','ngSanitize','afkl.lazyImage','satellizer','ngFileUpload','ngMap','btford.socket-io','720kb.socialshare',
   'authModApp',
   'app.common','app.home','app.store','app.chat','app.admin','ngMaterial','app.review','app.product','app.user','app.offer']
   ).config(['$routeProvider','$mdThemingProvider',

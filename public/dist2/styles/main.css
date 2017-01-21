@@ -838,6 +838,35 @@ md-ink-bar {
     height: 100%; } }
 
 
+.offerPage .offerBannerSection .offerBannerImage {
+  position: relative;
+  max-height: 400px;
+  text-align: center;
+  box-sizing: border-box; }
+  .offerPage .offerBannerSection .offerBannerImage:after {
+    padding-bottom: 60%;
+    content: " ";
+    display: block; }
+  .offerPage .offerBannerSection .offerBannerImage img {
+    box-sizing: border-box;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    left: 0;
+    width: 100%;
+    border: 1px solid #e1e8ed;
+    border-radius: 3px; }
+
+.offerPage .offerDetailsSection {
+  text-transform: capitalize;
+    text-transform-font-family: 'Lato', sans-serif; }
+  .offerPage .offerDetailsSection .offerDetailsEntity {
+    border-top: 1px solid #ccc;
+    padding: 20px 5px;
+    text-transform: capitalize; }
+    .offerPage .offerDetailsSection .offerDetailsEntity .offerDetailsEntityLabel {
+      font-weight: 600; }
+
 a {
   text-decoration: none; }
 
@@ -972,7 +1001,9 @@ a {
 .offerVertDetailsContainer {
   height: 150px;
   text-transform: capitalize;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
   background-color: white; }
   .offerVertDetailsContainer .offerDetailsHeader {
     margin: 0;
