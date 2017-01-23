@@ -1,12 +1,24 @@
 (function(angular) {
 	'use strict';
 	angular.module('app.offer')
-		.controller('OfferPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", 'offerService', OfferPageController]);
+		.controller('OfferPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", 'offerService', 'baseUrlService','Socialshare',OfferPageController]);
 
-	function OfferPageController($scope, $auth, $routeParams, changeBrowserURL, offerService) {
+	function OfferPageController($scope, $auth, $routeParams, changeBrowserURL, offerService,baseUrlService,Socialshare) {
 		var opc = this;
 		opc.offerData = {};
 		activate();
+		opc.shareFacebook = shareFacebook;
+		console.log("sd"+baseUrlService.currentUrlWQ);
+		function shareFacebook() {
+			Socialshare.share({
+				'provider': 'facebook',
+				'attrs': {
+					'socialshareUrl': baseUrlService.currentUrlWQ,
+					'socialshareText' :"Offline Offers",
+					"socialshareVia":"1068203956594250"
+				}
+			});
+		}
 
 		function activate() {
 			offerService.getSingleOffer($routeParams.offerId)
@@ -23,7 +35,7 @@
 					console.log(res);
 				}).catch(function(e) {
 					console.log('Error: ', e);
-					
+
 				}).finally(function() {
 					console.log('This finally block');
 				});

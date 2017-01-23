@@ -43,10 +43,10 @@ gulp.task('styles', function(){
     .pipe(sass())
     .pipe(autoprefixer('last 2 versions'))
     .pipe(concat('main.css'))
-    .pipe(gulp.dest('public/dist2/styles/'))
+    .pipe(gulp.dest('public/www/styles/'))
     .pipe(rename({suffix: '.min'}))
     .pipe(minifycss())
-    .pipe(gulp.dest('public/dist2/styles/'))
+    .pipe(gulp.dest('public/www/styles/'))
    
 });
 
@@ -60,10 +60,10 @@ gulp.task('scripts', function(){
     .pipe(jshint())
     .pipe(jshint.reporter('default'))
     .pipe(concat('main.js'))
-    .pipe(gulp.dest('public/dist2/scripts/'))
+    .pipe(gulp.dest('public/www/scripts/'))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
-    .pipe(gulp.dest('public/dist2/scripts/'))
+    .pipe(gulp.dest('public/www/scripts/'))
     
 });
 

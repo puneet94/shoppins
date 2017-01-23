@@ -118,7 +118,8 @@ angular.module('app.common')
 		else{
 			this.baseUrl = this.baseUrl = $location.protocol() + "://" + $location.host()+'/';	
 		}
-		
+		this.currentUrl = $location.absUrl().split('?')[0];
+		this.currentUrlWQ = $location.absUrl();
 		console.log("base");
 		console.log(this.baseUrl);
 

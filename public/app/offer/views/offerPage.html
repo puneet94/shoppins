@@ -1,10 +1,13 @@
+<div ng-include="'app/home/searchBox.html'"></div>
 <div class="offerPage">
         <div class="offerBannerSection">
                 <div class="offerBannerImage" flex>
                         <img ng-src="{{opc.offerData.bannerImage}}" alt="" />
                 </div>
         </div>
-        <a href="#" socialshare socialshare-provider="facebook" socialshare-text="Offline Offers"  socialshare-url="http://720kb.net" socialshare-via="1068203956594250">
+        <br>
+        <md-button class="md-raised md-primary" ng-click="opc.shareFacebook()">Facebook</md-button>
+        <a href="#" socialshare socialshare-provider="facebook" socialshare-url="http://720kb.net">
 Share me
 </a>
         <div layout="row">
@@ -47,15 +50,9 @@ Share me
                         </div>
                 </div>
                 <div flex="30" flex-sm="100" flex-xs="100" class="offerSuggestionSection">
-                        <div class="similarOfferSection">
-                        </div>
+                        
                         <div class="moreOfferSection">
-                                <div layout="row" layout-wrap layout-align="space-between">
-                                        <div flex="30" class="singleStoreSuggestion" ng-repeat="suggestedStore in ssc.storeSuggestions">
-                                                <single-store-suggestion suggested-store="suggestedStore">
-                                                </single-store-suggestion>
-                                        </div>
-                                </div>
+                                <offer-suggestion-list offer-limit="6" offer-city="opc.offerData.address.city"> </offer-suggestion-list>
                         </div>
                 </div>
         </div>

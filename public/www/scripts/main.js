@@ -156,7 +156,7 @@ function redirectIfNotStoreAuthenticated($q, $route, userData, adminStoreService
         //var fbClientId = '991629147629579';
         //shoppins
         var fbClientId = '1068203956594250';
-        var authenticateUrl = 'http://localhost:3000/authenticate';
+        var authenticateUrl = 'http://www.ofline.in/authenticate';
         $routeProvider
             .when('/signup', {
                 templateUrl: 'app/authentication/views/register.html',
@@ -2740,12 +2740,12 @@ angular.module('app.user')
 		opc.offerData = {};
 		activate();
 		opc.shareFacebook = shareFacebook;
-		//console.log(baseUrlService.currentUrl);
+		console.log("sd"+baseUrlService.currentUrlWQ);
 		function shareFacebook() {
 			Socialshare.share({
 				'provider': 'facebook',
 				'attrs': {
-					'socialshareUrl': 'http://www.ofline.in',
+					'socialshareUrl': baseUrlService.currentUrlWQ,
 					'socialshareText' :"Offline Offers",
 					"socialshareVia":"1068203956594250"
 				}
@@ -2868,6 +2868,49 @@ angular.module('app.user')
 (function(angular) {
   'use strict';
   angular.module('app.offer')
+    .directive('offerSuggestionList', ['offerService',offerSuggestionList]);
+
+  function offerSuggestionList(offerService) {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/offer/views/offerSuggestionListTemplate.html',
+      scope: {
+                offerLimit: '=offerLimit',
+                offerCity: '=offerCity'
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: function($scope) {
+        var offerParamData = {
+          page: 1,
+          limit: $scope.offerLimit,
+          city: $scope.offerCity
+        };
+        offerService.getOfferCollection(offerParamData).then(function(response){
+          console.log("offers");
+          console.log(response);
+          $scope.offerSuggestions = response.data.docs;
+        },function(response){
+          console.log('error');
+          console.log(response);
+        });
+        $scope.offerDir = {
+
+        };
+
+
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.offer')
     .directive('singleOfferVertDirective', [singleOfferVertDirective])
     .directive('singleOfferDirective', [singleOfferDirective]);
 
@@ -2930,6 +2973,35 @@ function singleOfferVertDirective() {
       }
     };
   }
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.offer')
+    .directive('singleOfferSuggestion', [singleOfferSuggestion]);
+
+  function singleOfferSuggestion() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/offer/views/singleOfferSuggestionTemplate.html',
+      scope: {
+        suggestedOffer: '=suggestedOffer'
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: function($scope) {
+        $scope.offerDir = {
+
+        };
+
+
+      }
+    };
+  }
+
 
 })(window.angular);
 
@@ -3711,6 +3783,127 @@ angular.module('app.review')
 })(window.angular);
 
 (function(angular){
+  'use strict';
+  angular.module('app.store')
+  .directive('filterDirective',[ filterDirective])
+  .directive('addClass',[ addClassDirective])
+  .directive('removeClass',[ removeClassDirective])
+  .directive('siblingRemoveClass',[ siblingRemoveClassDirective]);
+  function filterDirective() {
+    return {
+      restrict: 'E',
+      templateUrl:'app/store/views/filterDirectiveTemplate.html',
+      scope:{
+        filterName:"@filterName",
+        radioModel:"=radioModel",
+        radioChange:"&radioChange",
+        radioRepeat:"=radioRepeat",
+        clearClick:"&clearClick"
+      },
+      
+    };
+  }
+  function addClassDirective() {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          //$(element).removeClass('highlightClass');
+          $(this).addClass(attrs.addClass);
+
+        });
+
+      }
+    };
+  }
+  function siblingRemoveClassDirective() {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          $(this).siblings().removeClass(attrs.siblingRemoveClass);
+        });
+
+      }
+    };
+  }
+
+  function removeClassDirective() {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          $(this).siblings('.filterDirectiveRadioGroup').find('.filterRadioButton').removeClass(attrs.removeClass);
+        });
+
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+  angular.module('app.store')
+  .directive('imageReplace',['$timeout',imageReplaceDirective]);
+
+  function imageReplaceDirective($timeout) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+      	console.log(element);
+      	console.log( $(element).attr('src'));
+      	console.log(attrs.imageReplace);
+      	$timeout(function(){
+      		$(element).attr('src',attrs.imageReplace);
+      	},1000);
+        
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+  angular.module('app.store')
+  .directive('scrollToId',['scrollToIdService',scrollToIdDirective]);
+
+  function scrollToIdDirective(scrollToIdService) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          scrollToIdService.scrollToId(attrs.scrollToId);
+        });
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular){
+  angular.module('app.store')
+  .directive('singleStoreSuggestion',[ singleStoreSuggestion]);
+  function singleStoreSuggestion() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl:'app/store/views/singleStoreSuggestion.html',
+      scope:{
+        suggestedStore: '=suggestedStore'
+      }
+    };
+  }
+  
+
+
+})(window.angular);
+
+(function(angular){
 	'use strict';
 
 	angular.module('app.home')
@@ -4341,127 +4534,6 @@ angular.module('app.review')
       }
 
     }
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-  angular.module('app.store')
-  .directive('filterDirective',[ filterDirective])
-  .directive('addClass',[ addClassDirective])
-  .directive('removeClass',[ removeClassDirective])
-  .directive('siblingRemoveClass',[ siblingRemoveClassDirective]);
-  function filterDirective() {
-    return {
-      restrict: 'E',
-      templateUrl:'app/store/views/filterDirectiveTemplate.html',
-      scope:{
-        filterName:"@filterName",
-        radioModel:"=radioModel",
-        radioChange:"&radioChange",
-        radioRepeat:"=radioRepeat",
-        clearClick:"&clearClick"
-      },
-      
-    };
-  }
-  function addClassDirective() {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          //$(element).removeClass('highlightClass');
-          $(this).addClass(attrs.addClass);
-
-        });
-
-      }
-    };
-  }
-  function siblingRemoveClassDirective() {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          $(this).siblings().removeClass(attrs.siblingRemoveClass);
-        });
-
-      }
-    };
-  }
-
-  function removeClassDirective() {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          $(this).siblings('.filterDirectiveRadioGroup').find('.filterRadioButton').removeClass(attrs.removeClass);
-        });
-
-      }
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-  angular.module('app.store')
-  .directive('imageReplace',['$timeout',imageReplaceDirective]);
-
-  function imageReplaceDirective($timeout) {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-      	console.log(element);
-      	console.log( $(element).attr('src'));
-      	console.log(attrs.imageReplace);
-      	$timeout(function(){
-      		$(element).attr('src',attrs.imageReplace);
-      	},1000);
-        
-      }
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-  angular.module('app.store')
-  .directive('scrollToId',['scrollToIdService',scrollToIdDirective]);
-
-  function scrollToIdDirective(scrollToIdService) {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          scrollToIdService.scrollToId(attrs.scrollToId);
-        });
-      }
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular){
-  angular.module('app.store')
-  .directive('singleStoreSuggestion',[ singleStoreSuggestion]);
-  function singleStoreSuggestion() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl:'app/store/views/singleStoreSuggestion.html',
-      scope:{
-        suggestedStore: '=suggestedStore'
-      }
-    };
-  }
-  
-
 
 })(window.angular);
 
