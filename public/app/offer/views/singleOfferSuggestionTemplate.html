@@ -4,10 +4,10 @@
     </div>
     <div class="suggestedOfferInfo">
         <a ng-href="#/offer/singleOffer/{{suggestedOffer._id}}">
-            <h5 class="suggestedOfferName">{{suggestedOffer.name}}</h5>
+            <h5 class="suggestedOfferName">{{suggestedOffer.tagline}}</h5>
         </a>
         <p class="suggestedOfferAddress">
-        	{{suggestedOffer.address.area+" "}}
+        	{{suggestedOffer.address.area+" , "+suggestedOffer.address.locality}}
         </p>
         <p class="suggestedOfferCategories">
             {{suggestedOffer.category.join(" | ")}}

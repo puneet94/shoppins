@@ -7,9 +7,7 @@ var Store = models.Store;
 var Activity = models.Activity;
 var mongoose = require('mongoose');
 var activityRouter = express.Router();
-var commons = require('./commonRouteFunctions');
-var ObjectId = require('mongoose').Schema.ObjectId;
-var commons = require('./commonRouteFunctions');
+
 var app = express();
 var moment = require('moment');
 
@@ -22,7 +20,7 @@ activityRouter.use(function(req, res, next) {
 function getActivity(res, usersList) {
     var queryObj = {};
     if (usersList) {
-        queryObj = { $or: [{ creator: { $in: usersList } }, { creatorStore: { $in: usersList } }] }
+        queryObj = { $or: [{ creator: { $in: usersList } }, { creatorStore: { $in: usersList } }] };
             //queryObj.creator = { $in: usersList };
     }
     Activity

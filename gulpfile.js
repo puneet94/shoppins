@@ -1,3 +1,4 @@
+'use strict';
 var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     rename = require('gulp-rename');
@@ -67,7 +68,7 @@ gulp.task('scripts', function(){
     
 });
 
-gulp.task('default', function(){
+gulp.task('default', ['scripts','styles'],function(){
   gulp.watch("public/app/**/*.sass", ['styles']);
   gulp.watch("public/app/**/*.js", ['scripts']);
   gulp.watch("*.html",['scripts','styles']);

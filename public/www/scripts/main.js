@@ -1665,6 +1665,41 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
 }
 })(window.angular);
 
+
+
+/**
+ * @ngdoc directive
+ * @name authModApp.directive:sameAs
+ * @description
+ * # sameAs
+ */
+ (function(angular){
+ 'use strict';
+	angular.module('authModApp')
+		.directive('sameAs', function () {
+			return {
+				require: 'ngModel',
+				restrict: 'EA',
+				link: function postLink(scope, element, attrs,ngModelCtrl) {
+          console.log(attrs);
+          console.log(attrs.sameAs);
+					//console.log(scope.$eval(attrs.sameAs));
+					function validateEqual(value){
+						var valid = (value === scope.$eval(attrs.sameAs));
+						ngModelCtrl.$setValidity('equal',valid);
+						return valid ? value : undefined;
+					}
+					ngModelCtrl.$parsers.push(validateEqual);
+					ngModelCtrl.$formatters.push(validateEqual);
+					scope.$watch(attrs.sameAs,function(){
+						ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
+					});
+				}
+			};
+		});
+
+})(window.angular);
+
 (function(angular) {
     'use strict';
 
@@ -1916,41 +1951,6 @@ angular.module('authModApp')
 //
 //     }
 //   }
-
-
-
-/**
- * @ngdoc directive
- * @name authModApp.directive:sameAs
- * @description
- * # sameAs
- */
- (function(angular){
- 'use strict';
-	angular.module('authModApp')
-		.directive('sameAs', function () {
-			return {
-				require: 'ngModel',
-				restrict: 'EA',
-				link: function postLink(scope, element, attrs,ngModelCtrl) {
-          console.log(attrs);
-          console.log(attrs.sameAs);
-					//console.log(scope.$eval(attrs.sameAs));
-					function validateEqual(value){
-						var valid = (value === scope.$eval(attrs.sameAs));
-						ngModelCtrl.$setValidity('equal',valid);
-						return valid ? value : undefined;
-					}
-					ngModelCtrl.$parsers.push(validateEqual);
-					ngModelCtrl.$formatters.push(validateEqual);
-					scope.$watch(attrs.sameAs,function(){
-						ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
-					});
-				}
-			};
-		});
-
-})(window.angular);
 
 (function(angular){
   'use strict';
@@ -2730,304 +2730,6 @@ angular.module('app.user')
     }
 })(window.angular);
 
-(function(angular) {
-	'use strict';
-	angular.module('app.offer')
-		.controller('OfferPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", 'offerService', 'baseUrlService','Socialshare',OfferPageController]);
-
-	function OfferPageController($scope, $auth, $routeParams, changeBrowserURL, offerService,baseUrlService,Socialshare) {
-		var opc = this;
-		opc.offerData = {};
-		activate();
-		opc.shareFacebook = shareFacebook;
-		console.log("sd"+baseUrlService.currentUrlWQ);
-		function shareFacebook() {
-			Socialshare.share({
-				'provider': 'facebook',
-				'attrs': {
-					'socialshareUrl': baseUrlService.currentUrlWQ,
-					'socialshareText' :"Offline Offers",
-					"socialshareVia":"1068203956594250"
-				}
-			});
-		}
-
-		function activate() {
-			offerService.getSingleOffer($routeParams.offerId)
-				.then(function(res) {
-					console.log("single offer");
-					console.log(res);
-					opc.offerData = res.data;
-					if (opc.offerData.address.latitude) {
-						opc.pos = [opc.offerData.address.latitude, opc.offerData.address.longitude];
-					} else {
-						opc.pos = [17.361625, 78.474622];
-					}
-				}, function(res) {
-					console.log(res);
-				}).catch(function(e) {
-					console.log('Error: ', e);
-
-				}).finally(function() {
-					console.log('This finally block');
-				});
-
-		}
-
-
-
-	}
-
-
-
-
-})(window.angular);
-
-(function(angular) {
-  'use strict';
-  angular.module('app.offer')
-    .controller('OffersCollectionController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", "offerService", OffersCollectionController]);
-
-  function OffersCollectionController($scope, $auth, $routeParams, changeBrowserURL, offerService) {
-    var occ = this;
-    occ.pageNo = 0;
-    occ.offersList = [];
-    occ.getSingleoffer = getSingleoffer;
-    occ.getOffersCollection = getOffersCollection;
-
-    activate();
-    $scope.$on('parent', function(event, data) {
-      occ.pageNo = 0;
-      occ.paramData = data;
-      occ.getoffersCollection();
-
-    });
-
-    function getSingleoffer(offer) {
-      var url = "offer/" + offer._id;
-      changeBrowserURL.changeBrowserURLMethod(url);
-    }
-
-    function getOffersCollection() {
-      occ.loading = true;
-      occ.pageNo = occ.pageNo + 1;
-      var location = $routeParams.location;
-      occ.paramData = {'store': $routeParams.storeId,'limit':100,'page':1,'populate':'store'};
-      offerService.getOfferCollection( occ.paramData)
-        .then(function(response) {
-          console.log("offers collection");
-          console.log(response);
-          if (response.data.docs.length === 0) {
-            occ.nooffersToShow = true;
-
-          } else {
-            occ.nooffersToShow = false;
-            occ.offersList = response.data.docs;
-          }
-
-          occ.loading = false;
-        }, function(response) {
-          console.log(response);
-        });
-    }
-
-    function activate() {
-      occ.getOffersCollection();
-    }
-
-  }
-
-
-
-
-})(window.angular);
-
-(function(angular) {
-	'use strict';
-	angular.module('app.offer')
-		.controller('OffersPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", "baseUrlService", OffersPageController]);
-
-	function OffersPageController($scope, $auth, $routeParams, changeBrowserURL, baseUrlService) {
-		var opc = this;
-
-		activate();
-
-		function activate(){
-
-		}
-		
-		
-
-	}
-
-
-
-
-})(window.angular);
-
-(function(angular) {
-  'use strict';
-  angular.module('app.offer')
-    .directive('offerSuggestionList', ['offerService',offerSuggestionList]);
-
-  function offerSuggestionList(offerService) {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'app/offer/views/offerSuggestionListTemplate.html',
-      scope: {
-                offerLimit: '=offerLimit',
-                offerCity: '=offerCity'
-      },
-      link: function(scope, element, attrs) {
-
-      },
-      controller: function($scope) {
-        var offerParamData = {
-          page: 1,
-          limit: $scope.offerLimit,
-          city: $scope.offerCity
-        };
-        offerService.getOfferCollection(offerParamData).then(function(response){
-          console.log("offers");
-          console.log(response);
-          $scope.offerSuggestions = response.data.docs;
-        },function(response){
-          console.log('error');
-          console.log(response);
-        });
-        $scope.offerDir = {
-
-        };
-
-
-      }
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular) {
-  'use strict';
-  angular.module('app.offer')
-    .directive('singleOfferVertDirective', [singleOfferVertDirective])
-    .directive('singleOfferDirective', [singleOfferDirective]);
-
-  function singleOfferDirective() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'app/offer/views/singleOfferTemplate.html',
-      scope: {
-        offer: '=singleOffer',
-        'isAdminOffer': '@adminOffer'
-      },
-      link: function(scope, element, attrs) {
-
-      },
-      controller: function($scope) {
-        $scope.offerDir = {
-          mapAddress: mapAddress
-        };
-
-        function mapAddress(addressObj) {
-          return Object.keys(addressObj).map(function(key, index) {
-            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
-              console.log(key);
-              return addressObj[key];  
-            }
-            
-          });
-        }
-      }
-    };
-  }
-
-function singleOfferVertDirective() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'app/offer/views/singleOfferVertTemplate.html',
-      scope: {
-        offer: '=singleOffer',
-        
-      },
-      link: function(scope, element, attrs) {
-
-      },
-      controller: function($scope) {
-        $scope.offerDir = {
-          mapAddress: mapAddress
-        };
-
-        function mapAddress(addressObj) {
-          return Object.keys(addressObj).map(function(key, index) {
-            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
-              console.log(key);
-              return addressObj[key];  
-            }
-            
-          });
-        }
-      }
-    };
-  }
-
-})(window.angular);
-
-(function(angular) {
-  'use strict';
-  angular.module('app.offer')
-    .directive('singleOfferSuggestion', [singleOfferSuggestion]);
-
-  function singleOfferSuggestion() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'app/offer/views/singleOfferSuggestionTemplate.html',
-      scope: {
-        suggestedOffer: '=suggestedOffer'
-      },
-      link: function(scope, element, attrs) {
-
-      },
-      controller: function($scope) {
-        $scope.offerDir = {
-
-        };
-
-
-      }
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-
-angular.module('app.offer')
-  .service('offerService',["$http","baseUrlService",OfferService]);
-
-/*
-  * This servic has a function to get collection of offers`
-*/
-function OfferService($http,baseUrlService){
-  this.getOfferCollection = getOfferCollection;
-  this.getSingleOffer = getSingleOffer;
-  function getOfferCollection(params){
-  	console.log(params);
-    return $http.get(baseUrlService.baseUrl+'offer/collection',{params:params});
-
-  }
-  function getSingleOffer(id,params){
-	return $http.get(baseUrlService.baseUrl+'offer/offer/'+id,{params:params});  	
-  }
-}
-})(window.angular);
-
 (function(angular){
 	'use strict';
   angular.module('app.product')
@@ -3362,6 +3064,304 @@ this.getSingleProductStores = getSingleProductStores;
         }
         changeBrowserURL.changeBrowserURLMethod(url);
       }
+}
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.offer')
+    .directive('offerSuggestionList', ['offerService',offerSuggestionList]);
+
+  function offerSuggestionList(offerService) {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/offer/views/offerSuggestionListTemplate.html',
+      scope: {
+                offerLimit: '=offerLimit',
+                offerCity: '=offerCity'
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: function($scope) {
+        var offerParamData = {
+          page: 1,
+          limit: $scope.offerLimit,
+          city: $scope.offerCity
+        };
+        offerService.getOfferCollection(offerParamData).then(function(response){
+          console.log("offers");
+          console.log(response);
+          $scope.offerSuggestions = response.data.docs;
+        },function(response){
+          console.log('error');
+          console.log(response);
+        });
+        $scope.offerDir = {
+
+        };
+
+
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.offer')
+    .directive('singleOfferVertDirective', [singleOfferVertDirective])
+    .directive('singleOfferDirective', [singleOfferDirective]);
+
+  function singleOfferDirective() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/offer/views/singleOfferTemplate.html',
+      scope: {
+        offer: '=singleOffer',
+        'isAdminOffer': '@adminOffer'
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: function($scope) {
+        $scope.offerDir = {
+          mapAddress: mapAddress
+        };
+
+        function mapAddress(addressObj) {
+          return Object.keys(addressObj).map(function(key, index) {
+            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
+              console.log(key);
+              return addressObj[key];  
+            }
+            
+          });
+        }
+      }
+    };
+  }
+
+function singleOfferVertDirective() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/offer/views/singleOfferVertTemplate.html',
+      scope: {
+        offer: '=singleOffer',
+        
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: function($scope) {
+        $scope.offerDir = {
+          mapAddress: mapAddress
+        };
+
+        function mapAddress(addressObj) {
+          return Object.keys(addressObj).map(function(key, index) {
+            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
+              console.log(key);
+              return addressObj[key];  
+            }
+            
+          });
+        }
+      }
+    };
+  }
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.offer')
+    .directive('singleOfferSuggestion', [singleOfferSuggestion]);
+
+  function singleOfferSuggestion() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/offer/views/singleOfferSuggestionTemplate.html',
+      scope: {
+        suggestedOffer: '=suggestedOffer'
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: function($scope) {
+        $scope.offerDir = {
+
+        };
+
+
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular) {
+	'use strict';
+	angular.module('app.offer')
+		.controller('OfferPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", 'offerService', 'baseUrlService','Socialshare',OfferPageController]);
+
+	function OfferPageController($scope, $auth, $routeParams, changeBrowserURL, offerService,baseUrlService,Socialshare) {
+		var opc = this;
+		opc.offerData = {};
+		activate();
+		opc.shareFacebook = shareFacebook;
+		console.log("sd"+baseUrlService.currentUrlWQ);
+		function shareFacebook() {
+			Socialshare.share({
+				'provider': 'facebook',
+				'attrs': {
+					'socialshareUrl': baseUrlService.currentUrlWQ,
+					'socialshareText' :"Offline Offers",
+					"socialshareVia":"1068203956594250"
+				}
+			});
+		}
+
+		function activate() {
+			offerService.getSingleOffer($routeParams.offerId)
+				.then(function(res) {
+					console.log("single offer");
+					console.log(res);
+					opc.offerData = res.data;
+					if (opc.offerData.address.latitude) {
+						opc.pos = [opc.offerData.address.latitude, opc.offerData.address.longitude];
+					} else {
+						opc.pos = [17.361625, 78.474622];
+					}
+				}, function(res) {
+					console.log(res);
+				}).catch(function(e) {
+					console.log('Error: ', e);
+
+				}).finally(function() {
+					console.log('This finally block');
+				});
+
+		}
+
+
+
+	}
+
+
+
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.offer')
+    .controller('OffersCollectionController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", "offerService", OffersCollectionController]);
+
+  function OffersCollectionController($scope, $auth, $routeParams, changeBrowserURL, offerService) {
+    var occ = this;
+    occ.pageNo = 0;
+    occ.offersList = [];
+    occ.getSingleoffer = getSingleoffer;
+    occ.getOffersCollection = getOffersCollection;
+
+    activate();
+    $scope.$on('parent', function(event, data) {
+      occ.pageNo = 0;
+      occ.paramData = data;
+      occ.getoffersCollection();
+
+    });
+
+    function getSingleoffer(offer) {
+      var url = "offer/" + offer._id;
+      changeBrowserURL.changeBrowserURLMethod(url);
+    }
+
+    function getOffersCollection() {
+      occ.loading = true;
+      occ.pageNo = occ.pageNo + 1;
+      var location = $routeParams.location;
+      occ.paramData = {'store': $routeParams.storeId,'limit':100,'page':1,'populate':'store'};
+      offerService.getOfferCollection( occ.paramData)
+        .then(function(response) {
+          console.log("offers collection");
+          console.log(response);
+          if (response.data.docs.length === 0) {
+            occ.nooffersToShow = true;
+
+          } else {
+            occ.nooffersToShow = false;
+            occ.offersList = response.data.docs;
+          }
+
+          occ.loading = false;
+        }, function(response) {
+          console.log(response);
+        });
+    }
+
+    function activate() {
+      occ.getOffersCollection();
+    }
+
+  }
+
+
+
+
+})(window.angular);
+
+(function(angular) {
+	'use strict';
+	angular.module('app.offer')
+		.controller('OffersPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", "baseUrlService", OffersPageController]);
+
+	function OffersPageController($scope, $auth, $routeParams, changeBrowserURL, baseUrlService) {
+		var opc = this;
+
+		activate();
+
+		function activate(){
+
+		}
+		
+		
+
+	}
+
+
+
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('app.offer')
+  .service('offerService',["$http","baseUrlService",OfferService]);
+
+/*
+  * This servic has a function to get collection of offers`
+*/
+function OfferService($http,baseUrlService){
+  this.getOfferCollection = getOfferCollection;
+  this.getSingleOffer = getSingleOffer;
+  function getOfferCollection(params){
+  	console.log(params);
+    return $http.get(baseUrlService.baseUrl+'offer/collection',{params:params});
+
+  }
+  function getSingleOffer(id,params){
+	return $http.get(baseUrlService.baseUrl+'offer/offer/'+id,{params:params});  	
+  }
 }
 })(window.angular);
 
@@ -3780,127 +3780,6 @@ angular.module('app.review')
         
 
       }
-})(window.angular);
-
-(function(angular){
-  'use strict';
-  angular.module('app.store')
-  .directive('filterDirective',[ filterDirective])
-  .directive('addClass',[ addClassDirective])
-  .directive('removeClass',[ removeClassDirective])
-  .directive('siblingRemoveClass',[ siblingRemoveClassDirective]);
-  function filterDirective() {
-    return {
-      restrict: 'E',
-      templateUrl:'app/store/views/filterDirectiveTemplate.html',
-      scope:{
-        filterName:"@filterName",
-        radioModel:"=radioModel",
-        radioChange:"&radioChange",
-        radioRepeat:"=radioRepeat",
-        clearClick:"&clearClick"
-      },
-      
-    };
-  }
-  function addClassDirective() {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          //$(element).removeClass('highlightClass');
-          $(this).addClass(attrs.addClass);
-
-        });
-
-      }
-    };
-  }
-  function siblingRemoveClassDirective() {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          $(this).siblings().removeClass(attrs.siblingRemoveClass);
-        });
-
-      }
-    };
-  }
-
-  function removeClassDirective() {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          $(this).siblings('.filterDirectiveRadioGroup').find('.filterRadioButton').removeClass(attrs.removeClass);
-        });
-
-      }
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-  angular.module('app.store')
-  .directive('imageReplace',['$timeout',imageReplaceDirective]);
-
-  function imageReplaceDirective($timeout) {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-      	console.log(element);
-      	console.log( $(element).attr('src'));
-      	console.log(attrs.imageReplace);
-      	$timeout(function(){
-      		$(element).attr('src',attrs.imageReplace);
-      	},1000);
-        
-      }
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-  angular.module('app.store')
-  .directive('scrollToId',['scrollToIdService',scrollToIdDirective]);
-
-  function scrollToIdDirective(scrollToIdService) {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          scrollToIdService.scrollToId(attrs.scrollToId);
-        });
-      }
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular){
-  angular.module('app.store')
-  .directive('singleStoreSuggestion',[ singleStoreSuggestion]);
-  function singleStoreSuggestion() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl:'app/store/views/singleStoreSuggestion.html',
-      scope:{
-        suggestedStore: '=suggestedStore'
-      }
-    };
-  }
-  
-
-
 })(window.angular);
 
 (function(angular){
@@ -4534,6 +4413,127 @@ angular.module('app.review')
       }
 
     }
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+  angular.module('app.store')
+  .directive('filterDirective',[ filterDirective])
+  .directive('addClass',[ addClassDirective])
+  .directive('removeClass',[ removeClassDirective])
+  .directive('siblingRemoveClass',[ siblingRemoveClassDirective]);
+  function filterDirective() {
+    return {
+      restrict: 'E',
+      templateUrl:'app/store/views/filterDirectiveTemplate.html',
+      scope:{
+        filterName:"@filterName",
+        radioModel:"=radioModel",
+        radioChange:"&radioChange",
+        radioRepeat:"=radioRepeat",
+        clearClick:"&clearClick"
+      },
+      
+    };
+  }
+  function addClassDirective() {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          //$(element).removeClass('highlightClass');
+          $(this).addClass(attrs.addClass);
+
+        });
+
+      }
+    };
+  }
+  function siblingRemoveClassDirective() {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          $(this).siblings().removeClass(attrs.siblingRemoveClass);
+        });
+
+      }
+    };
+  }
+
+  function removeClassDirective() {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          $(this).siblings('.filterDirectiveRadioGroup').find('.filterRadioButton').removeClass(attrs.removeClass);
+        });
+
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+  angular.module('app.store')
+  .directive('imageReplace',['$timeout',imageReplaceDirective]);
+
+  function imageReplaceDirective($timeout) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+      	console.log(element);
+      	console.log( $(element).attr('src'));
+      	console.log(attrs.imageReplace);
+      	$timeout(function(){
+      		$(element).attr('src',attrs.imageReplace);
+      	},1000);
+        
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+  angular.module('app.store')
+  .directive('scrollToId',['scrollToIdService',scrollToIdDirective]);
+
+  function scrollToIdDirective(scrollToIdService) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          scrollToIdService.scrollToId(attrs.scrollToId);
+        });
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular){
+  angular.module('app.store')
+  .directive('singleStoreSuggestion',[ singleStoreSuggestion]);
+  function singleStoreSuggestion() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl:'app/store/views/singleStoreSuggestion.html',
+      scope:{
+        suggestedStore: '=suggestedStore'
+      }
+    };
+  }
+  
+
 
 })(window.angular);
 

@@ -103,8 +103,6 @@ cob.ensureStoreAdminAuthenticated = function ensureStoreAdminAuthenticated(req, 
                 console.log('store authentication error');
                 console.log(err);
             }
-            console.log('****************************************');
-            console.log("correct***********");
             if (store.admin == req.user) {
                 console.log("this is used");
             }
