@@ -1,20 +1,7 @@
 (function(angular) {
     'use strict';
-
-    /**
-     * @ngdoc overview
-     * @name authModApp
-     * @description
-     * # authModApp
-     *
-     * Main module of the application.
-     */
     angular
-        .module('authModApp', [
-            'ngCookies',
-            'ngRoute',
-            'satellizer'
-        ])
+        .module('authModApp', [])
         .config(["$routeProvider", "$httpProvider", "$authProvider", authConfig]);
 
     function authConfig($routeProvider, $httpProvider, $authProvider) {
@@ -29,7 +16,7 @@
                 controller: 'RegisterCtrl',
                 controllerAs: 'rcl',
                 resolve: {
-                    redirectIfNotAuthenticated: redirectIfNotAuthenticated
+                    redirectIfNotAuthenticated: ['$q', '$auth', '$route', 'userData', 'changeBrowserURL',redirectIfNotAuthenticated]
                 }
             })
             .when('/logout', {
@@ -40,7 +27,7 @@
                 controller: 'LoginController',
                 controllerAs: 'login',
                 resolve: {
-                    redirectIfNotAuthenticated: redirectIfNotAuthenticated
+                    redirectIfNotAuthenticated: ['$q', '$auth', '$route', 'userData', 'changeBrowserURL',redirectIfNotAuthenticated]
                 }
 
 

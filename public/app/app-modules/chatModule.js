@@ -8,14 +8,14 @@ angular.module('app.chat',[]).config(['$routeProvider',
         controller: 'ChatBoxController',
         controllerAs: 'cbc',
         resolve:{
-          redirectIfNotAuthenticated: redirectIfNotAuthenticated
+          redirectIfNotAuthenticated: ['$q','$auth','$route','userData','changeBrowserURL',redirectIfNotAuthenticated]
         }
         
       }).
       when('/chatRooms', {
         templateUrl: 'app/chat/views/chatRoomListPage.html',
         resolve:{
-          redirectIfNotUserAuthenticated: redirectIfNotUserAuthenticated
+          redirectIfNotUserAuthenticated: ['$q','$auth','changeBrowserURL',redirectIfNotUserAuthenticated]
         }
       });
   }]);

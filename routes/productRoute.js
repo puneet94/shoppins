@@ -47,7 +47,7 @@ productRouter.route('/products/store/:storeId/:pageNo')
 			} else {
 				city_name = store.address.city;
 			}
-		})
+		});
 		product.save(function(err) {
 			if (err) {
 				if (err.code == 11000) {
@@ -88,7 +88,7 @@ productRouter.route('/products/category/:category/:location/:pageNo')
 				res.json(result);
 			}
 		});
-	})
+	});
 productRouter.route('/products/subCategory/:subCategory/:location/:pageNo')
 	.get(function(req, res) {
 		var queryObject = {};
@@ -101,7 +101,7 @@ productRouter.route('/products/subCategory/:subCategory/:location/:pageNo')
 				res.json(result);
 			}
 		});
-	})
+	});
 
 productRouter.route('/products/name/:name/:location/:pageNo')
 	.get(function(req, res) {
@@ -136,7 +136,7 @@ productRouter.route('/products/singleProduct/:productId')
 			} else {
 				res.json(product);
 			}
-		})
+		});
 	});
 
 productRouter.route('/products/location/:location/:pageNo')
@@ -161,7 +161,7 @@ productRouter.route('/products/location/:location/:pageNo')
 
 	})
 
-productRouter.route('/localities/:city')
+productRouter.route('/areas/:city')
 	.get(function(req, res) {
 		var query = Product.find({ 'address.city': req.params.city }).select({ "address.area": 1, "_id": 0 });
 		query.exec(function(err, someValue) {
@@ -239,6 +239,9 @@ productRouter.route('/collection')
         }
         if (req.query.location) {
             queryObj['address.city'] = req.query.location.toLowerCase();
+        }
+        if (req.query.city) {
+            queryObj['address.city'] = req.query.city.toLowerCase();
         }
         if (req.query.category) {
             queryObj.category = req.query.category.toLowerCase();

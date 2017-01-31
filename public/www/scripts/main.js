@@ -1,52 +1,54 @@
-(function(angular){
+(function(angular) {
 
-'use strict';
+	'use strict';
 
-angular.module('myApp',
-  ['ngRoute','ngCookies','ngMessages','ngSanitize','afkl.lazyImage','satellizer','ngFileUpload','ngMap','btford.socket-io','720kb.socialshare',
-  'authModApp',
-  'app.common','app.home','app.store','app.chat','app.admin','ngMaterial','app.review','app.product','app.user','app.offer']
-  ).config(['$routeProvider','$mdThemingProvider',
-  function($routeProvider,$mdThemingProvider) {
-      $mdThemingProvider.theme('default')
-    .primaryPalette('cyan')
-    .accentPalette('yellow')
-     .warnPalette('orange');
-     //.backgroundPalette('blue-grey');
-      $routeProvider.
-      otherwise({
-        redirectTo: '/home'
-      });
-  }]).run(function ($rootScope, $location,$route, $timeout) {
+	var app = angular.module('myApp', ['ngRoute', 'ngMessages', 'ngSanitize', 'afkl.lazyImage', 'satellizer', 'ngFileUpload', 'ngMap', 'btford.socket-io', '720kb.socialshare',
+		'authModApp',
+		'app.common', 'app.home', 'app.store', 'app.chat', 'app.admin', 'ngMaterial', 'app.review', 'app.product', 'app.user', 'app.offer', 'app.event'
+	]);
+	app.config(['$routeProvider', '$mdThemingProvider',
+		function($routeProvider, $mdThemingProvider) {
+			$mdThemingProvider.theme('default')
+				.primaryPalette('cyan')
+				.accentPalette('yellow')
+				.warnPalette('orange');
+			//.backgroundPalette('blue-grey');
+			$routeProvider.
+			otherwise({
+				redirectTo: '/home'
+			});
+		}
+	]);
+	app.run(['$rootScope', '$location', '$route', '$timeout', function($rootScope, $location, $route, $timeout) {
 
-    $rootScope.config = {};
-    $rootScope.config.app_url = $location.url();
-    $rootScope.config.app_path = $location.path();
-    $rootScope.layout = {};
-    $rootScope.layout.loading = false;
+		$rootScope.config = {};
+		$rootScope.config.app_url = $location.url();
+		$rootScope.config.app_path = $location.path();
+		$rootScope.layout = {};
+		$rootScope.layout.loading = false;
 
-    $rootScope.$on('$routeChangeStart', function () {
-        
-        //show loading gif
-        $timeout(function(){
-          $rootScope.layout.loading = true;          
-        });
-    });
-    $rootScope.$on('$routeChangeSuccess', function () {
-        
-        //hide loading gif
-        $timeout(function(){
-          $rootScope.layout.loading = false;
-        }, 1000);
-    });
-    $rootScope.$on('$routeChangeError', function () {
+		$rootScope.$on('$routeChangeStart', function() {
+			
+			
+			$timeout(function() {
+				$rootScope.layout.loading = true;
+			});
+		});
+		$rootScope.$on('$routeChangeSuccess', function() {
 
-        //hide loading gif
-        alert('you are not authorized to view this page');
-        $rootScope.layout.loading = false;
+			//hide loading gif
+			$timeout(function() {
+				$rootScope.layout.loading = false;
+			}, 1000);
+		});
+		$rootScope.$on('$routeChangeError', function() {
 
-    });
-});
+			//hide loading gif
+			alert('you are not authorized to view this page');
+			$rootScope.layout.loading = false;
+
+		});
+	}]);
 })(window.angular);
 // red, pink, purple, deep-purple, indigo, blue, light-blue, cyan, teal, green,,
 //light-green, lime, yellow, amber, orange, deep-orange, brown, grey, blue-grey
@@ -66,27 +68,39 @@ angular.module('app.admin', []).config(['$routeProvider',
             controller: 'CreateStoreController',
             controllerAs: 'csc',
             resolve: {
-                redirectIfNotAuthenticated2: redirectIfNotAuthenticated2
+                redirectIfNotAuthenticated2: ['$q', '$timeout', '$auth', 'changeBrowserURL',redirectIfNotAuthenticated2]
             }
         }).when('/admin/adminStorePage/:storeId', {
             templateUrl: 'app/admin/views/adminStorePage.html',
             controller: 'AdminStoreController',
             controllerAs: 'asc',
             resolve: {
-                redirectIfNotAuthenticated2: redirectIfNotAuthenticated2,
-                redirectIfNotStoreAuthenticated: redirectIfNotStoreAuthenticated
+                redirectIfNotAuthenticated2: ['$q', '$timeout', '$auth', 'changeBrowserURL',redirectIfNotAuthenticated2],
+                redirectIfNotStoreAuthenticated: ['$q', '$route', 'userData', 'adminStoreService', 'changeBrowserURL',redirectIfNotStoreAuthenticated]
             }
         }).when('/admin/adminCreateOffer/:storeId', {
             templateUrl: 'app/admin/views/adminCreateOffer.html',
             resolve: {
-                redirectIfNotAuthenticated2: redirectIfNotAuthenticated2,
-                redirectIfNotStoreAuthenticated: redirectIfNotStoreAuthenticated
+                redirectIfNotAuthenticated2: ['$q', '$timeout', '$auth', 'changeBrowserURL',redirectIfNotAuthenticated2],
+                redirectIfNotStoreAuthenticated: ['$q', '$route', 'userData', 'adminStoreService', 'changeBrowserURL',redirectIfNotStoreAuthenticated]
             }
         }).when('/admin/adminEditOffer/:storeId/:offerId', {
             templateUrl: 'app/admin/views/adminEditOffer.html',
             resolve: {
-                redirectIfNotAuthenticated2: redirectIfNotAuthenticated2,
-                redirectIfNotStoreAuthenticated: redirectIfNotStoreAuthenticated
+                redirectIfNotAuthenticated2: ['$q', '$timeout', '$auth', 'changeBrowserURL',redirectIfNotAuthenticated2],
+                redirectIfNotStoreAuthenticated: ['$q', '$route', 'userData', 'adminStoreService', 'changeBrowserURL',redirectIfNotStoreAuthenticated]
+            }
+        }).when('/admin/adminCreateEvent/:storeId', {
+            templateUrl: 'app/admin/views/adminCreateEvent.html',
+            resolve: {
+                redirectIfNotAuthenticated2: ['$q', '$timeout', '$auth', 'changeBrowserURL',redirectIfNotAuthenticated2],
+                redirectIfNotStoreAuthenticated: ['$q', '$route', 'userData', 'adminStoreService', 'changeBrowserURL',redirectIfNotStoreAuthenticated]
+            }
+        }).when('/admin/adminEditEvent/:storeId/:eventId', {
+            templateUrl: 'app/admin/views/adminEditEvent.html',
+            resolve: {
+                redirectIfNotAuthenticated2: ['$q', '$timeout', '$auth', 'changeBrowserURL',redirectIfNotAuthenticated2],
+                redirectIfNotStoreAuthenticated: ['$q', '$route', 'userData', 'adminStoreService', 'changeBrowserURL',redirectIfNotStoreAuthenticated]
             }
         });
     }
@@ -134,21 +148,8 @@ function redirectIfNotStoreAuthenticated($q, $route, userData, adminStoreService
 
 (function(angular) {
     'use strict';
-
-    /**
-     * @ngdoc overview
-     * @name authModApp
-     * @description
-     * # authModApp
-     *
-     * Main module of the application.
-     */
     angular
-        .module('authModApp', [
-            'ngCookies',
-            'ngRoute',
-            'satellizer'
-        ])
+        .module('authModApp', [])
         .config(["$routeProvider", "$httpProvider", "$authProvider", authConfig]);
 
     function authConfig($routeProvider, $httpProvider, $authProvider) {
@@ -156,14 +157,14 @@ function redirectIfNotStoreAuthenticated($q, $route, userData, adminStoreService
         //var fbClientId = '991629147629579';
         //shoppins
         var fbClientId = '1068203956594250';
-        var authenticateUrl = 'http://www.ofline.in/authenticate';
+        var authenticateUrl = 'http://localhost:3000/authenticate';
         $routeProvider
             .when('/signup', {
                 templateUrl: 'app/authentication/views/register.html',
                 controller: 'RegisterCtrl',
                 controllerAs: 'rcl',
                 resolve: {
-                    redirectIfNotAuthenticated: redirectIfNotAuthenticated
+                    redirectIfNotAuthenticated: ['$q', '$auth', '$route', 'userData', 'changeBrowserURL',redirectIfNotAuthenticated]
                 }
             })
             .when('/logout', {
@@ -174,7 +175,7 @@ function redirectIfNotStoreAuthenticated($q, $route, userData, adminStoreService
                 controller: 'LoginController',
                 controllerAs: 'login',
                 resolve: {
-                    redirectIfNotAuthenticated: redirectIfNotAuthenticated
+                    redirectIfNotAuthenticated: ['$q', '$auth', '$route', 'userData', 'changeBrowserURL',redirectIfNotAuthenticated]
                 }
 
 
@@ -210,14 +211,14 @@ angular.module('app.chat',[]).config(['$routeProvider',
         controller: 'ChatBoxController',
         controllerAs: 'cbc',
         resolve:{
-          redirectIfNotAuthenticated: redirectIfNotAuthenticated
+          redirectIfNotAuthenticated: ['$q','$auth','$route','userData','changeBrowserURL',redirectIfNotAuthenticated]
         }
         
       }).
       when('/chatRooms', {
         templateUrl: 'app/chat/views/chatRoomListPage.html',
         resolve:{
-          redirectIfNotUserAuthenticated: redirectIfNotUserAuthenticated
+          redirectIfNotUserAuthenticated: ['$q','$auth','changeBrowserURL',redirectIfNotUserAuthenticated]
         }
       });
   }]);
@@ -277,6 +278,29 @@ angular.module('app.common',[]);
 //du2b4powv cloudinary cloud name
 
 (function(angular){
+  'use strict';
+angular.module('app.event',[]).config(['$routeProvider',
+  function($routeProvider) {
+    $routeProvider.
+      when('/events/:location/:slug?', {
+        templateUrl: 'app/event/views/eventsPage.html',
+        controller: 'EventsPageController',
+        controllerAs: 'ospc'
+      }).
+      when('/event/:eventId', {
+        templateUrl: 'app/event/views/eventPage.html',
+        controller: 'EventPageController',
+        controllerAs: 'opc'
+      });
+  }]);
+
+})(window.angular);
+//productsCollection/";
+//productsCollectionCategory/";
+//productsCollectionSubCategory/";
+//product/singleProductName/necklace12/hyderabad/necklace12-products-in-hyderabad
+(function(angular){
+	'use strict';
 	angular.module('app.home',[])
 		.config(['$routeProvider',config]);
 		 function config($routeProvider) {
@@ -419,13 +443,13 @@ angular.module('app.store',[]).config(['$routeProvider',
             when('/userProfileSettings', {
                 templateUrl: 'app/user/views/userProfileSettingsPage.html',
                 resolve: {
-                    redirectIfNotUserAuthenticated: redirectIfNotUserAuthenticated
+                    redirectIfNotUserAuthenticated: ['$q', '$auth', 'changeBrowserURL',redirectIfNotUserAuthenticated]
                 }
             }).
             when('/userAccountSettings', {
                 templateUrl: 'app/user/views/userAccountSettingsPage.html',
                 resolve: {
-                    redirectIfNotUserAuthenticated: redirectIfNotUserAuthenticated
+                    redirectIfNotUserAuthenticated: ['$q', '$auth', 'changeBrowserURL',redirectIfNotUserAuthenticated]
                 }
             }).
             when('/userMobileFeed', {
@@ -438,7 +462,7 @@ angular.module('app.store',[]).config(['$routeProvider',
                 controller: 'UserMePageController',
                 controllerAs: 'umpc',
                 resolve: {
-                    redirectIfNotUserAuthenticated: redirectIfNotUserAuthenticated
+                    redirectIfNotUserAuthenticated: ['$q', '$auth', 'changeBrowserURL',redirectIfNotUserAuthenticated]
                 }
             });
         }
@@ -488,9 +512,9 @@ angular.module('app.common')
 	.service('arrayUniqueCopy',[ArrayUniqueCopy])
 	.service('userLocationService',[UserLocationService])
 	.service('baseUrlService',['$location',AjaxURL])
-	.service('getCityLocalitiesService',["$http","baseUrlService",GetCityLocalitiesService])
+	.service('getCityAreasService',["$http","baseUrlService",GetCityAreasService])
 	.service('getCityCategoriesService',["$http","baseUrlService",GetCityCategoriesService])
-	.service('getCityProductLocalitiesService',["$http","baseUrlService",GetCityProductLocalitiesService])
+	.service('getCityProductAreasService',["$http","baseUrlService",GetCityProductAreasService])
 	.service('getCityProductCategoriesService',["$http","baseUrlService",GetCityProductCategoriesService])
 	.service('getCityProductSubCategoriesService',["$http","baseUrlService",GetCityProductSubCategoriesService])
 	.factory('cityStorage',["$window",'$rootScope',cityStorage]);
@@ -614,10 +638,10 @@ angular.module('app.common')
 
 	}
 	
-	function GetCityLocalitiesService($http,baseUrlService){
-		this.getCityLocalities = getCityLocalities;
-		function getCityLocalities(city){
-			return $http.get(baseUrlService.baseUrl+"store/localities/"+city);
+	function GetCityAreasService($http,baseUrlService){
+		this.getCityAreas = getCityAreas;
+		function getCityAreas(city){
+			return $http.get(baseUrlService.baseUrl+"store/areas/"+city);
 		}
 	}
 	function GetCityCategoriesService($http,baseUrlService){
@@ -628,10 +652,10 @@ angular.module('app.common')
 		}
 
 	}
-	function GetCityProductLocalitiesService($http,baseUrlService){
-		this.getCityLocalities = getCityLocalities;
-		function getCityLocalities(city){
-			return $http.get(baseUrlService.baseUrl+"product/localities/"+city);
+	function GetCityProductAreasService($http,baseUrlService){
+		this.getCityAreas = getCityAreas;
+		function getCityAreas(city){
+			return $http.get(baseUrlService.baseUrl+"product/areas/"+city);
 		}
 	}
 	function GetCityProductCategoriesService($http,baseUrlService){
@@ -787,7 +811,7 @@ function toggleMobile($window,$location) {
     link: function(scope, element, attrs) {
 
       $(element).on('click',function(){
-        windowWidth = window.innerWidth ? window.innerWidth : $(window).width();
+        var windowWidth = window.innerWidth ? window.innerWidth : $(window).width();
 
           if (windowWidth <= 961 ) {
 
@@ -926,6 +950,197 @@ function imageReplacementDirective(){
   angular.module('app.review',[]);
 })(window.angular);
 
+(function(angular){
+  'use strict';
+
+angular.module('app.event')
+  .service('adminEventService',["$http","baseUrlService",'changeBrowserURL',AdminEventService]);
+
+/*
+  * This servic has a function to get collection of events`
+*/
+
+function AdminEventService($http,baseUrlService){
+  
+  this.createEvent = createEvent;
+  this.getEvent = getEvent;
+  this.updateEvent = updateEvent;
+  this.deleteEvent  = deleteEvent;
+  
+  function createEvent(storeId, event){
+
+  	return $http.post(baseUrlService.baseUrl+'admin/events/'+storeId,event);
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function updateEvent(eventId,storeId,event){
+  	return $http.put(baseUrlService.baseUrl+'admin/event/'+storeId+'/'+eventId,event);
+  }
+  function getEvent(eventId,storeId,obj){
+    return $http.get(baseUrlService.baseUrl+'admin/event/'+storeId+'/'+eventId,{params:obj});       
+  }
+  function deleteEvent(){
+
+  }
+}
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('app.offer')
+  .service('adminOfferService',["$http","baseUrlService",'changeBrowserURL',AdminOfferService]);
+
+/*
+  * This servic has a function to get collection of offers`
+*/
+
+function AdminOfferService($http,baseUrlService){
+  
+  this.createOffer = createOffer;
+  this.getOffer = getOffer;
+  this.updateOffer = updateOffer;
+  this.deleteOffer  = deleteOffer;
+  
+  function createOffer(storeId, offer){
+
+  	return $http.post(baseUrlService.baseUrl+'admin/offers/'+storeId,offer);
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function updateOffer(offerId,storeId,offer){
+  	return $http.put(baseUrlService.baseUrl+'admin/offer/'+storeId+'/'+offerId,offer);
+  }
+  function getOffer(offerId,storeId,obj){
+    return $http.get(baseUrlService.baseUrl+'admin/offer/'+storeId+'/'+offerId,{params:obj});       
+  }
+  function deleteOffer(){
+
+  }
+}
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('app.admin')
+  .service('adminProductService',["$http","baseUrlService",'changeBrowserURL',AdminProductService]);
+
+/*
+  * This servic has a function to get collection of products`
+*/
+
+function AdminProductService($http,baseUrlService,changeBrowserURL){
+  this.checkProductAdmin = checkProductAdmin;
+  this.createProduct = createProduct;
+  this.getProduct = getProduct;
+  this.updateProduct = updateProduct;
+  this.deleteProduct  = deleteProduct;
+  function checkProductAdmin(userId,productId){
+    return $http.get(baseUrlService.baseUrl);
+  }
+  function createProduct(product,storeId){
+  	return $http.post(baseUrlService.baseUrl+'admin/products/'+storeId,product);
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function updateProduct(productId,product){
+  	return $http.put(baseUrlService.baseUrl+'admin/product/'+productId,product);
+  }
+  function getProduct(productId,obj){
+    return $http.get(baseUrlService.baseUrl+'admin/product/'+productId,{params:obj});       
+  }
+  function deleteProduct(){
+
+  }
+}
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('app.admin')
+  .service('adminStoreService',["$http","baseUrlService",'changeBrowserURL',AdminStoreService]);
+
+/*
+  * This servic has a function to get collection of stores`
+*/
+
+function AdminStoreService($http,baseUrlService,changeBrowserURL){
+  this.checkStoreAdmin = checkStoreAdmin;
+  this.createStore = createStore;
+  this.getStore = getStore;
+  this.updateStore = updateStore;
+  this.deleteStore  = deleteStore;
+  function checkStoreAdmin(userId,storeId){
+    return $http.get(baseUrlService.baseUrl);
+  }
+  function createStore(store){
+  	return $http.post(baseUrlService.baseUrl+'admin/stores',store);
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function updateStore(storeId,store){
+  	return $http.put(baseUrlService.baseUrl+'admin/store/'+storeId,store);
+  }
+  function getStore(storeId,obj){
+    return $http.get(baseUrlService.baseUrl+'admin/store/'+storeId,{params:obj});       
+  }
+  function deleteStore(){
+
+  }
+}
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.event')
+    .controller('AdminEventsCollectionController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", "eventService", AdminEventsCollectionController]);
+
+  function AdminEventsCollectionController($scope, $auth, $routeParams, changeBrowserURL, eventService) {
+    var occ = this;
+    occ.pageNo = 0;
+    occ.eventsList = [];
+    
+    occ.getEventsCollection = getEventsCollection;
+
+    activate();
+    
+    function getEventsCollection() {
+      occ.loading = true;
+      occ.pageNo = occ.pageNo + 1;
+      
+      occ.paramData = {'store': $routeParams.storeId,'limit':100,'page':1,'populate':'store'};
+      console.log(occ.paramData);
+      eventService.getEventCollection( occ.paramData)
+        .then(function(response) {
+          console.log("events collection");
+          console.log(response);
+          if (response.data.docs.length === 0) {
+            occ.noeventsToShow = true;
+
+          } else {
+            occ.noeventsToShow = false;
+            occ.eventsList = response.data.docs;
+          }
+
+          occ.loading = false;
+        }, function(response) {
+          console.log(response);
+        });
+    }
+
+    function activate() {
+      occ.getEventsCollection();
+    }
+
+  }
+
+
+
+
+})(window.angular);
+
 (function(angular) {
   'use strict';
   angular.module('app.offer')
@@ -1027,6 +1242,101 @@ function imageReplacementDirective(){
 	'use strict';
 	angular.module('app.admin')
 
+	.controller('CreateEventController', ['$scope', 'Upload', '$timeout', 'baseUrlService', '$mdDialog','$location','adminEventService','$routeParams',CreateEventController]);
+
+	function CreateEventController($scope, Upload, $timeout, baseUrlService,$mdDialog,$location,adminEventService,$routeParams) {
+		var coc = this;
+		coc.eventForm = {};
+		coc.eventForm.eventImages = [];
+		coc.eventForm.category = [];
+		activate();
+
+		coc.createEvent = createEvent;
+		coc.uploadSingleImage = function(file, errFiles) {
+			coc.f = file;
+			coc.errFile = errFiles && errFiles[0];
+			if (file) {
+				coc.formBannerLoading = true;
+
+				file.upload = Upload.upload({
+					url: baseUrlService.baseUrl + 'upload/singleUpload',
+					data: { file: file }
+				});
+
+				file.upload.then(function(response) {
+					file.result = response.data;
+					coc.uploadedImage = response.data;
+					coc.eventForm.bannerImage = coc.uploadedImage;
+					console.log("the banner image");
+					console.log(coc.eventForm);
+					coc.formBannerLoading = false;
+
+				});
+			}
+		};
+		coc.uploadMultipleImages = function(files) {
+			coc.files = files;
+			coc.formImgListLoading = true;
+			angular.forEach(files, function(file) {
+				coc.formImgListLoading = true;
+				file.upload = Upload.upload({
+					url: baseUrlService.baseUrl + 'upload/singleUpload',
+					data: { file: file }
+				});
+
+				file.upload.then(function(response) {
+					$timeout(function() {
+						file.result = response.data;
+						console.log(response.data);
+						coc.eventForm.eventImages.push(response.data);
+						coc.formImgListLoading = false;
+					});
+				}, function(response) {
+					if (response.status > 0)
+						coc.errorMsg = response.status + ': ' + response.data;
+				}, function(evt) {
+					file.progress = Math.min(100, parseInt(100.0 *
+						evt.loaded / evt.total));
+				});
+			});
+
+
+		};
+
+		function createEvent() {
+			coc.eventForm.bannerImage = coc.eventForm.bannerImage || coc.eventForm.eventImages[0];
+			adminEventService.createEvent($routeParams.storeId,coc.eventForm)
+				.then(function(response) {
+					console.log(response.data._id);
+					userData.setUser();
+					$mdDialog.show(
+						$mdDialog.alert()
+						.clickOutsideToClose(true)
+						.title('Event created')
+						.textContent('Your Event has been created.')
+						.ariaLabel('Alert Dialog Demo')
+						.ok('Got it!')
+
+					);
+					$location.url('/admin/adminEventPage/' + response.data._id);
+					//$window.location.reload();
+				}, function(response) {
+					console.log(response);
+				});
+		}
+
+
+		function activate() {
+
+		}
+
+	}
+})(window.angular);
+
+(function(angular) {
+	'use strict';
+	angular.module('app.admin')
+
 	.controller('CreateOfferController', ['$scope', 'Upload', '$timeout', 'baseUrlService', '$mdDialog','$location','adminOfferService','$routeParams',CreateOfferController]);
 
 	function CreateOfferController($scope, Upload, $timeout, baseUrlService,$mdDialog,$location,adminOfferService,$routeParams) {
@@ -1119,10 +1429,12 @@ function imageReplacementDirective(){
 })(window.angular);
 
 (function(angular){
+  'use strict';
   angular.module('app.admin')
 
     .controller('CreateProductController',['$routeParams','$timeout','$route','adminProductService','Upload','baseUrlService','$mdDialog',CreateProductController]);
     function CreateProductController($routeParams,$timeout,$route,adminProductService,Upload,baseUrlService,$mdDialog){
+
     	var csc = this;
     	csc.productForm = {};
       csc.productForm.price = {};
@@ -1159,7 +1471,7 @@ function imageReplacementDirective(){
         
     };
         csc.uploadSingleImage = function(file, errFiles) {
-          console.log("Enterd file uploading");
+          
           csc.f = file;
           csc.errFile = errFiles && errFiles[0];
           if (file) {
@@ -1173,7 +1485,7 @@ function imageReplacementDirective(){
                   
                       file.result = response.data;
                       csc.productForm.bannerImage = response.data;
-                      console.log(response.data);
+                      
                       $('.productMainImage').css('background-image','url('+response.data+')');
                       csc.formBannerLoading = false;
                       
@@ -1307,6 +1619,110 @@ function imageReplacementDirective(){
 	'use strict';
 	angular.module('app.admin')
 
+	.controller('EditEventController', ['$scope', 'Upload', '$timeout', 'baseUrlService', '$mdDialog', '$routeParams','$location', 'adminEventService', EditEventController]);
+
+	function EditEventController($scope, Upload, $timeout, baseUrlService, $mdDialog, $routeParams,$location, adminEventService) {
+		var eoc = this;
+		eoc.eventForm = {};
+		eoc.eventForm.eventImages = [];
+		eoc.eventForm.category = [];
+		activate();
+
+		eoc.createEvent = createEvent;
+		eoc.uploadSingleImage = function(file, errFiles) {
+			eoc.f = file;
+			eoc.errFile = errFiles && errFiles[0];
+			if (file) {
+				eoc.formBannerLoading = true;
+
+				file.upload = Upload.upload({
+					url: baseUrlService.baseUrl + 'upload/singleUpload',
+					data: { file: file }
+				});
+
+				file.upload.then(function(response) {
+					file.result = response.data;
+					eoc.uploadedImage = response.data;
+					eoc.eventForm.bannerImage = eoc.uploadedImage;
+					console.log("the banner image");
+					console.log(eoc.eventForm);
+					$('.adminEventBannerImage').css('background-image', 'url(' + response.data + ')');
+					eoc.formBannerLoading = false;
+
+				});
+			}
+		};
+		eoc.uploadMultipleImages = function(files) {
+			eoc.files = files;
+			eoc.formImgListLoading = true;
+			angular.forEach(files, function(file) {
+				eoc.formImgListLoading = true;
+				file.upload = Upload.upload({
+					url: baseUrlService.baseUrl + 'upload/singleUpload',
+					data: { file: file }
+				});
+
+				file.upload.then(function(response) {
+					$timeout(function() {
+						file.result = response.data;
+						console.log(response.data);
+						eoc.eventForm.eventImages.push(response.data);
+						eoc.formImgListLoading = false;
+					});
+				}, function(response) {
+					if (response.status > 0)
+						eoc.errorMsg = response.status + ': ' + response.data;
+				}, function(evt) {
+					file.progress = Math.min(100, parseInt(100.0 *
+						evt.loaded / evt.total));
+				});
+			});
+
+
+		};
+
+		function createEvent() {
+			eoc.eventForm.bannerImage = eoc.eventForm.bannerImage || eoc.eventForm.eventImages[0];
+			adminEventService.updateEvent($routeParams.eventId,$routeParams.storeId,eoc.eventForm)
+				.then(function(response) {
+					console.log(response.data._id);
+					
+					$mdDialog.show(
+						$mdDialog.alert()
+						.clickOutsideToClose(true)
+						.title('Event created')
+						.textContent('Your Event has been edited.')
+						.ariaLabel('Alert Dialog Demo')
+						.ok('Got it!')
+
+					);
+					$location.url('/event/' + response.data._id);
+					//$window.location.reload();
+				}, function(response) {
+					console.log(response);
+				});
+		}
+
+
+		function activate() {
+			adminEventService.getEvent($routeParams.eventId,$routeParams.storeId).then(function(response) {
+				//response.data.category = response.data.category;
+				
+				response.data.startDate = new Date(response.data.startDate);
+				response.data.endDate = new Date(response.data.endDate);
+				console.log(response);
+				eoc.eventForm = response.data;
+			});
+
+		}
+
+	}
+})(window.angular);
+
+(function(angular) {
+	'use strict';
+	angular.module('app.admin')
+
 	.controller('EditOfferController', ['$scope', 'Upload', '$timeout', 'baseUrlService', '$mdDialog', '$routeParams','$location', 'adminOfferService', EditOfferController]);
 
 	function EditOfferController($scope, Upload, $timeout, baseUrlService, $mdDialog, $routeParams,$location, adminOfferService) {
@@ -1408,6 +1824,7 @@ function imageReplacementDirective(){
 })(window.angular);
 
 (function(angular){
+    'use strict';
   angular.module('app.admin')
 
     .controller('EditProductController',['$auth','adminProductService','$routeParams','$mdDialog',EditProductController]);
@@ -1558,515 +1975,6 @@ function imageReplacementDirective(){
     }
 })(window.angular);
 
-(function(angular){
-  'use strict';
-
-angular.module('app.offer')
-  .service('adminOfferService',["$http","baseUrlService",'changeBrowserURL',AdminOfferService]);
-
-/*
-  * This servic has a function to get collection of offers`
-*/
-
-function AdminOfferService($http,baseUrlService){
-  
-  this.createOffer = createOffer;
-  this.getOffer = getOffer;
-  this.updateOffer = updateOffer;
-  this.deleteOffer  = deleteOffer;
-  
-  function createOffer(storeId, offer){
-
-  	return $http.post(baseUrlService.baseUrl+'admin/offers/'+storeId,offer);
-    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
-
-  }
-  function updateOffer(offerId,storeId,offer){
-  	return $http.put(baseUrlService.baseUrl+'admin/offer/'+storeId+'/'+offerId,offer);
-  }
-  function getOffer(offerId,storeId,obj){
-    return $http.get(baseUrlService.baseUrl+'admin/offer/'+storeId+'/'+offerId,{params:obj});       
-  }
-  function deleteOffer(){
-
-  }
-}
-})(window.angular);
-
-(function(angular){
-  'use strict';
-
-angular.module('app.admin')
-  .service('adminProductService',["$http","baseUrlService",'changeBrowserURL',AdminProductService]);
-
-/*
-  * This servic has a function to get collection of products`
-*/
-
-function AdminProductService($http,baseUrlService,changeBrowserURL){
-  this.checkProductAdmin = checkProductAdmin;
-  this.createProduct = createProduct;
-  this.getProduct = getProduct;
-  this.updateProduct = updateProduct;
-  this.deleteProduct  = deleteProduct;
-  function checkProductAdmin(userId,productId){
-    return $http.get(baseUrlService.baseUrl);
-  }
-  function createProduct(product,storeId){
-  	return $http.post(baseUrlService.baseUrl+'admin/products/'+storeId,product);
-    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
-
-  }
-  function updateProduct(productId,product){
-  	return $http.put(baseUrlService.baseUrl+'admin/product/'+productId,product);
-  }
-  function getProduct(productId,obj){
-    return $http.get(baseUrlService.baseUrl+'admin/product/'+productId,{params:obj});       
-  }
-  function deleteProduct(){
-
-  }
-}
-})(window.angular);
-
-(function(angular){
-  'use strict';
-
-angular.module('app.admin')
-  .service('adminStoreService',["$http","baseUrlService",'changeBrowserURL',AdminStoreService]);
-
-/*
-  * This servic has a function to get collection of stores`
-*/
-
-function AdminStoreService($http,baseUrlService,changeBrowserURL){
-  this.checkStoreAdmin = checkStoreAdmin;
-  this.createStore = createStore;
-  this.getStore = getStore;
-  this.updateStore = updateStore;
-  this.deleteStore  = deleteStore;
-  function checkStoreAdmin(userId,storeId){
-    return $http.get(baseUrlService.baseUrl);
-  }
-  function createStore(store){
-  	return $http.post(baseUrlService.baseUrl+'admin/stores',store);
-    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
-
-  }
-  function updateStore(storeId,store){
-  	return $http.put(baseUrlService.baseUrl+'admin/store/'+storeId,store);
-  }
-  function getStore(storeId,obj){
-    return $http.get(baseUrlService.baseUrl+'admin/store/'+storeId,{params:obj});       
-  }
-  function deleteStore(){
-
-  }
-}
-})(window.angular);
-
-
-
-/**
- * @ngdoc directive
- * @name authModApp.directive:sameAs
- * @description
- * # sameAs
- */
- (function(angular){
- 'use strict';
-	angular.module('authModApp')
-		.directive('sameAs', function () {
-			return {
-				require: 'ngModel',
-				restrict: 'EA',
-				link: function postLink(scope, element, attrs,ngModelCtrl) {
-          console.log(attrs);
-          console.log(attrs.sameAs);
-					//console.log(scope.$eval(attrs.sameAs));
-					function validateEqual(value){
-						var valid = (value === scope.$eval(attrs.sameAs));
-						ngModelCtrl.$setValidity('equal',valid);
-						return valid ? value : undefined;
-					}
-					ngModelCtrl.$parsers.push(validateEqual);
-					ngModelCtrl.$formatters.push(validateEqual);
-					scope.$watch(attrs.sameAs,function(){
-						ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
-					});
-				}
-			};
-		});
-
-})(window.angular);
-
-(function(angular) {
-    'use strict';
-
-    angular.module('app.home')
-        .controller("AuthenticationModalController", ["$scope", "changeBrowserURL", 'userAuthService',"$auth", "$window", "$route", '$mdDialog', "userData",  AuthenticationModalController]);
-
-    function AuthenticationModalController($scope, changeBrowserURL, userAuthService,$auth, $window, $route, $mdDialog, userData) {
-        var phc = this;
-        phc.toHomePage = toHomePage;
-        phc.authenticate = authenticate;
-        phc.authLogout = authLogout;
-        phc.loginPage = loginPage;
-        phc.socialAuthenticate = socialAuthenticate;
-        phc.cancelDialog = cancelDialog;
-
-      function cancelDialog() {
-            $mdDialog.cancel();
-        }
-        function socialAuthenticate(provider) {
-            console.log("entered auth");
-            userAuthService.socialAuthenticate(provider);
-            
-        }
-        phc.tab = 1;
-
-        phc.setTab = function(newTab) {
-            phc.tab = newTab;
-        };
-
-        phc.isSet = function(tabNum) {
-            return phc.tab === tabNum;
-        };
-
-        phc.isAuth = $auth.isAuthenticated();
-
-        function toHomePage() {
-            changeBrowserURL.changeBrowserURLMethod('/');
-        }
-
-
-        function loginPage() {
-            changeBrowserURL.changeBrowserURLMethod('/login');
-        }
-
-        function authenticate(provider) {
-            $auth.authenticate(provider).then(function(response) {
-                userData.setUser(response.data.user);
-                alert('login with facebook successfull');
-                $window.location.reload();
-            });
-        }
-
-        function authLogout() {
-            $auth.logout();
-            userData.removeUser();
-            toHomePage();
-        }
-    }
-
-
-})(window.angular);
-
-// 'use strict';
-//
-// /*
-//  * @ngdoc function
-//  * @name authModApp.controller:HeaderCtrl
-//  * @description
-//  * # HeaderCtrl
-//  * Controller of the authModApp
-//  */
-// angular.module('authModApp')
-//   .controller('HeaderCtrl', function (userData,$auth,$location) {
-//     var hcl = this;
-//     hcl.isAuthenticated = isAuthenticated;
-//     hcl.logOut = logOut;
-//     //console.log($auth.getPayload()["sub"]);
-//     function logOut(){
-//         $auth.logout();
-//         console.log('********logout*******');
-//         console.log(userData.getUser());
-//         userData.removeUser();
-//         console.log(userData.getUser());
-//     	$location.path("/");
-//     }
-//     function isAuthenticated(){
-//     	return $auth.isAuthenticated();
-//     }
-//   });
-
-(function(angular){
-'use strict';
-
-/**
- * @ngdoc function
- * @name authModApp.controller:LoginCtrl
- * @description
- * # LoginCtrl
- * Controller of the authModApp
- */
-angular.module('authModApp')
-  .controller('LoginController', ["$location","$window","$auth","userData",LoginCtrl]);
-
-  function LoginCtrl($location,$window,$auth,userData) {
-    var logCl = this;
-    logCl.user = {};
-    logCl.submitLogin = submitLogin;
-    logCl.signUp = signUp;
-    
-    logCl.authenticate = function(provider) {
-      $auth.authenticate(provider);
-      $location.path("/");
-
-    };
-    
-    function signUp(){
-      $location.path("/signup");
-    }
-    function submitLogin(){
-    	//authorize.login(logCl.user)
-      $auth.login(logCl.user)
-    	.then(function(response){
-
-          userData.setUser(response.data.user);    
-          alert("Login successfull");
-          //socketStart();
-          $window.location.reload();
-    		},function(response){
-                  logCl.message = response.data.message;
-    			console.log(response);
-    		});
-    }
-  }
-
-})(window.angular);
-  /* please work
-	<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '1068203956594250',
-      xfbml      : true,
-      version    : 'v2.6'
-    });
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
-  */
-
-// 'use strict';
-//
-// /**
-//  * @ngdoc function
-//  * @name authModApp.controller:LogoutCtrl
-//  * @description
-//  * # LogoutCtrl
-//  * Controller of the authModApp
-//  */
-// angular.module('authModApp')
-//   .controller('LogoutCtrl', function ($location,authToken) {
-//     var lcl = this;
-//     authToken.removeToken();
-//     $location.path("/");
-//   });
-
-(function(angular){
-'use strict';
-
-/**
- * @ngdoc function
- * @name authModApp.controller:RegisterCtrl
- * @description
- * # RegisterCtrl
- * Controller of the authModApp
- */
-angular.module('authModApp')
-	.controller('RegisterCtrl', ["$scope","userData","$auth","$location",RegisterCtrl]);
-
-	function RegisterCtrl($scope,userData,$auth,$location) {
-		var rc = this;
-		rc.user = {};
-	    rc.formSubmit = formSubmit;
-	    //var url = 'http://localhost:8000/register';
-
-	    function formSubmit(){
-
-		    $auth.signup(rc.user)
-				.then(function(response){
-					console.log(response);
-			    		rc.message = response.data.message;
-			    		/*$auth.setToken(response.data.token);
-			    		userData.setUser(response.data.user);
-			    		//console.log(userData.getUser());
-							window.history.back();*/
-					},function(response){
-						rc.message = response.data.message;
-						console.log(response);
-				});
-		}
-	}
-})(window.angular);
-// $http.post(url,rc.user).then(function(res){
-			    	// 	authToken.setToken(res.data.token);
-			    	// 	console.log(res);
-			    	// 	$location.path("/");
-			    	// },function(data){
-			    	// 	console.log(data);
-			    	// });
-
-// 'use strict';
-//
-// /**
-//  * @ngdoc function
-//  * @name authModApp.controller:ReviewsCtrl
-//  * @description
-//  * # ReviewsCtrl
-//  * Controller of the authModApp
-//  */
-//  /*reviews.reviewsList
-// reviews.userReview
-// reviews.submitReview()*/
-// angular.module('authModApp')
-//   .controller('ReviewsCtrl', ["$http","$auth",reviewsCtrl]);
-//   function reviewsCtrl($http,$auth) {
-//     var reviews = this;
-//     reviews.user = {};
-//     reviews.submitReview = submitReview;
-//     $http.get('http://localhost:8000/reviews/user/'+$auth.getPayload()["sub"])
-//     	.then(function(response){
-//     		console.log(response);
-//     	},function(response){
-//     		console.log(response);
-//     	});
-//     function submitReview(){
-//     	reviews.user.userId = $auth.getPayload()["sub"];
-//     	console.log(reviews.user);
-//     	$http.post("http://localhost:8000/reviews",reviews.user)
-//     		.then(function(response){
-//     			console.log(response);
-//     		},function(response){
-//     			console.log(response);
-//     		});
-//
-//     }
-//   }
-
-(function(angular){
-  'use strict';
-
-angular.module('authModApp')
-  .service('userAuthService',["$http",'$auth',"baseUrlService",'$mdDialog','userData','$window',UserAuthService]);
-
-/*
-  * This servic has a function to get collection of stores`
-*/
-function UserAuthService($http,$auth,baseUrlService,$mdDialog,userData,$window){
-  this.socialAuthenticate = socialAuthenticate;
-  this.showAuthenticationDialog = showAuthenticationDialog;
-
-  function showAuthenticationDialog(ev) {
-            $mdDialog.show({
-                    controller: 'AuthenticationModalController',
-                    controllerAs: 'amc',
-                    templateUrl: 'app/authentication/views/authenticationModalTemplate.html',
-                    parent: angular.element(document.body),
-                    targetEvent: ev,
-                    clickOutsideToClose: true,
-                    fullscreen: true // Only for -xs, -sm breakpoints.*/
-                })
-                .then(function(answer) {
-                    
-                }, function() {
-
-                });
-        }
-
-
-        function socialAuthenticate(provider) {
-        	console.log("entered authwww");
-            $auth.authenticate(provider).then(function(response) {
-                userData.setUser(response.data.user);
-                alert('login with facebook successfull');
-                $window.location.reload();
-            });
-        }
-}
-})(window.angular);
-
-(function(angular){
-'use strict';
-
-/**
- * @ngdoc service
- * @name authModApp.userData
- * @description
- * # userData
- * Factory in the authModApp.
- */
-angular.module('authModApp')
-  .factory('userData',['$window','$route','$auth','$http',"baseUrlService","changeBrowserURL",userData]);
-
-  function userData($window,$route,$auth,$http,baseUrlService,changeBrowserURL) {
-    var storage = $window.localStorage;
-    var cachedUser={};
-    var obj1 =  {
-      setUser: function (user) {
-        
-        if(user){
-          storage.setItem('user',JSON.stringify(user));
-        }
-        else{
-
-          var userId = $auth.getPayload().sub;
-          if(userId){
-            $http.get(baseUrlService.baseUrl+'authenticate/user/'+userId).then(function(res){
-              
-              if(obj1.isUserExists()){
-                  storage.removeItem('user');
-              }
-
-              storage.setItem('user',JSON.stringify(res.data.user));
-              //
-              //$route.reload();
-            //  $window.location.reload();
-
-            },function(res){
-              console.log(res);
-            });
-          }
-        }
-        
-
-      },
-      getUser: function(){
-
-        return JSON.parse(storage.getItem('user'));
-      //   if(!cachedUser){
-      //     cachedUser = storage.getItem('user');
-      //   }
-      // return cachedUser;
-      },
-      removeUser: function(){
-        cachedUser = null;
-        //console.log('***********logged out*************');
-        storage.removeItem('user');
-      },
-      isUserExists: function(){
-        if(obj1.getUser()){
-          return true;
-        }
-        return false;
-      },
-      getUserPage: function(userId){
-        var url = "/user/"+userId;
-        changeBrowserURL.changeBrowserURLMethod(url);
-      }
-    };
-    return obj1;
-  }
-})(window.angular);
-
 (function(angular) {
     'use strict';
     angular.module('app.chat')
@@ -2152,6 +2060,7 @@ angular.module('authModApp')
 })(window.angular);
 
 (function(angular) {
+    'use strict';
     angular.module('app.chat')
 
     .controller('ChatRoomListController', ['$scope','$routeParams', 'userData', 'chatService', 'changeBrowserURL',ChatRoomListController]);
@@ -2226,6 +2135,11 @@ angular.module('app.chat').factory('Socket', ['socketFactory','baseUrlService',S
     }
 
 })(window.angular);
+(function(angular){
+'use strict';
+
+
+
 angular.module('app.chat')
 	.factory('SocketUserService', ['socketFactory','userData',socketFactoryFunction]);
     function socketFactoryFunction(socketFactory,userData) {
@@ -2234,6 +2148,304 @@ angular.module('app.chat')
             ioSocket: io.connect('/'+userData.getUser()._id)
         });
     }
+})(window.angular);
+(function(angular) {
+	'use strict';
+	angular.module('app.event')
+		.controller('EventPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", 'eventService', 'baseUrlService','Socialshare',EventPageController]);
+
+	function EventPageController($scope, $auth, $routeParams, changeBrowserURL, eventService,baseUrlService,Socialshare) {
+		var opc = this;
+		opc.eventData = {};
+		activate();
+		opc.shareFacebook = shareFacebook;
+		console.log("sd"+baseUrlService.currentUrlWQ);
+		function shareFacebook() {
+			Socialshare.share({
+				'provider': 'facebook',
+				'attrs': {
+					'socialshareUrl': baseUrlService.currentUrlWQ,
+					'socialshareText' :"Offline Events",
+					"socialshareVia":"1068203956594250"
+				}
+			});
+		}
+
+		function activate() {
+			eventService.getSingleEvent($routeParams.eventId)
+				.then(function(res) {
+					console.log("single event");
+					console.log(res);
+					opc.eventData = res.data;
+					if (opc.eventData.address.latitude) {
+						opc.pos = [opc.eventData.address.latitude, opc.eventData.address.longitude];
+					} else {
+						opc.pos = [17.361625, 78.474622];
+					}
+				}, function(res) {
+					console.log(res);
+				}).catch(function(e) {
+					console.log('Error: ', e);
+
+				}).finally(function() {
+					console.log('This finally block');
+				});
+
+		}
+
+
+
+	}
+
+
+
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.event')
+    .controller('EventsCollectionController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", "eventService", EventsCollectionController]);
+
+  function EventsCollectionController($scope, $auth, $routeParams, changeBrowserURL, eventService) {
+    var occ = this;
+    occ.pageNo = 0;
+    occ.eventsList = [];
+    occ.getSingleevent = getSingleevent;
+    occ.getEventsCollection = getEventsCollection;
+
+    activate();
+    $scope.$on('parent', function(event, data) {
+      occ.pageNo = 0;
+      occ.paramData = data;
+      occ.geteventsCollection();
+
+    });
+
+    function getSingleevent(event) {
+      var url = "event/" + event._id;
+      changeBrowserURL.changeBrowserURLMethod(url);
+    }
+
+    function getEventsCollection() {
+      occ.loading = true;
+      occ.pageNo = occ.pageNo + 1;
+      var location = $routeParams.location;
+      occ.paramData = {'store': $routeParams.storeId,'limit':100,'page':1,'populate':'store'};
+      eventService.getEventCollection( occ.paramData)
+        .then(function(response) {
+          console.log("events collection");
+          console.log(response);
+          if (response.data.docs.length === 0) {
+            occ.noeventsToShow = true;
+
+          } else {
+            occ.noeventsToShow = false;
+            occ.eventsList = response.data.docs;
+          }
+
+          occ.loading = false;
+        }, function(response) {
+          console.log(response);
+        });
+    }
+
+    function activate() {
+      occ.getEventsCollection();
+    }
+
+  }
+
+
+
+
+})(window.angular);
+
+(function(angular) {
+	'use strict';
+	angular.module('app.event')
+		.controller('EventsPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", "baseUrlService", EventsPageController]);
+
+	function EventsPageController($scope, $auth, $routeParams, changeBrowserURL, baseUrlService) {
+		var opc = this;
+
+		activate();
+
+		function activate(){
+
+		}
+		
+		
+
+	}
+
+
+
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.event')
+    .directive('eventSuggestionList', ['eventService',eventSuggestionList]);
+
+  function eventSuggestionList(eventService) {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/event/views/eventSuggestionListTemplate.html',
+      scope: {
+                eventLimit: '=eventLimit',
+                eventCity: '=eventCity'
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: function($scope) {
+        var eventParamData = {
+          page: 1,
+          limit: $scope.eventLimit,
+          city: $scope.eventCity
+        };
+        eventService.getEventCollection(eventParamData).then(function(response){
+          console.log("events");
+          console.log(response);
+          $scope.eventSuggestions = response.data.docs;
+        },function(response){
+          console.log('error');
+          console.log(response);
+        });
+        $scope.eventDir = {
+
+        };
+
+
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.event')
+    .directive('singleEventVertDirective', [singleEventVertDirective])
+    .directive('singleEventDirective', [singleEventDirective]);
+
+  function singleEventDirective() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/event/views/singleEventTemplate.html',
+      scope: {
+        event: '=singleEvent',
+        'isAdminEvent': '@adminEvent'
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: function($scope) {
+        $scope.eventDir = {
+          mapAddress: mapAddress
+        };
+
+        function mapAddress(addressObj) {
+          return Object.keys(addressObj).map(function(key, index) {
+            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
+              console.log(key);
+              return addressObj[key];  
+            }
+            
+          });
+        }
+      }
+    };
+  }
+
+function singleEventVertDirective() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/event/views/singleEventVertTemplate.html',
+      scope: {
+        event: '=singleEvent',
+        
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: function($scope) {
+        $scope.eventDir = {
+          mapAddress: mapAddress
+        };
+
+        function mapAddress(addressObj) {
+          return Object.keys(addressObj).map(function(key, index) {
+            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
+              console.log(key);
+              return addressObj[key];  
+            }
+            
+          });
+        }
+      }
+    };
+  }
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.event')
+    .directive('singleEventSuggestion', [singleEventSuggestion]);
+
+  function singleEventSuggestion() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/event/views/singleEventSuggestionTemplate.html',
+      scope: {
+        suggestedEvent: '=suggestedEvent'
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: function($scope) {
+        $scope.eventDir = {
+
+        };
+
+
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('app.event')
+  .service('eventService',["$http","baseUrlService",EventService]);
+
+/*
+  * This servic has a function to get collection of events`
+*/
+function EventService($http,baseUrlService){
+  this.getEventCollection = getEventCollection;
+  this.getSingleEvent = getSingleEvent;
+  function getEventCollection(params){
+  	console.log(params);
+    return $http.get(baseUrlService.baseUrl+'event/collection',{params:params});
+
+  }
+  function getSingleEvent(id,params){
+	return $http.get(baseUrlService.baseUrl+'event/event/'+id,{params:params});  	
+  }
+}
+})(window.angular);
 
 (function(angular) {
     'use strict';
@@ -2517,6 +2729,7 @@ angular.module('app.chat')
         
 
         function userSearchItemChange(item) {
+            
             if (!item) {
                 item = {};
             }
@@ -2524,43 +2737,47 @@ angular.module('app.chat')
             var entityName = item.userSearchString.split("#&#")[0];
             var location = hm.selectedItem;
             hm.slug = entityName + "-" + changeEntity.split("-")[0] + "s-in-" + location;
-
+           
             if (changeEntity == "store") {
 
                 hm.url = "/store/storesCollection/storeName/";
-
+                $window.location.href =baseUrlService.baseUrl+ '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
 
             } else if (changeEntity == "store-category") {
 
                 hm.url = "/store/storesCollection/category/";
-
+                $window.location.href =baseUrlService.baseUrl+ '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
 
             } else if (changeEntity == "product") {
 
                 hm.url = "/productsCollectionName/";
+                $window.location.href =baseUrlService.baseUrl+ '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
 
             } else if (changeEntity == "product-category") {
 
                 hm.url = "/productsCollectionCategory/";
+                $window.location.href =baseUrlService.baseUrl+ '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
 
 
             } else if (changeEntity == "product-subcategory") {
 
                 hm.url = "/productsCollectionSubCategory/";
+                $window.location.href =baseUrlService.baseUrl+ '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
 
-            } else if (changeEntity.trim() == "All products in") {
-
+            } else if (changeEntity.trim().indexOf("products")!=-1) {
+                
                 locationProductsSearchUrl();
 
-            } else if (changeEntity.trim() == "All offers in") {
-
+            } else if (changeEntity.trim().indexOf("offers")!=-1) {
+               
                 locationOffersSearchUrl();
 
             } else {
 
                 locationStoresSearchUrl();
             }
-            $window.location.href =baseUrlService.baseUrl+ '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
+           
+            
 
 
 
@@ -2573,9 +2790,9 @@ angular.module('app.chat')
                     .then(function(resource) {
 
                         hm.userSearches = [];
-                        var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
-                        var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
-                        var allOffersItem = { "userSearchString": "#&#All offers in #&#" + hm.selectedItem };
+                        var allStoresItem = { "userSearchString": "All stores#&#stores#&#" + hm.selectedItem };
+                        var allProductsItem = { "userSearchString": "All products#&#products#&#" + hm.selectedItem };
+                        var allOffersItem = { "userSearchString": "All offers#&# offers#&#" + hm.selectedItem };
                         hm.userSearches = resource.data;
                         hm.userSearches.unshift(allStoresItem, allProductsItem,allOffersItem);
                         //hm.userSearches = 
@@ -2596,9 +2813,9 @@ angular.module('app.chat')
 
             cityStorage.setCity(item);
             searchService.getSearches(item).then(function(resource) {
-                var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
-                var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
-                var allOffersItem = { "userSearchString": "#&#All offers in #&#" + hm.selectedItem };
+                var allStoresItem = { "userSearchString": "All stores#&#stores#&#" + hm.selectedItem };
+                var allProductsItem = { "userSearchString": "All products#&#products#&#" + hm.selectedItem };
+                var allOffersItem = { "userSearchString": "All offers#&#offers#&#" + hm.selectedItem };
                 hm.userSearches = resource.data;
                 hm.userSearches.unshift(allStoresItem, allProductsItem,allOffersItem);
                 /*hm.userSearches = [allStoresItem, allProductsItem];
@@ -2620,10 +2837,13 @@ angular.module('app.chat')
         }
 
         function locationStoresSearchUrl() {
+            
             hm.url = "/store/storesCollection/location";
             var myLocation = hm.selectedItem;
             hm.slug = "stores-in-" + myLocation;
+            
             changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
+            //$window.location.href =baseUrlService.baseUrl+ '#' + hm.url +  "/" + location + "/" + hm.slug;
 
         }
 
@@ -2730,13 +2950,389 @@ angular.module('app.user')
     }
 })(window.angular);
 
+(function(angular) {
+	'use strict';
+	angular.module('app.offer')
+		.controller('OfferPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", 'offerService', 'baseUrlService','Socialshare',OfferPageController]);
+
+	function OfferPageController($scope, $auth, $routeParams, changeBrowserURL, offerService,baseUrlService,Socialshare) {
+		var opc = this;
+		opc.offerData = {};
+		activate();
+		opc.shareFacebook = shareFacebook;
+		console.log("sd"+baseUrlService.currentUrlWQ);
+		function shareFacebook() {
+			Socialshare.share({
+				'provider': 'facebook',
+				'attrs': {
+					'socialshareUrl': baseUrlService.currentUrlWQ,
+					'socialshareText' :"Offline Offers",
+					"socialshareVia":"1068203956594250"
+				}
+			});
+		}
+
+		function activate() {
+			offerService.getSingleOffer($routeParams.offerId)
+				.then(function(res) {
+					console.log("single offer");
+					console.log(res);
+					opc.offerData = res.data;
+					if (opc.offerData.address.latitude) {
+						opc.pos = [opc.offerData.address.latitude, opc.offerData.address.longitude];
+					} else {
+						opc.pos = [17.361625, 78.474622];
+					}
+				}, function(res) {
+					console.log(res);
+				}).catch(function(e) {
+					console.log('Error: ', e);
+
+				}).finally(function() {
+					console.log('This finally block');
+				});
+
+		}
+
+
+
+	}
+
+
+
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.offer')
+    .controller('OffersCollectionController', ["$scope", "$auth", "$routeParams", OffersCollectionController]);
+
+  function OffersCollectionController($scope, $auth, $routeParams) {
+    var occ = this;
+    occ.pageNo = 0;
+
+    occ.offersList = [];
+    
+    
+    occ.paramData = {
+      city: $routeParams.location,
+      page: 1,
+      limit: 10
+    };
+    activate();
+    
+    
+    
+    function activate() {
+      
+    }
+
+  }
+
+
+
+
+})(window.angular);
+
+(function(angular) {
+	'use strict';
+	angular.module('app.offer')
+		.controller('OffersPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", "baseUrlService", OffersPageController]);
+
+	function OffersPageController($scope, $auth, $routeParams, changeBrowserURL, baseUrlService) {
+		var opc = this;
+
+		activate();
+
+		function activate(){
+
+		}
+		
+		
+
+	}
+
+
+
+
+})(window.angular);
+
+(function(angular) {
+	'use strict';
+	angular.module('app.offer')
+		.directive('offersList', ['offerService', offersList]);
+
+	function offersList(offerService) {
+		return {
+			restrict: 'E',
+			replace: true,
+			templateUrl: 'app/offer/views/offersListTemplate.html',
+			scope: {
+				paramData: '=paramData'
+			},
+			
+			controller: ['$scope',function($scope) {
+				$scope.offersList = [];
+				$scope.loadMoreOffers = loadMoreOffers;
+				$scope.getOffers = getOffers;
+				activate();
+				$scope.$on('filterClicked', function() {
+					$scope.offersList = [];
+					$scope.paramData.page = 1;
+					getOffers();
+				});
+
+				function loadMoreOffers() {
+					$scope.paramData.page = $scope.paramData.page + 1;
+					getOffers();
+				}
+
+				function getOffers() {
+					$scope.spinnerLoading = true;
+					console.log("paramdata");
+					console.log($scope.paramData);
+					offerService.getOfferCollection($scope.paramData).then(function(response) {
+						console.log(response);
+						$scope.totalOffers = response.data.total;
+						
+						angular.forEach(response.data.docs, function(value) {
+							$scope.offersList.push(value);
+						});
+						
+						$scope.spinnerLoading = false;
+
+					}).catch(function(error) {
+						console.log('error');
+						console.log(error);
+					});
+				}
+
+				function activate() {
+					getOffers();
+				}
+
+
+			}]
+		};
+	}
+
+
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.offer')
+    .directive('offerSuggestionList', ['offerService',offerSuggestionList]);
+
+  function offerSuggestionList(offerService) {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/offer/views/offerSuggestionListTemplate.html',
+      scope: {
+                offerLimit: '=offerLimit',
+                offerCity: '=offerCity'
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: ['$scope',function($scope) {
+        var offerParamData = {
+          page: 1,
+          limit: $scope.offerLimit,
+          city: $scope.offerCity
+        };
+        offerService.getOfferCollection(offerParamData).then(function(response){
+          console.log("offers");
+          console.log(response);
+          $scope.offerSuggestions = response.data.docs;
+        },function(response){
+          console.log('error');
+          console.log(response);
+        });
+        $scope.offerDir = {
+
+        };
+
+
+      }]
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.offer')
+    .directive('singleOfferVertDirective', [singleOfferVertDirective])
+    .directive('singleOfferDirective', [singleOfferDirective]);
+
+  function singleOfferDirective() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/offer/views/singleOfferTemplate.html',
+      scope: {
+        offer: '=singleOffer',
+        'isAdminOffer': '@adminOffer'
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: ['$scope',function($scope) {
+        $scope.offerDir = {
+          mapAddress: mapAddress
+        };
+
+        function mapAddress(addressObj) {
+          return Object.keys(addressObj).map(function(key, index) {
+            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
+              console.log(key);
+              return addressObj[key];  
+            }
+            
+          });
+        }
+      }]
+    };
+  }
+
+function singleOfferVertDirective() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/offer/views/singleOfferVertTemplate.html',
+      scope: {
+        offer: '=singleOffer',
+        
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: ['$scope',function($scope) {
+        $scope.offerDir = {
+          mapAddress: mapAddress
+        };
+
+        function mapAddress(addressObj) {
+          return Object.keys(addressObj).map(function(key, index) {
+            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
+              console.log(key);
+              return addressObj[key];  
+            }
+            
+          });
+        }
+      }]
+    };
+  }
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.offer')
+    .directive('singleOfferSuggestion', [singleOfferSuggestion]);
+
+  function singleOfferSuggestion() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/offer/views/singleOfferSuggestionTemplate.html',
+      scope: {
+        suggestedOffer: '=suggestedOffer'
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: ['$scope',function($scope) {
+        $scope.offerDir = {
+
+        };
+
+
+      }]
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('app.offer')
+  .service('offerService',["$http","baseUrlService",OfferService]);
+
+/*
+  * This servic has a function to get collection of offers`
+*/
+function OfferService($http,baseUrlService){
+  this.getOfferCollection = getOfferCollection;
+  this.getSingleOffer = getSingleOffer;
+  function getOfferCollection(params){
+  	console.log(params);
+    return $http.get(baseUrlService.baseUrl+'offer/collection',{params:params});
+
+  }
+  function getSingleOffer(id,params){
+	return $http.get(baseUrlService.baseUrl+'offer/offer/'+id,{params:params});  	
+  }
+}
+})(window.angular);
+
 (function(angular){
 	'use strict';
   angular.module('app.product')
 
-    .controller('ProductCategoryCollectionController',[productCategoryCollectionController]);
-    function productCategoryCollectionController(){
-    	
+    .controller('ProductCategoryCollectionController',['$scope','getCityProductAreasService', '$routeParams',ProductCategoryCollectionController]);
+    function ProductCategoryCollectionController($scope,getCityProductAreasService, $routeParams){
+    	var plc = this;
+		plc.location = $routeParams.location;
+		plc.productsSearchHeader = $routeParams.slug;
+		plc.categoryRadioModel = {};
+		plc.areaRadioModel = {};
+		plc.areaFilterName = 'area';
+		plc.categoryFilterName = 'category';
+		plc.paramData = {
+			city: plc.location,
+			page: 1,
+			limit: 10,
+			fields: '-store',
+			name: $routeParams.productName
+		};
+
+
+		plc.areaRadioClear = areaRadioClear;
+		plc.areaRadioChange = areaRadioChange;
+
+
+		function areaRadioClear() {
+			delete plc.areaRadioModel[plc.areaFilterName];
+			delete plc.paramData[plc.areaFilterName];
+			$scope.$broadcast('filterClicked');
+		}
+
+
+		function areaRadioChange() {
+			plc.paramData.area = plc.areaRadioModel[plc.areaFilterName];
+			$scope.$broadcast('filterClicked');
+		}
+
+
+
+
+		getCityProductAreasService.getCityAreas(plc.location)
+			.then(function(res) {
+				plc.areas = res.data;
+			}, function(res) {
+				console.log(res);
+			});
+
+
     }
 })(window.angular);
 
@@ -2840,75 +3436,140 @@ angular.module('app.product')
 
 })(window.angular);
 
-(function(angular){
-  angular.module('app.product')
+(function(angular) {
+	'use strict';
+	angular.module('app.product')
 
-    .controller('ProductNameCollectionController',[productNameCollectionController]);
-    function productNameCollectionController(){
-    	
-    }
+	.controller('ProductNameCollectionController', ['$scope', 'getCityProductAreasService', '$routeParams', ProductNameCollectionController]);
+
+	function ProductNameCollectionController($scope, getCityProductAreasService, $routeParams) {
+		var plc = this;
+		plc.location = $routeParams.location;
+		plc.productsSearchHeader = $routeParams.slug;
+		plc.categoryRadioModel = {};
+		plc.areaRadioModel = {};
+		plc.areaFilterName = 'area';
+		plc.categoryFilterName = 'category';
+		plc.paramData = {
+			city: plc.location,
+			page: 1,
+			limit: 10,
+			fields: '-store',
+			name: $routeParams.productName
+		};
+
+
+		plc.areaRadioClear = areaRadioClear;
+		plc.areaRadioChange = areaRadioChange;
+
+
+		function areaRadioClear() {
+			delete plc.areaRadioModel[plc.areaFilterName];
+			delete plc.paramData[plc.areaFilterName];
+			$scope.$broadcast('filterClicked');
+		}
+
+
+		function areaRadioChange() {
+			plc.paramData.area = plc.areaRadioModel[plc.areaFilterName];
+			$scope.$broadcast('filterClicked');
+		}
+
+
+
+
+		getCityProductAreasService.getCityAreas(plc.location)
+			.then(function(res) {
+				plc.areas = res.data;
+			}, function(res) {
+				console.log(res);
+			});
+
+
+	}
 })(window.angular);
 
 (function(angular){
+  'use strict';
   angular.module('app.product')
-    .controller('ProductsLocationController',["$scope","$routeParams","getCityProductLocalitiesService","getCityProductCategoriesService","getCityProductSubCategoriesService",ProductsLocationController]);
+    .controller('ProductsLocationController',["$scope","$routeParams","getCityProductAreasService","getCityProductCategoriesService",ProductsLocationController]);
 
-  function ProductsLocationController($scope,$routeParams,getCityProductLocalitiesService,getCityProductCategoriesService,getCityProductSubCategoriesService){
+  function ProductsLocationController($scope,$routeParams,getCityProductAreasService,getCityProductCategoriesService){
     var plc = this;
-    plc.areaModel = {};
-    plc.categoryModel = {};
-    plc.launchFilterEvent = launchFilterEvent;
-    plc.areaRadioClicked = areaRadioClicked;
-    plc.categoryRadioClicked = categoryRadioClicked;
-    plc.majorFilter = {};
-    plc.clearAreaFilters = clearAreaFilters;
-    plc.clearCategoryFilters = clearCategoryFilters;
-    function areaRadioClicked(){
-      plc.majorFilter.area=plc.areaModel.area;
-      launchFilterEvent(plc.majorFilter);
+    plc.location = $routeParams.location;
+    plc.productsSearchHeader = $routeParams.slug;
+    plc.categoryRadioModel = {};
+    plc.areaRadioModel = {};
+    plc.areaFilterName = 'area';
+    plc.categoryFilterName = 'category';
+    plc.paramData = {
+      city: plc.location,
+      page: 1,
+      limit: 10,
+      fields: '-store'
+    };
+
+    
+    plc.areaRadioClear = areaRadioClear;
+    plc.areaRadioChange = areaRadioChange;
+    
+    plc.categoryRadioClear = categoryRadioClear;
+    plc.categoryRadioChange = categoryRadioChange;
+    
+
+    function categoryRadioClear() {
+      delete plc.categoryRadioModel[plc.categoryFilterName];
+      delete plc.paramData[plc.categoryFilterName];
+      $scope.$broadcast('filterClicked');
     }
-    function clearAreaFilters(){
-      delete plc.majorFilter.area;
-      plc.areaModel = {};
-      launchFilterEvent(plc.majorFilter);
+
+
+    function categoryRadioChange() {
+      plc.paramData.category = plc.categoryRadioModel[plc.categoryFilterName];
+      $scope.$broadcast('filterClicked');
     }
-    function categoryRadioClicked(){
-      plc.majorFilter.category=plc.categoryModel.category;
-      launchFilterEvent(plc.majorFilter);
+
+    function areaRadioClear() {
+      delete plc.areaRadioModel[plc.areaFilterName];
+      delete plc.paramData[plc.areaFilterName];
+      $scope.$broadcast('filterClicked');
     }
-    function clearCategoryFilters(){
-      delete plc.majorFilter.category;
-      plc.categoryModel = {};
-      launchFilterEvent(plc.majorFilter);
+
+
+    function areaRadioChange() {
+      plc.paramData.area = plc.areaRadioModel[plc.areaFilterName];
+      $scope.$broadcast('filterClicked');
     }
-    var location = $routeParams.location;
-    getCityProductLocalitiesService.getCityLocalities(location)
-      .then(function(res){
+
+
+    
+
+    getCityProductAreasService.getCityAreas(plc.location)
+      .then(function(res) {
         plc.areas = res.data;
-      },function(res){
-        
+      }, function(res) {
+        console.log(res);
       });
-      getCityProductCategoriesService.getCityCategories(location)
-        .then(function(res){
-          plc.categories = res.data;
-          
-        },function(res){
-          console.log(res);
-        });
-    function launchFilterEvent(obj){
-        $scope.$broadcast('parent', obj);
-    }
+    getCityProductCategoriesService.getCityCategories(plc.location)
+      .then(function(res) {
+        plc.categories = res.data;
+
+      }, function(res) {
+        console.log(res);
+      });
 
   }
 })(window.angular);
 
-(function(angular){
-  angular.module('app.product')
+(function(angular) {
+	'use strict';
+	angular.module('app.product')
 
-    .controller('ProductSubCategoryCollectionController',[productSubCategoryCollectionController]);
-    function productSubCategoryCollectionController(){
-    	
-    }
+	.controller('ProductSubCategoryCollectionController', [ProductSubCategoryCollectionController]);
+
+	function ProductSubCategoryCollectionController() {
+
+	}
 })(window.angular);
 
 (function(angular) {
@@ -2934,7 +3595,7 @@ angular.module('app.product')
     function activate() {
       getProductsService.getSingleProduct($routeParams.productId).then(function(res) {
         spc.product = res.data;
-        getProductsService.getSingleProductStores({ 'limit': 10, 'page': 1, 'name': spc.product.name,'fields':'store' }).then(function(res) {
+        getProductsService.getSingleProductStores({ 'limit': 10, 'page': 1, 'name': spc.product.name,'fields':'store','populate':'store' }).then(function(res) {
           console.log("the list of list");
           console.log(res);
           spc.productStoreList  = res.data.docs.map(function(singleProduct){
@@ -2980,6 +3641,72 @@ angular.module('app.product')
 
 })(window.angular);
 
+(function(angular) {
+	'use strict';
+	angular.module('app.product')
+		.directive('productsList', ['getProductCollectionService', productsList]);
+
+	function productsList(getProductCollectionService) {
+		return {
+			restrict: 'E',
+			replace: true,
+			templateUrl: 'app/product/views/productListTemplate.html',
+			scope: {
+				paramData: '=paramData'
+			},
+			controller: ['$scope', function($scope) {
+				$scope.productsList = [];
+				$scope.loadMoreProducts = loadMoreProducts;
+				$scope.getProducts = getProducts;
+				activate();
+				$scope.$on('filterClicked', function() {
+					$scope.productsList = [];
+					$scope.paramData.page = 1;
+					getProducts();
+				});
+
+				function loadMoreProducts() {
+					$scope.paramData.page = $scope.paramData.page + 1;
+					getProducts();
+				}
+
+				function getProducts() {
+					$scope.loading = true;
+					console.log("the params");
+					console.log($scope.paramData);
+					getProductCollectionService.productsCollection($scope.paramData).then(function(response) {
+						console.log("products");
+						console.log(response.data);
+						if (response.data.docs.length === 0) {
+							$scope.noProductsToShow = true;
+						}
+						else{
+           						$scope.noProductsToShow = false; 
+          					}
+						$scope.totalProducts = response.data.total;
+
+						angular.forEach(response.data.docs, function(value) {
+							$scope.productsList.push(value);
+						});
+						
+						$scope.loading = false;
+
+					}).catch(function(error) {
+						console.log('error');
+						console.log(error);
+					});
+				}
+
+				function activate() {
+					getProducts();
+				}
+			}]
+		};
+	}
+
+
+})(window.angular);
+
 
 (function(angular){
   'use strict';
@@ -3015,9 +3742,15 @@ angular.module('app.product')
 function GetProductCollectionService($http,baseUrlService){
   this.getProductCollection = getProductCollection;
   this.getProductNameCollection = getProductNameCollection;
+  this.productsCollection = productsCollection;
   function getProductCollection(url,paramData){
   	console.log(paramData);
     return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function productsCollection(paramData){
+    console.log(paramData);
+    return $http.get(baseUrlService.baseUrl+'product/collection',{params:paramData});
 
   }
   function getProductNameCollection(){
@@ -3064,304 +3797,6 @@ this.getSingleProductStores = getSingleProductStores;
         }
         changeBrowserURL.changeBrowserURLMethod(url);
       }
-}
-})(window.angular);
-
-(function(angular) {
-  'use strict';
-  angular.module('app.offer')
-    .directive('offerSuggestionList', ['offerService',offerSuggestionList]);
-
-  function offerSuggestionList(offerService) {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'app/offer/views/offerSuggestionListTemplate.html',
-      scope: {
-                offerLimit: '=offerLimit',
-                offerCity: '=offerCity'
-      },
-      link: function(scope, element, attrs) {
-
-      },
-      controller: function($scope) {
-        var offerParamData = {
-          page: 1,
-          limit: $scope.offerLimit,
-          city: $scope.offerCity
-        };
-        offerService.getOfferCollection(offerParamData).then(function(response){
-          console.log("offers");
-          console.log(response);
-          $scope.offerSuggestions = response.data.docs;
-        },function(response){
-          console.log('error');
-          console.log(response);
-        });
-        $scope.offerDir = {
-
-        };
-
-
-      }
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular) {
-  'use strict';
-  angular.module('app.offer')
-    .directive('singleOfferVertDirective', [singleOfferVertDirective])
-    .directive('singleOfferDirective', [singleOfferDirective]);
-
-  function singleOfferDirective() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'app/offer/views/singleOfferTemplate.html',
-      scope: {
-        offer: '=singleOffer',
-        'isAdminOffer': '@adminOffer'
-      },
-      link: function(scope, element, attrs) {
-
-      },
-      controller: function($scope) {
-        $scope.offerDir = {
-          mapAddress: mapAddress
-        };
-
-        function mapAddress(addressObj) {
-          return Object.keys(addressObj).map(function(key, index) {
-            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
-              console.log(key);
-              return addressObj[key];  
-            }
-            
-          });
-        }
-      }
-    };
-  }
-
-function singleOfferVertDirective() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'app/offer/views/singleOfferVertTemplate.html',
-      scope: {
-        offer: '=singleOffer',
-        
-      },
-      link: function(scope, element, attrs) {
-
-      },
-      controller: function($scope) {
-        $scope.offerDir = {
-          mapAddress: mapAddress
-        };
-
-        function mapAddress(addressObj) {
-          return Object.keys(addressObj).map(function(key, index) {
-            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
-              console.log(key);
-              return addressObj[key];  
-            }
-            
-          });
-        }
-      }
-    };
-  }
-
-})(window.angular);
-
-(function(angular) {
-  'use strict';
-  angular.module('app.offer')
-    .directive('singleOfferSuggestion', [singleOfferSuggestion]);
-
-  function singleOfferSuggestion() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'app/offer/views/singleOfferSuggestionTemplate.html',
-      scope: {
-        suggestedOffer: '=suggestedOffer'
-      },
-      link: function(scope, element, attrs) {
-
-      },
-      controller: function($scope) {
-        $scope.offerDir = {
-
-        };
-
-
-      }
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular) {
-	'use strict';
-	angular.module('app.offer')
-		.controller('OfferPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", 'offerService', 'baseUrlService','Socialshare',OfferPageController]);
-
-	function OfferPageController($scope, $auth, $routeParams, changeBrowserURL, offerService,baseUrlService,Socialshare) {
-		var opc = this;
-		opc.offerData = {};
-		activate();
-		opc.shareFacebook = shareFacebook;
-		console.log("sd"+baseUrlService.currentUrlWQ);
-		function shareFacebook() {
-			Socialshare.share({
-				'provider': 'facebook',
-				'attrs': {
-					'socialshareUrl': baseUrlService.currentUrlWQ,
-					'socialshareText' :"Offline Offers",
-					"socialshareVia":"1068203956594250"
-				}
-			});
-		}
-
-		function activate() {
-			offerService.getSingleOffer($routeParams.offerId)
-				.then(function(res) {
-					console.log("single offer");
-					console.log(res);
-					opc.offerData = res.data;
-					if (opc.offerData.address.latitude) {
-						opc.pos = [opc.offerData.address.latitude, opc.offerData.address.longitude];
-					} else {
-						opc.pos = [17.361625, 78.474622];
-					}
-				}, function(res) {
-					console.log(res);
-				}).catch(function(e) {
-					console.log('Error: ', e);
-
-				}).finally(function() {
-					console.log('This finally block');
-				});
-
-		}
-
-
-
-	}
-
-
-
-
-})(window.angular);
-
-(function(angular) {
-  'use strict';
-  angular.module('app.offer')
-    .controller('OffersCollectionController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", "offerService", OffersCollectionController]);
-
-  function OffersCollectionController($scope, $auth, $routeParams, changeBrowserURL, offerService) {
-    var occ = this;
-    occ.pageNo = 0;
-    occ.offersList = [];
-    occ.getSingleoffer = getSingleoffer;
-    occ.getOffersCollection = getOffersCollection;
-
-    activate();
-    $scope.$on('parent', function(event, data) {
-      occ.pageNo = 0;
-      occ.paramData = data;
-      occ.getoffersCollection();
-
-    });
-
-    function getSingleoffer(offer) {
-      var url = "offer/" + offer._id;
-      changeBrowserURL.changeBrowserURLMethod(url);
-    }
-
-    function getOffersCollection() {
-      occ.loading = true;
-      occ.pageNo = occ.pageNo + 1;
-      var location = $routeParams.location;
-      occ.paramData = {'store': $routeParams.storeId,'limit':100,'page':1,'populate':'store'};
-      offerService.getOfferCollection( occ.paramData)
-        .then(function(response) {
-          console.log("offers collection");
-          console.log(response);
-          if (response.data.docs.length === 0) {
-            occ.nooffersToShow = true;
-
-          } else {
-            occ.nooffersToShow = false;
-            occ.offersList = response.data.docs;
-          }
-
-          occ.loading = false;
-        }, function(response) {
-          console.log(response);
-        });
-    }
-
-    function activate() {
-      occ.getOffersCollection();
-    }
-
-  }
-
-
-
-
-})(window.angular);
-
-(function(angular) {
-	'use strict';
-	angular.module('app.offer')
-		.controller('OffersPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", "baseUrlService", OffersPageController]);
-
-	function OffersPageController($scope, $auth, $routeParams, changeBrowserURL, baseUrlService) {
-		var opc = this;
-
-		activate();
-
-		function activate(){
-
-		}
-		
-		
-
-	}
-
-
-
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-
-angular.module('app.offer')
-  .service('offerService',["$http","baseUrlService",OfferService]);
-
-/*
-  * This servic has a function to get collection of offers`
-*/
-function OfferService($http,baseUrlService){
-  this.getOfferCollection = getOfferCollection;
-  this.getSingleOffer = getSingleOffer;
-  function getOfferCollection(params){
-  	console.log(params);
-    return $http.get(baseUrlService.baseUrl+'offer/collection',{params:params});
-
-  }
-  function getSingleOffer(id,params){
-	return $http.get(baseUrlService.baseUrl+'offer/offer/'+id,{params:params});  	
-  }
 }
 })(window.angular);
 
@@ -3782,6 +4217,408 @@ angular.module('app.review')
       }
 })(window.angular);
 
+(function(angular) {
+    'use strict';
+
+    angular.module('app.home')
+        .controller("AuthenticationModalController", ["$scope", "changeBrowserURL", 'userAuthService',"$auth", "$window", "$route", '$mdDialog', "userData",  AuthenticationModalController]);
+
+    function AuthenticationModalController($scope, changeBrowserURL, userAuthService,$auth, $window, $route, $mdDialog, userData) {
+        var phc = this;
+        phc.toHomePage = toHomePage;
+        phc.authenticate = authenticate;
+        phc.authLogout = authLogout;
+        phc.loginPage = loginPage;
+        phc.socialAuthenticate = socialAuthenticate;
+        phc.cancelDialog = cancelDialog;
+
+      function cancelDialog() {
+            $mdDialog.cancel();
+        }
+        function socialAuthenticate(provider) {
+            console.log("entered auth");
+            userAuthService.socialAuthenticate(provider);
+            
+        }
+        phc.tab = 1;
+
+        phc.setTab = function(newTab) {
+            phc.tab = newTab;
+        };
+
+        phc.isSet = function(tabNum) {
+            return phc.tab === tabNum;
+        };
+
+        phc.isAuth = $auth.isAuthenticated();
+
+        function toHomePage() {
+            changeBrowserURL.changeBrowserURLMethod('/');
+        }
+
+
+        function loginPage() {
+            changeBrowserURL.changeBrowserURLMethod('/login');
+        }
+
+        function authenticate(provider) {
+            $auth.authenticate(provider).then(function(response) {
+                userData.setUser(response.data.user);
+                alert('login with facebook successfull');
+                $window.location.reload();
+            });
+        }
+
+        function authLogout() {
+            $auth.logout();
+            userData.removeUser();
+            toHomePage();
+        }
+    }
+
+
+})(window.angular);
+
+// 'use strict';
+//
+// /*
+//  * @ngdoc function
+//  * @name authModApp.controller:HeaderCtrl
+//  * @description
+//  * # HeaderCtrl
+//  * Controller of the authModApp
+//  */
+// angular.module('authModApp')
+//   .controller('HeaderCtrl', function (userData,$auth,$location) {
+//     var hcl = this;
+//     hcl.isAuthenticated = isAuthenticated;
+//     hcl.logOut = logOut;
+//     //console.log($auth.getPayload()["sub"]);
+//     function logOut(){
+//         $auth.logout();
+//         console.log('********logout*******');
+//         console.log(userData.getUser());
+//         userData.removeUser();
+//         console.log(userData.getUser());
+//     	$location.path("/");
+//     }
+//     function isAuthenticated(){
+//     	return $auth.isAuthenticated();
+//     }
+//   });
+
+(function(angular){
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name authModApp.controller:LoginCtrl
+ * @description
+ * # LoginCtrl
+ * Controller of the authModApp
+ */
+angular.module('authModApp')
+  .controller('LoginController', ["$location","$window","$auth","userData",LoginCtrl]);
+
+  function LoginCtrl($location,$window,$auth,userData) {
+    var logCl = this;
+    logCl.user = {};
+    logCl.submitLogin = submitLogin;
+    logCl.signUp = signUp;
+    
+    logCl.authenticate = function(provider) {
+      $auth.authenticate(provider);
+      $location.path("/");
+
+    };
+    
+    function signUp(){
+      $location.path("/signup");
+    }
+    function submitLogin(){
+    	//authorize.login(logCl.user)
+      $auth.login(logCl.user)
+    	.then(function(response){
+
+          userData.setUser(response.data.user);    
+          alert("Login successfull");
+          //socketStart();
+          $window.location.reload();
+    		},function(response){
+                  logCl.message = response.data.message;
+    			console.log(response);
+    		});
+    }
+  }
+
+})(window.angular);
+  /* please work
+	<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1068203956594250',
+      xfbml      : true,
+      version    : 'v2.6'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+  */
+
+// 'use strict';
+//
+// /**
+//  * @ngdoc function
+//  * @name authModApp.controller:LogoutCtrl
+//  * @description
+//  * # LogoutCtrl
+//  * Controller of the authModApp
+//  */
+// angular.module('authModApp')
+//   .controller('LogoutCtrl', function ($location,authToken) {
+//     var lcl = this;
+//     authToken.removeToken();
+//     $location.path("/");
+//   });
+
+(function(angular){
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name authModApp.controller:RegisterCtrl
+ * @description
+ * # RegisterCtrl
+ * Controller of the authModApp
+ */
+angular.module('authModApp')
+	.controller('RegisterCtrl', ["$scope","userData","$auth",RegisterCtrl]);
+
+	function RegisterCtrl($scope,userData,$auth) {
+		var rc = this;
+		rc.user = {};
+	    rc.formSubmit = formSubmit;
+	    //var url = 'http://localhost:8000/register';
+
+	    function formSubmit(){
+
+		    $auth.signup(rc.user)
+				.then(function(response){
+					console.log(response);
+			    		rc.message = response.data.message;
+			    		/*$auth.setToken(response.data.token);
+			    		userData.setUser(response.data.user);
+			    		//console.log(userData.getUser());
+							window.history.back();*/
+					},function(response){
+						rc.message = response.data.message;
+						console.log(response);
+				});
+		}
+	}
+})(window.angular);
+// $http.post(url,rc.user).then(function(res){
+			    	// 	authToken.setToken(res.data.token);
+			    	// 	console.log(res);
+			    	// 	$location.path("/");
+			    	// },function(data){
+			    	// 	console.log(data);
+			    	// });
+
+// 'use strict';
+//
+// /**
+//  * @ngdoc function
+//  * @name authModApp.controller:ReviewsCtrl
+//  * @description
+//  * # ReviewsCtrl
+//  * Controller of the authModApp
+//  */
+//  /*reviews.reviewsList
+// reviews.userReview
+// reviews.submitReview()*/
+// angular.module('authModApp')
+//   .controller('ReviewsCtrl', ["$http","$auth",reviewsCtrl]);
+//   function reviewsCtrl($http,$auth) {
+//     var reviews = this;
+//     reviews.user = {};
+//     reviews.submitReview = submitReview;
+//     $http.get('http://localhost:8000/reviews/user/'+$auth.getPayload()["sub"])
+//     	.then(function(response){
+//     		console.log(response);
+//     	},function(response){
+//     		console.log(response);
+//     	});
+//     function submitReview(){
+//     	reviews.user.userId = $auth.getPayload()["sub"];
+//     	console.log(reviews.user);
+//     	$http.post("http://localhost:8000/reviews",reviews.user)
+//     		.then(function(response){
+//     			console.log(response);
+//     		},function(response){
+//     			console.log(response);
+//     		});
+//
+//     }
+//   }
+
+
+
+/**
+ * @ngdoc directive
+ * @name authModApp.directive:sameAs
+ * @description
+ * # sameAs
+ */
+ (function(angular){
+ 'use strict';
+	angular.module('authModApp')
+		.directive('sameAs', function () {
+			return {
+				require: 'ngModel',
+				restrict: 'EA',
+				link: function postLink(scope, element, attrs,ngModelCtrl) {
+          console.log(attrs);
+          console.log(attrs.sameAs);
+					//console.log(scope.$eval(attrs.sameAs));
+					function validateEqual(value){
+						var valid = (value === scope.$eval(attrs.sameAs));
+						ngModelCtrl.$setValidity('equal',valid);
+						return valid ? value : undefined;
+					}
+					ngModelCtrl.$parsers.push(validateEqual);
+					ngModelCtrl.$formatters.push(validateEqual);
+					scope.$watch(attrs.sameAs,function(){
+						ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
+					});
+				}
+			};
+		});
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('authModApp')
+  .service('userAuthService',["$http",'$auth',"baseUrlService",'$mdDialog','userData','$window',UserAuthService]);
+
+/*
+  * This servic has a function to get collection of stores`
+*/
+function UserAuthService($http,$auth,baseUrlService,$mdDialog,userData,$window){
+  this.socialAuthenticate = socialAuthenticate;
+  this.showAuthenticationDialog = showAuthenticationDialog;
+
+  function showAuthenticationDialog(ev) {
+            $mdDialog.show({
+                    controller: 'AuthenticationModalController',
+                    controllerAs: 'amc',
+                    templateUrl: 'app/authentication/views/authenticationModalTemplate.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true // Only for -xs, -sm breakpoints.*/
+                })
+                .then(function(answer) {
+                    
+                }, function() {
+
+                });
+        }
+
+
+        function socialAuthenticate(provider) {
+        	console.log("entered authwww");
+            $auth.authenticate(provider).then(function(response) {
+                userData.setUser(response.data.user);
+                alert('login with facebook successfull');
+                $window.location.reload();
+            });
+        }
+}
+})(window.angular);
+
+(function(angular){
+'use strict';
+
+/**
+ * @ngdoc service
+ * @name authModApp.userData
+ * @description
+ * # userData
+ * Factory in the authModApp.
+ */
+angular.module('authModApp')
+  .factory('userData',['$window','$route','$auth','$http',"baseUrlService","changeBrowserURL",userData]);
+
+  function userData($window,$route,$auth,$http,baseUrlService,changeBrowserURL) {
+    var storage = $window.localStorage;
+    var cachedUser={};
+    var obj1 =  {
+      setUser: function (user) {
+        
+        if(user){
+          storage.setItem('user',JSON.stringify(user));
+        }
+        else{
+
+          var userId = $auth.getPayload().sub;
+          if(userId){
+            $http.get(baseUrlService.baseUrl+'authenticate/user/'+userId).then(function(res){
+              
+              if(obj1.isUserExists()){
+                  storage.removeItem('user');
+              }
+
+              storage.setItem('user',JSON.stringify(res.data.user));
+              //
+              //$route.reload();
+            //  $window.location.reload();
+
+            },function(res){
+              console.log(res);
+            });
+          }
+        }
+        
+
+      },
+      getUser: function(){
+
+        return JSON.parse(storage.getItem('user'));
+      //   if(!cachedUser){
+      //     cachedUser = storage.getItem('user');
+      //   }
+      // return cachedUser;
+      },
+      removeUser: function(){
+        cachedUser = null;
+        //console.log('***********logged out*************');
+        storage.removeItem('user');
+      },
+      isUserExists: function(){
+        if(obj1.getUser()){
+          return true;
+        }
+        return false;
+      },
+      getUserPage: function(userId){
+        var url = "/user/"+userId;
+        changeBrowserURL.changeBrowserURLMethod(url);
+      }
+    };
+    return obj1;
+  }
+})(window.angular);
+
 (function(angular){
 	'use strict';
 
@@ -3949,45 +4786,59 @@ angular.module('app.review')
   'use strict';
   angular.module('app.store')
 
-  .controller('StoreCategoryCollectionController', ["$scope", "$routeParams", "getCityLocalitiesService", "getCityCategoriesService", StoreCategoryCollectionController]);
+  .controller('StoreCategoryCollectionController', ["$scope", "$routeParams", "getCityAreasService", "getCityCategoriesService", StoreCategoryCollectionController]);
 
-  function StoreCategoryCollectionController($scope, $routeParams, getCityLocalitiesService, getCityCategoriesService) {
-    var slcc = this;
-    slcc.areaModel = {};
-    slcc.launchFilterEvent = launchFilterEvent;
-    slcc.areaRadioClicked = areaRadioClicked;
-    slcc.majorFilter = {};
-    slcc.clearAreaFilters = clearAreaFilters;
+  function StoreCategoryCollectionController($scope, $routeParams, getCityAreasService, getCityCategoriesService) {
+    
+    var sccc = this;
+    sccc.location = $routeParams.location;
+    sccc.storesSearchHeader = $routeParams.slug;
+    sccc.areaRadioModel = {};
+    sccc.areaFilterName = 'area';
+    sccc.paramData = {
+      city: sccc.location,
+      page: 1,
+      limit: 10,
+      category: $routeParams.category
+    };
 
-    function areaRadioClicked() {
-      slcc.majorFilter.area = slcc.areaModel.area;
-      launchFilterEvent(slcc.majorFilter);
+    
+    sccc.areaRadioClear = areaRadioClear;
+    sccc.areaRadioChange = areaRadioChange;
+    
+    
+    
+
+    function areaRadioClear() {
+      delete sccc.areaRadioModel[sccc.areaFilterName];
+      delete sccc.paramData[sccc.areaFilterName];
+      $scope.$broadcast('filterClicked');
     }
 
-    function clearAreaFilters() {
-      delete slcc.majorFilter.area;
-      slcc.areaModel = {};
-      launchFilterEvent(slcc.majorFilter);
+
+    function areaRadioChange() {
+      sccc.paramData.area = sccc.areaRadioModel[sccc.areaFilterName];
+      $scope.$broadcast('filterClicked');
     }
 
-    var location = $routeParams.location;
-    getCityLocalitiesService.getCityLocalities(location)
+
+    
+
+    getCityAreasService.getCityAreas(sccc.location)
       .then(function(res) {
-        slcc.areas = res.data;
+        sccc.areas = res.data;
       }, function(res) {
         console.log(res);
       });
-    getCityCategoriesService.getCityCategories(location)
+    getCityCategoriesService.getCityCategories(sccc.location)
       .then(function(res) {
-        slcc.categories = res.data;
+        sccc.categories = res.data;
 
       }, function(res) {
         console.log(res);
       });
 
-    function launchFilterEvent(obj) {
-      $scope.$broadcast('parent', obj);
-    }
+    
   }
 
 })(window.angular);
@@ -4078,70 +4929,130 @@ angular.module('app.review')
 
 })(window.angular);
 
+(function(angular) {
+	'use strict';
+	angular.module('app.store')
+		.controller('StoreLocationCollectionController', ["$scope", "$routeParams", "getCityAreasService", "getCityCategoriesService", StoreLocationCollectionController]);
+
+	function StoreLocationCollectionController($scope, $routeParams, getCityAreasService, getCityCategoriesService) {
+
+		var slcc = this;
+		slcc.location = $routeParams.location;
+		slcc.categoryRadioModel = {};
+		slcc.categoryFilterName = 'category';
+		slcc.storesSearchHeader = $routeParams.slug;
+		slcc.areaRadioModel = {};
+		slcc.areaFilterName = 'area';
+		slcc.paramData = {
+			city: slcc.location,
+			page: 1,
+			limit: 10
+		};
+
+		slcc.categoryRadioClear = categoryRadioClear;
+		slcc.areaRadioClear = areaRadioClear;
+		slcc.areaRadioChange = areaRadioChange;
+		slcc.categoryRadioChange = categoryRadioChange;
+		
+		activate();
+		function categoryRadioClear() {
+			delete slcc.categoryRadioModel[slcc.categoryFilterName];
+			delete slcc.paramData[slcc.categoryFilterName];
+			$scope.$broadcast('filterClicked');
+		}
+
+		function areaRadioClear() {
+			delete slcc.areaRadioModel[slcc.areaFilterName];
+			delete slcc.paramData[slcc.areaFilterName];
+			$scope.$broadcast('filterClicked');
+		}
+
+
+		function areaRadioChange() {
+			slcc.paramData.area = slcc.areaRadioModel[slcc.areaFilterName];
+			$scope.$broadcast('filterClicked');
+		}
+
+
+		function categoryRadioChange() {
+			slcc.paramData.category = slcc.categoryRadioModel[slcc.categoryFilterName];
+			$scope.$broadcast('filterClicked');
+		}
+
+		function activate() {
+			getCityAreasService.getCityAreas(slcc.location)
+				.then(function(res) {
+					slcc.areas = res.data;
+				}, function(res) {
+					console.log(res);
+				});
+			getCityCategoriesService.getCityCategories(slcc.location)
+				.then(function(res) {
+					slcc.categories = res.data;
+
+				}, function(res) {
+					console.log(res);
+				});
+		}
+
+
+
+	}
+})(window.angular);
+
+(function(angular) {
+	'use strict';
+	angular.module('app.store')
+
+	.controller('StoreNameCollectionController', ["$scope", "$routeParams", "getCityAreasService", StoreNameCollectionController]);
+
+	function StoreNameCollectionController($scope, $routeParams, getCityAreasService) {
+		var sncc = this;
+		sncc.location = $routeParams.location;
+		sncc.storesSearchHeader = $routeParams.slug;
+		sncc.areaRadioModel = {};
+		sncc.areaFilterName = 'area';
+		sncc.paramData = {
+			city: sncc.location,
+			page: 1,
+			limit: 10,
+			name: $routeParams.storeName
+		};
+
+
+		sncc.areaRadioClear = areaRadioClear;
+		sncc.areaRadioChange = areaRadioChange;
+
+
+
+
+		function areaRadioClear() {
+			delete sncc.areaRadioModel[sncc.areaFilterName];
+			delete sncc.paramData[sncc.areaFilterName];
+			$scope.$broadcast('filterClicked');
+		}
+
+
+		function areaRadioChange() {
+			sncc.paramData.area = sncc.areaRadioModel[sncc.areaFilterName];
+			$scope.$broadcast('filterClicked');
+		}
+
+
+
+
+		getCityAreasService.getCityAreas(sncc.location)
+			.then(function(res) {
+				sncc.areas = res.data;
+			}, function(res) {
+				console.log(res);
+			});
+
+	}
+})(window.angular);
+
 (function(angular){
   'use strict';
-  angular.module('app.store')
-    .controller('StoreLocationCollectionController',["$scope","$routeParams","getCityLocalitiesService","getCityCategoriesService",StoreLocationCollectionController]);
-
-  function StoreLocationCollectionController($scope,$routeParams,getCityLocalitiesService,getCityCategoriesService){
-    var slcc = this;
-    slcc.areaModel = {};
-    slcc.categoryModel = {};
-    slcc.launchFilterEvent = launchFilterEvent;
-    slcc.areaRadioClicked = areaRadioClicked;
-    slcc.categoryRadioClicked = categoryRadioClicked;
-    slcc.majorFilter = {};
-    slcc.clearAreaFilters = clearAreaFilters;
-    slcc.clearCategoryFilters = clearCategoryFilters;
-    function areaRadioClicked(){
-      slcc.majorFilter.area=slcc.areaModel.area;
-      launchFilterEvent(slcc.majorFilter);
-    }
-    function clearAreaFilters(){
-      delete slcc.majorFilter.area;
-      slcc.areaModel = {};
-      launchFilterEvent(slcc.majorFilter);
-    }
-    function categoryRadioClicked(){
-      slcc.majorFilter.category=slcc.categoryModel.category;
-      launchFilterEvent(slcc.majorFilter);
-    }
-    function clearCategoryFilters(){
-      delete slcc.majorFilter.category;
-      slcc.categoryModel = {};
-      launchFilterEvent(slcc.majorFilter);
-    }
-    var location = $routeParams.location;
-    getCityLocalitiesService.getCityLocalities(location)
-      .then(function(res){
-        slcc.areas = res.data;
-      },function(res){
-        console.log(res);
-      });
-      getCityCategoriesService.getCityCategories(location)
-        .then(function(res){
-          slcc.categories = res.data;
-          
-        },function(res){
-          console.log(res);
-        });
-    function launchFilterEvent(obj){
-        $scope.$broadcast('parent', obj);
-    }
-
-  }
-})(window.angular);
-
-(function(angular){
-  angular.module('app.store')
-
-    .controller('StoreNameCollectionController',[storeNameCollectionController]);
-    function storeNameCollectionController(){
-    	
-    }
-})(window.angular);
-
-(function(angular){
   angular.module('app.store')
 
     .controller('UserStoreFollowController',["$scope","$auth","$routeParams","userData","userFollowService",UserStoreFollowController]);
@@ -4209,6 +5120,7 @@ angular.module('app.review')
 })(window.angular);
 
 (function(angular) {
+    'use strict';
     angular.module('app.store')
 
     .controller('UserStoreReportController', ["$scope", "$auth", "$routeParams", "userData", "userService", '$mdDialog', UserStoreReportController]);
@@ -4265,6 +5177,7 @@ angular.module('app.review')
 })(window.angular);
 
 (function(angular){
+  'use strict';
   angular.module('app.store')
 
     .controller('UserStoreUpvoteController',["$scope","$auth","$routeParams","userData","userUpvoteService",'storeData',UserStoreUpvoteController]);
@@ -4337,6 +5250,7 @@ angular.module('app.review')
 })(window.angular);
 
 (function(angular){
+  'use strict';
   angular.module('app.store')
 
     .controller('UserStoreVisitController',["$scope","$auth","$routeParams","userData","userVisitService",UserStoreVisitController]);
@@ -4520,6 +5434,33 @@ angular.module('app.review')
 })(window.angular);
 
 (function(angular){
+  'use strict';
+  angular.module('app.store')
+  .directive('singleStore',[ singleStore]);
+  function singleStore() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl:'app/store/views/singleStoreTemplate.html',
+      scope:{
+        store: '=store'
+      },
+      controller: ['$scope',function($scope){
+      	$scope.getSingleStore = getSingleStore;
+
+      	function getSingleStore(){
+
+      	}
+      }]
+    };
+  }
+  
+
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
   angular.module('app.store')
   .directive('singleStoreSuggestion',[ singleStoreSuggestion]);
   function singleStoreSuggestion() {
@@ -4533,6 +5474,68 @@ angular.module('app.review')
     };
   }
   
+
+
+})(window.angular);
+
+(function(angular) {
+	'use strict';
+	angular.module('app.store')
+		.directive('storesList', ['getStoreCollectionService', storesList]);
+
+	function storesList(getStoreCollectionService) {
+		return {
+			restrict: 'E',
+			templateUrl: 'app/store/views/storesListTemplate.html',
+			scope: {
+				paramData: '=paramData'
+			},
+			
+			controller: ['$scope',function($scope) {
+				$scope.storesList = [];
+				$scope.loadMoreStores = loadMoreStores;
+				$scope.getStores = getStores;
+				activate();
+				$scope.$on('filterClicked', function() {
+					$scope.storesList = [];
+					$scope.paramData.page = 1;
+					getStores();
+				});
+
+				function loadMoreStores() {
+					$scope.paramData.page = $scope.paramData.page + 1;
+					getStores();
+				}
+
+				function getStores() {
+					$scope.spinnerLoading = true;
+					console.log("paramdata");
+					console.log($scope.paramData);
+					getStoreCollectionService.storesCollection($scope.paramData).then(function(response) {
+						
+						$scope.totalStores = response.data.total;
+						
+						angular.forEach(response.data.docs, function(value) {
+							$scope.storesList.push(value);
+						});
+						
+						$scope.spinnerLoading = false;
+
+					}).catch(function(error) {
+						console.log('error');
+						console.log(error);
+					});
+				}
+
+				function activate() {
+					getStores();
+				}
+
+
+			}]
+		};
+	}
+
 
 
 })(window.angular);
@@ -4808,12 +5811,13 @@ angular.module('app.user')
   function UserActivityListController($scope,$routeParams,activityService){
     var ual = this;
     ual.loading = true;
+    ual.activityData = ' ';
     activate();
     function activate(){
 
       ual.loading = true;
         activityService.getSingleUserActivity($routeParams.userId).then(function(result){        
-        ual.activityData= result.data;
+        ual.activityData+= result.data;
 
         ual.loading = false;
       }); 
@@ -4832,62 +5836,135 @@ angular.module('app.user')
     .controller('UserCustomFeedController', ["$scope", "$auth", "activityService", UserCustomFeedController]);
 
     function UserCustomFeedController($scope, $auth, activityService) {
+        
+    var ual = this;
+    ual.loading = true;
+    ual.authCheck = $auth.isAuthenticated();
+    ual.activityData = [];
+    ual.params = {
+      'page': 1,
+      'limit': 25
+    };
+    ual.loadMoreFeed = loadMoreFeed;
+    ual.getUserFollowingActivity = getUserFollowingActivity;
+    ual.getAllActivity = getAllActivity;
+    ual.getActivity = getActivity;
 
-        var ual = this;
-        ual.loading = true;
-        ual.authCheck = $auth.isAuthenticated();
-        activate();
+    activate();
 
-        function activate() {
-            ual.loading = true;
-            if (ual.authCheck) {
-                activityService.getUserFollowingActivity($auth.getPayload().sub).then(function(result) {
-                    ual.activityData = result.data;
-                    console.log(typeof result.data);
-                    ual.loading = false;
-                });
-            }
-        }
+    function loadMoreFeed() {
+      ual.params.page+=1;
+      ual.getActivity(ual.params);
+    }
+
+    function getUserFollowingActivity(params) {
+      ual.loading = true;
+
+      activityService.getUserFollowingActivity($auth.getPayload().sub, params).then(function(result) {
+        ual.activityData.push(result.data);
+        console.log("from the activity");
+        console.log(result);
+        ual.loading = false;
+      });
+    }
+
+    function getAllActivity(params) {
+      ual.loading = true;
+      activityService.getAllActivity(params).then(function(result) {
+        console.log("from the activity");
+        console.log(result);
+        ual.activityData.push(result.data);
+        ual.loading = false;
+      });
+    }
+
+    function getActivity(params) {
+      if (ual.authCheck) {
+        ual.getUserFollowingActivity(params);
+
+      } else {
+        ual.getAllActivity(params);
+      }
+    }
+
+    function activate() {
+
+      ual.getActivity(ual.params);
+
+    }
+
 
 
     }
 
 })(window.angular);
 
-(function(angular){
+(function(angular) {
   'use strict';
-angular.module('app.user')
+  angular.module('app.user')
 
-  .controller('UserFeedController',["$scope","$auth","activityService",'NgMap',UserFeedController]);
-  function UserFeedController($scope,$auth,activityService){
-    
+  .controller('UserFeedController', ["$scope", "$auth", "activityService", 'NgMap', UserFeedController]);
+
+  function UserFeedController($scope, $auth, activityService) {
+
     var ual = this;
     ual.loading = true;
     ual.authCheck = $auth.isAuthenticated();
-    activate();
-    function activate(){
+    ual.activityData = [];
+    ual.params = {
+      'page': 1,
+      'limit': 25
+    };
+    ual.loadMoreFeed = loadMoreFeed;
+    ual.getUserFollowingActivity = getUserFollowingActivity;
+    ual.getAllActivity = getAllActivity;
+    ual.getActivity = getActivity;
 
+    activate();
+
+    function loadMoreFeed() {
+      ual.params.page+=1;
+      ual.getActivity(ual.params);
+    }
+
+    function getUserFollowingActivity(params) {
       ual.loading = true;
-      if(ual.authCheck){
-        activityService.getUserFollowingActivity($auth.getPayload().sub).then(function(result){
-        ual.activityData= result.data;
-        ual.loading = false;
-      });  
-      }
-      else{
-       activityService.getAllActivity().then(function(result){
+
+      activityService.getUserFollowingActivity($auth.getPayload().sub, params).then(function(result) {
+        ual.activityData.push(result.data);
         console.log("from the activity");
         console.log(result);
-       ual.activityData= result.data;
-       ual.loading = false;
-      }); 
+        ual.loading = false;
+      });
+    }
+
+    function getAllActivity(params) {
+      ual.loading = true;
+      activityService.getAllActivity(params).then(function(result) {
+        console.log("from the activity");
+        console.log(result);
+        ual.activityData.push(result.data);
+        ual.loading = false;
+      });
+    }
+
+    function getActivity(params) {
+      if (ual.authCheck) {
+        ual.getUserFollowingActivity(params);
+
+      } else {
+        ual.getAllActivity(params);
       }
-      
-      
+    }
+
+    function activate() {
+
+      ual.getActivity(ual.params);
+
     }
 
 
-    }
+  }
 
 })(window.angular);
 
@@ -5002,19 +6079,48 @@ if(ufc.authCheck){
     .controller('UserLocalFeedController', ["$scope", "$auth", "activityService", UserLocalFeedController]);
 
     function UserLocalFeedController($scope, $auth, activityService) {
+        
+    var ual = this;
+    ual.loading = true;
+    ual.activityData = [];
+    ual.params = {
+      'page': 1,
+      'limit': 25
+    };
+    ual.loadMoreFeed = loadMoreFeed;
+    ual.getAllActivity = getAllActivity;
+    ual.getActivity = getActivity;
 
-        var ual = this;
-        ual.loading = true;
-        ual.authCheck = $auth.isAuthenticated();
-        activate();
+    activate();
 
-        function activate() {
-            ual.loading = true;
-            activityService.getAllActivity().then(function(result) {
-                ual.activityData = result.data;
-                ual.loading = false;
-            });
-        }
+    function loadMoreFeed() {
+      ual.params.page+=1;
+      ual.getActivity(ual.params);
+    }
+
+    
+
+    function getAllActivity(params) {
+      ual.loading = true;
+      activityService.getAllActivity(params).then(function(result) {
+        console.log("from the activity");
+        console.log(result);
+        ual.activityData.push(result.data);
+        ual.loading = false;
+      });
+    }
+
+    function getActivity(params) {
+        ual.getAllActivity(params);
+      
+    }
+
+    function activate() {
+
+      ual.getActivity(ual.params);
+
+    }
+
     }
 
 })(window.angular);
@@ -5428,11 +6534,11 @@ function ActivityService($http,baseUrlService){
   function getSingleUserActivity(id){
     return $http.get(baseUrlService.baseUrl+'activity/singleUserActivity/'+id);
   }
-  function getAllActivity(){
-    return $http.get(baseUrlService.baseUrl+'activity/allActivity/');
+  function getAllActivity(params){
+    return $http.get(baseUrlService.baseUrl+'activity/allActivity/',{params:params});
   }
-  function getUserFollowingActivity(userId){
-    return $http.get(baseUrlService.baseUrl+'activity/userFollowingActivity/'+userId);
+  function getUserFollowingActivity(userId,params){
+    return $http.get(baseUrlService.baseUrl+'activity/userFollowingActivity/'+userId,{params:params});
   }
 
 

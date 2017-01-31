@@ -21,7 +21,7 @@
     function activate() {
       getProductsService.getSingleProduct($routeParams.productId).then(function(res) {
         spc.product = res.data;
-        getProductsService.getSingleProductStores({ 'limit': 10, 'page': 1, 'name': spc.product.name,'fields':'store' }).then(function(res) {
+        getProductsService.getSingleProductStores({ 'limit': 10, 'page': 1, 'name': spc.product.name,'fields':'store','populate':'store' }).then(function(res) {
           console.log("the list of list");
           console.log(res);
           spc.productStoreList  = res.data.docs.map(function(singleProduct){

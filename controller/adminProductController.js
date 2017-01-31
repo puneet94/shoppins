@@ -1,12 +1,9 @@
 'use strict';
-var express = require('express');
-var app = express();
-var mongoose = require('mongoose');
-var cloudinary = require('cloudinary').v2;
+
 var models = require('..//models/storeModel');
 var Product = models.Product;
 var Store = models.Store;
-var User = models.User;
+var common = require('../routes/commonRouteFunctions');
 
 var adminProductController = {
   createProduct: createProduct,
@@ -18,7 +15,7 @@ function createProduct(req, res){
   var product = new Product();
   var address = {};
   var price = {};
-  item = req.body;
+  var item = req.body;
   product.name = item.name.toLowerCase();
   product.quantity = item.quantity;
   product.description = item.description;
@@ -40,16 +37,16 @@ function createProduct(req, res){
       product.address = store.address;
       product.save(function (error,result) {
         if (error){
-          console.log("error" + error);
+          console.log( error);
         }
         else{
           common.saveSearchList(product.name.toLowerCase(),"product",product.address.city.toLowerCase(),req,res);
           for (var i = 0;i<product.category.length; i++) {
             common.saveSearchList(product.category[i].toLowerCase(),"product-category",product.address.city.toLowerCase(),req,res);
-          };
+          }
           for (var j = 0;j<product.subCategory.length; j++) {
             common.saveSearchList(product.subCategory[j].toLowerCase(),"product-subcategory",product.address.city.toLowerCase(),req,res);
-          };
+          }
           
           res.json(result);
         }
@@ -101,10 +98,10 @@ function updateProduct(req, res){
           common.saveSearchList(product.name.toLowerCase(),"product",product.address.city.toLowerCase(),req,res);
           for (var i = 0;i<product.category.length; i++) {
             common.saveSearchList(product.category[i].toLowerCase(),"product-category",product.address.city.toLowerCase(),req,res);
-          };
+          }
           for (var j = 0;j<product.subCategory.length; j++) {
             common.saveSearchList(product.subCategory[j].toLowerCase(),"product-subcategory",product.address.city.toLowerCase(),req,res);
-          };
+          }
           
           res.json(result);
         }
@@ -116,10 +113,10 @@ function deleteProduct(req, res){
   
   Product.findById(req.params.productId, function (err, product) {
     if (err){
-      callback(err, null);
+      console.log(err);
     }
     else {
-      
+      res.json("Product deleted");
     }
   });
 }

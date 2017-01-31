@@ -1,8 +1,19 @@
 @import ../../app-modules/styles/main.sass
 
+
+
 .filterDirectiveTemplate
   margin-top: 10px
   width: 90%
+  .filterRadioItem
+    margin: 4px 2px
+  .filterLabel
+    text-transform: capitalize
+  input[type="radio"]
+    &:checked + label
+      font-weight: bold
+      color: teal
+    display: none
   .filterNameHeading
     background-color: teal
     padding: 10px

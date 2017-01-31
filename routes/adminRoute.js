@@ -5,6 +5,7 @@ var commons = require('./commonRouteFunctions');
 var storeController = require('../controller/adminStoreController');
 var productController = require('../controller/adminProductController');
 var offerController = require('../controller/adminOfferController');
+var eventController = require('../controller/adminEventController');
 
 adminRouter.route('/stores').post(commons.ensureAuthenticated,storeController.createStore);
 adminRouter.route('/store/:storeId')
@@ -23,6 +24,12 @@ adminRouter.route('/offer/:storeId/:offerId/')
 	.get(commons.ensureAuthenticated,commons.ensureStoreAdminAuthenticated,offerController.editOffer)
 	.put(commons.ensureAuthenticated,commons.ensureStoreAdminAuthenticated,offerController.updateOffer)
 	.delete(commons.ensureAuthenticated,commons.ensureStoreAdminAuthenticated,offerController.deleteOffer);
+
+adminRouter.route('/events/:storeId').post(commons.ensureAuthenticated,eventController.createEvent);
+adminRouter.route('/event/:storeId/:eventId/')
+	.get(commons.ensureAuthenticated,eventController.editEvent)
+	.put(commons.ensureAuthenticated,eventController.updateEvent)
+	.delete(commons.ensureAuthenticated,eventController.deleteEvent);
 
 adminRouter.route('/store/products')
 .get(commons.ensureAuthenticated,function(req,res){

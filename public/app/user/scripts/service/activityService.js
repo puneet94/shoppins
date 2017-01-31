@@ -16,11 +16,11 @@ function ActivityService($http,baseUrlService){
   function getSingleUserActivity(id){
     return $http.get(baseUrlService.baseUrl+'activity/singleUserActivity/'+id);
   }
-  function getAllActivity(){
-    return $http.get(baseUrlService.baseUrl+'activity/allActivity/');
+  function getAllActivity(params){
+    return $http.get(baseUrlService.baseUrl+'activity/allActivity/',{params:params});
   }
-  function getUserFollowingActivity(userId){
-    return $http.get(baseUrlService.baseUrl+'activity/userFollowingActivity/'+userId);
+  function getUserFollowingActivity(userId,params){
+    return $http.get(baseUrlService.baseUrl+'activity/userFollowingActivity/'+userId,{params:params});
   }
 
 

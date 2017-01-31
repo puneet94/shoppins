@@ -1,4 +1,5 @@
 (function(angular){
+  'use strict';
   angular.module('app.store')
 
     .controller('UserStoreFollowController',["$scope","$auth","$routeParams","userData","userFollowService",UserStoreFollowController]);

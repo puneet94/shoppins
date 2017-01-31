@@ -7,11 +7,10 @@ var morgan = require('morgan');
 var mongoose = require('mongoose');
 
 var compression = require('compression');
-var qs = require('querystring');
-var moment = require('moment');
+
+
 var io = require('socket.io');
-var request = require('request');
-var jwt = require('jwt-simple');
+
 
 //Variables
 var port = process.env.PORT || 3000;
@@ -38,6 +37,7 @@ var reviewRouter = require('./routes/reviewRoute');
 var visitRouter = require('./routes/visitRoute');
 var emailRouter = require('./routes/emailRoute');
 var offerRouter = require('./routes/offerRoute');
+var eventRouter = require('./routes/eventRoute');
 var adminRouter = require('./routes/adminRoute');
 var chatRouter = require('./routes/chatRoute');
 var urlStrings = require('./routes/url');
@@ -68,6 +68,7 @@ if (app.get('env') === 'production') {
 
 app.use('/store',storeRouter);
 app.use('/offer',offerRouter);
+app.use('/event',eventRouter);
 app.use('/search',searchRouter);
 app.use('/product',productRouter);
 app.use('/email',emailRouter);

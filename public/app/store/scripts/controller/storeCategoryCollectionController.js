@@ -2,45 +2,59 @@
   'use strict';
   angular.module('app.store')
 
-  .controller('StoreCategoryCollectionController', ["$scope", "$routeParams", "getCityLocalitiesService", "getCityCategoriesService", StoreCategoryCollectionController]);
+  .controller('StoreCategoryCollectionController', ["$scope", "$routeParams", "getCityAreasService", "getCityCategoriesService", StoreCategoryCollectionController]);
 
-  function StoreCategoryCollectionController($scope, $routeParams, getCityLocalitiesService, getCityCategoriesService) {
-    var slcc = this;
-    slcc.areaModel = {};
-    slcc.launchFilterEvent = launchFilterEvent;
-    slcc.areaRadioClicked = areaRadioClicked;
-    slcc.majorFilter = {};
-    slcc.clearAreaFilters = clearAreaFilters;
+  function StoreCategoryCollectionController($scope, $routeParams, getCityAreasService, getCityCategoriesService) {
+    
+    var sccc = this;
+    sccc.location = $routeParams.location;
+    sccc.storesSearchHeader = $routeParams.slug;
+    sccc.areaRadioModel = {};
+    sccc.areaFilterName = 'area';
+    sccc.paramData = {
+      city: sccc.location,
+      page: 1,
+      limit: 10,
+      category: $routeParams.category
+    };
 
-    function areaRadioClicked() {
-      slcc.majorFilter.area = slcc.areaModel.area;
-      launchFilterEvent(slcc.majorFilter);
+    
+    sccc.areaRadioClear = areaRadioClear;
+    sccc.areaRadioChange = areaRadioChange;
+    
+    
+    
+
+    function areaRadioClear() {
+      delete sccc.areaRadioModel[sccc.areaFilterName];
+      delete sccc.paramData[sccc.areaFilterName];
+      $scope.$broadcast('filterClicked');
     }
 
-    function clearAreaFilters() {
-      delete slcc.majorFilter.area;
-      slcc.areaModel = {};
-      launchFilterEvent(slcc.majorFilter);
+
+    function areaRadioChange() {
+      sccc.paramData.area = sccc.areaRadioModel[sccc.areaFilterName];
+      $scope.$broadcast('filterClicked');
     }
 
-    var location = $routeParams.location;
-    getCityLocalitiesService.getCityLocalities(location)
+
+    
+
+    getCityAreasService.getCityAreas(sccc.location)
       .then(function(res) {
-        slcc.areas = res.data;
+        sccc.areas = res.data;
       }, function(res) {
         console.log(res);
       });
-    getCityCategoriesService.getCityCategories(location)
+    getCityCategoriesService.getCityCategories(sccc.location)
       .then(function(res) {
-        slcc.categories = res.data;
+        sccc.categories = res.data;
 
       }, function(res) {
         console.log(res);
       });
 
-    function launchFilterEvent(obj) {
-      $scope.$broadcast('parent', obj);
-    }
+    
   }
 
 })(window.angular);

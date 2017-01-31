@@ -6,13 +6,19 @@
 <main class="fixedHeaderMain">
 <div layout="row" layout-wrap>
 
-	<div flex="20" hide-sm hide-xs>[flex=20]</div>
-	<div flex="80" flex-sm="100" flex-xs="100">
-		<div ng-include="'app/product/views/productList.html'"></div>
-
-
-	</div>
-	
+	<div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100">
+                        <h3 hide-sm hide-xs>Filters</h3>
+                        <div class="" layout-sm="column" layout-xs="column">
+                                <filter-directive filter-name="{{pccc.areaFilterName}}" radio-model="pccc.areaRadioModel" radio-change="pccc.areaRadioChange()" radio-repeat="pccc.areas" clear-click="pccc.areaRadioClear()">
+                                </filter-directive>
+                                
+                        </div>
+                </div>
+                <div flex="80" flex-sm="100" flex-xs="100">
+                        <h3 class="productListHeading">{{pccc.productsSearchHeader.split("-").join(" ")}}</h3>
+                        <!--<div ng-include="'app/product/views/productList.html'"></div>-->
+                        <products-list param-data="pccc.paramData"></products-list>
+                </div>
 
 
 </div>

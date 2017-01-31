@@ -1,8 +1,10 @@
-(function(angular){
-  angular.module('app.product')
+(function(angular) {
+	'use strict';
+	angular.module('app.product')
 
-    .controller('ProductSubCategoryCollectionController',[productSubCategoryCollectionController]);
-    function productSubCategoryCollectionController(){
-    	
-    }
+	.controller('ProductSubCategoryCollectionController', [ProductSubCategoryCollectionController]);
+
+	function ProductSubCategoryCollectionController() {
+
+	}
 })(window.angular);

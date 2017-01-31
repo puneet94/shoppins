@@ -11,13 +11,13 @@
             when('/userProfileSettings', {
                 templateUrl: 'app/user/views/userProfileSettingsPage.html',
                 resolve: {
-                    redirectIfNotUserAuthenticated: redirectIfNotUserAuthenticated
+                    redirectIfNotUserAuthenticated: ['$q', '$auth', 'changeBrowserURL',redirectIfNotUserAuthenticated]
                 }
             }).
             when('/userAccountSettings', {
                 templateUrl: 'app/user/views/userAccountSettingsPage.html',
                 resolve: {
-                    redirectIfNotUserAuthenticated: redirectIfNotUserAuthenticated
+                    redirectIfNotUserAuthenticated: ['$q', '$auth', 'changeBrowserURL',redirectIfNotUserAuthenticated]
                 }
             }).
             when('/userMobileFeed', {
@@ -30,7 +30,7 @@
                 controller: 'UserMePageController',
                 controllerAs: 'umpc',
                 resolve: {
-                    redirectIfNotUserAuthenticated: redirectIfNotUserAuthenticated
+                    redirectIfNotUserAuthenticated: ['$q', '$auth', 'changeBrowserURL',redirectIfNotUserAuthenticated]
                 }
             });
         }

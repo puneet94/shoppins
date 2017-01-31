@@ -42,6 +42,7 @@
         
 
         function userSearchItemChange(item) {
+            
             if (!item) {
                 item = {};
             }
@@ -49,43 +50,47 @@
             var entityName = item.userSearchString.split("#&#")[0];
             var location = hm.selectedItem;
             hm.slug = entityName + "-" + changeEntity.split("-")[0] + "s-in-" + location;
-
+           
             if (changeEntity == "store") {
 
                 hm.url = "/store/storesCollection/storeName/";
-
+                $window.location.href =baseUrlService.baseUrl+ '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
 
             } else if (changeEntity == "store-category") {
 
                 hm.url = "/store/storesCollection/category/";
-
+                $window.location.href =baseUrlService.baseUrl+ '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
 
             } else if (changeEntity == "product") {
 
                 hm.url = "/productsCollectionName/";
+                $window.location.href =baseUrlService.baseUrl+ '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
 
             } else if (changeEntity == "product-category") {
 
                 hm.url = "/productsCollectionCategory/";
+                $window.location.href =baseUrlService.baseUrl+ '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
 
 
             } else if (changeEntity == "product-subcategory") {
 
                 hm.url = "/productsCollectionSubCategory/";
+                $window.location.href =baseUrlService.baseUrl+ '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
 
-            } else if (changeEntity.trim() == "All products in") {
-
+            } else if (changeEntity.trim().indexOf("products")!=-1) {
+                
                 locationProductsSearchUrl();
 
-            } else if (changeEntity.trim() == "All offers in") {
-
+            } else if (changeEntity.trim().indexOf("offers")!=-1) {
+               
                 locationOffersSearchUrl();
 
             } else {
 
                 locationStoresSearchUrl();
             }
-            $window.location.href =baseUrlService.baseUrl+ '#' + hm.url + entityName + "/" + location + "/" + hm.slug;
+           
+            
 
 
 
@@ -98,9 +103,9 @@
                     .then(function(resource) {
 
                         hm.userSearches = [];
-                        var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
-                        var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
-                        var allOffersItem = { "userSearchString": "#&#All offers in #&#" + hm.selectedItem };
+                        var allStoresItem = { "userSearchString": "All stores#&#stores#&#" + hm.selectedItem };
+                        var allProductsItem = { "userSearchString": "All products#&#products#&#" + hm.selectedItem };
+                        var allOffersItem = { "userSearchString": "All offers#&# offers#&#" + hm.selectedItem };
                         hm.userSearches = resource.data;
                         hm.userSearches.unshift(allStoresItem, allProductsItem,allOffersItem);
                         //hm.userSearches = 
@@ -121,9 +126,9 @@
 
             cityStorage.setCity(item);
             searchService.getSearches(item).then(function(resource) {
-                var allStoresItem = { "userSearchString": "#&#All stores in #&#" + hm.selectedItem };
-                var allProductsItem = { "userSearchString": "#&#All products in #&#" + hm.selectedItem };
-                var allOffersItem = { "userSearchString": "#&#All offers in #&#" + hm.selectedItem };
+                var allStoresItem = { "userSearchString": "All stores#&#stores#&#" + hm.selectedItem };
+                var allProductsItem = { "userSearchString": "All products#&#products#&#" + hm.selectedItem };
+                var allOffersItem = { "userSearchString": "All offers#&#offers#&#" + hm.selectedItem };
                 hm.userSearches = resource.data;
                 hm.userSearches.unshift(allStoresItem, allProductsItem,allOffersItem);
                 /*hm.userSearches = [allStoresItem, allProductsItem];
@@ -145,10 +150,13 @@
         }
 
         function locationStoresSearchUrl() {
+            
             hm.url = "/store/storesCollection/location";
             var myLocation = hm.selectedItem;
             hm.slug = "stores-in-" + myLocation;
+            
             changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
+            //$window.location.href =baseUrlService.baseUrl+ '#' + hm.url +  "/" + location + "/" + hm.slug;
 
         }
 

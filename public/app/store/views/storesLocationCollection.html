@@ -1,67 +1,23 @@
 <div class="storesLocationCollection">
-
+        <div ng-include="'app/home/searchBox.html'"></div>
+        <main class="fixedHeaderMain">
+                <h3 toggle-mobile=".locationFilters" hide-lg hide-md>Filters</h3>
+                <div layout="row" layout-wrap>
+                        <div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100">
+                                <h3 hide-sm hide-xs>Filters</h3>
+                                <div class="" layout-sm="column" layout-xs="column">
+                                        <filter-directive filter-name="{{slcc.areaFilterName}}" radio-model="slcc.areaRadioModel" radio-change="slcc.areaRadioChange()" radio-repeat="slcc.areas" clear-click="slcc.areaRadioClear()">
+                                        </filter-directive>
+                                        <filter-directive filter-name="{{slcc.categoryFilterName}}" radio-model="slcc.categoryRadioModel" radio-change="slcc.categoryRadioChange()" radio-repeat="slcc.categories" clear-click="slcc.categoryRadioClear()">
+                                        </filter-directive>
+                                </div>
+                        </div>
+                        <div flex="55" flex-sm="100" flex-xs="100">
+                        		<h3>{{slcc.storesSearchHeader.split('-').join(" ")}}</h3>
+                                <stores-list param-data="slcc.paramData">
+                                </stores-list>
+                        </div>
+                        <div flex="20" hide-sm hide-xs>[flex=20]</div>
+                </div>
+        </main>
 </div>
-<!--<header layout="row"  >
-	<div ng-include="'app/home/pageHeader.html'" flex></div>
-</header>-->
-<div ng-include="'app/home/searchBox.html'"></div>
-
-<main class="fixedHeaderMain">
-	<h3 toggle-mobile=".locationFilters" hide-lg hide-md>Filters</h3>
-<div layout="row" layout-wrap>
-
-		<div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100" >
-			<h3 hide-sm hide-xs>Filters</h3>
-			<div class="" layout-sm="column" layout-xs="column"  >
-				
-				<filter-directive
-					filter-name="Area"
-					radio-model="slcc.areaModel"
-					radio-change="slcc.areaRadioClicked()"
-					radio-repeat="slcc.areas"
-					clear-click="slcc.clearAreaFilters()">
-				</filter-directive>
-				<filter-directive
-					filter-name="Category"
-					radio-model="slcc.categoryModel"
-					radio-change="slcc.categoryRadioClicked()"
-					radio-repeat="slcc.categories"
-					clear-click="slcc.clearCategoryFilters()">
-				</filter-directive>
-			</div>
-
-
-    </div>
-		<div flex="55" flex-sm="100" flex-xs="100">
-			<div ng-include="'app/store/views/storesList.html'"></div>
-
-
-		</div>
-		<div flex="20" hide-sm hide-xs>[flex=20]</div>
-
-
-</div>
-</main>
-</div>
-<!--<div class="">
-						<h5>Area</h5>
-						<md-radio-group ng-model="slcc.areaModel['area']" ng-change="slcc.areaRadioClicked()">
-			        <md-radio-button ng-repeat="area in slcc.areas" value="{{area}}" >
-			          <span>
-			            {{area}}
-			          </span>
-			        </md-radio-button>
-			    </md-radio-group>
-			      <button type="button" name="button" ng-disabled="!slcc.areaModel['area']" ng-click="slcc.clearAreaFilters()">Clear</button>
-				</div>
-				<div class="">
-					<h5>Category</h5>
-					<md-radio-group ng-model="slcc.categoryModel['category']" ng-change="slcc.categoryRadioClicked()">
-		        <md-radio-button ng-repeat="category in slcc.categories" value="{{category}}" >
-		          <span>
-		            {{category}}
-		          </span>
-		        </md-radio-button>
-		    	</md-radio-group>
-		      <button type="button" name="button" ng-disabled="!slcc.categoryModel['category']" ng-click="slcc.clearCategoryFilters()">Clear</button>
-				</div>-->

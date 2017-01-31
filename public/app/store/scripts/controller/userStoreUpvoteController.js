@@ -1,4 +1,5 @@
 (function(angular){
+  'use strict';
   angular.module('app.store')
 
     .controller('UserStoreUpvoteController',["$scope","$auth","$routeParams","userData","userUpvoteService",'storeData',UserStoreUpvoteController]);

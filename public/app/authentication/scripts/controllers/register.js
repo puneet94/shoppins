@@ -9,9 +9,9 @@
  * Controller of the authModApp
  */
 angular.module('authModApp')
-	.controller('RegisterCtrl', ["$scope","userData","$auth","$location",RegisterCtrl]);
+	.controller('RegisterCtrl', ["$scope","userData","$auth",RegisterCtrl]);
 
-	function RegisterCtrl($scope,userData,$auth,$location) {
+	function RegisterCtrl($scope,userData,$auth) {
 		var rc = this;
 		rc.user = {};
 	    rc.formSubmit = formSubmit;

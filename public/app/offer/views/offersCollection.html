@@ -1,5 +1,6 @@
 <div ng-controller="OffersCollectionController as occ">
-        <div layout="row">
+        <div >
+            <offers-list layout="row" param-data="occ.paramData"></offers-list>
                <!-- <md-card ng-repeat="offer in occ.offersList">
                         <img ng-src="{{offer.bannerImage}}" class="md-card-image" alt="Washed Out">
                         <md-card-title>
@@ -28,7 +29,7 @@
                                 </a>
                         </md-card-actions>
                 </md-card>-->
-                <single-offer-vert-directive flex="33" flex-xs="100" flex-sm="50" ng-repeat="item in occ.offersList" single-offer="item"> </single-offer-vert-directive>
+                <!--<single-offer-vert-directive flex="33" flex-xs="100" flex-sm="50" ng-repeat="item in occ.offersList" single-offer="item"> </single-offer-vert-directive>-->
         </div>
         
 </div>

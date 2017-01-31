@@ -11,9 +11,9 @@ angular.module('app.common')
 	.service('arrayUniqueCopy',[ArrayUniqueCopy])
 	.service('userLocationService',[UserLocationService])
 	.service('baseUrlService',['$location',AjaxURL])
-	.service('getCityLocalitiesService',["$http","baseUrlService",GetCityLocalitiesService])
+	.service('getCityAreasService',["$http","baseUrlService",GetCityAreasService])
 	.service('getCityCategoriesService',["$http","baseUrlService",GetCityCategoriesService])
-	.service('getCityProductLocalitiesService',["$http","baseUrlService",GetCityProductLocalitiesService])
+	.service('getCityProductAreasService',["$http","baseUrlService",GetCityProductAreasService])
 	.service('getCityProductCategoriesService',["$http","baseUrlService",GetCityProductCategoriesService])
 	.service('getCityProductSubCategoriesService',["$http","baseUrlService",GetCityProductSubCategoriesService])
 	.factory('cityStorage',["$window",'$rootScope',cityStorage]);
@@ -137,10 +137,10 @@ angular.module('app.common')
 
 	}
 	
-	function GetCityLocalitiesService($http,baseUrlService){
-		this.getCityLocalities = getCityLocalities;
-		function getCityLocalities(city){
-			return $http.get(baseUrlService.baseUrl+"store/localities/"+city);
+	function GetCityAreasService($http,baseUrlService){
+		this.getCityAreas = getCityAreas;
+		function getCityAreas(city){
+			return $http.get(baseUrlService.baseUrl+"store/areas/"+city);
 		}
 	}
 	function GetCityCategoriesService($http,baseUrlService){
@@ -151,10 +151,10 @@ angular.module('app.common')
 		}
 
 	}
-	function GetCityProductLocalitiesService($http,baseUrlService){
-		this.getCityLocalities = getCityLocalities;
-		function getCityLocalities(city){
-			return $http.get(baseUrlService.baseUrl+"product/localities/"+city);
+	function GetCityProductAreasService($http,baseUrlService){
+		this.getCityAreas = getCityAreas;
+		function getCityAreas(city){
+			return $http.get(baseUrlService.baseUrl+"product/areas/"+city);
 		}
 	}
 	function GetCityProductCategoriesService($http,baseUrlService){

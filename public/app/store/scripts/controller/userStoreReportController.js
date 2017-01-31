@@ -1,4 +1,5 @@
 (function(angular) {
+    'use strict';
     angular.module('app.store')
 
     .controller('UserStoreReportController', ["$scope", "$auth", "$routeParams", "userData", "userService", '$mdDialog', UserStoreReportController]);

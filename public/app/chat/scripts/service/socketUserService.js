@@ -1,3 +1,8 @@
+(function(angular){
+'use strict';
+
+
+
 angular.module('app.chat')
 	.factory('SocketUserService', ['socketFactory','userData',socketFactoryFunction]);
     function socketFactoryFunction(socketFactory,userData) {
@@ -6,3 +11,4 @@ angular.module('app.chat')
             ioSocket: io.connect('/'+userData.getUser()._id)
         });
     }
+})(window.angular);

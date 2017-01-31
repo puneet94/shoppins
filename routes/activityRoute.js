@@ -5,7 +5,7 @@ var Review = models.Review;
 var User = models.User;
 var Store = models.Store;
 var Activity = models.Activity;
-var mongoose = require('mongoose');
+
 var activityRouter = express.Router();
 
 var app = express();
@@ -17,13 +17,38 @@ activityRouter.use(function(req, res, next) {
     next();
 });
 
-function getActivity(res, usersList) {
+function getActivity(req, res, usersList) {
     var queryObj = {};
     if (usersList) {
         queryObj = { $or: [{ creator: { $in: usersList } }, { creatorStore: { $in: usersList } }] };
-            //queryObj.creator = { $in: usersList };
+        //queryObj.creator = { $in: usersList };
     }
-    Activity
+    var options = {};
+    options.limit = req.query.limit ? parseInt(req.query.limit) : 2;
+    options.sort = req.query.sort || { 'time': 'desc' };
+    options.page = req.query.page || 1;
+    options.select = req.query.fields || null;
+    options.populate = [{ path: 'creator', model: 'User', select: 'displayName picture' },
+        { path: 'followed', model: 'User', select: 'displayName picture' },
+        { path: 'store', select: 'name bannerImage', model: 'Store' },
+        { path: 'product', select: 'name images', model: 'Product' },
+        { path: 'review', model: 'Review', populate: { path: 'store', select: 'name bannerImage', model: 'Store' } },
+        { path: 'review', model: 'Review', populate: { path: 'product', select: 'name images', model: 'Product' } },
+        { path: 'review', model: 'Review', populate: { path: 'user', select: 'displayName', model: 'User' } }
+    ];
+    Activity.paginate(queryObj, options).then(function(activities) {
+        
+        app.render('activity/userActivity', { activity: activities.docs, moment: moment }, function(err, html) {
+
+            if (err) {
+                console.log(err);
+            }
+            res.send(html);
+
+        });
+
+    });
+    /*Activity
         .find(queryObj)
         .sort({ 'time': 'desc' })
         .populate({ path: 'creator', model: 'User', select: 'displayName picture' })
@@ -48,7 +73,7 @@ function getActivity(res, usersList) {
 
                 });
             }
-        });
+        });*/
 }
 activityRouter.route('/userFollowingActivity/:userId')
     .get(function(req, res) {
@@ -64,7 +89,7 @@ activityRouter.route('/userFollowingActivity/:userId')
                     }
                     if (result) {
                         followingList = result.following.concat(result.storeFollowing);
-                        getActivity(res, followingList);
+                        getActivity(req, res, followingList);
                     }
 
                 });
@@ -83,7 +108,7 @@ activityRouter.route('/singleUserActivity/:userId')
             .exec(function(err, result) {
                 followingList = [req.params.userId];
 
-                getActivity(res, followingList);
+                getActivity(req, res, followingList);
             });
 
         console.log(followingList);
@@ -91,7 +116,7 @@ activityRouter.route('/singleUserActivity/:userId')
 
 activityRouter.route('/allActivity/')
     .get(function(req, res) {
-        getActivity(res);
+        getActivity(req, res);
     });
 
 

@@ -1,4 +1,5 @@
 (function(angular){
+    'use strict';
   angular.module('app.admin')
 
     .controller('EditProductController',['$auth','adminProductService','$routeParams','$mdDialog',EditProductController]);

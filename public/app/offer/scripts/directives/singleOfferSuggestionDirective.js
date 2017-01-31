@@ -14,13 +14,13 @@
       link: function(scope, element, attrs) {
 
       },
-      controller: function($scope) {
+      controller: ['$scope',function($scope) {
         $scope.offerDir = {
 
         };
 
 
-      }
+      }]
     };
   }
 

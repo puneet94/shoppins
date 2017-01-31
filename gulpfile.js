@@ -3,9 +3,11 @@ var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     rename = require('gulp-rename');
 var autoprefixer = require('gulp-autoprefixer');
+var minify = require('gulp-minify');
 var concat = require('gulp-concat');
 var jshint = require('gulp-jshint');
 var uglify = require('gulp-uglify');
+var jslint = require('gulp-jslint');
 
 var    cache = require('gulp-cache');
 var minifycss = require('gulp-minify-css');
@@ -47,7 +49,7 @@ gulp.task('styles', function(){
     .pipe(gulp.dest('public/www/styles/'))
     .pipe(rename({suffix: '.min'}))
     .pipe(minifycss())
-    .pipe(gulp.dest('public/www/styles/'))
+    .pipe(gulp.dest('public/www/styles/'));
    
 });
 
@@ -60,11 +62,13 @@ gulp.task('scripts', function(){
     }}))
     .pipe(jshint())
     .pipe(jshint.reporter('default'))
+    
     .pipe(concat('main.js'))
+    
     .pipe(gulp.dest('public/www/scripts/'))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
-    .pipe(gulp.dest('public/www/scripts/'))
+    .pipe(gulp.dest('public/www/scripts/'));
     
 });
 

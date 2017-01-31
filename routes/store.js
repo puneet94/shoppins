@@ -155,7 +155,7 @@ storeRouter.route('/storesCollection/category/:category/:location/:pageNo')
         });
 
     });
-storeRouter.route('/localities/:city')
+storeRouter.route('/areas/:city')
     .get(function(req, res) {
         var query = Store.find({ 'address.city': req.params.city }).select({ "address.area": 1, "_id": 0 });
         query.exec(function(err, someValue) {
@@ -164,7 +164,6 @@ storeRouter.route('/localities/:city')
             } else {
                 var areaArray = [];
                 for (var i = 0; i < someValue.length; i++) {
-                    console.log(someValue[i].address.area);
                     if (areaArray.indexOf(someValue[i].address.area) == -1) {
                         areaArray.push(someValue[i].address.area);
                     }
@@ -177,11 +176,20 @@ storeRouter.route('/localities/:city')
 storeRouter.route('/collection')
     .get(function(req, res, next) {
         var queryObj = {};
+        if (req.query.name) {
+            queryObj.name = req.query.name.toLowerCase();
+        }
         if (req.query.area) {
             queryObj['address.area'] = req.query.area.toLowerCase();
         }
-        if (req.query.location) {
+        if (req.query.locality) {
+            queryObj['address.locality'] = req.query.locality.toLowerCase();
+        }
+        if (req.query.location ) {
             queryObj['address.city'] = req.query.location.toLowerCase();
+        }
+        if (req.query.city ) {
+            queryObj['address.city'] = req.query.city.toLowerCase();
         }
         if (req.query.category) {
             queryObj.category = req.query.category.toLowerCase();
@@ -198,7 +206,7 @@ storeRouter.route('/collection')
         Store.paginate(queryObj, options).then(function(storeList) {
             res.json(storeList);
 
-        })
+        });
 
     });
 
@@ -221,8 +229,7 @@ storeRouter.route('/userSearch/storeCategories')
                 return item.userSearchString.split('#&#')[0];
             });
             res.json(categoryFindList);
-
-        })
+        });
 
     });
 storeRouter.route('/categories/:city')

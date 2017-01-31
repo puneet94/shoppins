@@ -9,12 +9,19 @@
 <main class="fixedHeaderMain">
 <div layout="row" layout-wrap>
 
-	<div flex="20" hide-sm hide-xs>[flex=20]</div>
-	<div flex="55" flex-sm="100" flex-xs="100">
-		<div ng-include="'app/store/views/storesList.html'"></div>
-
-
-	</div>
+	<div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100">
+                                <h3 hide-sm hide-xs>Filters</h3>
+                                <div class="" layout-sm="column" layout-xs="column">
+                                        <filter-directive filter-name="{{sncc.areaFilterName}}" radio-model="sncc.areaRadioModel" radio-change="sncc.areaRadioChange()" radio-repeat="sncc.areas" clear-click="sncc.areaRadioClear()">
+                                        </filter-directive>
+                                        
+                                </div>
+                        </div>
+                        <div flex="55" flex-sm="100" flex-xs="100">
+                                        <h3>{{sncc.storesSearchHeader.split('-').join(" ")}}</h3>
+                                <stores-list param-data="sncc.paramData">
+                                </stores-list>
+                        </div>
 	<div flex="20" hide-sm hide-xs></div>
 
 

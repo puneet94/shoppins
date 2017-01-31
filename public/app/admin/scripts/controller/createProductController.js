@@ -1,8 +1,10 @@
 (function(angular){
+  'use strict';
   angular.module('app.admin')
 
     .controller('CreateProductController',['$routeParams','$timeout','$route','adminProductService','Upload','baseUrlService','$mdDialog',CreateProductController]);
     function CreateProductController($routeParams,$timeout,$route,adminProductService,Upload,baseUrlService,$mdDialog){
+
     	var csc = this;
     	csc.productForm = {};
       csc.productForm.price = {};
@@ -39,7 +41,7 @@
         
     };
         csc.uploadSingleImage = function(file, errFiles) {
-          console.log("Enterd file uploading");
+          
           csc.f = file;
           csc.errFile = errFiles && errFiles[0];
           if (file) {
@@ -53,7 +55,7 @@
                   
                       file.result = response.data;
                       csc.productForm.bannerImage = response.data;
-                      console.log(response.data);
+                      
                       $('.productMainImage').css('background-image','url('+response.data+')');
                       csc.formBannerLoading = false;
                       

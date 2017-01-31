@@ -34,7 +34,7 @@ var ChatSchema = new Schema({
 ChatSchema.plugin(relationship, { relationshipPathName: 'chatRoom' });
 var Chat = mongoose.model("Chat", ChatSchema);
 var ActivitySchema = new Schema({
-	//activityFor:{ type:Schema.ObjectId, ref:"User"},
+	
 	creator: { type: Schema.ObjectId, ref: "User" }, //created by person
 	creatorStore: { type: Schema.ObjectId, ref: "Store" }, //created by store
 	offer: { type: Schema.ObjectId, ref: "Offer" },
@@ -45,6 +45,7 @@ var ActivitySchema = new Schema({
 	statement: String,
 	time: { type: Date, default: Date.now }
 });
+ActivitySchema.plugin(mongoosePaginate);
 var Address = new Schema({
 	doorNo: String,
 	city: String,
@@ -119,6 +120,29 @@ var OfferSchema = new Schema({
 }, { collection: 'offers' });
 OfferSchema.plugin(relationship, { relationshipPathName: 'store' });
 OfferSchema.plugin(mongoosePaginate);
+
+
+
+var EventSchema = new Schema({
+	tagline: String,
+	description: String,
+	address: Address,
+	startDate: { type: Date, default: Date.now },
+	endDate: { type: Date, default: Date.now },
+	time: { type: Date, default: Date.now },
+	store: { type: Schema.ObjectId, ref: "Store", childPath: "events" },
+	user: { type: Schema.ObjectId, ref: "User", childPath: "events" },
+	category: [String],
+	bannerImage: { type: String },
+	images: [String],
+	type: String
+
+}, { collection: 'events' });
+EventSchema.plugin(relationship, { relationshipPathName: 'store' });
+EventSchema.plugin(relationship, { relationshipPathName: 'user' });
+EventSchema.plugin(mongoosePaginate);
+
+
 var ReviewSchema = new Schema({
 	description: String,
 	date: { type: Date, default: Date.now },
@@ -186,6 +210,7 @@ var UserSchema = new Schema({
 	visitsCount: Number,
 	upvotesCount: Number,
 	storeId: [{ type: Schema.ObjectId, ref: "Store" }],
+	events: [{ type: Schema.ObjectId, ref: "Event" }]
 
 }, { collection: 'users' });
 
@@ -275,6 +300,7 @@ var StoreSchema = new Schema({
 	products: [{ type: Schema.ObjectId, ref: "Product" }],
 	upvotes: [{ type: Schema.ObjectId, ref: "Upvote" }],
 	offers: [{ type: Schema.ObjectId, ref: "Offer" }],
+	events: [{ type: Schema.ObjectId, ref: "Event" }],
 	bannerImage: { type: String, default: 'https://upload.wikimedia.org/wikipedia/commons/3/3a/SM_Department_Store_Cubao.jpg' },
 	storeImages: [String],
 	visits: [{ type: Schema.ObjectId, ref: "Visit" }],
@@ -323,8 +349,8 @@ var autoPopulateStore = function(next) {
 };
 
 ProductSchema.
-pre('findOne', autoPopulateStore).
-pre('find', autoPopulateStore);
+pre('findOne', autoPopulateStore);
+//pre('find', autoPopulateStore);
 ProductSchema.post('init', function() {
 
 	try {
@@ -360,6 +386,7 @@ var MailVerifySchema = new Schema({
 exports.MailVerify = mongoose.model('MailVerify', MailVerifySchema);
 exports.Store = mongoose.model('Store', StoreSchema);
 exports.Offer = mongoose.model('Offer', OfferSchema);
+exports.Event = mongoose.model('Event', EventSchema);
 exports.Product = mongoose.model("Product", ProductSchema);
 exports.User = User;
 exports.Review = Review;

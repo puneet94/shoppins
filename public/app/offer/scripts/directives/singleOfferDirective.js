@@ -16,7 +16,7 @@
       link: function(scope, element, attrs) {
 
       },
-      controller: function($scope) {
+      controller: ['$scope',function($scope) {
         $scope.offerDir = {
           mapAddress: mapAddress
         };
@@ -30,7 +30,7 @@
             
           });
         }
-      }
+      }]
     };
   }
 
@@ -46,7 +46,7 @@ function singleOfferVertDirective() {
       link: function(scope, element, attrs) {
 
       },
-      controller: function($scope) {
+      controller: ['$scope',function($scope) {
         $scope.offerDir = {
           mapAddress: mapAddress
         };
@@ -60,7 +60,7 @@ function singleOfferVertDirective() {
             
           });
         }
-      }
+      }]
     };
   }
 

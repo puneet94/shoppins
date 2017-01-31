@@ -1,4 +1,5 @@
 (function(angular) {
+    'use strict';
     angular.module('app.chat')
 
     .controller('ChatRoomListController', ['$scope','$routeParams', 'userData', 'chatService', 'changeBrowserURL',ChatRoomListController]);

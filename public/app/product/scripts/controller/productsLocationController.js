@@ -1,52 +1,71 @@
 (function(angular){
+  'use strict';
   angular.module('app.product')
-    .controller('ProductsLocationController',["$scope","$routeParams","getCityProductLocalitiesService","getCityProductCategoriesService","getCityProductSubCategoriesService",ProductsLocationController]);
+    .controller('ProductsLocationController',["$scope","$routeParams","getCityProductAreasService","getCityProductCategoriesService",ProductsLocationController]);
 
-  function ProductsLocationController($scope,$routeParams,getCityProductLocalitiesService,getCityProductCategoriesService,getCityProductSubCategoriesService){
+  function ProductsLocationController($scope,$routeParams,getCityProductAreasService,getCityProductCategoriesService){
     var plc = this;
-    plc.areaModel = {};
-    plc.categoryModel = {};
-    plc.launchFilterEvent = launchFilterEvent;
-    plc.areaRadioClicked = areaRadioClicked;
-    plc.categoryRadioClicked = categoryRadioClicked;
-    plc.majorFilter = {};
-    plc.clearAreaFilters = clearAreaFilters;
-    plc.clearCategoryFilters = clearCategoryFilters;
-    function areaRadioClicked(){
-      plc.majorFilter.area=plc.areaModel.area;
-      launchFilterEvent(plc.majorFilter);
+    plc.location = $routeParams.location;
+    plc.productsSearchHeader = $routeParams.slug;
+    plc.categoryRadioModel = {};
+    plc.areaRadioModel = {};
+    plc.areaFilterName = 'area';
+    plc.categoryFilterName = 'category';
+    plc.paramData = {
+      city: plc.location,
+      page: 1,
+      limit: 10,
+      fields: '-store'
+    };
+
+    
+    plc.areaRadioClear = areaRadioClear;
+    plc.areaRadioChange = areaRadioChange;
+    
+    plc.categoryRadioClear = categoryRadioClear;
+    plc.categoryRadioChange = categoryRadioChange;
+    
+
+    function categoryRadioClear() {
+      delete plc.categoryRadioModel[plc.categoryFilterName];
+      delete plc.paramData[plc.categoryFilterName];
+      $scope.$broadcast('filterClicked');
     }
-    function clearAreaFilters(){
-      delete plc.majorFilter.area;
-      plc.areaModel = {};
-      launchFilterEvent(plc.majorFilter);
+
+
+    function categoryRadioChange() {
+      plc.paramData.category = plc.categoryRadioModel[plc.categoryFilterName];
+      $scope.$broadcast('filterClicked');
     }
-    function categoryRadioClicked(){
-      plc.majorFilter.category=plc.categoryModel.category;
-      launchFilterEvent(plc.majorFilter);
+
+    function areaRadioClear() {
+      delete plc.areaRadioModel[plc.areaFilterName];
+      delete plc.paramData[plc.areaFilterName];
+      $scope.$broadcast('filterClicked');
     }
-    function clearCategoryFilters(){
-      delete plc.majorFilter.category;
-      plc.categoryModel = {};
-      launchFilterEvent(plc.majorFilter);
+
+
+    function areaRadioChange() {
+      plc.paramData.area = plc.areaRadioModel[plc.areaFilterName];
+      $scope.$broadcast('filterClicked');
     }
-    var location = $routeParams.location;
-    getCityProductLocalitiesService.getCityLocalities(location)
-      .then(function(res){
+
+
+    
+
+    getCityProductAreasService.getCityAreas(plc.location)
+      .then(function(res) {
         plc.areas = res.data;
-      },function(res){
-        
+      }, function(res) {
+        console.log(res);
       });
-      getCityProductCategoriesService.getCityCategories(location)
-        .then(function(res){
-          plc.categories = res.data;
-          
-        },function(res){
-          console.log(res);
-        });
-    function launchFilterEvent(obj){
-        $scope.$broadcast('parent', obj);
-    }
+    getCityProductCategoriesService.getCityCategories(plc.location)
+      .then(function(res) {
+        plc.categories = res.data;
+
+      }, function(res) {
+        console.log(res);
+      });
 
   }
 })(window.angular);

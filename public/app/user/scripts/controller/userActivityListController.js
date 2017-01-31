@@ -6,12 +6,13 @@ angular.module('app.user')
   function UserActivityListController($scope,$routeParams,activityService){
     var ual = this;
     ual.loading = true;
+    ual.activityData = ' ';
     activate();
     function activate(){
 
       ual.loading = true;
         activityService.getSingleUserActivity($routeParams.userId).then(function(result){        
-        ual.activityData= result.data;
+        ual.activityData+= result.data;
 
         ual.loading = false;
       }); 

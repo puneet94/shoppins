@@ -94,6 +94,106 @@
     display: inline;
     margin: 2px; }
 
+.capital-heading-text {
+  text-transform: capitalize;
+  font-size: 24px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-sub-heading-text {
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-normal-text {
+  text-transform: capitalize;
+  font-size: 14px;
+  font-weight: 400;
+  color: #795548; }
+
+.authenticationModalContainer {
+  padding: 24px; }
+
+.authModalFormContainer {
+  max-width: 100%;
+  width: 480px;
+  box-sizing: border-box;
+  margin-top: 10px; }
+
+.autheticateFormInputContainer {
+  position: relative;
+  margin-bottom: 15px; }
+  .autheticateFormInputContainer .iconContainer {
+    position: absolute;
+    right: 5px;
+    top: 10px;
+    width: 30px;
+    text-align: center; }
+    .autheticateFormInputContainer .iconContainer span {
+      font-size: 24px;
+      color: teal; }
+  .autheticateFormInputContainer input {
+    height: 50px;
+    font-size: 16px;
+    width: 100%;
+    font-family: Roboto;
+    font-weight: 500;
+    padding-left: 10px;
+    padding-right: 10px;
+    -webkit-transition: border-color 0.2s;
+            transition: border-color 0.2s;
+    border: 1px solid #aaa;
+    border-radius: 2px;
+    background-color: #fff;
+    color: #484848;
+    box-sizing: border-box;
+    display: block; }
+
+.facebookAuthenticateButton {
+  border-color: #3B5998;
+  background-color: #3B5998;
+  color: #fff;
+  padding: 20px;
+  margin-bottom: 0px;
+  box-sizing: border-box; }
+  .facebookAuthenticateButton .text-container {
+    margin-left: 30%; }
+
+.loginSeparator {
+  position: relative;
+  text-align: center;
+  margin-top: 10px;
+  height: 20px;
+  color: rgba(0, 0, 0, 0.5); }
+  .loginSeparator .separatorLine {
+    position: absolute;
+    top: 45%;
+    height: 1.5px;
+    background-color: rgba(0, 0, 0, 0.2);
+    width: 100%;
+    display: block; }
+  .loginSeparator .separatorText {
+    position: absolute;
+    left: 45%;
+    display: block;
+    padding: 10px;
+    background-color: white;
+    padding-top: 0; }
+
+.authModalText {
+  font-size: 18px;
+  color: teal;
+  font-family: "Lato"; }
+
+.authModalButton {
+  font-family: "Lato";
+  padding: 10px 18px;
+  color: teal;
+  border: 1px solid teal;
+  border-radius: 3px; }
+
+
 .chatBoxPage {
   position: relative;
   padding: 10px;
@@ -197,106 +297,6 @@
 @media (max-width: 600px) {
   .mobileChatRoomList {
     /*margin-top: 60px*/ } }
-
-.authenticationModalContainer {
-  padding: 24px; }
-
-.authModalFormContainer {
-  max-width: 100%;
-  width: 480px;
-  box-sizing: border-box;
-  margin-top: 10px; }
-
-.autheticateFormInputContainer {
-  position: relative;
-  margin-bottom: 15px; }
-  .autheticateFormInputContainer .iconContainer {
-    position: absolute;
-    right: 5px;
-    top: 10px;
-    width: 30px;
-    text-align: center; }
-    .autheticateFormInputContainer .iconContainer span {
-      font-size: 24px;
-      color: teal; }
-  .autheticateFormInputContainer input {
-    height: 50px;
-    font-size: 16px;
-    width: 100%;
-    font-family: Roboto;
-    font-weight: 500;
-    padding-left: 10px;
-    padding-right: 10px;
-    -webkit-transition: border-color 0.2s;
-            transition: border-color 0.2s;
-    border: 1px solid #aaa;
-    border-radius: 2px;
-    background-color: #fff;
-    color: #484848;
-    box-sizing: border-box;
-    display: block; }
-
-.facebookAuthenticateButton {
-  border-color: #3B5998;
-  background-color: #3B5998;
-  color: #fff;
-  padding: 20px;
-  margin-bottom: 0px;
-  box-sizing: border-box; }
-  .facebookAuthenticateButton .text-container {
-    margin-left: 30%; }
-
-.loginSeparator {
-  position: relative;
-  text-align: center;
-  margin-top: 10px;
-  height: 20px;
-  color: rgba(0, 0, 0, 0.5); }
-  .loginSeparator .separatorLine {
-    position: absolute;
-    top: 45%;
-    height: 1.5px;
-    background-color: rgba(0, 0, 0, 0.2);
-    width: 100%;
-    display: block; }
-  .loginSeparator .separatorText {
-    position: absolute;
-    left: 45%;
-    display: block;
-    padding: 10px;
-    background-color: white;
-    padding-top: 0; }
-
-.authModalText {
-  font-size: 18px;
-  color: teal;
-  font-family: "Lato"; }
-
-.authModalButton {
-  font-family: "Lato";
-  padding: 10px 18px;
-  color: teal;
-  border: 1px solid teal;
-  border-radius: 3px; }
-
-
-.capital-heading-text {
-  text-transform: capitalize;
-  font-size: 24px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-sub-heading-text {
-  text-transform: capitalize;
-  font-size: 16px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-normal-text {
-  text-transform: capitalize;
-  font-size: 14px;
-  font-weight: 400;
-  color: #795548; }
 
 textarea {
   border: 1px solid black; }
@@ -523,6 +523,246 @@ md-ink-bar {
   to {
     -webkit-transform: rotate(359deg);
     transform: rotate(359deg); } }
+
+.eventPage .eventBannerSection .eventBannerImage {
+  position: relative;
+  max-height: 400px;
+  text-align: center;
+  box-sizing: border-box; }
+  .eventPage .eventBannerSection .eventBannerImage:after {
+    padding-bottom: 60%;
+    content: " ";
+    display: block; }
+  .eventPage .eventBannerSection .eventBannerImage img {
+    box-sizing: border-box;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    left: 0;
+    width: 100%;
+    border: 1px solid #e1e8ed;
+    border-radius: 3px; }
+
+.eventPage .eventDetailsSection {
+  text-transform: capitalize;
+  font-family: 'Lato', sans-serif;
+  padding-left: 15px;
+  padding-right: 40px;
+  border-right: 1px solid #ccc; }
+  .eventPage .eventDetailsSection .mapContainer {
+    margin-top: 20px; }
+  .eventPage .eventDetailsSection .eventDetailsEntity {
+    border-top: 1px solid #ccc;
+    padding: 20px 5px;
+    text-transform: capitalize; }
+    .eventPage .eventDetailsSection .eventDetailsEntity .eventDetailsEntityLabel {
+      font-weight: 600; }
+
+.eventPage .eventSuggestionSection {
+  padding-left: 2%; }
+  .eventPage .eventSuggestionSection .eventSuggestionHeader {
+    margin-top: 0px; }
+
+@media (max-width: 600px) {
+  .eventDetailsSection {
+    padding-left: 0px;
+    padding-right: 0px;
+    border-right: 0px solid black; } }
+
+a {
+  text-decoration: none; }
+
+.singleeventContainer {
+  float: left;
+  display: block;
+  width: 49%;
+  height: 200px;
+  box-sizing: border-box;
+  border: 1px solid #e1e8ed;
+  border-radius: 3px;
+  margin: 2px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  font-family: 'Roboto'; }
+  .singleeventContainer .eventImageContainer {
+    display: block;
+    float: left;
+    width: 50%;
+    height: 100%;
+    box-sizing: border-box;
+    position: relative; }
+    .singleeventContainer .eventImageContainer img {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); }
+    .singleeventContainer .eventImageContainer .eventImageDate {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      color: white;
+      background-color: #5BC199;
+      padding: 5px 10px;
+      border: 1px solid #5BC199;
+      border-radius: 3px;
+      font-size: 10px; }
+    .singleeventContainer .eventImageContainer .adminEventTag {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      color: white;
+      background-color: #5BC199;
+      padding: 5px 10px;
+      border: 1px solid #5BC199;
+      border-radius: 3px;
+      font-size: 10px; }
+      .singleeventContainer .eventImageContainer .adminEventTag a {
+        color: white;
+        text-decoration: none; }
+  .singleeventContainer .eventDetailsContainer {
+    display: block;
+    float: left;
+    width: 50%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 2%;
+    background-color: white;
+    position: relative; }
+    .singleeventContainer .eventDetailsContainer .eventDetailsHeader {
+      margin-top: 0;
+      margin-bottom: 0;
+      text-transform: capitalize; }
+    .singleeventContainer .eventDetailsContainer .eventLocation {
+      width: 100%;
+      word-wrap: break-word;
+      font-size: 12px;
+      text-transform: capitalize; }
+    .singleeventContainer .eventDetailsContainer .eventAddressEntity {
+      margin: 2px; }
+    .singleeventContainer .eventDetailsContainer .eventViewMore {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      padding: 5px 8px;
+      background-color: #00bcd4;
+      font-size: 11px; }
+      .singleeventContainer .eventDetailsContainer .eventViewMore a {
+        color: white; }
+
+@media (max-width: 600px) {
+  .singleeventContainer {
+    float: left;
+    display: block;
+    width: 100%;
+    min-height: 400px; }
+    .singleeventContainer .eventImageContainer {
+      display: block;
+      float: left;
+      width: 100%;
+      height: 50%; }
+    .singleeventContainer .eventDetailsContainer {
+      display: block;
+      float: left;
+      width: 100%; } }
+
+.suggestedStoreImage {
+  width: 100%;
+  position: relative;
+  height: 100%;
+  box-sizing: border-box; }
+  .suggestedStoreImage img {
+    width: 100%;
+    height: 100%;
+    position: absolute; }
+
+.customChip {
+  font-size: 11px;
+  color: white;
+  background-color: #669999;
+  margin-right: 5px;
+  padding: 5px 8px;
+  text-transform: capitalize;
+  border: 1px solid #669999;
+  border-radius: 4px; }
+
+.eventVertImageContainer {
+  position: relative; }
+  .eventVertImageContainer .eventImageDate {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    color: white;
+    background-color: #5BC199;
+    padding: 5px 10px;
+    border: 1px solid #5BC199;
+    border-radius: 3px;
+    font-size: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); }
+  .eventVertImageContainer .suggestedEventImage {
+    height: 180px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); }
+    .eventVertImageContainer .suggestedEventImage img {
+      height: 100%;
+      width: 100%; }
+
+.eventVertDetailsContainer {
+  height: 150px;
+  text-transform: capitalize;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+  background-color: white; }
+  .eventVertDetailsContainer .eventDetailsHeader {
+    margin: 0;
+    margin-top: 6px; }
+  .eventVertDetailsContainer .eventMore {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 5px 8px;
+    background-color: #00bcd4;
+    font-size: 11px; }
+
+.eventSuggestionHeader {
+  margin-top: 5px;
+  margin-bottom: 10px; }
+
+.singleEventSuggestion {
+  width: 100%;
+  margin-bottom: 10px; }
+  .singleEventSuggestion .suggestedEventImage {
+    width: 100%;
+    position: relative; }
+    .singleEventSuggestion .suggestedEventImage:after {
+      content: " ";
+      display: block;
+      padding-bottom: 75%; }
+    .singleEventSuggestion .suggestedEventImage img {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      border: 1px solid #e1e8ed;
+      border-radius: 3px; }
+
+.suggestedEventInfo {
+  padding: 5px;
+  word-wrap: break-word; }
+
+a {
+  text-decoration: none; }
+
+.suggestedEventName {
+  text-transform: capitalize;
+  margin-top: 0px;
+  margin-bottom: 0; }
+
+.suggestedEventAddress {
+  margin-top: 2px;
+  font-size: 10px;
+  margin-bottom: 0;
+  text-transform: capitalize; }
+
+.suggestedEventCategories {
+  margin-top: 2px;
+  font-size: 10px;
+  margin-bottom: 0;
+  text-transform: capitalize; }
+
+@media (max-width: 600px) {
+  .eventSuggestionsMainContainer {
+    margin-left: 0px; } }
 
 .shakeElement {
   animation: shake 2s infinite;
@@ -1078,6 +1318,12 @@ a {
   .offerSuggestionsMainContainer {
     margin-left: 0px; } }
 
+.loadMoreButton {
+  color: white;
+  text-transform: capitalize;
+  margin: 0;
+  width: 100%; }
+
 .productPageContainer .singleProductContainer .productTopContainer .productImageContainer {
   padding: 10px;
   background-color: white;
@@ -1142,6 +1388,9 @@ a {
       .productContainer .singleProductContainer .productImageContainer .singleProductImage {
         width: 100%;
         height: 180px; }
+        .productContainer .singleProductContainer .productImageContainer .singleProductImage img {
+          width: 100%;
+          height: 100%; }
     .productContainer .singleProductContainer .productDetailsContainer {
       padding: 5px;
       text-transform: capitalize; }
@@ -1287,6 +1536,15 @@ a {
 .filterDirectiveTemplate {
   margin-top: 10px;
   width: 90%; }
+  .filterDirectiveTemplate .filterRadioItem {
+    margin: 4px 2px; }
+  .filterDirectiveTemplate .filterLabel {
+    text-transform: capitalize; }
+  .filterDirectiveTemplate input[type="radio"] {
+    display: none; }
+    .filterDirectiveTemplate input[type="radio"]:checked + label {
+      font-weight: bold;
+      color: teal; }
   .filterDirectiveTemplate .filterNameHeading {
     background-color: teal;
     padding: 10px;
@@ -1506,7 +1764,7 @@ a {
   .storeDetailsContainer .infoContainer .contentText .moreLocationsLink {
     font-size: 12px; }
 
-.capital-heading-text, .storeListHeading {
+.capital-heading-text {
   text-transform: capitalize;
   font-size: 24px;
   font-weight: 600;
@@ -1574,6 +1832,12 @@ a {
     color: red;
     font-size: 12px;
     padding-left: 5px; }
+
+.loadMoreButton {
+  width: 100%;
+  color: white; }
+  .loadMoreButton span {
+    color: white; }
 
 .userImg {
   width: 50px;

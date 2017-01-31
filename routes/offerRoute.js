@@ -5,7 +5,7 @@ var Store = models.Store;
 var Offer = models.Offer;
 
 var offerRouter = express.Router();
-var commons = require('./commonRouteFunctions');
+
 offerRouter.use(function(req, res, next) {
 	console.log("offer");
 	console.log(req.method, req.url);

@@ -133,7 +133,7 @@ function toggleMobile($window,$location) {
     link: function(scope, element, attrs) {
 
       $(element).on('click',function(){
-        windowWidth = window.innerWidth ? window.innerWidth : $(window).width();
+        var windowWidth = window.innerWidth ? window.innerWidth : $(window).width();
 
           if (windowWidth <= 961 ) {
 

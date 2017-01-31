@@ -15,7 +15,7 @@
       link: function(scope, element, attrs) {
 
       },
-      controller: function($scope) {
+      controller: ['$scope',function($scope) {
         var offerParamData = {
           page: 1,
           limit: $scope.offerLimit,
@@ -34,7 +34,7 @@
         };
 
 
-      }
+      }]
     };
   }
 

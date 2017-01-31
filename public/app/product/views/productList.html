@@ -1,58 +1,15 @@
-
-<div  ng-controller="ProductListController as plc" style="width:100%;min-height:200px;">
-  <h3 class="productListHeading">{{plc.productsSearchHeader.split("-").join(" ")}}</h3>
-  <!--<loading-directive loading="plc.loading"></loading-directive>-->
-  
-  <div class="productContainer" layout="row" layout-wrap layout-align="center center"><!--space-between start" >-->
-    
-    <div class="singleProductContainer" md-whiteframe="2"   flex-xs="100" ng-repeat="product in plc.productsList track by product._id"  >
-      
-    <single-product-directive single-product="product"> </single-product-directive>
-
-    <!--  <div class="productImageContainer" flex="50">
-        <img class="singleProductImage" ng-src="{{::product.images[0]||product.imagesMin[0]||'http://www.planwallpaper.com/static/images/desktop-year-of-the-tiger-images-wallpaper.jpg'}}"/>  
-      </div>
-      
-      <div class="productDetailsContainer" flex="50" layout="column" layout-align="space-between stretch">
-        <div layout="row" layout-align="space-between end">
-          <div class="productName" ng-click="plc.getSingleProduct(product)"> {{::product.name}}</div>
-          <div class="productPrice"> {{::product.price.value}} {{::product.price.currency}}</div>
+<div ng-controller="ProductListController as plc" style="width:100%;min-height:200px;">
+        <h3 class="productListHeading">{{plc.productsSearchHeader.split("-").join(" ")}}</h3>
+        <div class="productContainer" layout="row" layout-wrap layout-align="center center">
+                <div class="singleProductContainer" md-whiteframe="2" flex-xs="100" ng-repeat="product in plc.productsList track by product._id">
+                        <single-product-directive single-product="product"> </single-product-directive>
+                        
+                </div>
         </div>
-        <div>
-          <div >
-            <span ng-repeat="category in product.category" class="productCategory">
-              {{::category}}
-            
-            </span>
-          </div>
-          <div>
-            <span ng-repeat="subCat in product.subCategory" class="productSubCategory">
-              {{::subCat}}
-            </span>
-          </div>
+        <div style="position:relative">
+                <inner-loading-directive inner-loading="plc.loading" container-height="200px"></inner-loading-directive>
         </div>
-        <div class="productStatsContainer" layout="row" layout-align="space-between end">
-          <div>
-            <span> {{::product.reviewsCount}}<span><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span> </span>
-          <span > {{::product.upvotesCount}}<span><i class="fa fa-hand-paper-o" aria-hidden="true"></i></span></span>
-          <span > {{::product.visitsCount}}<span><i class="fa fa-cart-arrow-down" aria-hidden="true"></i></span></span>  
-          </div>
-          <div class="viewProductContainer">
-            <span class="viewProductLink" ng-click="plc.getSingleProduct(product)">
-              View Product
-            </span>
-          </div>
+        <div ng-if="plc.noProductsToShow">
+                <p style="text-align: center;">No product available</p>
         </div>
-      </div><h1 ng-if="plc.productsList.length==0">No products available</h1>-->
-    </div>
-  </div>
-  <div style="position:relative">
-
-    <inner-loading-directive inner-loading="plc.loading" container-height="200px"></inner-loading-directive>
-  </div>
-  <div ng-if="plc.noProductsToShow">
-    <p style="text-align: center;">No product available</p>
-  </div>
 </div>
-
-
