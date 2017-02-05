@@ -1,9 +1,9 @@
 (function(angular) {
 	'use strict';
 	angular.module('app.store')
-		.directive('storesList', ['getStoreCollectionService', storesList]);
+		.directive('storesList', ['getStoreCollectionService', 'paramFactory',storesList]);
 
-	function storesList(getStoreCollectionService) {
+	function storesList(getStoreCollectionService,paramFactory) {
 		return {
 			restrict: 'E',
 			templateUrl: 'app/store/views/storesListTemplate.html',
@@ -13,24 +13,24 @@
 			
 			controller: ['$scope',function($scope) {
 				$scope.storesList = [];
+				$scope.paramData = paramFactory.getParamData();
 				$scope.loadMoreStores = loadMoreStores;
 				$scope.getStores = getStores;
 				activate();
 				$scope.$on('filterClicked', function() {
 					$scope.storesList = [];
-					$scope.paramData.page = 1;
+					$scope.paramData = paramFactory.getParamData();
 					getStores();
 				});
 
 				function loadMoreStores() {
 					$scope.paramData.page = $scope.paramData.page + 1;
+					paramFactory.setParamData($scope.paramData);
 					getStores();
 				}
 
 				function getStores() {
 					$scope.spinnerLoading = true;
-					console.log("paramdata");
-					console.log($scope.paramData);
 					getStoreCollectionService.storesCollection($scope.paramData).then(function(response) {
 						
 						$scope.totalStores = response.data.total;
@@ -42,7 +42,7 @@
 						$scope.spinnerLoading = false;
 
 					}).catch(function(error) {
-						console.log('error');
+						
 						console.log(error);
 					});
 				}

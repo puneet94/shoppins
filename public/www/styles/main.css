@@ -1540,11 +1540,9 @@ a {
     margin: 4px 2px; }
   .filterDirectiveTemplate .filterLabel {
     text-transform: capitalize; }
-  .filterDirectiveTemplate input[type="radio"] {
-    display: none; }
-    .filterDirectiveTemplate input[type="radio"]:checked + label {
-      font-weight: bold;
-      color: teal; }
+  .filterDirectiveTemplate input[type="radio"]:checked + label {
+    font-weight: bold;
+    color: teal; }
   .filterDirectiveTemplate .filterNameHeading {
     background-color: teal;
     padding: 10px;

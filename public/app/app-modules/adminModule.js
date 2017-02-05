@@ -65,8 +65,7 @@ function redirectIfNotAuthenticated2($q, $timeout, $auth, changeBrowserURL) {
 
 function redirectIfNotStoreAuthenticated($q, $route, userData, adminStoreService, changeBrowserURL) {
     var defer = $q.defer();
-    console.log("stre authen");
-    console.log($route.current.params.storeId);
+    
     adminStoreService.getStore($route.current.params.storeId, { 'select': 'admin' }).then(function(response) {
 
         if (userData.getUser()._id == response.data.admin) {

@@ -1,52 +1,63 @@
 (function(angular) {
 	'use strict';
 	angular.module('app.store')
-		.controller('StoreLocationCollectionController', ["$scope", "$routeParams", "getCityAreasService", "getCityCategoriesService", StoreLocationCollectionController]);
+		.controller('StoreLocationCollectionController', ["$scope", "$routeParams", "getCityAreasService", "getCityCategoriesService", 'paramFactory', '$mdDialog', StoreLocationCollectionController]);
 
-	function StoreLocationCollectionController($scope, $routeParams, getCityAreasService, getCityCategoriesService) {
+	function StoreLocationCollectionController($scope, $routeParams, getCityAreasService, getCityCategoriesService, paramFactory, $mdDialog) {
 
 		var slcc = this;
 		slcc.location = $routeParams.location;
 		slcc.categoryRadioModel = {};
 		slcc.categoryFilterName = 'category';
 		slcc.storesSearchHeader = $routeParams.slug;
+		slcc.showFilterDialog = showFilterDialog;
 		slcc.areaRadioModel = {};
 		slcc.areaFilterName = 'area';
 		slcc.paramData = {
 			city: slcc.location,
 			page: 1,
-			limit: 10
+			limit: 5
 		};
+		paramFactory.setParamData(slcc.paramData);
 
-		slcc.categoryRadioClear = categoryRadioClear;
-		slcc.areaRadioClear = areaRadioClear;
-		slcc.areaRadioChange = areaRadioChange;
-		slcc.categoryRadioChange = categoryRadioChange;
-		
+		$scope.$on('filterClicked', function() {
+
+			slcc.paramData = paramFactory.getParamData();
+
+		});
+		function showFilterDialog(ev) {
+			$mdDialog.show({
+					controller: 'FilterModalController',
+					templateUrl: 'app/store/views/filterModalTemplate.html',
+					parent: angular.element(document.body),
+					targetEvent: ev,
+					clickOutsideToClose: true,
+					fullscreen: true,
+					locals: {
+						filtersList: [{
+							'filterName': slcc.areaFilterName,
+							'filterNames': slcc.areas,
+							'filterModel': slcc.areaRadioModel
+						}, {
+							'filterName': slcc.categoryFilterName,
+							'filterNames': slcc.categories,
+							'filterModel': slcc.categoryRadioModel
+						}]
+					}
+				})
+				.then(function(answer) {
+					console.log(answer);
+				}, function() {
+
+				});
+
+
+
+		}
 		activate();
-		function categoryRadioClear() {
-			delete slcc.categoryRadioModel[slcc.categoryFilterName];
-			delete slcc.paramData[slcc.categoryFilterName];
-			$scope.$broadcast('filterClicked');
-		}
 
-		function areaRadioClear() {
-			delete slcc.areaRadioModel[slcc.areaFilterName];
-			delete slcc.paramData[slcc.areaFilterName];
-			$scope.$broadcast('filterClicked');
-		}
-
-
-		function areaRadioChange() {
-			slcc.paramData.area = slcc.areaRadioModel[slcc.areaFilterName];
-			$scope.$broadcast('filterClicked');
-		}
-
-
-		function categoryRadioChange() {
-			slcc.paramData.category = slcc.categoryRadioModel[slcc.categoryFilterName];
-			$scope.$broadcast('filterClicked');
-		}
+		
+		
 
 		function activate() {
 			getCityAreasService.getCityAreas(slcc.location)

@@ -6,13 +6,17 @@
 <main class="fixedHeaderMain">
 <div layout="row" layout-wrap>
 
-	<div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100">
-                        <h3 hide-sm hide-xs>Filters</h3>
-                        <div class="" layout-sm="column" layout-xs="column">
-                                <filter-directive filter-name="{{pncc.areaFilterName}}" radio-model="pncc.areaRadioModel" radio-change="pncc.areaRadioChange()" radio-repeat="pncc.areas" clear-click="pncc.areaRadioClear()">
-                                </filter-directive>
-                                
+	<md-button class="md-raised md-primary" hide-lg hide-md ng-click="pncc.showFilterDialog()">Filter</md-button>
+                        <div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100">
+                        
+                                <h3 hide-sm hide-xs>Filters</h3>
+                                <div class="" layout-sm="column" layout-xs="column">
+                                        <filter-directive filter-name="{{pncc.areaFilterName}}" radio-model="pncc.areaRadioModel"  radio-repeat="pncc.areas" >
+                                        </filter-directive>
+                                        
+                                </div>
                         </div>
+                        
                 </div>
                 <div flex="80" flex-sm="100" flex-xs="100">
                         <h3 class="productListHeading">{{pncc.productsSearchHeader.split("-").join(" ")}}</h3>

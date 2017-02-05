@@ -6,13 +6,17 @@
 <main class="fixedHeaderMain">
 <div layout="row" layout-wrap>
 
-	<div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100">
-                        <h3 hide-sm hide-xs>Filters</h3>
-                        <div class="" layout-sm="column" layout-xs="column">
-                                <filter-directive filter-name="{{pccc.areaFilterName}}" radio-model="pccc.areaRadioModel" radio-change="pccc.areaRadioChange()" radio-repeat="pccc.areas" clear-click="pccc.areaRadioClear()">
-                                </filter-directive>
-                                
+	<md-button class="md-raised md-primary" hide-lg hide-md ng-click="pccc.showFilterDialog()">Filter</md-button>
+                        <div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100">
+                        
+                                <h3 hide-sm hide-xs>Filters</h3>
+                                <div class="" layout-sm="column" layout-xs="column">
+                                        <filter-directive filter-name="{{pccc.areaFilterName}}" radio-model="pccc.areaRadioModel"  radio-repeat="pccc.areas" >
+                                        </filter-directive>
+                                        
+                                </div>
                         </div>
+                        
                 </div>
                 <div flex="80" flex-sm="100" flex-xs="100">
                         <h3 class="productListHeading">{{pccc.productsSearchHeader.split("-").join(" ")}}</h3>

@@ -9,10 +9,12 @@
 <main class="fixedHeaderMain">
 <div layout="row" layout-wrap>
 
-	<div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100">
+	<md-button class="md-raised md-primary" hide-lg hide-md ng-click="sncc.showFilterDialog()">Filter</md-button>
+                        <div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100">
+                        
                                 <h3 hide-sm hide-xs>Filters</h3>
                                 <div class="" layout-sm="column" layout-xs="column">
-                                        <filter-directive filter-name="{{sncc.areaFilterName}}" radio-model="sncc.areaRadioModel" radio-change="sncc.areaRadioChange()" radio-repeat="sncc.areas" clear-click="sncc.areaRadioClear()">
+                                        <filter-directive filter-name="{{sncc.areaFilterName}}" radio-model="sncc.areaRadioModel"  radio-repeat="sncc.areas" >
                                         </filter-directive>
                                         
                                 </div>

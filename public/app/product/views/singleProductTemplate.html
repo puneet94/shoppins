@@ -3,6 +3,9 @@
       <div class="productImageContainer" flex="50" flex-sm="100" flex-xs="100">
         <div class="singleProductImage" afkl-lazy-image="{{::product.bannerImage||product.images[0]||product.imagesMin[0]||'http://www.planwallpaper.com/static/images/desktop-year-of-the-tiger-images-wallpaper.jpg'}}">
         </div>  
+        <div ng-if="adminProduct">
+          <md-button class="md-raised md-primary" ng-click="showProductEditModal(product,$event)">Edit</md-button>
+        </div>
       </div>
       
       <div class="productDetailsContainer" flex="50" flex-sm="100" flex-xs="100" layout="column" layout-align="space-between stretch">

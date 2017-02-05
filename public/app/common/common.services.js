@@ -91,11 +91,12 @@ angular.module('app.common')
 
 		var obj1 =  {
 			setCity: function (city) {
-				
-				
 				if(city){
-					storage.setItem('city',JSON.stringify(city));
-					$rootScope.$broadcast('city-changed');
+					if(city.toLowerCase()!==obj1.getCity().toLowerCase()){
+						storage.setItem('city',JSON.stringify(city));
+						$rootScope.$broadcast('city-changed');
+					}
+					
 				}
 			},
 			getCity: function(){

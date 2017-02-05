@@ -1,9 +1,9 @@
 (function(angular){
   'use strict';
   angular.module('app.product')
-    .controller('ProductsLocationController',["$scope","$routeParams","getCityProductAreasService","getCityProductCategoriesService",ProductsLocationController]);
+    .controller('ProductsLocationController',["$scope","$routeParams","getCityProductAreasService","getCityProductCategoriesService",'paramFactory', '$mdDialog',ProductsLocationController]);
 
-  function ProductsLocationController($scope,$routeParams,getCityProductAreasService,getCityProductCategoriesService){
+  function ProductsLocationController($scope,$routeParams,getCityProductAreasService,getCityProductCategoriesService,paramFactory, $mdDialog){
     var plc = this;
     plc.location = $routeParams.location;
     plc.productsSearchHeader = $routeParams.slug;
@@ -11,6 +11,7 @@
     plc.areaRadioModel = {};
     plc.areaFilterName = 'area';
     plc.categoryFilterName = 'category';
+    plc.showFilterDialog = showFilterDialog;
     plc.paramData = {
       city: plc.location,
       page: 1,
@@ -18,41 +19,42 @@
       fields: '-store'
     };
 
-    
-    plc.areaRadioClear = areaRadioClear;
-    plc.areaRadioChange = areaRadioChange;
-    
-    plc.categoryRadioClear = categoryRadioClear;
-    plc.categoryRadioChange = categoryRadioChange;
-    
+    paramFactory.setParamData(plc.paramData);
 
-    function categoryRadioClear() {
-      delete plc.categoryRadioModel[plc.categoryFilterName];
-      delete plc.paramData[plc.categoryFilterName];
-      $scope.$broadcast('filterClicked');
+    $scope.$on('filterClicked', function() {
+
+      plc.paramData = paramFactory.getParamData();
+
+    });
+    function showFilterDialog(ev) {
+      $mdDialog.show({
+          controller: 'FilterModalController',
+          templateUrl: 'app/store/views/filterModalTemplate.html',
+          parent: angular.element(document.body),
+          targetEvent: ev,
+          clickOutsideToClose: true,
+          fullscreen: true,
+          locals: {
+            filtersList: [{
+              'filterName': plc.areaFilterName,
+              'filterNames': plc.areas,
+              'filterModel': plc.areaRadioModel
+            }, {
+              'filterName': plc.categoryFilterName,
+              'filterNames': plc.categories,
+              'filterModel': plc.categoryRadioModel
+            }]
+          }
+        })
+        .then(function(answer) {
+          console.log(answer);
+        }, function() {
+
+        });
+
+
+
     }
-
-
-    function categoryRadioChange() {
-      plc.paramData.category = plc.categoryRadioModel[plc.categoryFilterName];
-      $scope.$broadcast('filterClicked');
-    }
-
-    function areaRadioClear() {
-      delete plc.areaRadioModel[plc.areaFilterName];
-      delete plc.paramData[plc.areaFilterName];
-      $scope.$broadcast('filterClicked');
-    }
-
-
-    function areaRadioChange() {
-      plc.paramData.area = plc.areaRadioModel[plc.areaFilterName];
-      $scope.$broadcast('filterClicked');
-    }
-
-
-    
-
     getCityProductAreasService.getCityAreas(plc.location)
       .then(function(res) {
         plc.areas = res.data;

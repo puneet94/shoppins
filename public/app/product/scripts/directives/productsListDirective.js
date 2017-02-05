@@ -1,39 +1,38 @@
 (function(angular) {
 	'use strict';
 	angular.module('app.product')
-		.directive('productsList', ['getProductCollectionService', productsList]);
+		.directive('productsList', ['getProductCollectionService','paramFactory' ,productsList]);
 
-	function productsList(getProductCollectionService) {
+	function productsList(getProductCollectionService,paramFactory) {
 		return {
 			restrict: 'E',
 			replace: true,
 			templateUrl: 'app/product/views/productListTemplate.html',
 			scope: {
-				paramData: '=paramData'
+				paramData: '=paramData',
+				adminProduct: '@adminProduct'
 			},
 			controller: ['$scope', function($scope) {
 				$scope.productsList = [];
 				$scope.loadMoreProducts = loadMoreProducts;
 				$scope.getProducts = getProducts;
+				$scope.paramData = paramFactory.getParamData();
 				activate();
 				$scope.$on('filterClicked', function() {
 					$scope.productsList = [];
-					$scope.paramData.page = 1;
+					$scope.paramData = paramFactory.getParamData();
 					getProducts();
 				});
 
 				function loadMoreProducts() {
 					$scope.paramData.page = $scope.paramData.page + 1;
+					paramFactory.setParamData($scope.paramData);
 					getProducts();
 				}
 
 				function getProducts() {
 					$scope.loading = true;
-					console.log("the params");
-					console.log($scope.paramData);
 					getProductCollectionService.productsCollection($scope.paramData).then(function(response) {
-						console.log("products");
-						console.log(response.data);
 						if (response.data.docs.length === 0) {
 							$scope.noProductsToShow = true;
 						}

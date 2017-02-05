@@ -256,4 +256,59 @@ for i,index in activity
 							div(class="activityReviewDescription")
 								span.
 									#{i.review.description}	
-			
+		else if i.statement == "updated product"
+			div(class="activityHeading")
+				- var storeLink = "#/store/singleStore/"+i.creatorStore._id
+				div(class="creatorImageContainer")
+					a(ng-href='#{userLink}')
+						div(class="creatorImage" afkl-lazy-image='#{i.creatorStore.bannerImage}')
+				div(class="activityHeadingTextContainer")
+					h5(class="activityHeadingText")
+						span(class="activityHeadingTextInfo")
+							a(ng-href='#{storeLink}').
+								#{i.creatorStore.name}
+						span(class="activityHeadingTextInfo").
+							#{i.statement}
+						
+						span(class="activityHeadingTextInfo")
+							- var productLink = "#/product/singleProduct/"+i.product._id
+							a(ng-href='#{productLink}').
+								#{i.product.name}
+						
+					h6(class="activityTime")
+						span.
+							#{moment(i.time).fromNow()}
+				div(class="clearBoth")
+			div(class="activityContent")
+				div( class="activityContentText")
+					div
+						div(class="activityReviewProductImageContainer")
+							div(class="reviewProductImage" afkl-lazy-image="#{i.product.images[0]}" afkl-lazy-image-options="{'offset': 20}")
+		else if i.statement == "created product"
+			div(class="activityHeading")
+				- var storeLink = "#/store/singleStore/"+i.creatorStore._id
+				div(class="creatorImageContainer")
+					a(ng-href='#{userLink}')
+						div(class="creatorImage" afkl-lazy-image='#{i.creatorStore.bannerImage}')
+				div(class="activityHeadingTextContainer")
+					h5(class="activityHeadingText")
+						span(class="activityHeadingTextInfo")
+							a(ng-href='#{storeLink}').
+								#{i.creatorStore.name}
+						span(class="activityHeadingTextInfo").
+							#{i.statement}
+						
+						span(class="activityHeadingTextInfo")
+							- var productLink = "#/product/singleProduct/"+i.product._id
+							a(ng-href='#{productLink}').
+								#{i.product.name}
+						
+					h6(class="activityTime")
+						span.
+							#{moment(i.time).fromNow()}
+				div(class="clearBoth")
+			div(class="activityContent")
+				div( class="activityContentText")
+					div
+						div(class="activityReviewProductImageContainer")
+							div(class="reviewProductImage" afkl-lazy-image="#{i.product.images[0]}" afkl-lazy-image-options="{'offset': 20}")

@@ -7,15 +7,17 @@
 <main class="fixedHeaderMain">
         <h3 toggle-mobile=".locationFilters" hide-lg hide-md>Filters</h3>
         <div layout="row" layout-wrap>
-                <div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100">
-                        <h3 hide-sm hide-xs>Filters</h3>
-                        <div class="" layout-sm="column" layout-xs="column">
-                                <filter-directive filter-name="{{plc.areaFilterName}}" radio-model="plc.areaRadioModel" radio-change="plc.areaRadioChange()" radio-repeat="plc.areas" clear-click="plc.areaRadioClear()">
-                                </filter-directive>
-                                <filter-directive filter-name="{{plc.categoryFilterName}}" radio-model="plc.categoryRadioModel" radio-change="plc.categoryRadioChange()" radio-repeat="plc.categories" clear-click="plc.categoryRadioClear()">
-                                </filter-directive>
+                <md-button class="md-raised md-primary" hide-lg hide-md ng-click="plc.showFilterDialog()">Filter</md-button>
+                        <div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100">
+                        
+                                <h3 hide-sm hide-xs>Filters</h3>
+                                <div class="" layout-sm="column" layout-xs="column">
+                                        <filter-directive filter-name="{{plc.areaFilterName}}" radio-model="plc.areaRadioModel"  radio-repeat="plc.areas" >
+                                        </filter-directive>
+                                        <filter-directive filter-name="{{plc.categoryFilterName}}" radio-model="plc.categoryRadioModel"  radio-repeat="plc.categories" >
+                                        </filter-directive>
+                                </div>
                         </div>
-                </div>
                 <div flex="80" flex-sm="100" flex-xs="100">
                         <h3 class="productListHeading">{{plc.productsSearchHeader.split("-").join(" ")}}</h3>
                         <!--<div ng-include="'app/product/views/productList.html'"></div>-->

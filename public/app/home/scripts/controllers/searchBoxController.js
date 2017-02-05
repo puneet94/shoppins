@@ -38,9 +38,6 @@
             hm.mobileSearchBoxVisible = true;
         }
         hm.selectedItemChange(hm.selectedItem);
-
-        
-
         function userSearchItemChange(item) {
             
             if (!item) {
@@ -101,44 +98,35 @@
             if (userSearchText.length >= 1) {
                 searchService.getAjaxSearches(city, userSearchText)
                     .then(function(resource) {
-
                         hm.userSearches = [];
-                        var allStoresItem = { "userSearchString": "All stores#&#stores#&#" + hm.selectedItem };
-                        var allProductsItem = { "userSearchString": "All products#&#products#&#" + hm.selectedItem };
-                        var allOffersItem = { "userSearchString": "All offers#&# offers#&#" + hm.selectedItem };
                         hm.userSearches = resource.data;
-                        hm.userSearches.unshift(allStoresItem, allProductsItem,allOffersItem);
-                        //hm.userSearches = 
-                        /*
-                        for (var i = 0; i < resource.data.length; i++) {
-                            hm.userSearches.push([i]);
-                        }*/
-
+                        
                     });
             } else {
                 if (hm.selectedItem) {
-                    selectedItemChange(hm.selectedItem);
+                    setSearches(hm.selectedItem);
                 }
             }
         }
-
-        function selectedItemChange(item) {
-
-            cityStorage.setCity(item);
+        function setSearches(item){
             searchService.getSearches(item).then(function(resource) {
                 var allStoresItem = { "userSearchString": "All stores#&#stores#&#" + hm.selectedItem };
                 var allProductsItem = { "userSearchString": "All products#&#products#&#" + hm.selectedItem };
                 var allOffersItem = { "userSearchString": "All offers#&#offers#&#" + hm.selectedItem };
                 hm.userSearches = resource.data;
                 hm.userSearches.unshift(allStoresItem, allProductsItem,allOffersItem);
-                /*hm.userSearches = [allStoresItem, allProductsItem];
-                for (var i = 0; i < resource.data.length; i++) {
-                    hm.userSearches.push(resource.data[i]);
-                }*/
+                
 
             }, function(data) {
                 console.log(data);
             });
+
+        }
+        function selectedItemChange(item) {
+
+            cityStorage.setCity(item);
+            setSearches(item);
+            
         }
 
         function locationSearch() {
@@ -154,8 +142,8 @@
             hm.url = "/store/storesCollection/location";
             var myLocation = hm.selectedItem;
             hm.slug = "stores-in-" + myLocation;
-            
-            changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
+            $window.location.href =baseUrlService.baseUrl+ '#' + hm.url+ "/" + myLocation + "/" + hm.slug; 
+            //changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
             //$window.location.href =baseUrlService.baseUrl+ '#' + hm.url +  "/" + location + "/" + hm.slug;
 
         }
@@ -165,8 +153,8 @@
             hm.url = "/productsCollectionLocation";
             var myLocation = hm.selectedItem;
             hm.slug = "products-in-" + myLocation;
-
-            changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
+            $window.location.href =baseUrlService.baseUrl+ '#' + hm.url+ "/" + myLocation + "/" + hm.slug; 
+            //changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
 
 
         }
@@ -175,8 +163,8 @@
             hm.url = "/offers";
             var myLocation = hm.selectedItem;
             hm.slug = "offers-in-" + myLocation;
-
-            changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
+            $window.location.href =baseUrlService.baseUrl+ '#' + hm.url+ "/" + myLocation + "/" + hm.slug; 
+            //changeBrowserURL.changeBrowserURLMethod(hm.url + "/" + myLocation + "/" + hm.slug);
 
 
         }

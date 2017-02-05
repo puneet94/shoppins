@@ -29,6 +29,7 @@ function getActivity(req, res, usersList) {
     options.page = req.query.page || 1;
     options.select = req.query.fields || null;
     options.populate = [{ path: 'creator', model: 'User', select: 'displayName picture' },
+        { path: 'creatorStore', select: 'name bannerImage', model: 'Store' },
         { path: 'followed', model: 'User', select: 'displayName picture' },
         { path: 'store', select: 'name bannerImage', model: 'Store' },
         { path: 'product', select: 'name images', model: 'Product' },
@@ -36,8 +37,11 @@ function getActivity(req, res, usersList) {
         { path: 'review', model: 'Review', populate: { path: 'product', select: 'name images', model: 'Product' } },
         { path: 'review', model: 'Review', populate: { path: 'user', select: 'displayName', model: 'User' } }
     ];
+
     Activity.paginate(queryObj, options).then(function(activities) {
-        
+        if(req.query.tjson == 1){
+            res.json(activities);
+        }    
         app.render('activity/userActivity', { activity: activities.docs, moment: moment }, function(err, html) {
 
             if (err) {
@@ -101,6 +105,7 @@ activityRouter.route('/userFollowingActivity/:userId')
     });
 activityRouter.route('/singleUserActivity/:userId')
     .get(function(req, res) {
+        console.log('**************in here*************');
         var followingList = [];
         User
             .findById(req.params.userId)

@@ -22,8 +22,10 @@ function AdminProductService($http,baseUrlService,changeBrowserURL){
     //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
 
   }
-  function updateProduct(productId,product){
-  	return $http.put(baseUrlService.baseUrl+'admin/product/'+productId,product);
+  function updateProduct(storeId,productId,product){
+    console.log("entered product update");
+    console.log(product);
+  	return $http.put(baseUrlService.baseUrl+'admin/product/'+productId+'/'+storeId,product);
   }
   function getProduct(productId,obj){
     return $http.get(baseUrlService.baseUrl+'admin/product/'+productId,{params:obj});       

@@ -1,14 +1,18 @@
 (function(angular){
   'use strict';
 angular.module('app.product')
-  .controller('StoreProductListController',["$scope","$auth",'$location','scrollToIdService',"$routeParams","getProductsService","changeBrowserURL",StoreProductListController]);
-  function StoreProductListController($scope,$auth,$location,scrollToIdService,$routeParams,getProductsService,changeBrowserURL){
+  .controller('StoreProductListController',["$scope","$routeParams",StoreProductListController]);
+  function StoreProductListController($scope,$routeParams){
     var splc = this;
-    splc.storeProductsList = [];
-    splc.pageNo = 0;
-    splc.getSingleProduct = getSingleProduct;
-    activate();
-
+    
+    
+    splc.paramData = {
+      page: 1,
+      limit: 10,
+      fields: '-store',
+      store: $routeParams.storeId
+    };
+    /*
     function getSingleProduct(productId){
       var url = "/product/singleProduct/"+productId;
       changeBrowserURL.changeBrowserURLMethod(url);
@@ -23,7 +27,7 @@ angular.module('app.product')
           splc.noProductsInStore  = false; 
         }
       });
-    }
+    }*/
 
   }
 

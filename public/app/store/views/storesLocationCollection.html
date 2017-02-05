@@ -1,14 +1,16 @@
 <div class="storesLocationCollection">
         <div ng-include="'app/home/searchBox.html'"></div>
         <main class="fixedHeaderMain">
-                <h3 toggle-mobile=".locationFilters" hide-lg hide-md>Filters</h3>
+                
                 <div layout="row" layout-wrap>
+                        <md-button class="md-raised md-primary" hide-lg hide-md ng-click="slcc.showFilterDialog()">Filter</md-button>
                         <div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100">
+                        
                                 <h3 hide-sm hide-xs>Filters</h3>
                                 <div class="" layout-sm="column" layout-xs="column">
-                                        <filter-directive filter-name="{{slcc.areaFilterName}}" radio-model="slcc.areaRadioModel" radio-change="slcc.areaRadioChange()" radio-repeat="slcc.areas" clear-click="slcc.areaRadioClear()">
+                                        <filter-directive filter-name="{{slcc.areaFilterName}}" radio-model="slcc.areaRadioModel"  radio-repeat="slcc.areas" >
                                         </filter-directive>
-                                        <filter-directive filter-name="{{slcc.categoryFilterName}}" radio-model="slcc.categoryRadioModel" radio-change="slcc.categoryRadioChange()" radio-repeat="slcc.categories" clear-click="slcc.categoryRadioClear()">
+                                        <filter-directive filter-name="{{slcc.categoryFilterName}}" radio-model="slcc.categoryRadioModel"  radio-repeat="slcc.categories" >
                                         </filter-directive>
                                 </div>
                         </div>

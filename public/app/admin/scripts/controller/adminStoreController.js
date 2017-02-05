@@ -6,6 +6,7 @@
     function AdminStoreController($scope,$routeParams,getSingleStore,Upload,baseUrlService){	
     	var asc = this;
         asc.storeData = {};
+        
         activate();
         
         asc.uploadStoreBanner = function(file, errFiles) {

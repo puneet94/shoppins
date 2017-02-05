@@ -1,0 +1,14 @@
+<md-dialog>
+        <md-dialog-content>
+                <div>
+                        <h1>Hello</h1>
+                        <div>
+                                <div ng-repeat="filterItem in filtersList">
+                                        <filter-directive filter-name="{{filterItem.filterName}}" radio-repeat="filterItem.filterNames" radio-model="filterItem.filterModel">
+                                        </filter-directive>
+                                </div>
+                        </div>
+                </div>
+                <md-button ng-click="cancelDialog()">Close</md-button>
+        </md-dialog-content>
+</md-dialog>

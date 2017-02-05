@@ -1,4 +1,5 @@
 <div ng-controller="StoreStatisticsController as sstc" layout="column" ng-cloak="">
+
       <div class="customTabsContainer">
                 <ul class="tabsList">
                     <li ng-click="sstc.setTab(1)" ng-class="{customTabActive:sstc.isSet(1)}">Store Info</li>
@@ -12,6 +13,7 @@
                   
                 </div>
             </div>
+
             <div ng-show="sstc.isSet(2)">
                 <div class="animated slideInLeft">
                     <div ng-include="'app/reviews/views/storeReviewList.html'"></div>
@@ -19,16 +21,18 @@
                 </div>
                 
             </div>
+
             <div ng-show="sstc.isSet(3)">
                 <div  class="animated slideInLeft" >
                     <div ng-include="'app/product/views/productsStoreCollection.html'">
                         
                     </div>
-                    <div ng-include="'app/product/views/adminCreateProduct.html'">
+                    <div ng-include="'app/admin/views/adminCreateProduct.html'">
                         
                     </div>
                 </div>
             </div>
+            
             <div ng-show="sstc.isSet(4)">
                 <div class="animated slideInLeft" >
                     <div ng-include="'app/admin/views/adminOffersCollection.html'">
@@ -40,9 +44,5 @@
                 </div>
                 
             </div>
-        
+ 
 </div>
-<!--
-Copyright 2016 Google Inc. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that can be foundin the LICENSE file at http://material.angularjs.org/HEAD/license.
--->

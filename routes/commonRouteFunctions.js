@@ -135,28 +135,42 @@ cob.storeRatingAvg = function(req, res) {
 cob.enterActivity = function(activ) {
     var activity = new Activity();
     activity.creator = activ.creator || null;
+    activity.creatorStore = activ.creatorStore || null;
     activity.review = activ.review || null;
     activity.store = activ.store || null;
     activity.product = activ.product || null;
     activity.followed = activ.followed || null; // on which he created
     activity.statement = activ.statement;
-    User
+    if(activity.creatorStore){
+        activity.save(function(err, savedActivity) {
+                    if (err) {
+                        console.log(err);
+                        
+                    }
+                    console.log("got saved here");
+                    console.log(savedActivity);
+                });    
+    }
+    else{
+        User
         .findOne({ _id: activity.creator })
         .select('followers')
         .exec(function(err, output) {
             if (err) {
-                return handleError(err)
+                console.log(err);
             } else {
                 activity.save(function(err, savedActivity) {
                     if (err) {
                         console.log(err);
-                        return res.send(err);
+                        
                     }
-                    console.log("got saved here");
+                    console.log("got saved here2");
                     console.log(savedActivity);
                 });
             }
-        })
+        });    
+    }
+    
 
 }
 module.exports = cob;

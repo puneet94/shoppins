@@ -30,7 +30,7 @@ function UserAuthService($http,$auth,baseUrlService,$mdDialog,userData,$window){
 
 
         function socialAuthenticate(provider) {
-        	console.log("entered authwww");
+        	
             $auth.authenticate(provider).then(function(response) {
                 userData.setUser(response.data.user);
                 alert('login with facebook successfull');

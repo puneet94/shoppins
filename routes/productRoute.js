@@ -40,8 +40,7 @@ productRouter.route('/products/store/:storeId/:pageNo')
 		var city_name = "nopeeeeejjjje"; //ObjectId.fromString new ObjectId(product.store)
 		Store.findById(mongoose.Types.ObjectId(req.params.storeId), function(err, store) {
 			if (err) {
-				console.log("inside save of product");
-				//res.send(err);
+				
 				console.log(err);
 
 			} else {
@@ -159,7 +158,7 @@ productRouter.route('/products/location/:location/:pageNo')
 			}
 		});
 
-	})
+	});
 
 productRouter.route('/areas/:city')
 	.get(function(req, res) {
@@ -242,6 +241,9 @@ productRouter.route('/collection')
         }
         if (req.query.city) {
             queryObj['address.city'] = req.query.city.toLowerCase();
+        }
+        if (req.query.store) {
+            queryObj.store = req.query.store;
         }
         if (req.query.category) {
             queryObj.category = req.query.category.toLowerCase();

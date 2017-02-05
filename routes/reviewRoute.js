@@ -1,14 +1,11 @@
+'use strict';
 var express = require('express');
 var models = require('..//models/storeModel');
 var Review = models.Review;
-var User = models.User;
-var Store = models.Store;
-var Activity = models.Activity;
 var mongoose = require('mongoose');
 var reviewRouter = express.Router();
 var commons = require('./commonRouteFunctions');
-var ObjectId = require('mongoose').Schema.ObjectId;
-var commons = require('./commonRouteFunctions');
+
 reviewRouter.use(function(req, res, next) {
     console.log("review");
     console.log(req.method, req.url);

@@ -2,14 +2,17 @@
         <div ng-include="'app/home/searchBox.html'"></div>
         <main class="fixedHeaderMain">
                 <div layout="row" layout-wrap>
+                        <md-button class="md-raised md-primary" hide-lg hide-md ng-click="sccc.showFilterDialog()">Filter</md-button>
                         <div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100">
+                        
                                 <h3 hide-sm hide-xs>Filters</h3>
                                 <div class="" layout-sm="column" layout-xs="column">
-                                        <filter-directive filter-name="{{sccc.areaFilterName}}" radio-model="sccc.areaRadioModel" radio-change="sccc.areaRadioChange()" radio-repeat="sccc.areas" clear-click="sccc.areaRadioClear()">
+                                        <filter-directive filter-name="{{sccc.areaFilterName}}" radio-model="sccc.areaRadioModel"  radio-repeat="sccc.areas" >
                                         </filter-directive>
                                         
                                 </div>
                         </div>
+                        
                         <div flex="55" flex-sm="100" flex-xs="100">
                                         <h3>{{sccc.storesSearchHeader.split('-').join(" ")}}</h3>
                                 <stores-list param-data="sccc.paramData">
