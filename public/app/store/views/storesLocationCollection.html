@@ -1,12 +1,12 @@
 <div class="storesLocationCollection">
         <div ng-include="'app/home/searchBox.html'"></div>
         <main class="fixedHeaderMain">
-                
+                <h1 class="collectionHeader">{{slcc.storesSearchHeader.split('-').join(" ")}}</h1>
                 <div layout="row" layout-wrap>
                         <md-button class="md-raised md-primary" hide-lg hide-md ng-click="slcc.showFilterDialog()">Filter</md-button>
                         <div class="locationFilters" flex="20" hide-sm hide-xs flex-sm="100" flex-xs="100">
                         
-                                <h3 hide-sm hide-xs>Filters</h3>
+                                
                                 <div class="" layout-sm="column" layout-xs="column">
                                         <filter-directive filter-name="{{slcc.areaFilterName}}" radio-model="slcc.areaRadioModel"  radio-repeat="slcc.areas" >
                                         </filter-directive>
@@ -15,7 +15,7 @@
                                 </div>
                         </div>
                         <div flex="55" flex-sm="100" flex-xs="100">
-                        		<h3>{{slcc.storesSearchHeader.split('-').join(" ")}}</h3>
+                        		
                                 <stores-list param-data="slcc.paramData">
                                 </stores-list>
                         </div>

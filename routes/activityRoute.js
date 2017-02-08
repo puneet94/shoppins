@@ -1,9 +1,9 @@
 'use strict';
 var express = require('express');
 var models = require('..//models/storeModel');
-var Review = models.Review;
+
 var User = models.User;
-var Store = models.Store;
+
 var Activity = models.Activity;
 
 var activityRouter = express.Router();

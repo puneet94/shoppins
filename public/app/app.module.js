@@ -8,10 +8,10 @@
 	]);
 	app.config(['$routeProvider', '$mdThemingProvider',
 		function($routeProvider, $mdThemingProvider) {
-			$mdThemingProvider.theme('default')
+			/*$mdThemingProvider.theme('default')
 				.primaryPalette('cyan')
 				.accentPalette('yellow')
-				.warnPalette('orange');
+				.warnPalette('orange');*/
 			//.backgroundPalette('blue-grey');
 			$routeProvider.
 			otherwise({

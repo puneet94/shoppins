@@ -1,18 +1,62 @@
 @import ../../app-modules/styles/main.sass
-
-
-
 .filterDirectiveTemplate
-  margin-top: 10px
-  width: 90%
-  .filterRadioItem
-    margin: 4px 2px
-  .filterLabel
-    text-transform: capitalize
+  background-color: white
+  border: 1px solid #e1e8ed
+  border-radius: 3px
+  font-family: 'Source Sans Pro', sans-serif
+  margin-top: 7px
+  .filterHeader
+    margin: 15px 10px
+    color: #cb202d
+  
   input[type="radio"]
-    &:checked + label
+    display: none
+    &:checked + span
       font-weight: bold
-      color: teal
+      color: red
+  span
+    cursor: pointer
+    &:hover
+      color: red
+.filterNameContainer
+  margin-bottom: 5px
+  .filterNameHeader
+    margin: 0
+    text-transform: capitalize
+    font-size: 14px
+    margin-left: 10px
+
+  .clearFilterButton
+    background: none
+    color: black
+    border: none
+    font-size: 10px
+.filterRadioContainer
+  padding-left: 10px
+  position: relative
+  &:after 
+    content: " " /* Older browser do not support empty content */
+    visibility: hidden
+    display: block
+    height: 0
+    clear: both
+  .dummy-ink
+    position: absolute
+    top: 0
+    bottom: 0 
+    left: 0
+    right: 0
+    
+  .filterRadio
+    float: right
+  .filterLabel
+    width: 100%
+    display: block
+    text-transform: capitalize
+    z-index: 5
+    .radioText
+      font-size: 13px
+    
     
   .filterNameHeading
     background-color: teal

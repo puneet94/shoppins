@@ -851,9 +851,11 @@ a {
     margin-top: 6px; }
   .userActivityButtonContainer .userName {
     text-transform: capitalize;
-    margin-top: 10px; }
+    margin-top: 10px;
+    color: rgba(0, 0, 0, 0.95); }
   .userActivityButtonContainer .dropIcon {
-    margin-top: 10px; }
+    margin-top: 10px;
+    color: rgba(0, 0, 0, 0.95); }
   .userActivityButtonContainer .userActionListImage {
     width: 24px;
     height: 24px;
@@ -1479,436 +1481,6 @@ a {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px; }
 
-@media (max-width: 600px) {
-  .customTabsContainer ul.tabsList li {
-    -webkit-box-flex: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
-    min-width: 20%;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 15px;
-    margin: 0 1px; } }
-
-.customTabsContainer ul.tabsList {
-  list-style-type: none;
-  margin: 0;
-  margin-top: 10px;
-  padding: 0;
-  width: 100%;
-  overflow-x: auto;
-  white-space: nowrap;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row; }
-  .customTabsContainer ul.tabsList li {
-    -webkit-box-flex: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
-    cursor: pointer;
-    border-right: 1px solid #ddd;
-    background-color: white;
-    color: rgba(0, 0, 0, 0.9);
-    padding: 15px; }
-
-.capital-heading-text {
-  text-transform: capitalize;
-  font-size: 24px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-sub-heading-text {
-  text-transform: capitalize;
-  font-size: 16px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-normal-text {
-  text-transform: capitalize;
-  font-size: 14px;
-  font-weight: 400;
-  color: #795548; }
-
-.filterDirectiveTemplate {
-  margin-top: 10px;
-  width: 90%; }
-  .filterDirectiveTemplate .filterRadioItem {
-    margin: 4px 2px; }
-  .filterDirectiveTemplate .filterLabel {
-    text-transform: capitalize; }
-  .filterDirectiveTemplate input[type="radio"]:checked + label {
-    font-weight: bold;
-    color: teal; }
-  .filterDirectiveTemplate .filterNameHeading {
-    background-color: teal;
-    padding: 10px;
-    border-radius: 5%;
-    color: white; }
-    .filterDirectiveTemplate .filterNameHeading h5 {
-      margin: 0;
-      float: left; }
-    .filterDirectiveTemplate .filterNameHeading .clearFilterButton {
-      float: right;
-      border: 1px solid white;
-      background-color: white;
-      font-size: 12px;
-      padding: 2px 5px;
-      border-radius: 2px;
-      color: black;
-      display: block; }
-  .filterDirectiveTemplate .filterDirectiveRadioGroup {
-    height: 160px;
-    padding: 10px;
-    overflow-y: auto;
-    background-color: white; }
-    .filterDirectiveTemplate .filterDirectiveRadioGroup .filterRadioButton {
-      font-size: 14px;
-      margin: 8px;
-      font-weight: 500;
-      text-transform: capitalize; }
-      .filterDirectiveTemplate .filterDirectiveRadioGroup .filterRadioButton ._md-label {
-        margin-left: 5px; }
-      .filterDirectiveTemplate .filterDirectiveRadioGroup .filterRadioButton ._md-container {
-        display: none; }
-    .filterDirectiveTemplate .filterDirectiveRadioGroup .highlightClass {
-      color: red; }
-
-.filterDirectiveRadioGroup::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #F5F5F5; }
-
-.filterDirectiveRadioGroup::-webkit-scrollbar {
-  width: 8px;
-  background-color: #F5F5F5; }
-
-.filterDirectiveRadioGroup::-webkit-scrollbar-thumb {
-  background-color: teal;
-  border-radius: 5px; }
-
-.capital-heading-text, .reviewHeadingText, .addressHeadingText {
-  text-transform: capitalize;
-  font-size: 24px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-sub-heading-text {
-  text-transform: capitalize;
-  font-size: 16px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-normal-text, .addressContentText {
-  text-transform: capitalize;
-  font-size: 14px;
-  font-weight: 400;
-  color: #795548; }
-
-.storeSuggestionsMainContainer {
-  margin-left: 20px;
-  margin-top: 20px; }
-
-.storeImagesCollection {
-  background-color: white;
-  padding: 5px; }
-
-.carouselContainer {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.9);
-  z-index: 99999999999; }
-
-.storeImageContent {
-  margin-top: 20px;
-  background-color: #fafafa;
-  border: 1px solid #e7e7e7;
-  border-radius: 1px;
-  position: relative; }
-  .storeImageContent .businessClaimButton {
-    position: absolute; }
-    .storeImageContent .businessClaimButton button {
-      color: white;
-      text-transform: capitalize; }
-  .storeImageContent .storeBannerImage {
-    width: 100%;
-    background-size: 100% 100%;
-    height: 300px; }
-  .storeImageContent .storeHeadingRating {
-    padding: 10px; }
-    .storeImageContent .storeHeadingRating .singleStoreHeading {
-      font-size: 24px;
-      text-transform: capitalize; }
-  .storeImageContent .userInteractionNav {
-    margin-bottom: 20px; }
-    .storeImageContent .userInteractionNav .userInteractionContainers {
-      font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
-      margin: 0 10px;
-      background: #FFF;
-      border: 1px solid #e7e7e7;
-      color: #7B8489;
-      border-radius: 5px;
-      font-weight: 500; }
-
-.chipType {
-  display: block;
-  padding: 6px 9px;
-  cursor: pointer;
-  -webkit-transition: background .1s ease;
-          transition: background .1s ease; }
-  .chipType:hover {
-    background: #eee; }
-  .chipType .chipText {
-    margin-left: 7px;
-    font-size: 14px; }
-
-.addressContentText {
-  margin-top: 25px;
-  margin-left: 15px; }
-
-.storeReviewsBrief {
-  width: 100%; }
-  .storeReviewsBrief .storeReviewsBriefIcons .iconContainer {
-    text-align: center;
-    margin: 5px;
-    padding: 15px;
-    width: 100%;
-    background-color: white;
-    -webkit-transition: all 1s;
-            transition: all 1s;
-    cursor: pointer; }
-    .storeReviewsBrief .storeReviewsBriefIcons .iconContainer:hover {
-      color: red; }
-    .storeReviewsBrief .storeReviewsBriefIcons .iconContainer .iconClass {
-      font-size: 32px;
-      text-align: center; }
-
-.storePageStatsNav .statsContent {
-  padding: 10px;
-  cursor: pointer; }
-  .storePageStatsNav .statsContent .statsContentText {
-    margin: 2px 0; }
-    .storePageStatsNav .statsContent .statsContentText span {
-      margin: 5px; }
-
-.storePageStatsNav md-divider {
-  border-right-width: 3px; }
-
-.storeSuggestionsContainer {
-  margin-top: 20px;
-  background-color: white;
-  padding: 10px;
-  border: 1px solid #e1e8ed;
-  border-radius: 5px; }
-  .storeSuggestionsContainer .storeSuggestionHeader {
-    margin-top: 5px;
-    margin-bottom: 10px; }
-  .storeSuggestionsContainer .singleStoreSuggestion {
-    width: 100%;
-    margin-bottom: 10px; }
-    .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreImage {
-      width: 100%;
-      position: relative; }
-      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreImage:after {
-        content: "";
-        display: block;
-        padding-bottom: 75%; }
-      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreImage img {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        border: 1px solid #e1e8ed;
-        border-radius: 3px; }
-    .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo {
-      padding: 5px;
-      word-wrap: break-word; }
-      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo a {
-        text-decoration: none; }
-      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo .suggestedStoreName {
-        text-transform: capitalize;
-        margin-top: 0px;
-        margin-bottom: 0; }
-      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo .suggestedStoreAddress {
-        margin-top: 2px;
-        font-size: 10px;
-        margin-bottom: 0;
-        text-transform: capitalize; }
-      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo .suggestedStoreCategories {
-        margin-top: 2px;
-        font-size: 10px;
-        margin-bottom: 0;
-        text-transform: capitalize; }
-
-@media (max-width: 600px) {
-  .storeSuggestionsMainContainer {
-    margin-left: 0px; } }
-
-.storeDetailsContainer {
-  padding: 10px;
-  margin-top: 10px;
-  background-color: white; }
-  .storeDetailsContainer .infoContainer .contentHeader {
-    margin: 5px 0;
-    font-size: 16px; }
-  .storeDetailsContainer .infoContainer .contentText p {
-    text-transform: capitalize;
-    margin: 0;
-    font-size: 14px; }
-  .storeDetailsContainer .infoContainer .contentText .moreLocationsLink {
-    font-size: 12px; }
-
-.capital-heading-text {
-  text-transform: capitalize;
-  font-size: 24px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-sub-heading-text {
-  text-transform: capitalize;
-  font-size: 16px;
-  font-weight: 600;
-  color: #795548; }
-
-.capital-normal-text {
-  text-transform: capitalize;
-  font-size: 14px;
-  font-weight: 400;
-  color: #795548; }
-
-.storeListCategories {
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: capitalize; }
-  .storeListCategories .storeListCategory {
-    border-radius: 2px;
-    padding: 2px 5px;
-    background-color: blue;
-    color: white;
-    margin: 2px; }
-
-.storeListSubCategories {
-  margin-top: 5px;
-  font-size: 12px;
-  text-transform: capitalize; }
-  .storeListSubCategories .storeListSubCategory {
-    border-radius: 2px;
-    padding: 2px 5px;
-    background-color: green;
-    color: white;
-    margin: 2px; }
-
-.storeCardImage {
-  background-size: cover;
-  height: 100px; }
-
-.storeAddressDetails {
-  font-size: 12px;
-  font-weight: 500;
-  color: black;
-  text-transform: capitalize;
-  padding-top: 10px;
-  padding-bottom: 10px; }
-
-.storeCardFooter {
-  font-size: 12px;
-  font-weight: 800; }
-  .storeCardFooter span {
-    margin: 2px; }
-
-.storeNameHeading {
-  text-transform: capitalize;
-  font-weight: 700;
-  color: #795548;
-  font-size: 18px;
-  cursor: pointer; }
-  .storeNameHeading span {
-    color: red;
-    font-size: 12px;
-    padding-left: 5px; }
-
-.loadMoreButton {
-  width: 100%;
-  color: white; }
-  .loadMoreButton span {
-    color: white; }
-
-.userImg {
-  width: 50px;
-  height: 50px;
-  background-image: url("http://opstatic.com/img/profile/default_user.jpg");
-  background-size: cover; }
-
-.reviewListSection {
-  padding: 5px; }
-  .reviewListSection .singleReview {
-    padding: 10px;
-    background-color: white;
-    margin: 10px 0px;
-    border-top: 1px solid #eee; }
-    .reviewListSection .singleReview .reviewContent {
-      margin: 10px 0; }
-  .reviewListSection .userSection {
-    font-size: 12px; }
-  .reviewListSection .userImg {
-    width: 50px;
-    height: 50px;
-    background-image: url("http://opstatic.com/img/profile/default_user.jpg");
-    background-size: cover; }
-  .reviewListSection .userStats ul {
-    list-style: none;
-    margin: 0;
-    padding-left: 10px; }
-    .reviewListSection .userStats ul .userName {
-      font-size: 14px;
-      font-weight: bold; }
-    .reviewListSection .userStats ul .userFollowers {
-      font-weight: bold; }
-  .reviewListSection .contentRatingSection {
-    font-size: 11px;
-    margin-top: 5px; }
-
-.userRatingSection > input {
-  display: none; }
-
-.userRatingSection > label:before {
-  margin: 5px;
-  font-size: 1.25em;
-  font-family: FontAwesome;
-  display: inline-block;
-  content: "\f005"; }
-
-.userRatingSection > .half:before {
-  content: "\f089";
-  position: absolute; }
-
-.userRatingSection > label {
-  color: #ddd;
-  float: right; }
-
-.userRatingSection > input:checked ~ label {
-  color: #FFD700; }
-
-.userRatingSection:not(:checked) > label:hover {
-  color: #FFD700; }
-  .userRatingSection:not(:checked) > label:hover ~ label {
-    color: #FFD700; }
-
-.userRatingSection > input:checked + label:hover, .userRatingSection > input:checked ~ label:hover {
-  color: #FFED85; }
-
-.userRatingSection > label:hover ~ input:checked ~ label, .userRatingSection > input:checked ~ label:hover ~ label {
-  color: #FFED85; }
-
-/***** CSS Magic to Highlight Stars on Hover **** */
-/* hover previous stars in list */
-
-
-
 .clearBoth {
   clear: both; }
 
@@ -2143,3 +1715,492 @@ a {
     max-height: 400px;
     overflow: auto;
     width: 100%; } }
+
+@media (max-width: 600px) {
+  .customTabsContainer ul.tabsList li {
+    -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    min-width: 20%;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 15px;
+    margin: 0 1px; } }
+
+.customTabsContainer ul.tabsList {
+  list-style-type: none;
+  margin: 0;
+  margin-top: 10px;
+  padding: 0;
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row; }
+  .customTabsContainer ul.tabsList li {
+    -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    background-color: white;
+    color: rgba(0, 0, 0, 0.9);
+    padding: 15px; }
+
+.capital-heading-text {
+  text-transform: capitalize;
+  font-size: 24px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-sub-heading-text {
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-normal-text {
+  text-transform: capitalize;
+  font-size: 14px;
+  font-weight: 400;
+  color: #795548; }
+
+.filterDirectiveTemplate {
+  background-color: white;
+  border: 1px solid #e1e8ed;
+  border-radius: 3px;
+  font-family: 'Source Sans Pro', sans-serif;
+  margin-top: 7px; }
+  .filterDirectiveTemplate .filterHeader {
+    margin: 15px 10px;
+    color: #cb202d; }
+  .filterDirectiveTemplate input[type="radio"] {
+    display: none; }
+    .filterDirectiveTemplate input[type="radio"]:checked + span {
+      font-weight: bold;
+      color: red; }
+  .filterDirectiveTemplate span {
+    cursor: pointer; }
+    .filterDirectiveTemplate span:hover {
+      color: red; }
+
+.filterNameContainer {
+  margin-bottom: 5px; }
+  .filterNameContainer .filterNameHeader {
+    margin: 0;
+    text-transform: capitalize;
+    font-size: 14px;
+    margin-left: 10px; }
+  .filterNameContainer .clearFilterButton {
+    background: none;
+    color: black;
+    border: none;
+    font-size: 10px; }
+
+.filterRadioContainer {
+  padding-left: 10px;
+  position: relative; }
+  .filterRadioContainer:after {
+    content: " ";
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both; }
+  .filterRadioContainer .dummy-ink {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0; }
+  .filterRadioContainer .filterRadio {
+    float: right; }
+  .filterRadioContainer .filterLabel {
+    width: 100%;
+    display: block;
+    text-transform: capitalize;
+    z-index: 5; }
+    .filterRadioContainer .filterLabel .radioText {
+      font-size: 13px; }
+  .filterRadioContainer .filterNameHeading {
+    background-color: teal;
+    padding: 10px;
+    border-radius: 5%;
+    color: white; }
+    .filterRadioContainer .filterNameHeading h5 {
+      margin: 0;
+      float: left; }
+    .filterRadioContainer .filterNameHeading .clearFilterButton {
+      float: right;
+      border: 1px solid white;
+      background-color: white;
+      font-size: 12px;
+      padding: 2px 5px;
+      border-radius: 2px;
+      color: black;
+      display: block; }
+  .filterRadioContainer .filterDirectiveRadioGroup {
+    height: 160px;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: white; }
+    .filterRadioContainer .filterDirectiveRadioGroup .filterRadioButton {
+      font-size: 14px;
+      margin: 8px;
+      font-weight: 500;
+      text-transform: capitalize; }
+      .filterRadioContainer .filterDirectiveRadioGroup .filterRadioButton ._md-label {
+        margin-left: 5px; }
+      .filterRadioContainer .filterDirectiveRadioGroup .filterRadioButton ._md-container {
+        display: none; }
+    .filterRadioContainer .filterDirectiveRadioGroup .highlightClass {
+      color: red; }
+
+.filterDirectiveRadioGroup::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #F5F5F5; }
+
+.filterDirectiveRadioGroup::-webkit-scrollbar {
+  width: 8px;
+  background-color: #F5F5F5; }
+
+.filterDirectiveRadioGroup::-webkit-scrollbar-thumb {
+  background-color: teal;
+  border-radius: 5px; }
+
+.capital-heading-text, .reviewHeadingText, .addressHeadingText {
+  text-transform: capitalize;
+  font-size: 24px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-sub-heading-text {
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-normal-text, .addressContentText {
+  text-transform: capitalize;
+  font-size: 14px;
+  font-weight: 400;
+  color: #795548; }
+
+.singleStoreDetails {
+  padding-left: 5%; }
+  .singleStoreDetails .storeNameHeader {
+    margin: 0;
+    font-size: 24px; }
+
+.singleStoreMedia img {
+  border: 1px solid #e1e8ed;
+  border-radius: 4px; }
+
+.storeSuggestionsMainContainer {
+  margin-left: 20px;
+  margin-top: 20px; }
+
+.storeImagesCollection {
+  background-color: white;
+  padding: 5px; }
+
+.carouselContainer {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 99999999999; }
+
+.storeImageContent {
+  margin-top: 20px;
+  background-color: #fafafa;
+  border: 1px solid #e7e7e7;
+  border-radius: 1px;
+  position: relative; }
+  .storeImageContent .businessClaimButton {
+    position: absolute; }
+    .storeImageContent .businessClaimButton button {
+      color: white;
+      text-transform: capitalize; }
+  .storeImageContent .storeBannerImage {
+    width: 100%;
+    background-size: 100% 100%;
+    height: 300px; }
+  .storeImageContent .storeHeadingRating {
+    padding: 10px; }
+    .storeImageContent .storeHeadingRating .singleStoreHeading {
+      font-size: 24px;
+      text-transform: capitalize; }
+  .storeImageContent .userInteractionNav {
+    margin-bottom: 20px; }
+    .storeImageContent .userInteractionNav .userInteractionContainers {
+      font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+      margin: 0 10px;
+      background: #FFF;
+      border: 1px solid #e7e7e7;
+      color: #7B8489;
+      border-radius: 5px;
+      font-weight: 500; }
+
+.chipType {
+  display: block;
+  padding: 6px 9px;
+  cursor: pointer;
+  -webkit-transition: background .1s ease;
+          transition: background .1s ease; }
+  .chipType:hover {
+    background: #eee; }
+  .chipType .chipText {
+    margin-left: 7px;
+    font-size: 14px; }
+
+.addressContentText {
+  margin-top: 25px;
+  margin-left: 15px; }
+
+.storeReviewsBrief {
+  width: 100%; }
+  .storeReviewsBrief .storeReviewsBriefIcons .iconContainer {
+    text-align: center;
+    margin: 5px;
+    padding: 15px;
+    width: 100%;
+    background-color: white;
+    -webkit-transition: all 1s;
+            transition: all 1s;
+    cursor: pointer; }
+    .storeReviewsBrief .storeReviewsBriefIcons .iconContainer:hover {
+      color: red; }
+    .storeReviewsBrief .storeReviewsBriefIcons .iconContainer .iconClass {
+      font-size: 32px;
+      text-align: center; }
+
+.storePageStatsNav .statsContent {
+  padding: 10px;
+  cursor: pointer; }
+  .storePageStatsNav .statsContent .statsContentText {
+    margin: 2px 0; }
+    .storePageStatsNav .statsContent .statsContentText span {
+      margin: 5px; }
+
+.storePageStatsNav md-divider {
+  border-right-width: 3px; }
+
+.storeSuggestionsContainer {
+  margin-top: 20px;
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #e1e8ed;
+  border-radius: 5px; }
+  .storeSuggestionsContainer .storeSuggestionHeader {
+    margin-top: 5px;
+    margin-bottom: 10px; }
+  .storeSuggestionsContainer .singleStoreSuggestion {
+    width: 100%;
+    margin-bottom: 10px; }
+    .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreImage {
+      width: 100%;
+      position: relative; }
+      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreImage:after {
+        content: "";
+        display: block;
+        padding-bottom: 75%; }
+      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreImage img {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        border: 1px solid #e1e8ed;
+        border-radius: 3px; }
+    .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo {
+      padding: 5px;
+      word-wrap: break-word; }
+      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo a {
+        text-decoration: none; }
+      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo .suggestedStoreName {
+        text-transform: capitalize;
+        margin-top: 0px;
+        margin-bottom: 0; }
+      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo .suggestedStoreAddress {
+        margin-top: 2px;
+        font-size: 10px;
+        margin-bottom: 0;
+        text-transform: capitalize; }
+      .storeSuggestionsContainer .singleStoreSuggestion .suggestedStoreInfo .suggestedStoreCategories {
+        margin-top: 2px;
+        font-size: 10px;
+        margin-bottom: 0;
+        text-transform: capitalize; }
+
+@media (max-width: 600px) {
+  .storeSuggestionsMainContainer {
+    margin-left: 0px; } }
+
+.storeDetailsContainer {
+  padding: 10px;
+  margin-top: 10px;
+  background-color: white; }
+  .storeDetailsContainer .infoContainer .contentHeader {
+    margin: 5px 0;
+    font-size: 16px; }
+  .storeDetailsContainer .infoContainer .contentText p {
+    text-transform: capitalize;
+    margin: 0;
+    font-size: 14px; }
+  .storeDetailsContainer .infoContainer .contentText .moreLocationsLink {
+    font-size: 12px; }
+
+.capital-heading-text {
+  text-transform: capitalize;
+  font-size: 24px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-sub-heading-text {
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 600;
+  color: #795548; }
+
+.capital-normal-text {
+  text-transform: capitalize;
+  font-size: 14px;
+  font-weight: 400;
+  color: #795548; }
+
+.storeListCategories {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize; }
+  .storeListCategories .storeListCategory {
+    border-radius: 2px;
+    padding: 2px 5px;
+    background-color: blue;
+    color: white;
+    margin: 2px; }
+
+.storeListSubCategories {
+  margin-top: 5px;
+  font-size: 12px;
+  text-transform: capitalize; }
+  .storeListSubCategories .storeListSubCategory {
+    border-radius: 2px;
+    padding: 2px 5px;
+    background-color: green;
+    color: white;
+    margin: 2px; }
+
+.storeCardImage {
+  background-size: cover;
+  height: 100px; }
+
+.storeAddressDetails {
+  font-size: 12px;
+  font-weight: 500;
+  color: black;
+  text-transform: capitalize;
+  padding-top: 10px;
+  padding-bottom: 10px; }
+
+.storeCardFooter {
+  font-size: 12px;
+  font-weight: 800; }
+  .storeCardFooter span {
+    margin: 2px; }
+
+.storeNameHeading {
+  text-transform: capitalize;
+  font-weight: 700;
+  cursor: pointer; }
+  .storeNameHeading span {
+    color: red;
+    font-size: 12px;
+    padding-left: 5px; }
+
+.loadMoreButton {
+  width: 100%;
+  color: white; }
+  .loadMoreButton span {
+    color: white; }
+
+.userImg {
+  width: 50px;
+  height: 50px;
+  background-image: url("http://opstatic.com/img/profile/default_user.jpg");
+  background-size: cover; }
+
+.reviewListSection {
+  padding: 5px; }
+  .reviewListSection .singleReview {
+    padding: 10px;
+    background-color: white;
+    margin: 10px 0px;
+    border-top: 1px solid #eee; }
+    .reviewListSection .singleReview .reviewContent {
+      margin: 10px 0; }
+  .reviewListSection .userSection {
+    font-size: 12px; }
+  .reviewListSection .userImg {
+    width: 50px;
+    height: 50px;
+    background-image: url("http://opstatic.com/img/profile/default_user.jpg");
+    background-size: cover; }
+  .reviewListSection .userStats ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 10px; }
+    .reviewListSection .userStats ul .userName {
+      font-size: 14px;
+      font-weight: bold; }
+    .reviewListSection .userStats ul .userFollowers {
+      font-weight: bold; }
+  .reviewListSection .contentRatingSection {
+    font-size: 11px;
+    margin-top: 5px; }
+
+.userRatingSection > input {
+  display: none; }
+
+.userRatingSection > label:before {
+  margin: 5px;
+  font-size: 1.25em;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f005"; }
+
+.userRatingSection > .half:before {
+  content: "\f089";
+  position: absolute; }
+
+.userRatingSection > label {
+  color: #ddd;
+  float: right; }
+
+.userRatingSection > input:checked ~ label {
+  color: #FFD700; }
+
+.userRatingSection:not(:checked) > label:hover {
+  color: #FFD700; }
+  .userRatingSection:not(:checked) > label:hover ~ label {
+    color: #FFD700; }
+
+.userRatingSection > input:checked + label:hover, .userRatingSection > input:checked ~ label:hover {
+  color: #FFED85; }
+
+.userRatingSection > label:hover ~ input:checked ~ label, .userRatingSection > input:checked ~ label:hover ~ label {
+  color: #FFED85; }
+
+/***** CSS Magic to Highlight Stars on Hover **** */
+/* hover previous stars in list */
+
+
+.collectionHeader {
+  text-transform: capitalize;
+  font-weight: 500;
+  font-family: 'Source Sans Pro', sans-serif;
+  margin: 12px 0; }

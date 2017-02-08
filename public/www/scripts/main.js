@@ -8,10 +8,10 @@
 	]);
 	app.config(['$routeProvider', '$mdThemingProvider',
 		function($routeProvider, $mdThemingProvider) {
-			$mdThemingProvider.theme('default')
+			/*$mdThemingProvider.theme('default')
 				.primaryPalette('cyan')
 				.accentPalette('yellow')
-				.warnPalette('orange');
+				.warnPalette('orange');*/
 			//.backgroundPalette('blue-grey');
 			$routeProvider.
 			otherwise({
@@ -2029,180 +2029,6 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
 
 (function(angular) {
     'use strict';
-    angular.module('app.chat')
-
-    .controller('ChatBoxController', ['$scope', 'Socket', '$routeParams', 'userData', 'chatService', 'userService',ChatBoxController]);
-
-    function ChatBoxController($scope, Socket, $routeParams, userData, chatService,userService) {
-        var cbc = this;
-        cbc.currentUser = userData.getUser()._id;
-        cbc.receiverUser = '';
-        cbc.innerLoading = true;
-        cbc.chatRoomId = '';
-        cbc.messageLoading = false;
-        activate();
-        
-        function getChatMessages(){
-          chatService.getChatMessages(cbc.chatRoomId).then(function(res){
-              cbc.chatList = res.data[0].chats;
-               $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
-               cbc.innerLoading = false;
-            },function(res){
-              console.log(res);
-            });
-
-        }
-        function activate() {
-            
-            chatService.getChatRoom().then(function(res) {
-                console.log("the response the room");
-                console.log(res);
-                cbc.chatRoomId = res.data._id;
-                cbc.receiverUserId = res.data.creator1 == cbc.currentUser ? res.data.creator2: res.data.creator1;
-                console.log("the reciver id"+cbc.receiverUserId);
-                socketJoin();
-                getChatMessages();
-
-                userService.getUserDetails(cbc.receiverUserId,{'fields':'displayName firstName'}).then(function(response){
-                  console.log("the receiver");
-                  console.log(response.data);
-                  cbc.receiverUser = response.data.displayName || (response.data.firstName);
-                });
-            }, function(res) {
-                console.log(res);
-            });
-        }
-        
-
-        function socketJoin() {
-            Socket.emit('addToRoom', { 'roomId': cbc.chatRoomId });
-            Socket.on('messageSaved',function(message){
-                  cbc.chatList.push(message);
-                  $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
-                });
-        }
-        cbc.sendMsg = function($event) {
-            if ($event.which == 13 && !$event.shiftKey && cbc.myMsg) {
-                cbc.messageLoading = true;
-                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
-                chatService.sendChatMessage(chatObj).then(function(res){
-                  cbc.myMsg = '';
-                  cbc.messageLoading = false;
-                },function(res){
-                  console.log(res);
-                });
-                
-            }
-        };
-        cbc.clickSubmit = function(){
-          if (cbc.myMsg) {
-                cbc.messageLoading = true;
-                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
-                chatService.sendChatMessage(chatObj).then(function(res){
-                  cbc.myMsg = '';
-                  cbc.messageLoading = false;
-                },function(res){
-                  console.log(res);
-                });
-                
-            }  
-        };
-
-    }
-})(window.angular);
-
-(function(angular) {
-    'use strict';
-    angular.module('app.chat')
-
-    .controller('ChatRoomListController', ['$scope','$routeParams', 'userData', 'chatService', 'changeBrowserURL',ChatRoomListController]);
-
-    function ChatRoomListController($scope,$routeParams, userData, chatService,changeBrowserURL) {
-        
-        var cbc = this;
-        cbc.currentUser = userData.getUser()._id;
-        cbc.innerLoading = true;
-        activate();
-        cbc.openChatbox = openChatbox;
-        function openChatbox(chatRoom){
-            changeBrowserURL.changeBrowserURLMethod('/chatBox/'+chatRoom.creator1._id+'/'+chatRoom.creator2._id);
-        }
-        function getChatRoomList(){
-
-          chatService.getChatRoomList(cbc.currentUser).then(function(res){
-              cbc.chatRoomList = res.data;
-                cbc.innerLoading = false;
-            },function(res){
-              console.log(res);
-            });
-
-        }
-
-        function activate() {
-            getChatRoomList();
-        }
-        
-
-    }
-})(window.angular);
-
-(function(angular){
-  'use strict';
-  angular.module('app.chat')
-      .service('chatService',['$http','$routeParams','baseUrlService',ReviewService]);
-      function ReviewService($http,$routeParams,baseUrlService){
-        var rs  = this;
-        rs.sendChatMessage = sendChatMessage;
-        rs.getChatMessages = getChatMessages;
-        rs.getChatRoom = getChatRoom;
-        rs.getChatRoomList = getChatRoomList;
-        function sendChatMessage(chat){
-          return $http.post(baseUrlService.baseUrl+'chat/chats/'+chat.roomId,chat);
-        }
-        function getChatMessages(chatRoomId){
-          
-          return $http.get(baseUrlService.baseUrl+'chat/chats/'+chatRoomId);
-        }
-        function getChatRoom(){
-        	return $http.get(baseUrlService.baseUrl + 'chat/chatBox/' + $routeParams.creator1 + '/' + $routeParams.creator2);
-                
-        }
-        function getChatRoomList(userId){
-          return $http.get(baseUrlService.baseUrl + 'chat/chatRooms/' + userId);
-        }
-        
-
-      }
-})(window.angular);
-
-(function(angular){
-'use strict';
-angular.module('app.chat').factory('Socket', ['socketFactory','baseUrlService',SocketFactory]);
-    
-    function SocketFactory(socketFactory,baseUrlService) {
-        return socketFactory({
-            prefix: '',
-            ioSocket: io.connect(baseUrlService)
-        });
-    }
-
-})(window.angular);
-(function(angular){
-'use strict';
-
-
-
-angular.module('app.chat')
-	.factory('SocketUserService', ['socketFactory','userData',socketFactoryFunction]);
-    function socketFactoryFunction(socketFactory,userData) {
-        return socketFactory({
-            prefix: '',
-            ioSocket: io.connect('/'+userData.getUser()._id)
-        });
-    }
-})(window.angular);
-(function(angular) {
-    'use strict';
 
     angular.module('app.home')
         .controller("AuthenticationModalController", ["$scope", "changeBrowserURL", 'userAuthService',"$auth", "$window", "$route", '$mdDialog', "userData",  AuthenticationModalController]);
@@ -2603,6 +2429,180 @@ angular.module('authModApp')
   }
 })(window.angular);
 
+(function(angular) {
+    'use strict';
+    angular.module('app.chat')
+
+    .controller('ChatBoxController', ['$scope', 'Socket', '$routeParams', 'userData', 'chatService', 'userService',ChatBoxController]);
+
+    function ChatBoxController($scope, Socket, $routeParams, userData, chatService,userService) {
+        var cbc = this;
+        cbc.currentUser = userData.getUser()._id;
+        cbc.receiverUser = '';
+        cbc.innerLoading = true;
+        cbc.chatRoomId = '';
+        cbc.messageLoading = false;
+        activate();
+        
+        function getChatMessages(){
+          chatService.getChatMessages(cbc.chatRoomId).then(function(res){
+              cbc.chatList = res.data[0].chats;
+               $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
+               cbc.innerLoading = false;
+            },function(res){
+              console.log(res);
+            });
+
+        }
+        function activate() {
+            
+            chatService.getChatRoom().then(function(res) {
+                console.log("the response the room");
+                console.log(res);
+                cbc.chatRoomId = res.data._id;
+                cbc.receiverUserId = res.data.creator1 == cbc.currentUser ? res.data.creator2: res.data.creator1;
+                console.log("the reciver id"+cbc.receiverUserId);
+                socketJoin();
+                getChatMessages();
+
+                userService.getUserDetails(cbc.receiverUserId,{'fields':'displayName firstName'}).then(function(response){
+                  console.log("the receiver");
+                  console.log(response.data);
+                  cbc.receiverUser = response.data.displayName || (response.data.firstName);
+                });
+            }, function(res) {
+                console.log(res);
+            });
+        }
+        
+
+        function socketJoin() {
+            Socket.emit('addToRoom', { 'roomId': cbc.chatRoomId });
+            Socket.on('messageSaved',function(message){
+                  cbc.chatList.push(message);
+                  $('.chatBoxUL').animate({ scrollTop: 99999999 }, 'slow');
+                });
+        }
+        cbc.sendMsg = function($event) {
+            if ($event.which == 13 && !$event.shiftKey && cbc.myMsg) {
+                cbc.messageLoading = true;
+                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
+                chatService.sendChatMessage(chatObj).then(function(res){
+                  cbc.myMsg = '';
+                  cbc.messageLoading = false;
+                },function(res){
+                  console.log(res);
+                });
+                
+            }
+        };
+        cbc.clickSubmit = function(){
+          if (cbc.myMsg) {
+                cbc.messageLoading = true;
+                var chatObj = { 'message': cbc.myMsg, 'user': cbc.currentUser, 'roomId': cbc.chatRoomId };
+                chatService.sendChatMessage(chatObj).then(function(res){
+                  cbc.myMsg = '';
+                  cbc.messageLoading = false;
+                },function(res){
+                  console.log(res);
+                });
+                
+            }  
+        };
+
+    }
+})(window.angular);
+
+(function(angular) {
+    'use strict';
+    angular.module('app.chat')
+
+    .controller('ChatRoomListController', ['$scope','$routeParams', 'userData', 'chatService', 'changeBrowserURL',ChatRoomListController]);
+
+    function ChatRoomListController($scope,$routeParams, userData, chatService,changeBrowserURL) {
+        
+        var cbc = this;
+        cbc.currentUser = userData.getUser()._id;
+        cbc.innerLoading = true;
+        activate();
+        cbc.openChatbox = openChatbox;
+        function openChatbox(chatRoom){
+            changeBrowserURL.changeBrowserURLMethod('/chatBox/'+chatRoom.creator1._id+'/'+chatRoom.creator2._id);
+        }
+        function getChatRoomList(){
+
+          chatService.getChatRoomList(cbc.currentUser).then(function(res){
+              cbc.chatRoomList = res.data;
+                cbc.innerLoading = false;
+            },function(res){
+              console.log(res);
+            });
+
+        }
+
+        function activate() {
+            getChatRoomList();
+        }
+        
+
+    }
+})(window.angular);
+
+(function(angular){
+  'use strict';
+  angular.module('app.chat')
+      .service('chatService',['$http','$routeParams','baseUrlService',ReviewService]);
+      function ReviewService($http,$routeParams,baseUrlService){
+        var rs  = this;
+        rs.sendChatMessage = sendChatMessage;
+        rs.getChatMessages = getChatMessages;
+        rs.getChatRoom = getChatRoom;
+        rs.getChatRoomList = getChatRoomList;
+        function sendChatMessage(chat){
+          return $http.post(baseUrlService.baseUrl+'chat/chats/'+chat.roomId,chat);
+        }
+        function getChatMessages(chatRoomId){
+          
+          return $http.get(baseUrlService.baseUrl+'chat/chats/'+chatRoomId);
+        }
+        function getChatRoom(){
+        	return $http.get(baseUrlService.baseUrl + 'chat/chatBox/' + $routeParams.creator1 + '/' + $routeParams.creator2);
+                
+        }
+        function getChatRoomList(userId){
+          return $http.get(baseUrlService.baseUrl + 'chat/chatRooms/' + userId);
+        }
+        
+
+      }
+})(window.angular);
+
+(function(angular){
+'use strict';
+angular.module('app.chat').factory('Socket', ['socketFactory','baseUrlService',SocketFactory]);
+    
+    function SocketFactory(socketFactory,baseUrlService) {
+        return socketFactory({
+            prefix: '',
+            ioSocket: io.connect(baseUrlService)
+        });
+    }
+
+})(window.angular);
+(function(angular){
+'use strict';
+
+
+
+angular.module('app.chat')
+	.factory('SocketUserService', ['socketFactory','userData',socketFactoryFunction]);
+    function socketFactoryFunction(socketFactory,userData) {
+        return socketFactory({
+            prefix: '',
+            ioSocket: io.connect('/'+userData.getUser()._id)
+        });
+    }
+})(window.angular);
 (function(angular) {
 	'use strict';
 	angular.module('app.event')
@@ -3392,6 +3392,340 @@ angular.module('app.user')
     }
 })(window.angular);
 
+(function(angular) {
+	'use strict';
+	angular.module('app.offer')
+		.controller('OfferPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", 'offerService', 'baseUrlService','Socialshare',OfferPageController]);
+
+	function OfferPageController($scope, $auth, $routeParams, changeBrowserURL, offerService,baseUrlService,Socialshare) {
+		var opc = this;
+		opc.offerData = {};
+		activate();
+		opc.shareFacebook = shareFacebook;
+		console.log("sd"+baseUrlService.currentUrlWQ);
+		function shareFacebook() {
+			Socialshare.share({
+				'provider': 'facebook',
+				'attrs': {
+					'socialshareUrl': baseUrlService.currentUrlWQ,
+					'socialshareText' :"Offline Offers",
+					"socialshareVia":"1068203956594250"
+				}
+			});
+		}
+
+		function activate() {
+			offerService.getSingleOffer($routeParams.offerId)
+				.then(function(res) {
+					console.log("single offer");
+					console.log(res);
+					opc.offerData = res.data;
+					if (opc.offerData.address.latitude) {
+						opc.pos = [opc.offerData.address.latitude, opc.offerData.address.longitude];
+					} else {
+						opc.pos = [17.361625, 78.474622];
+					}
+				}, function(res) {
+					console.log(res);
+				}).catch(function(e) {
+					console.log('Error: ', e);
+
+				}).finally(function() {
+					console.log('This finally block');
+				});
+
+		}
+
+
+
+	}
+
+
+
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.offer')
+    .controller('OffersCollectionController', ["$scope", "$auth", "$routeParams", OffersCollectionController]);
+
+  function OffersCollectionController($scope, $auth, $routeParams) {
+    var occ = this;
+    occ.pageNo = 0;
+
+    occ.offersList = [];
+    
+    
+    occ.paramData = {
+      city: $routeParams.location,
+      page: 1,
+      limit: 10
+    };
+    activate();
+    
+    
+    
+    function activate() {
+      
+    }
+
+  }
+
+
+
+
+})(window.angular);
+
+(function(angular) {
+	'use strict';
+	angular.module('app.offer')
+		.controller('OffersPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", "baseUrlService", OffersPageController]);
+
+	function OffersPageController($scope, $auth, $routeParams, changeBrowserURL, baseUrlService) {
+		var opc = this;
+
+		activate();
+
+		function activate(){
+
+		}
+		
+		
+
+	}
+
+
+
+
+})(window.angular);
+
+(function(angular) {
+	'use strict';
+	angular.module('app.offer')
+		.directive('offersList', ['offerService', offersList]);
+
+	function offersList(offerService) {
+		return {
+			restrict: 'E',
+			replace: true,
+			templateUrl: 'app/offer/views/offersListTemplate.html',
+			scope: {
+				paramData: '=paramData'
+			},
+			
+			controller: ['$scope',function($scope) {
+				$scope.offersList = [];
+				$scope.loadMoreOffers = loadMoreOffers;
+				$scope.getOffers = getOffers;
+				activate();
+				$scope.$on('filterClicked', function() {
+					$scope.offersList = [];
+					$scope.paramData.page = 1;
+					getOffers();
+				});
+
+				function loadMoreOffers() {
+					$scope.paramData.page = $scope.paramData.page + 1;
+					getOffers();
+				}
+
+				function getOffers() {
+					$scope.spinnerLoading = true;
+					console.log("paramdata");
+					console.log($scope.paramData);
+					offerService.getOfferCollection($scope.paramData).then(function(response) {
+						console.log(response);
+						$scope.totalOffers = response.data.total;
+						
+						angular.forEach(response.data.docs, function(value) {
+							$scope.offersList.push(value);
+						});
+						
+						$scope.spinnerLoading = false;
+
+					}).catch(function(error) {
+						console.log('error');
+						console.log(error);
+					});
+				}
+
+				function activate() {
+					getOffers();
+				}
+
+
+			}]
+		};
+	}
+
+
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.offer')
+    .directive('offerSuggestionList', ['offerService',offerSuggestionList]);
+
+  function offerSuggestionList(offerService) {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/offer/views/offerSuggestionListTemplate.html',
+      scope: {
+                offerLimit: '=offerLimit',
+                offerCity: '=offerCity'
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: ['$scope',function($scope) {
+        var offerParamData = {
+          page: 1,
+          limit: $scope.offerLimit,
+          city: $scope.offerCity
+        };
+        offerService.getOfferCollection(offerParamData).then(function(response){
+          console.log("offers");
+          console.log(response);
+          $scope.offerSuggestions = response.data.docs;
+        },function(response){
+          console.log('error');
+          console.log(response);
+        });
+        $scope.offerDir = {
+
+        };
+
+
+      }]
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.offer')
+    .directive('singleOfferVertDirective', [singleOfferVertDirective])
+    .directive('singleOfferDirective', [singleOfferDirective]);
+
+  function singleOfferDirective() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/offer/views/singleOfferTemplate.html',
+      scope: {
+        offer: '=singleOffer',
+        'isAdminOffer': '@adminOffer'
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: ['$scope',function($scope) {
+        $scope.offerDir = {
+          mapAddress: mapAddress
+        };
+
+        function mapAddress(addressObj) {
+          return Object.keys(addressObj).map(function(key, index) {
+            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
+              console.log(key);
+              return addressObj[key];  
+            }
+            
+          });
+        }
+      }]
+    };
+  }
+
+function singleOfferVertDirective() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/offer/views/singleOfferVertTemplate.html',
+      scope: {
+        offer: '=singleOffer',
+        
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: ['$scope',function($scope) {
+        $scope.offerDir = {
+          mapAddress: mapAddress
+        };
+
+        function mapAddress(addressObj) {
+          return Object.keys(addressObj).map(function(key, index) {
+            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
+              console.log(key);
+              return addressObj[key];  
+            }
+            
+          });
+        }
+      }]
+    };
+  }
+
+})(window.angular);
+
+(function(angular) {
+  'use strict';
+  angular.module('app.offer')
+    .directive('singleOfferSuggestion', [singleOfferSuggestion]);
+
+  function singleOfferSuggestion() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/offer/views/singleOfferSuggestionTemplate.html',
+      scope: {
+        suggestedOffer: '=suggestedOffer'
+      },
+      link: function(scope, element, attrs) {
+
+      },
+      controller: ['$scope',function($scope) {
+        $scope.offerDir = {
+
+        };
+
+
+      }]
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('app.offer')
+  .service('offerService',["$http","baseUrlService",OfferService]);
+
+/*
+  * This servic has a function to get collection of offers`
+*/
+function OfferService($http,baseUrlService){
+  this.getOfferCollection = getOfferCollection;
+  this.getSingleOffer = getSingleOffer;
+  function getOfferCollection(params){
+  	console.log(params);
+    return $http.get(baseUrlService.baseUrl+'offer/collection',{params:params});
+
+  }
+  function getSingleOffer(id,params){
+	return $http.get(baseUrlService.baseUrl+'offer/offer/'+id,{params:params});  	
+  }
+}
+})(window.angular);
+
 (function(angular){
 	'use strict';
   angular.module('app.product')
@@ -3964,340 +4298,6 @@ this.getSingleProductStores = getSingleProductStores;
         }
         changeBrowserURL.changeBrowserURLMethod(url);
       }
-}
-})(window.angular);
-
-(function(angular) {
-	'use strict';
-	angular.module('app.offer')
-		.controller('OfferPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", 'offerService', 'baseUrlService','Socialshare',OfferPageController]);
-
-	function OfferPageController($scope, $auth, $routeParams, changeBrowserURL, offerService,baseUrlService,Socialshare) {
-		var opc = this;
-		opc.offerData = {};
-		activate();
-		opc.shareFacebook = shareFacebook;
-		console.log("sd"+baseUrlService.currentUrlWQ);
-		function shareFacebook() {
-			Socialshare.share({
-				'provider': 'facebook',
-				'attrs': {
-					'socialshareUrl': baseUrlService.currentUrlWQ,
-					'socialshareText' :"Offline Offers",
-					"socialshareVia":"1068203956594250"
-				}
-			});
-		}
-
-		function activate() {
-			offerService.getSingleOffer($routeParams.offerId)
-				.then(function(res) {
-					console.log("single offer");
-					console.log(res);
-					opc.offerData = res.data;
-					if (opc.offerData.address.latitude) {
-						opc.pos = [opc.offerData.address.latitude, opc.offerData.address.longitude];
-					} else {
-						opc.pos = [17.361625, 78.474622];
-					}
-				}, function(res) {
-					console.log(res);
-				}).catch(function(e) {
-					console.log('Error: ', e);
-
-				}).finally(function() {
-					console.log('This finally block');
-				});
-
-		}
-
-
-
-	}
-
-
-
-
-})(window.angular);
-
-(function(angular) {
-  'use strict';
-  angular.module('app.offer')
-    .controller('OffersCollectionController', ["$scope", "$auth", "$routeParams", OffersCollectionController]);
-
-  function OffersCollectionController($scope, $auth, $routeParams) {
-    var occ = this;
-    occ.pageNo = 0;
-
-    occ.offersList = [];
-    
-    
-    occ.paramData = {
-      city: $routeParams.location,
-      page: 1,
-      limit: 10
-    };
-    activate();
-    
-    
-    
-    function activate() {
-      
-    }
-
-  }
-
-
-
-
-})(window.angular);
-
-(function(angular) {
-	'use strict';
-	angular.module('app.offer')
-		.controller('OffersPageController', ["$scope", "$auth", "$routeParams", "changeBrowserURL", "baseUrlService", OffersPageController]);
-
-	function OffersPageController($scope, $auth, $routeParams, changeBrowserURL, baseUrlService) {
-		var opc = this;
-
-		activate();
-
-		function activate(){
-
-		}
-		
-		
-
-	}
-
-
-
-
-})(window.angular);
-
-(function(angular) {
-	'use strict';
-	angular.module('app.offer')
-		.directive('offersList', ['offerService', offersList]);
-
-	function offersList(offerService) {
-		return {
-			restrict: 'E',
-			replace: true,
-			templateUrl: 'app/offer/views/offersListTemplate.html',
-			scope: {
-				paramData: '=paramData'
-			},
-			
-			controller: ['$scope',function($scope) {
-				$scope.offersList = [];
-				$scope.loadMoreOffers = loadMoreOffers;
-				$scope.getOffers = getOffers;
-				activate();
-				$scope.$on('filterClicked', function() {
-					$scope.offersList = [];
-					$scope.paramData.page = 1;
-					getOffers();
-				});
-
-				function loadMoreOffers() {
-					$scope.paramData.page = $scope.paramData.page + 1;
-					getOffers();
-				}
-
-				function getOffers() {
-					$scope.spinnerLoading = true;
-					console.log("paramdata");
-					console.log($scope.paramData);
-					offerService.getOfferCollection($scope.paramData).then(function(response) {
-						console.log(response);
-						$scope.totalOffers = response.data.total;
-						
-						angular.forEach(response.data.docs, function(value) {
-							$scope.offersList.push(value);
-						});
-						
-						$scope.spinnerLoading = false;
-
-					}).catch(function(error) {
-						console.log('error');
-						console.log(error);
-					});
-				}
-
-				function activate() {
-					getOffers();
-				}
-
-
-			}]
-		};
-	}
-
-
-
-})(window.angular);
-
-(function(angular) {
-  'use strict';
-  angular.module('app.offer')
-    .directive('offerSuggestionList', ['offerService',offerSuggestionList]);
-
-  function offerSuggestionList(offerService) {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'app/offer/views/offerSuggestionListTemplate.html',
-      scope: {
-                offerLimit: '=offerLimit',
-                offerCity: '=offerCity'
-      },
-      link: function(scope, element, attrs) {
-
-      },
-      controller: ['$scope',function($scope) {
-        var offerParamData = {
-          page: 1,
-          limit: $scope.offerLimit,
-          city: $scope.offerCity
-        };
-        offerService.getOfferCollection(offerParamData).then(function(response){
-          console.log("offers");
-          console.log(response);
-          $scope.offerSuggestions = response.data.docs;
-        },function(response){
-          console.log('error');
-          console.log(response);
-        });
-        $scope.offerDir = {
-
-        };
-
-
-      }]
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular) {
-  'use strict';
-  angular.module('app.offer')
-    .directive('singleOfferVertDirective', [singleOfferVertDirective])
-    .directive('singleOfferDirective', [singleOfferDirective]);
-
-  function singleOfferDirective() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'app/offer/views/singleOfferTemplate.html',
-      scope: {
-        offer: '=singleOffer',
-        'isAdminOffer': '@adminOffer'
-      },
-      link: function(scope, element, attrs) {
-
-      },
-      controller: ['$scope',function($scope) {
-        $scope.offerDir = {
-          mapAddress: mapAddress
-        };
-
-        function mapAddress(addressObj) {
-          return Object.keys(addressObj).map(function(key, index) {
-            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
-              console.log(key);
-              return addressObj[key];  
-            }
-            
-          });
-        }
-      }]
-    };
-  }
-
-function singleOfferVertDirective() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'app/offer/views/singleOfferVertTemplate.html',
-      scope: {
-        offer: '=singleOffer',
-        
-      },
-      link: function(scope, element, attrs) {
-
-      },
-      controller: ['$scope',function($scope) {
-        $scope.offerDir = {
-          mapAddress: mapAddress
-        };
-
-        function mapAddress(addressObj) {
-          return Object.keys(addressObj).map(function(key, index) {
-            if((key!= 'latitude') && (key!='longitude') && (key!='_id')){
-              console.log(key);
-              return addressObj[key];  
-            }
-            
-          });
-        }
-      }]
-    };
-  }
-
-})(window.angular);
-
-(function(angular) {
-  'use strict';
-  angular.module('app.offer')
-    .directive('singleOfferSuggestion', [singleOfferSuggestion]);
-
-  function singleOfferSuggestion() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'app/offer/views/singleOfferSuggestionTemplate.html',
-      scope: {
-        suggestedOffer: '=suggestedOffer'
-      },
-      link: function(scope, element, attrs) {
-
-      },
-      controller: ['$scope',function($scope) {
-        $scope.offerDir = {
-
-        };
-
-
-      }]
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-
-angular.module('app.offer')
-  .service('offerService',["$http","baseUrlService",OfferService]);
-
-/*
-  * This servic has a function to get collection of offers`
-*/
-function OfferService($http,baseUrlService){
-  this.getOfferCollection = getOfferCollection;
-  this.getSingleOffer = getSingleOffer;
-  function getOfferCollection(params){
-  	console.log(params);
-    return $http.get(baseUrlService.baseUrl+'offer/collection',{params:params});
-
-  }
-  function getSingleOffer(id,params){
-	return $http.get(baseUrlService.baseUrl+'offer/offer/'+id,{params:params});  	
-  }
 }
 })(window.angular);
 
