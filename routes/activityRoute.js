@@ -25,7 +25,9 @@ function getActivity(req, res, usersList) {
     }
     var options = {};
     options.limit = req.query.limit ? parseInt(req.query.limit) : 2;
-    options.sort = req.query.sort || { 'time': 'desc' };
+    options.sort = req.query.sort ||{
+        time: -1 //Sort by Date Added DESC
+    };
     options.page = req.query.page || 1;
     options.select = req.query.fields || null;
     options.populate = [{ path: 'creator', model: 'User', select: 'displayName picture' },
@@ -38,10 +40,7 @@ function getActivity(req, res, usersList) {
         { path: 'review', model: 'Review', populate: { path: 'user', select: 'displayName', model: 'User' } }
     ];
 
-    Activity.paginate(queryObj, options).then(function(activities) {
-        if(req.query.tjson == 1){
-            res.json(activities);
-        }    
+    Activity.paginate(queryObj, options).then(function(activities) {    
         app.render('activity/userActivity', { activity: activities.docs, moment: moment }, function(err, html) {
 
             if (err) {

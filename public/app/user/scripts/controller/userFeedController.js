@@ -12,7 +12,8 @@
     ual.activityData = [];
     ual.params = {
       'page': 1,
-      'limit': 25
+      'limit': 50,
+      'sort': '-time'
     };
     ual.loadMoreFeed = loadMoreFeed;
     ual.getUserFollowingActivity = getUserFollowingActivity;
@@ -31,13 +32,12 @@
 
       activityService.getUserFollowingActivity($auth.getPayload().sub, params).then(function(result) {
         ual.activityData.push(result.data);
-        console.log("from the activity");
-        console.log(result);
         ual.loading = false;
       });
     }
 
     function getAllActivity(params) {
+      params.sort = 'time';
       ual.loading = true;
       activityService.getAllActivity(params).then(function(result) {
         console.log("from the activity");

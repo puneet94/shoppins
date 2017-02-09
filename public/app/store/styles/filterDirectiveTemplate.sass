@@ -1,3 +1,7 @@
+div,span,li
+  &:focus
+    outline: none
+
 @import ../../app-modules/styles/main.sass
 .filterDirectiveTemplate
   background-color: white
@@ -5,6 +9,10 @@
   border-radius: 3px
   font-family: 'Source Sans Pro', sans-serif
   margin-top: 7px
+  .filterLoadMore
+    padding: 10px
+    font-size: 12px
+    color: #099E44
   .filterHeader
     margin: 15px 10px
     color: #cb202d
@@ -31,6 +39,7 @@
     color: black
     border: none
     font-size: 10px
+    margin-right: 8px
 .filterRadioContainer
   padding-left: 10px
   position: relative

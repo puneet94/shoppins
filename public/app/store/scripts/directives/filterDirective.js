@@ -16,8 +16,9 @@
 				radioModel: "=radioModel"
 			},
 			controller: ['$scope', function($scope) {
+				$scope.filterLimit = 5;
 				$scope.paramData = paramFactory.getParamData();
-
+				
 				$scope.clearClick = function() {
 					delete $scope.radioModel[$scope.filterName];
 					delete $scope.paramData[$scope.filterName];
@@ -32,8 +33,11 @@
 					$rootScope.$broadcast('filterClicked');
 
 				};
+				$scope.loadMoreFilters = function(){
+					$scope.filterLimit+=5;
 
-
+				};
+				
 
 			}]
 
