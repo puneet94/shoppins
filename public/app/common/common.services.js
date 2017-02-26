@@ -88,27 +88,29 @@ angular.module('app.common')
 	}
 	function cityStorage($window,$rootScope) {
 		var storage = $window.localStorage;
-
+		var defaultCity = "hyderabad";
 		var obj1 =  {
 			setCity: function (city) {
 				if(city){
-					if(city.toLowerCase()!==obj1.getCity().toLowerCase()){
-						storage.setItem('city',JSON.stringify(city));
-						$rootScope.$broadcast('city-changed');
-					}
-					
+					storage.setItem('city',JSON.stringify(city));
+					$rootScope.$broadcast('city-changed');					
 				}
 			},
 			getCity: function(){
-				return JSON.parse(storage.getItem('city'));
+				if(obj1.isCityExists()){
+					return JSON.parse(storage.getItem('city'));	
+				}
+				return defaultCity;
+				
 			},
 			isCityExists: function(){
-				if(obj1.getCity()){
+				if(storage.getItem('city')){
 					return true;
 				}
 				return false;
 			}
 		};
+
 		return obj1;
 	}
 
