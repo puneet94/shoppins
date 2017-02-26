@@ -2027,6 +2027,156 @@ function AdminStoreService($http,baseUrlService,changeBrowserURL){
 }
 })(window.angular);
 
+
+
+/**
+ * @ngdoc directive
+ * @name authModApp.directive:sameAs
+ * @description
+ * # sameAs
+ */
+ (function(angular){
+ 'use strict';
+	angular.module('authModApp')
+		.directive('sameAs', function () {
+			return {
+				require: 'ngModel',
+				restrict: 'EA',
+				link: function postLink(scope, element, attrs,ngModelCtrl) {
+          console.log(attrs);
+          console.log(attrs.sameAs);
+					//console.log(scope.$eval(attrs.sameAs));
+					function validateEqual(value){
+						var valid = (value === scope.$eval(attrs.sameAs));
+						ngModelCtrl.$setValidity('equal',valid);
+						return valid ? value : undefined;
+					}
+					ngModelCtrl.$parsers.push(validateEqual);
+					ngModelCtrl.$formatters.push(validateEqual);
+					scope.$watch(attrs.sameAs,function(){
+						ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
+					});
+				}
+			};
+		});
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('authModApp')
+  .service('userAuthService',["$http",'$auth',"baseUrlService",'$mdDialog','userData','$window',UserAuthService]);
+
+/*
+  * This servic has a function to get collection of stores`
+*/
+function UserAuthService($http,$auth,baseUrlService,$mdDialog,userData,$window){
+  this.socialAuthenticate = socialAuthenticate;
+  this.showAuthenticationDialog = showAuthenticationDialog;
+
+  function showAuthenticationDialog(ev) {
+            $mdDialog.show({
+                    controller: 'AuthenticationModalController',
+                    controllerAs: 'amc',
+                    templateUrl: 'app/authentication/views/authenticationModalTemplate.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true // Only for -xs, -sm breakpoints.*/
+                })
+                .then(function(answer) {
+                    
+                }, function() {
+
+                });
+        }
+
+
+        function socialAuthenticate(provider) {
+        	
+            $auth.authenticate(provider).then(function(response) {
+                userData.setUser(response.data.user);
+                alert('login with facebook successfull');
+                $window.location.reload();
+            });
+        }
+}
+})(window.angular);
+
+(function(angular){
+'use strict';
+
+/**
+ * @ngdoc service
+ * @name authModApp.userData
+ * @description
+ * # userData
+ * Factory in the authModApp.
+ */
+angular.module('authModApp')
+  .factory('userData',['$window','$route','$auth','$http',"baseUrlService","changeBrowserURL",userData]);
+
+  function userData($window,$route,$auth,$http,baseUrlService,changeBrowserURL) {
+    var storage = $window.localStorage;
+    var cachedUser={};
+    var obj1 =  {
+      setUser: function (user) {
+        
+        if(user){
+          storage.setItem('user',JSON.stringify(user));
+        }
+        else{
+
+          var userId = $auth.getPayload().sub;
+          if(userId){
+            $http.get(baseUrlService.baseUrl+'authenticate/user/'+userId).then(function(res){
+              
+              if(obj1.isUserExists()){
+                  storage.removeItem('user');
+              }
+
+              storage.setItem('user',JSON.stringify(res.data.user));
+              //
+              //$route.reload();
+            //  $window.location.reload();
+
+            },function(res){
+              console.log(res);
+            });
+          }
+        }
+        
+
+      },
+      getUser: function(){
+
+        return JSON.parse(storage.getItem('user'));
+      //   if(!cachedUser){
+      //     cachedUser = storage.getItem('user');
+      //   }
+      // return cachedUser;
+      },
+      removeUser: function(){
+        cachedUser = null;
+        //console.log('***********logged out*************');
+        storage.removeItem('user');
+      },
+      isUserExists: function(){
+        if(obj1.getUser()){
+          return true;
+        }
+        return false;
+      },
+      getUserPage: function(userId){
+        var url = "/user/"+userId;
+        changeBrowserURL.changeBrowserURLMethod(url);
+      }
+    };
+    return obj1;
+  }
+})(window.angular);
+
 (function(angular) {
     'use strict';
 
@@ -2279,156 +2429,61 @@ angular.module('authModApp')
 //     }
 //   }
 
-
-
-/**
- * @ngdoc directive
- * @name authModApp.directive:sameAs
- * @description
- * # sameAs
- */
- (function(angular){
- 'use strict';
-	angular.module('authModApp')
-		.directive('sameAs', function () {
-			return {
-				require: 'ngModel',
-				restrict: 'EA',
-				link: function postLink(scope, element, attrs,ngModelCtrl) {
-          console.log(attrs);
-          console.log(attrs.sameAs);
-					//console.log(scope.$eval(attrs.sameAs));
-					function validateEqual(value){
-						var valid = (value === scope.$eval(attrs.sameAs));
-						ngModelCtrl.$setValidity('equal',valid);
-						return valid ? value : undefined;
-					}
-					ngModelCtrl.$parsers.push(validateEqual);
-					ngModelCtrl.$formatters.push(validateEqual);
-					scope.$watch(attrs.sameAs,function(){
-						ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
-					});
-				}
-			};
-		});
-
-})(window.angular);
-
 (function(angular){
   'use strict';
-
-angular.module('authModApp')
-  .service('userAuthService',["$http",'$auth',"baseUrlService",'$mdDialog','userData','$window',UserAuthService]);
-
-/*
-  * This servic has a function to get collection of stores`
-*/
-function UserAuthService($http,$auth,baseUrlService,$mdDialog,userData,$window){
-  this.socialAuthenticate = socialAuthenticate;
-  this.showAuthenticationDialog = showAuthenticationDialog;
-
-  function showAuthenticationDialog(ev) {
-            $mdDialog.show({
-                    controller: 'AuthenticationModalController',
-                    controllerAs: 'amc',
-                    templateUrl: 'app/authentication/views/authenticationModalTemplate.html',
-                    parent: angular.element(document.body),
-                    targetEvent: ev,
-                    clickOutsideToClose: true,
-                    fullscreen: true // Only for -xs, -sm breakpoints.*/
-                })
-                .then(function(answer) {
-                    
-                }, function() {
-
-                });
+  angular.module('app.chat')
+      .service('chatService',['$http','$routeParams','baseUrlService',ReviewService]);
+      function ReviewService($http,$routeParams,baseUrlService){
+        var rs  = this;
+        rs.sendChatMessage = sendChatMessage;
+        rs.getChatMessages = getChatMessages;
+        rs.getChatRoom = getChatRoom;
+        rs.getChatRoomList = getChatRoomList;
+        function sendChatMessage(chat){
+          return $http.post(baseUrlService.baseUrl+'chat/chats/'+chat.roomId,chat);
         }
-
-
-        function socialAuthenticate(provider) {
-        	
-            $auth.authenticate(provider).then(function(response) {
-                userData.setUser(response.data.user);
-                alert('login with facebook successfull');
-                $window.location.reload();
-            });
+        function getChatMessages(chatRoomId){
+          
+          return $http.get(baseUrlService.baseUrl+'chat/chats/'+chatRoomId);
         }
-}
+        function getChatRoom(){
+        	return $http.get(baseUrlService.baseUrl + 'chat/chatBox/' + $routeParams.creator1 + '/' + $routeParams.creator2);
+                
+        }
+        function getChatRoomList(userId){
+          return $http.get(baseUrlService.baseUrl + 'chat/chatRooms/' + userId);
+        }
+        
+
+      }
 })(window.angular);
 
 (function(angular){
 'use strict';
+angular.module('app.chat').factory('Socket', ['socketFactory','baseUrlService',SocketFactory]);
+    
+    function SocketFactory(socketFactory,baseUrlService) {
+        return socketFactory({
+            prefix: '',
+            ioSocket: io.connect(baseUrlService)
+        });
+    }
 
-/**
- * @ngdoc service
- * @name authModApp.userData
- * @description
- * # userData
- * Factory in the authModApp.
- */
-angular.module('authModApp')
-  .factory('userData',['$window','$route','$auth','$http',"baseUrlService","changeBrowserURL",userData]);
-
-  function userData($window,$route,$auth,$http,baseUrlService,changeBrowserURL) {
-    var storage = $window.localStorage;
-    var cachedUser={};
-    var obj1 =  {
-      setUser: function (user) {
-        
-        if(user){
-          storage.setItem('user',JSON.stringify(user));
-        }
-        else{
-
-          var userId = $auth.getPayload().sub;
-          if(userId){
-            $http.get(baseUrlService.baseUrl+'authenticate/user/'+userId).then(function(res){
-              
-              if(obj1.isUserExists()){
-                  storage.removeItem('user');
-              }
-
-              storage.setItem('user',JSON.stringify(res.data.user));
-              //
-              //$route.reload();
-            //  $window.location.reload();
-
-            },function(res){
-              console.log(res);
-            });
-          }
-        }
-        
-
-      },
-      getUser: function(){
-
-        return JSON.parse(storage.getItem('user'));
-      //   if(!cachedUser){
-      //     cachedUser = storage.getItem('user');
-      //   }
-      // return cachedUser;
-      },
-      removeUser: function(){
-        cachedUser = null;
-        //console.log('***********logged out*************');
-        storage.removeItem('user');
-      },
-      isUserExists: function(){
-        if(obj1.getUser()){
-          return true;
-        }
-        return false;
-      },
-      getUserPage: function(userId){
-        var url = "/user/"+userId;
-        changeBrowserURL.changeBrowserURLMethod(url);
-      }
-    };
-    return obj1;
-  }
 })(window.angular);
+(function(angular){
+'use strict';
 
+
+
+angular.module('app.chat')
+	.factory('SocketUserService', ['socketFactory','userData',socketFactoryFunction]);
+    function socketFactoryFunction(socketFactory,userData) {
+        return socketFactory({
+            prefix: '',
+            ioSocket: io.connect('/'+userData.getUser()._id)
+        });
+    }
+})(window.angular);
 (function(angular) {
     'use strict';
     angular.module('app.chat')
@@ -2550,59 +2605,27 @@ angular.module('authModApp')
 
 (function(angular){
   'use strict';
-  angular.module('app.chat')
-      .service('chatService',['$http','$routeParams','baseUrlService',ReviewService]);
-      function ReviewService($http,$routeParams,baseUrlService){
-        var rs  = this;
-        rs.sendChatMessage = sendChatMessage;
-        rs.getChatMessages = getChatMessages;
-        rs.getChatRoom = getChatRoom;
-        rs.getChatRoomList = getChatRoomList;
-        function sendChatMessage(chat){
-          return $http.post(baseUrlService.baseUrl+'chat/chats/'+chat.roomId,chat);
-        }
-        function getChatMessages(chatRoomId){
-          
-          return $http.get(baseUrlService.baseUrl+'chat/chats/'+chatRoomId);
-        }
-        function getChatRoom(){
-        	return $http.get(baseUrlService.baseUrl + 'chat/chatBox/' + $routeParams.creator1 + '/' + $routeParams.creator2);
-                
-        }
-        function getChatRoomList(userId){
-          return $http.get(baseUrlService.baseUrl + 'chat/chatRooms/' + userId);
-        }
-        
 
-      }
+angular.module('app.event')
+  .service('eventService',["$http","baseUrlService",EventService]);
+
+/*
+  * This servic has a function to get collection of events`
+*/
+function EventService($http,baseUrlService){
+  this.getEventCollection = getEventCollection;
+  this.getSingleEvent = getSingleEvent;
+  function getEventCollection(params){
+  	console.log(params);
+    return $http.get(baseUrlService.baseUrl+'event/collection',{params:params});
+
+  }
+  function getSingleEvent(id,params){
+	return $http.get(baseUrlService.baseUrl+'event/event/'+id,{params:params});  	
+  }
+}
 })(window.angular);
 
-(function(angular){
-'use strict';
-angular.module('app.chat').factory('Socket', ['socketFactory','baseUrlService',SocketFactory]);
-    
-    function SocketFactory(socketFactory,baseUrlService) {
-        return socketFactory({
-            prefix: '',
-            ioSocket: io.connect(baseUrlService)
-        });
-    }
-
-})(window.angular);
-(function(angular){
-'use strict';
-
-
-
-angular.module('app.chat')
-	.factory('SocketUserService', ['socketFactory','userData',socketFactoryFunction]);
-    function socketFactoryFunction(socketFactory,userData) {
-        return socketFactory({
-            prefix: '',
-            ioSocket: io.connect('/'+userData.getUser()._id)
-        });
-    }
-})(window.angular);
 (function(angular) {
 	'use strict';
 	angular.module('app.event')
@@ -2876,29 +2899,6 @@ function singleEventVertDirective() {
   }
 
 
-})(window.angular);
-
-(function(angular){
-  'use strict';
-
-angular.module('app.event')
-  .service('eventService',["$http","baseUrlService",EventService]);
-
-/*
-  * This servic has a function to get collection of events`
-*/
-function EventService($http,baseUrlService){
-  this.getEventCollection = getEventCollection;
-  this.getSingleEvent = getSingleEvent;
-  function getEventCollection(params){
-  	console.log(params);
-    return $http.get(baseUrlService.baseUrl+'event/collection',{params:params});
-
-  }
-  function getSingleEvent(id,params){
-	return $http.get(baseUrlService.baseUrl+'event/event/'+id,{params:params});  	
-  }
-}
 })(window.angular);
 
 (function(angular) {
@@ -3392,6 +3392,29 @@ angular.module('app.user')
     }
 })(window.angular);
 
+(function(angular){
+  'use strict';
+
+angular.module('app.offer')
+  .service('offerService',["$http","baseUrlService",OfferService]);
+
+/*
+  * This servic has a function to get collection of offers`
+*/
+function OfferService($http,baseUrlService){
+  this.getOfferCollection = getOfferCollection;
+  this.getSingleOffer = getSingleOffer;
+  function getOfferCollection(params){
+  	console.log(params);
+    return $http.get(baseUrlService.baseUrl+'offer/collection',{params:params});
+
+  }
+  function getSingleOffer(id,params){
+	return $http.get(baseUrlService.baseUrl+'offer/offer/'+id,{params:params});  	
+  }
+}
+})(window.angular);
+
 (function(angular) {
 	'use strict';
 	angular.module('app.offer')
@@ -3701,446 +3724,6 @@ function singleOfferVertDirective() {
   }
 
 
-})(window.angular);
-
-(function(angular){
-  'use strict';
-
-angular.module('app.offer')
-  .service('offerService',["$http","baseUrlService",OfferService]);
-
-/*
-  * This servic has a function to get collection of offers`
-*/
-function OfferService($http,baseUrlService){
-  this.getOfferCollection = getOfferCollection;
-  this.getSingleOffer = getSingleOffer;
-  function getOfferCollection(params){
-  	console.log(params);
-    return $http.get(baseUrlService.baseUrl+'offer/collection',{params:params});
-
-  }
-  function getSingleOffer(id,params){
-	return $http.get(baseUrlService.baseUrl+'offer/offer/'+id,{params:params});  	
-  }
-}
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.review')
-
-  .controller('ProductReviewListController',["$scope","$auth","$routeParams",'$route','changeBrowserURL','reviewService','userData',ProductReviewListController]);
-  function ProductReviewListController($scope,$auth,$routeParams,$route,changeBrowserURL,reviewService,userData){
-    var plc = this;
-    plc.activate = activate;
-    plc.smallLoadingModel = {};
-    plc.getProductReviews = getProductReviews;
-    plc.getRating = getRating;
-    plc.userReviewUpvoted = userReviewUpvoted;
-    plc.authCheck = $auth.isAuthenticated();
-    plc.submitUserReviewUpvote = submitUserReviewUpvote;
-    plc.deleteUserReviewUpvote = deleteUserReviewUpvote;
-    plc.getUserPage = userData.getUserPage;
-
-    plc.reviewParams = {};
-    plc.reviewParams.getRating = getRating;
-    plc.reviewParams.userReviewUpvoted = userReviewUpvoted;
-    plc.reviewParams.submitUserReviewUpvote = submitUserReviewUpvote;
-    plc.reviewParams.deleteUserReviewUpvote = deleteUserReviewUpvote;
-    plc.reviewParams.smallLoadingModel = plc.smallLoadingModel;
-    plc.reviewParams.getRating = getRating;
-
-    if(plc.authCheck){
-      plc.userUpvotes  = userData.getUser().upvotes;
-    }
-    plc.submitUserReviewUpvote = submitUserReviewUpvote;
-    plc.activate();
-    function activate(){
-      plc.getProductReviews();
-    }
-    function getUserPage(userId){
-      var url = "/user/"+userId;
-      changeBrowserURL.changeBrowserURLMethod(url);
-    }
-    function getProductReviews(){
-      reviewService.getProductReviews().then(function(res){
-        plc.reviewList = res.data;
-
-      },function(res){
-
-      });
-    }
-    function getRating(review){
-
-      var rating2 = parseInt(review.rating);
-      var x = [];
-      for(var i=0;i<rating2;i++){
-        x.push(i);
-      }
-
-      return x;
-    }
-
-    function userReviewUpvoted(locReview){
-
-      var upArr = locReview.upvotes;
-      for(var i=0;i<upArr.length;i++){
-        if(plc.userUpvotes.indexOf(upArr[i])!=-1){
-
-          plc.currentUpvoteId = upArr[i];
-
-          return true;
-        }
-      }
-
-
-      //return false;
-    }
-
-    function submitUserReviewUpvote(review){
-      plc.smallLoadingModel[review._id] = true;
-
-      reviewService.submitUserReviewUpvote({"reviewId":review._id,"productId":$routeParams.productId,"userId":userData.getUser()._id})
-      .then(function(res){
-        review.upvotes.push(res.data.id);
-        plc.userUpvotes.push(res.data.id);userData.setUser();
-        plc.smallLoadingModel[review._id] = false;
-
-
-      });
-    }
-    function deleteUserReviewUpvote(review){
-      plc.smallLoadingModel[review._id] = true;
-      reviewService.deleteUserReviewUpvote({"reviewId":review._id,"productId":$routeParams.productId,"userId":userData.getUser()._id})
-      .then(function(res){
-        review.upvotes.splice(review.upvotes.indexOf(res.data.id), 1);userData.setUser();
-        plc.smallLoadingModel[review._id] = false;
-      });
-
-    }
-
-  }
-})(window.angular);
-
-(function(angular){
-  'use strict';
-  angular.module('app.review')
-      .controller('ReviewSubmitController',['$auth','$routeParams','$route','userData','reviewService',ReviewSubmitController]);
-      function ReviewSubmitController($auth,$routeParams,$route,userData,reviewService){
-        var rsv  = this;
-        rsv.review = {};
-        rsv.user = {};
-        if($routeParams.storeId){
-          rsv.review.storeId = $routeParams.storeId;  
-        }
-        else if($routeParams.productId){
-          rsv.review.productId = $routeParams.productId;  
-        }
-        
-        rsv.ratingClick = ratingClick;
-
-        if(userData.getUser()){
-          rsv.review.userId = userData.getUser()._id;
-          rsv.user.picture = userData.getUser().picture;
-          rsv.user.displayName = userData.getUser().displayName;
-        }
-        else{
-          rsv.review.userId = $auth.getPayload().sub;
-        }
-
-        rsv.submitReview = submitReview;
-        function ratingClick(obj){
-
-          var rating = 6-obj.currentTarget.attributes.value.nodeValue;
-
-          rsv.review.rating = rating;
-        }
-        function submitReview(){
-          if($routeParams.storeId){
-          reviewService.submitStoreReview(rsv.review)
-            .then(function(res){
-              userData.setUser();
-              $route.reload();
-            },function(res){
-
-            }); 
-        }
-        else if($routeParams.productId){
-          reviewService.submitProductReview(rsv.review)
-            .then(function(res){
-              userData.setUser();
-              $route.reload();
-            },function(res){
-
-            });
-        }
-          
-        }
-
-      }
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.review')
-
-  .controller('StoreReviewListController',["$scope","$auth","$routeParams",'$route','reviewService','userData',StoreReviewListController]);
-  function StoreReviewListController($scope,$auth,$routeParams,$route,reviewService,userData){
-    var slc = this;
-    slc.activate = activate;
-    slc.smallLoadingModel = {};
-    slc.getStoreReviews = getStoreReviews;
-    slc.getRating = getRating;
-    slc.userReviewUpvoted = userReviewUpvoted;
-    slc.authCheck = $auth.isAuthenticated();
-    slc.submitUserReviewUpvote = submitUserReviewUpvote;
-    slc.deleteUserReviewUpvote = deleteUserReviewUpvote;
-    slc.getUserPage = userData.getUserPage;
-
-    //parameter for review directive
-    slc.reviewParams = {};
-    slc.reviewParams.getRating = getRating;
-    slc.reviewParams.userReviewUpvoted = userReviewUpvoted;
-    slc.reviewParams.submitUserReviewUpvote = submitUserReviewUpvote;
-    slc.reviewParams.deleteUserReviewUpvote = deleteUserReviewUpvote;
-    slc.reviewParams.smallLoadingModel = slc.smallLoadingModel;
-    slc.reviewParams.getRating = getRating;
-
-    
-    if(slc.authCheck){
-      slc.userUpvotes  = userData.getUser().upvotes;
-    }
-    
-    slc.activate();
-    function activate(){
-      slc.getStoreReviews();
-    }
-    function getStoreReviews(){
-      reviewService.getStoreReviews().then(function(res){
-        slc.reviewList = res.data;
-        
-      },function(res){
-
-      });
-    }
-    function getRating(review){
-
-      var rating2 = parseInt(review.rating);
-      var x = [];
-      for(var i=0;i<rating2;i++){
-        x.push(i);
-      }
-
-      return x;
-    }
-
-    function userReviewUpvoted(locReview){
-      var upArr = locReview.upvotes;
-      for(var i=0;i<upArr.length;i++){
-        if(slc.userUpvotes.indexOf(upArr[i])!=-1){
-          
-          slc.currentUpvoteId = upArr[i];
-          
-          return true;
-        }
-      }
-      
-      
-      //return false;
-    }
-
-    function submitUserReviewUpvote(review){
-      slc.smallLoadingModel[review._id] = true;
-      
-      reviewService.submitUserReviewUpvote({"reviewId":review._id,"storeId":$routeParams.storeId,"userId":userData.getUser()._id})
-      .then(function(res){
-        review.upvotes.push(res.data.id);
-        slc.userUpvotes.push(res.data.id);
-        userData.setUser();
-        slc.smallLoadingModel[review._id] = false;
-        
-        
-      });
-    }
-    function deleteUserReviewUpvote(review){
-      slc.smallLoadingModel[review._id] = true;
-      reviewService.deleteUserReviewUpvote({"reviewId":review._id,"storeId":$routeParams.storeId,"userId":userData.getUser()._id})
-      .then(function(res){
-        review.upvotes.splice(review.upvotes.indexOf(res.data.id), 1);
-        userData.setUser();
-        slc.smallLoadingModel[review._id] = false;
-      });
-
-    }
-
-  }
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.review')
-
-  .controller('UserReviewListController',["$scope","$auth",'reviewService','userData','getSingleStore','getProductsService',UserReviewListController]);
-  function UserReviewListController($scope,$auth,reviewService,userData,getSingleStore,getProductsService){
-    var url = this;
-    url.activate = activate;
-    url.smallLoadingModel = {};
-    url.getUserReviews = getUserReviews;
-    url.getRating = getRating;
-    url.userReviewUpvoted = userReviewUpvoted;
-    url.authCheck = $auth.isAuthenticated();
-    url.submitUserReviewUpvote = submitUserReviewUpvote;
-    url.deleteUserReviewUpvote = deleteUserReviewUpvote;
-    url.getUserPage = userData.getUserPage;
-    url.getSingleStorePage = getSingleStore.getSingleStorePage;
-    url.getSingleProductPage = getProductsService.getSingleProductPage;
-
-
-    url.reviewParams = {};
-    url.reviewParams.getRating = getRating;
-    url.reviewParams.userReviewUpvoted = userReviewUpvoted;
-    url.reviewParams.submitUserReviewUpvote = submitUserReviewUpvote;
-    url.reviewParams.deleteUserReviewUpvote = deleteUserReviewUpvote;
-    url.reviewParams.smallLoadingModel = url.smallLoadingModel;
-    url.reviewParams.getRating = getRating;
-    
-    if(url.authCheck){
-      url.userUpvotes  = userData.getUser().upvotes;
-    }
-    url.submitUserReviewUpvote = submitUserReviewUpvote;
-    url.activate();
-    function activate(){
-      url.getUserReviews();
-    }
-    function getUserPage(userId){
-      var url = "/user/"+userId;
-      changeBrowserURL.changeBrowserURLMethod(url);
-    }
-    function getUserReviews(){
-      reviewService.getUserReviews().then(function(res){
-        url.reviewList = res.data;
-      },function(res){
-
-      });
-    }
-    function getRating(review){
-
-      var rating2 = parseInt(review.rating);
-      var x = [];
-      for(var i=0;i<rating2;i++){
-        x.push(i);
-      }
-
-      return x;
-    }
-
-    function userReviewUpvoted(locReview){
-
-      var upArr = locReview.upvotes;
-      for(var i=0;i<upArr.length;i++){
-        if(url.userUpvotes.indexOf(upArr[i])!=-1){
-
-          url.currentUpvoteId = upArr[i];
-
-          return true;
-        }
-      }
-
-
-      //return false;
-    }
-
-    function submitUserReviewUpvote(review){
-      url.smallLoadingModel[review._id] = true;
-
-      reviewService.submitUserReviewUpvote({"reviewId":review._id,"userId":userData.getUser()._id})
-      .then(function(res){
-        review.upvotes.push(res.data.id);
-        url.userUpvotes.push(res.data.id);userData.setUser();
-        url.smallLoadingModel[review._id] = false;
-
-
-      });
-    }
-    function deleteUserReviewUpvote(review){
-      url.smallLoadingModel[review._id] = true;
-      reviewService.deleteUserReviewUpvote({"reviewId":review._id,"userId":userData.getUser()._id})
-      .then(function(res){
-        review.upvotes.splice(review.upvotes.indexOf(res.data.id), 1);userData.setUser();
-        url.smallLoadingModel[review._id] = false;
-      });
-
-    }
-
-  }
-})(window.angular);
-
-(function(angular){
-  'use strict';
-angular.module('app.review')
-
-  .directive('singleReviewDirective',['$auth',singleReviewDirective]);
-  function singleReviewDirective($auth){    
-    return {
-      replace: true,
-      scope:{
-        
-        reviewParams: "=reviewParams",
-        review: "=review"
-      },
-      templateUrl: 'app/reviews/views/singleReviewTemplate.html',
-      link: function($scope){
-        $scope.authCheck = $auth.isAuthenticated();
-      }
-    };
-  }
-})(window.angular);
-
-(function(angular){
-  'use strict';
-  angular.module('app.review')
-      .service('reviewService',['$http','$routeParams','baseUrlService',ReviewService]);
-      function ReviewService($http,$routeParams,baseUrlService){
-        var rs  = this;
-        rs.submitStoreReview = submitStoreReview;
-        rs.getStoreReviews = getStoreReviews;
-        rs.submitUserReviewUpvote = submitUserReviewUpvote;
-        rs.deleteUserReviewUpvote  = deleteUserReviewUpvote;
-        rs.getProductReviews = getProductReviews;
-        rs.submitProductReview = submitProductReview;
-        rs.getUserReviews = getUserReviews;
-        function submitStoreReview(review){
-          return $http.post(baseUrlService.baseUrl+'review/reviews/store/'+review.storeId,review);
-        }
-        function getStoreReviews(){
-          var storeId = $routeParams.storeId;
-          return $http.get(baseUrlService.baseUrl+'review/reviews/store/'+storeId);
-        }
-        function submitProductReview(review){
-          return $http.post(baseUrlService.baseUrl+'review/reviews/product/'+review.productId,review);
-        }
-        function getProductReviews(){
-          var productId = $routeParams.productId;
-          return $http.get(baseUrlService.baseUrl+'review/reviews/product/'+productId);
-        }
-
-        function submitUserReviewUpvote(obj){
-          console.log(obj);
-          return $http.post(baseUrlService.baseUrl+'upvote/upvotes/review/',obj);
-        }
-        function deleteUserReviewUpvote(obj){
-          
-          return $http.delete(baseUrlService.baseUrl+'upvote/upvotes/review/',{"params":obj});
-        }
-
-        function getUserReviews(){
-          var userId = $routeParams.userId;
-         return $http.get(baseUrlService.baseUrl+'user/userReviews/'+userId); 
-        }
-        
-
-      }
 })(window.angular);
 
 (function(angular){
@@ -4533,6 +4116,76 @@ angular.module('app.product')
 
 })(window.angular);
 
+(function(angular){
+  'use strict';
+
+angular.module('app.product')
+  .service('getProductCollectionService',["$http","baseUrlService",GetProductCollectionService]);
+
+/*
+  * This servic has a function to get collection of products`
+*/
+function GetProductCollectionService($http,baseUrlService){
+  this.getProductCollection = getProductCollection;
+  this.getProductNameCollection = getProductNameCollection;
+  this.productsCollection = productsCollection;
+  function getProductCollection(url,paramData){
+  	console.log(paramData);
+    return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function productsCollection(paramData){
+    console.log(paramData);
+    return $http.get(baseUrlService.baseUrl+'product/collection',{params:paramData});
+
+  }
+  function getProductNameCollection(){
+	return $http.get(baseUrlService.baseUrl+'product/products/name/:name/:location/:pageNo',{params:paramData});  	
+  }
+}
+})(window.angular);
+
+(function(angular){
+  'use strict';
+
+angular.module('app.product')
+  .service('getProductsService',["$http","storeData","baseUrlService",'changeBrowserURL',GetProductsService]);
+
+/*
+  * This servic has a function to get collection of stores`
+*/
+function GetProductsService($http,storeData,baseUrlService,changeBrowserURL){
+  this.getStoreProductsList = getStoreProductsList;
+  this.getSingleProduct = getSingleProduct;
+this.getSingleProductPage = getSingleProductPage;
+this.getSingleProductStores = getSingleProductStores;
+  function getStoreProductsList(storeId){
+  	var pageNo = 1;
+  	return $http.get(baseUrlService.baseUrl+'product/products/store/'+storeId+"/"+pageNo);
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function getSingleProduct(productId){
+  	return $http.get(baseUrlService.baseUrl+'product/products/singleProduct/'+productId);
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function getSingleProductStores(params){
+    return $http.get(baseUrlService.baseUrl+'product/collection',{params:params});
+    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+
+  }
+  function getSingleProductPage(product,scrollId){
+        var url = "product/singleProduct/"+product._id+"/"+(product.myslug || ' ');
+        if(scrollId){
+          //url = url + "?scrollId="+scrollId;
+          changeBrowserURL.changeBrowserURLMethod(url,scrollId);
+        }
+        changeBrowserURL.changeBrowserURLMethod(url);
+      }
+}
+})(window.angular);
+
 (function(angular) {
 	'use strict';
 	angular.module('app.product')
@@ -4650,72 +4303,419 @@ angular.module('app.product')
 
 (function(angular){
   'use strict';
+angular.module('app.review')
 
-angular.module('app.product')
-  .service('getProductCollectionService',["$http","baseUrlService",GetProductCollectionService]);
-
-/*
-  * This servic has a function to get collection of products`
-*/
-function GetProductCollectionService($http,baseUrlService){
-  this.getProductCollection = getProductCollection;
-  this.getProductNameCollection = getProductNameCollection;
-  this.productsCollection = productsCollection;
-  function getProductCollection(url,paramData){
-  	console.log(paramData);
-    return $http.get(baseUrlService.baseUrl+url,{params:paramData});
-
+  .directive('singleReviewDirective',['$auth',singleReviewDirective]);
+  function singleReviewDirective($auth){    
+    return {
+      replace: true,
+      scope:{
+        
+        reviewParams: "=reviewParams",
+        review: "=review"
+      },
+      templateUrl: 'app/reviews/views/singleReviewTemplate.html',
+      link: function($scope){
+        $scope.authCheck = $auth.isAuthenticated();
+      }
+    };
   }
-  function productsCollection(paramData){
-    console.log(paramData);
-    return $http.get(baseUrlService.baseUrl+'product/collection',{params:paramData});
-
-  }
-  function getProductNameCollection(){
-	return $http.get(baseUrlService.baseUrl+'product/products/name/:name/:location/:pageNo',{params:paramData});  	
-  }
-}
 })(window.angular);
 
 (function(angular){
   'use strict';
+angular.module('app.review')
 
-angular.module('app.product')
-  .service('getProductsService',["$http","storeData","baseUrlService",'changeBrowserURL',GetProductsService]);
+  .controller('ProductReviewListController',["$scope","$auth","$routeParams",'$route','changeBrowserURL','reviewService','userData',ProductReviewListController]);
+  function ProductReviewListController($scope,$auth,$routeParams,$route,changeBrowserURL,reviewService,userData){
+    var plc = this;
+    plc.activate = activate;
+    plc.smallLoadingModel = {};
+    plc.getProductReviews = getProductReviews;
+    plc.getRating = getRating;
+    plc.userReviewUpvoted = userReviewUpvoted;
+    plc.authCheck = $auth.isAuthenticated();
+    plc.submitUserReviewUpvote = submitUserReviewUpvote;
+    plc.deleteUserReviewUpvote = deleteUserReviewUpvote;
+    plc.getUserPage = userData.getUserPage;
 
-/*
-  * This servic has a function to get collection of stores`
-*/
-function GetProductsService($http,storeData,baseUrlService,changeBrowserURL){
-  this.getStoreProductsList = getStoreProductsList;
-  this.getSingleProduct = getSingleProduct;
-this.getSingleProductPage = getSingleProductPage;
-this.getSingleProductStores = getSingleProductStores;
-  function getStoreProductsList(storeId){
-  	var pageNo = 1;
-  	return $http.get(baseUrlService.baseUrl+'product/products/store/'+storeId+"/"+pageNo);
-    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+    plc.reviewParams = {};
+    plc.reviewParams.getRating = getRating;
+    plc.reviewParams.userReviewUpvoted = userReviewUpvoted;
+    plc.reviewParams.submitUserReviewUpvote = submitUserReviewUpvote;
+    plc.reviewParams.deleteUserReviewUpvote = deleteUserReviewUpvote;
+    plc.reviewParams.smallLoadingModel = plc.smallLoadingModel;
+    plc.reviewParams.getRating = getRating;
 
-  }
-  function getSingleProduct(productId){
-  	return $http.get(baseUrlService.baseUrl+'product/products/singleProduct/'+productId);
-    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+    if(plc.authCheck){
+      plc.userUpvotes  = userData.getUser().upvotes;
+    }
+    plc.submitUserReviewUpvote = submitUserReviewUpvote;
+    plc.activate();
+    function activate(){
+      plc.getProductReviews();
+    }
+    function getUserPage(userId){
+      var url = "/user/"+userId;
+      changeBrowserURL.changeBrowserURLMethod(url);
+    }
+    function getProductReviews(){
+      reviewService.getProductReviews().then(function(res){
+        plc.reviewList = res.data;
 
-  }
-  function getSingleProductStores(params){
-    return $http.get(baseUrlService.baseUrl+'product/collection',{params:params});
-    //return $http.get(baseUrlService.baseUrl+url,{params:paramData});
+      },function(res){
 
-  }
-  function getSingleProductPage(product,scrollId){
-        var url = "product/singleProduct/"+product._id+"/"+(product.myslug || ' ');
-        if(scrollId){
-          //url = url + "?scrollId="+scrollId;
-          changeBrowserURL.changeBrowserURLMethod(url,scrollId);
-        }
-        changeBrowserURL.changeBrowserURLMethod(url);
+      });
+    }
+    function getRating(review){
+
+      var rating2 = parseInt(review.rating);
+      var x = [];
+      for(var i=0;i<rating2;i++){
+        x.push(i);
       }
-}
+
+      return x;
+    }
+
+    function userReviewUpvoted(locReview){
+
+      var upArr = locReview.upvotes;
+      for(var i=0;i<upArr.length;i++){
+        if(plc.userUpvotes.indexOf(upArr[i])!=-1){
+
+          plc.currentUpvoteId = upArr[i];
+
+          return true;
+        }
+      }
+
+
+      //return false;
+    }
+
+    function submitUserReviewUpvote(review){
+      plc.smallLoadingModel[review._id] = true;
+
+      reviewService.submitUserReviewUpvote({"reviewId":review._id,"productId":$routeParams.productId,"userId":userData.getUser()._id})
+      .then(function(res){
+        review.upvotes.push(res.data.id);
+        plc.userUpvotes.push(res.data.id);userData.setUser();
+        plc.smallLoadingModel[review._id] = false;
+
+
+      });
+    }
+    function deleteUserReviewUpvote(review){
+      plc.smallLoadingModel[review._id] = true;
+      reviewService.deleteUserReviewUpvote({"reviewId":review._id,"productId":$routeParams.productId,"userId":userData.getUser()._id})
+      .then(function(res){
+        review.upvotes.splice(review.upvotes.indexOf(res.data.id), 1);userData.setUser();
+        plc.smallLoadingModel[review._id] = false;
+      });
+
+    }
+
+  }
+})(window.angular);
+
+(function(angular){
+  'use strict';
+  angular.module('app.review')
+      .controller('ReviewSubmitController',['$auth','$routeParams','$route','userData','reviewService',ReviewSubmitController]);
+      function ReviewSubmitController($auth,$routeParams,$route,userData,reviewService){
+        var rsv  = this;
+        rsv.review = {};
+        rsv.user = {};
+        if($routeParams.storeId){
+          rsv.review.storeId = $routeParams.storeId;  
+        }
+        else if($routeParams.productId){
+          rsv.review.productId = $routeParams.productId;  
+        }
+        
+        rsv.ratingClick = ratingClick;
+
+        if(userData.getUser()){
+          rsv.review.userId = userData.getUser()._id;
+          rsv.user.picture = userData.getUser().picture;
+          rsv.user.displayName = userData.getUser().displayName;
+        }
+        else{
+          rsv.review.userId = $auth.getPayload().sub;
+        }
+
+        rsv.submitReview = submitReview;
+        function ratingClick(obj){
+
+          var rating = 6-obj.currentTarget.attributes.value.nodeValue;
+
+          rsv.review.rating = rating;
+        }
+        function submitReview(){
+          if($routeParams.storeId){
+          reviewService.submitStoreReview(rsv.review)
+            .then(function(res){
+              userData.setUser();
+              $route.reload();
+            },function(res){
+
+            }); 
+        }
+        else if($routeParams.productId){
+          reviewService.submitProductReview(rsv.review)
+            .then(function(res){
+              userData.setUser();
+              $route.reload();
+            },function(res){
+
+            });
+        }
+          
+        }
+
+      }
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.review')
+
+  .controller('StoreReviewListController',["$scope","$auth","$routeParams",'$route','reviewService','userData',StoreReviewListController]);
+  function StoreReviewListController($scope,$auth,$routeParams,$route,reviewService,userData){
+    var slc = this;
+    slc.activate = activate;
+    slc.smallLoadingModel = {};
+    slc.getStoreReviews = getStoreReviews;
+    slc.getRating = getRating;
+    slc.userReviewUpvoted = userReviewUpvoted;
+    slc.authCheck = $auth.isAuthenticated();
+    slc.submitUserReviewUpvote = submitUserReviewUpvote;
+    slc.deleteUserReviewUpvote = deleteUserReviewUpvote;
+    slc.getUserPage = userData.getUserPage;
+
+    //parameter for review directive
+    slc.reviewParams = {};
+    slc.reviewParams.getRating = getRating;
+    slc.reviewParams.userReviewUpvoted = userReviewUpvoted;
+    slc.reviewParams.submitUserReviewUpvote = submitUserReviewUpvote;
+    slc.reviewParams.deleteUserReviewUpvote = deleteUserReviewUpvote;
+    slc.reviewParams.smallLoadingModel = slc.smallLoadingModel;
+    slc.reviewParams.getRating = getRating;
+
+    
+    if(slc.authCheck){
+      slc.userUpvotes  = userData.getUser().upvotes;
+    }
+    
+    slc.activate();
+    function activate(){
+      slc.getStoreReviews();
+    }
+    function getStoreReviews(){
+      reviewService.getStoreReviews().then(function(res){
+        slc.reviewList = res.data;
+        
+      },function(res){
+
+      });
+    }
+    function getRating(review){
+
+      var rating2 = parseInt(review.rating);
+      var x = [];
+      for(var i=0;i<rating2;i++){
+        x.push(i);
+      }
+
+      return x;
+    }
+
+    function userReviewUpvoted(locReview){
+      var upArr = locReview.upvotes;
+      for(var i=0;i<upArr.length;i++){
+        if(slc.userUpvotes.indexOf(upArr[i])!=-1){
+          
+          slc.currentUpvoteId = upArr[i];
+          
+          return true;
+        }
+      }
+      
+      
+      //return false;
+    }
+
+    function submitUserReviewUpvote(review){
+      slc.smallLoadingModel[review._id] = true;
+      
+      reviewService.submitUserReviewUpvote({"reviewId":review._id,"storeId":$routeParams.storeId,"userId":userData.getUser()._id})
+      .then(function(res){
+        review.upvotes.push(res.data.id);
+        slc.userUpvotes.push(res.data.id);
+        userData.setUser();
+        slc.smallLoadingModel[review._id] = false;
+        
+        
+      });
+    }
+    function deleteUserReviewUpvote(review){
+      slc.smallLoadingModel[review._id] = true;
+      reviewService.deleteUserReviewUpvote({"reviewId":review._id,"storeId":$routeParams.storeId,"userId":userData.getUser()._id})
+      .then(function(res){
+        review.upvotes.splice(review.upvotes.indexOf(res.data.id), 1);
+        userData.setUser();
+        slc.smallLoadingModel[review._id] = false;
+      });
+
+    }
+
+  }
+})(window.angular);
+
+(function(angular){
+  'use strict';
+angular.module('app.review')
+
+  .controller('UserReviewListController',["$scope","$auth",'reviewService','userData','getSingleStore','getProductsService',UserReviewListController]);
+  function UserReviewListController($scope,$auth,reviewService,userData,getSingleStore,getProductsService){
+    var url = this;
+    url.activate = activate;
+    url.smallLoadingModel = {};
+    url.getUserReviews = getUserReviews;
+    url.getRating = getRating;
+    url.userReviewUpvoted = userReviewUpvoted;
+    url.authCheck = $auth.isAuthenticated();
+    url.submitUserReviewUpvote = submitUserReviewUpvote;
+    url.deleteUserReviewUpvote = deleteUserReviewUpvote;
+    url.getUserPage = userData.getUserPage;
+    url.getSingleStorePage = getSingleStore.getSingleStorePage;
+    url.getSingleProductPage = getProductsService.getSingleProductPage;
+
+
+    url.reviewParams = {};
+    url.reviewParams.getRating = getRating;
+    url.reviewParams.userReviewUpvoted = userReviewUpvoted;
+    url.reviewParams.submitUserReviewUpvote = submitUserReviewUpvote;
+    url.reviewParams.deleteUserReviewUpvote = deleteUserReviewUpvote;
+    url.reviewParams.smallLoadingModel = url.smallLoadingModel;
+    url.reviewParams.getRating = getRating;
+    
+    if(url.authCheck){
+      url.userUpvotes  = userData.getUser().upvotes;
+    }
+    url.submitUserReviewUpvote = submitUserReviewUpvote;
+    url.activate();
+    function activate(){
+      url.getUserReviews();
+    }
+    function getUserPage(userId){
+      var url = "/user/"+userId;
+      changeBrowserURL.changeBrowserURLMethod(url);
+    }
+    function getUserReviews(){
+      reviewService.getUserReviews().then(function(res){
+        url.reviewList = res.data;
+      },function(res){
+
+      });
+    }
+    function getRating(review){
+
+      var rating2 = parseInt(review.rating);
+      var x = [];
+      for(var i=0;i<rating2;i++){
+        x.push(i);
+      }
+
+      return x;
+    }
+
+    function userReviewUpvoted(locReview){
+
+      var upArr = locReview.upvotes;
+      for(var i=0;i<upArr.length;i++){
+        if(url.userUpvotes.indexOf(upArr[i])!=-1){
+
+          url.currentUpvoteId = upArr[i];
+
+          return true;
+        }
+      }
+
+
+      //return false;
+    }
+
+    function submitUserReviewUpvote(review){
+      url.smallLoadingModel[review._id] = true;
+
+      reviewService.submitUserReviewUpvote({"reviewId":review._id,"userId":userData.getUser()._id})
+      .then(function(res){
+        review.upvotes.push(res.data.id);
+        url.userUpvotes.push(res.data.id);userData.setUser();
+        url.smallLoadingModel[review._id] = false;
+
+
+      });
+    }
+    function deleteUserReviewUpvote(review){
+      url.smallLoadingModel[review._id] = true;
+      reviewService.deleteUserReviewUpvote({"reviewId":review._id,"userId":userData.getUser()._id})
+      .then(function(res){
+        review.upvotes.splice(review.upvotes.indexOf(res.data.id), 1);userData.setUser();
+        url.smallLoadingModel[review._id] = false;
+      });
+
+    }
+
+  }
+})(window.angular);
+
+(function(angular){
+  'use strict';
+  angular.module('app.review')
+      .service('reviewService',['$http','$routeParams','baseUrlService',ReviewService]);
+      function ReviewService($http,$routeParams,baseUrlService){
+        var rs  = this;
+        rs.submitStoreReview = submitStoreReview;
+        rs.getStoreReviews = getStoreReviews;
+        rs.submitUserReviewUpvote = submitUserReviewUpvote;
+        rs.deleteUserReviewUpvote  = deleteUserReviewUpvote;
+        rs.getProductReviews = getProductReviews;
+        rs.submitProductReview = submitProductReview;
+        rs.getUserReviews = getUserReviews;
+        function submitStoreReview(review){
+          return $http.post(baseUrlService.baseUrl+'review/reviews/store/'+review.storeId,review);
+        }
+        function getStoreReviews(){
+          var storeId = $routeParams.storeId;
+          return $http.get(baseUrlService.baseUrl+'review/reviews/store/'+storeId);
+        }
+        function submitProductReview(review){
+          return $http.post(baseUrlService.baseUrl+'review/reviews/product/'+review.productId,review);
+        }
+        function getProductReviews(){
+          var productId = $routeParams.productId;
+          return $http.get(baseUrlService.baseUrl+'review/reviews/product/'+productId);
+        }
+
+        function submitUserReviewUpvote(obj){
+          console.log(obj);
+          return $http.post(baseUrlService.baseUrl+'upvote/upvotes/review/',obj);
+        }
+        function deleteUserReviewUpvote(obj){
+          
+          return $http.delete(baseUrlService.baseUrl+'upvote/upvotes/review/',{"params":obj});
+        }
+
+        function getUserReviews(){
+          var userId = $routeParams.userId;
+         return $http.get(baseUrlService.baseUrl+'user/userReviews/'+userId); 
+        }
+        
+
+      }
 })(window.angular);
 
 (function(angular){
@@ -5491,6 +5491,242 @@ this.getSingleProductStores = getSingleProductStores;
 (function(angular) {
 	'use strict';
 	angular.module('app.store')
+		.directive('filterDirective', ['$rootScope', 'paramFactory', filterDirective])
+		.directive('addClass', [addClassDirective])
+		.directive('removeClass', [removeClassDirective])
+		.directive('siblingRemoveClass', [siblingRemoveClassDirective]);
+
+	function filterDirective($rootScope, paramFactory) {
+		return {
+			restrict: 'E',
+			templateUrl: 'app/store/views/filterDirectiveTemplate.html',
+			scope: {
+				filterName: "@filterName",
+				radioRepeat: "=radioRepeat",
+				radioModel: "=radioModel"
+			},
+			controller: ['$scope', function($scope) {
+				$scope.filterLimit = 5;
+				$scope.paramData = paramFactory.getParamData();
+				
+				$scope.clearClick = function() {
+					delete $scope.radioModel[$scope.filterName];
+					delete $scope.paramData[$scope.filterName];
+					$scope.paramData.page = 1;
+					paramFactory.setParamData($scope.paramData);
+					$rootScope.$broadcast('filterClicked');
+				};
+				$scope.radioChange = function() {
+					$scope.paramData[$scope.filterName] = $scope.radioModel[$scope.filterName];
+					$scope.paramData.page = 1;
+					paramFactory.setParamData($scope.paramData);
+					$rootScope.$broadcast('filterClicked');
+
+				};
+				$scope.loadMoreFilters = function(){
+					$scope.filterLimit+=5;
+
+				};
+				
+
+			}]
+
+		};
+	}
+
+	function addClassDirective() {
+		return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+				$(element).on('click', function() {
+					//$(element).removeClass('highlightClass');
+					$(this).addClass(attrs.addClass);
+
+				});
+
+			}
+		};
+	}
+
+	function siblingRemoveClassDirective() {
+		return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+				$(element).on('click', function() {
+					$(this).siblings().removeClass(attrs.siblingRemoveClass);
+				});
+
+			}
+		};
+	}
+
+	function removeClassDirective() {
+		return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+				$(element).on('click', function() {
+					$(this).siblings('.filterDirectiveRadioGroup').find('.filterRadioButton').removeClass(attrs.removeClass);
+				});
+
+			}
+		};
+	}
+
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+  angular.module('app.store')
+  .directive('imageReplace',['$timeout',imageReplaceDirective]);
+
+  function imageReplaceDirective($timeout) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+      	console.log(element);
+      	console.log( $(element).attr('src'));
+      	console.log(attrs.imageReplace);
+      	$timeout(function(){
+      		$(element).attr('src',attrs.imageReplace);
+      	},1000);
+        
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+  angular.module('app.store')
+  .directive('scrollToId',['scrollToIdService',scrollToIdDirective]);
+
+  function scrollToIdDirective(scrollToIdService) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        $(element).on('click',function(){
+          scrollToIdService.scrollToId(attrs.scrollToId);
+        });
+      }
+    };
+  }
+
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+  angular.module('app.store')
+  .directive('singleStore',[ singleStore]);
+  function singleStore() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl:'app/store/views/singleStoreTemplate.html',
+      scope:{
+        store: '=store'
+      },
+      controller: ['$scope',function($scope){
+      	$scope.getSingleStore = getSingleStore;
+
+      	function getSingleStore(){
+
+      	}
+      }]
+    };
+  }
+  
+
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+  angular.module('app.store')
+  .directive('singleStoreSuggestion',[ singleStoreSuggestion]);
+  function singleStoreSuggestion() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl:'app/store/views/singleStoreSuggestion.html',
+      scope:{
+        suggestedStore: '=suggestedStore'
+      }
+    };
+  }
+  
+
+
+})(window.angular);
+
+(function(angular) {
+	'use strict';
+	angular.module('app.store')
+		.directive('storesList', ['getStoreCollectionService', 'paramFactory',storesList]);
+
+	function storesList(getStoreCollectionService,paramFactory) {
+		return {
+			restrict: 'E',
+			templateUrl: 'app/store/views/storesListTemplate.html',
+			scope: {
+				paramData: '=paramData'
+			},
+			
+			controller: ['$scope',function($scope) {
+				$scope.storesList = [];
+				$scope.paramData = paramFactory.getParamData();
+				$scope.loadMoreStores = loadMoreStores;
+				$scope.getStores = getStores;
+				activate();
+				$scope.$on('filterClicked', function() {
+					$scope.storesList = [];
+					$scope.paramData = paramFactory.getParamData();
+					getStores();
+				});
+
+				function loadMoreStores() {
+					$scope.paramData.page = $scope.paramData.page + 1;
+					paramFactory.setParamData($scope.paramData);
+					getStores();
+				}
+
+				function getStores() {
+					$scope.spinnerLoading = true;
+					getStoreCollectionService.storesCollection($scope.paramData).then(function(response) {
+						
+						$scope.totalStores = response.data.total;
+						
+						angular.forEach(response.data.docs, function(value) {
+							$scope.storesList.push(value);
+						});
+						
+						$scope.spinnerLoading = false;
+
+					}).catch(function(error) {
+						
+						console.log(error);
+					});
+				}
+
+				function activate() {
+					getStores();
+				}
+
+
+			}]
+		};
+	}
+
+
+
+})(window.angular);
+
+(function(angular) {
+	'use strict';
+	angular.module('app.store')
 		.factory('paramFactory', [paramFactory]);
 
 	function paramFactory() {
@@ -5731,239 +5967,238 @@ function UserVisitService($http,baseUrlService){
 })(window.angular);
 
 (function(angular) {
-	'use strict';
-	angular.module('app.store')
-		.directive('filterDirective', ['$rootScope', 'paramFactory', filterDirective])
-		.directive('addClass', [addClassDirective])
-		.directive('removeClass', [removeClassDirective])
-		.directive('siblingRemoveClass', [siblingRemoveClassDirective]);
-
-	function filterDirective($rootScope, paramFactory) {
-		return {
-			restrict: 'E',
-			templateUrl: 'app/store/views/filterDirectiveTemplate.html',
-			scope: {
-				filterName: "@filterName",
-				radioRepeat: "=radioRepeat",
-				radioModel: "=radioModel"
-			},
-			controller: ['$scope', function($scope) {
-				$scope.filterLimit = 5;
-				$scope.paramData = paramFactory.getParamData();
-				
-				$scope.clearClick = function() {
-					delete $scope.radioModel[$scope.filterName];
-					delete $scope.paramData[$scope.filterName];
-					$scope.paramData.page = 1;
-					paramFactory.setParamData($scope.paramData);
-					$rootScope.$broadcast('filterClicked');
-				};
-				$scope.radioChange = function() {
-					$scope.paramData[$scope.filterName] = $scope.radioModel[$scope.filterName];
-					$scope.paramData.page = 1;
-					paramFactory.setParamData($scope.paramData);
-					$rootScope.$broadcast('filterClicked');
-
-				};
-				$scope.loadMoreFilters = function(){
-					$scope.filterLimit+=5;
-
-				};
-				
-
-			}]
-
-		};
-	}
-
-	function addClassDirective() {
-		return {
-			restrict: 'A',
-			link: function(scope, element, attrs) {
-				$(element).on('click', function() {
-					//$(element).removeClass('highlightClass');
-					$(this).addClass(attrs.addClass);
-
-				});
-
-			}
-		};
-	}
-
-	function siblingRemoveClassDirective() {
-		return {
-			restrict: 'A',
-			link: function(scope, element, attrs) {
-				$(element).on('click', function() {
-					$(this).siblings().removeClass(attrs.siblingRemoveClass);
-				});
-
-			}
-		};
-	}
-
-	function removeClassDirective() {
-		return {
-			restrict: 'A',
-			link: function(scope, element, attrs) {
-				$(element).on('click', function() {
-					$(this).siblings('.filterDirectiveRadioGroup').find('.filterRadioButton').removeClass(attrs.removeClass);
-				});
-
-			}
-		};
-	}
-
-
-})(window.angular);
-
-(function(angular){
   'use strict';
-  angular.module('app.store')
-  .directive('imageReplace',['$timeout',imageReplaceDirective]);
+  angular.module('app.user')
+    .directive('changePassword', [changePassword]);
 
-  function imageReplaceDirective($timeout) {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-      	console.log(element);
-      	console.log( $(element).attr('src'));
-      	console.log(attrs.imageReplace);
-      	$timeout(function(){
-      		$(element).attr('src',attrs.imageReplace);
-      	},1000);
-        
-      }
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-  angular.module('app.store')
-  .directive('scrollToId',['scrollToIdService',scrollToIdDirective]);
-
-  function scrollToIdDirective(scrollToIdService) {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        $(element).on('click',function(){
-          scrollToIdService.scrollToId(attrs.scrollToId);
-        });
-      }
-    };
-  }
-
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-  angular.module('app.store')
-  .directive('singleStore',[ singleStore]);
-  function singleStore() {
+  function changePassword() {
     return {
       restrict: 'E',
       replace: true,
-      templateUrl:'app/store/views/singleStoreTemplate.html',
-      scope:{
-        store: '=store'
+      templateUrl: 'app/user/views/userChangePasswordTemplate.html',
+      scope: {},
+      link: function(scope, element, attrs) {
+
       },
-      controller: ['$scope',function($scope){
-      	$scope.getSingleStore = getSingleStore;
+      controllerAs: 'vm',
+      controller: ['$scope', 'userService', function MyTabsController($scope, userService) {
+        var vm = this;
+        vm.user = {};
+        vm.checkCurrentPassword = checkCurrentPassword;
+        vm.changePassword = changePassword;
 
-      	function getSingleStore(){
+        function changePassword() {
 
-      	}
-      }]
+          vm.passwordChangedValue = false;
+          vm.showIncorrectPassword = false;
+          userService
+            .checkUserPassword({ 'password': vm.user.oldPassword })
+            .then(function(res) {
+              vm.passwordCheckValue = res.data;
+              if (vm.passwordCheckValue) {
+                userService
+                  .changeUserPassword({ 'password': vm.user.password })
+                  .then(function(res) {
+                    console.log("the status");
+                    console.log(res.data);
+                    vm.passwordChangedValue = true;
+                  });
+              }
+              else{
+                vm.showIncorrectPassword = true;
+                return;
+              }
+            });
+
+
+          vm.showIncorrectPassword = false;
+        }
+
+        function checkCurrentPassword() {
+
+        }
+      }],
     };
   }
-  
-
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-  angular.module('app.store')
-  .directive('singleStoreSuggestion',[ singleStoreSuggestion]);
-  function singleStoreSuggestion() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl:'app/store/views/singleStoreSuggestion.html',
-      scope:{
-        suggestedStore: '=suggestedStore'
-      }
-    };
-  }
-  
-
 
 })(window.angular);
 
 (function(angular) {
-	'use strict';
-	angular.module('app.store')
-		.directive('storesList', ['getStoreCollectionService', 'paramFactory',storesList]);
+  'use strict';
+  angular.module('app.user')
+    .directive('userSuggestionList', [userSuggestionList]);
 
-	function storesList(getStoreCollectionService,paramFactory) {
-		return {
-			restrict: 'E',
-			templateUrl: 'app/store/views/storesListTemplate.html',
-			scope: {
-				paramData: '=paramData'
-			},
-			
-			controller: ['$scope',function($scope) {
-				$scope.storesList = [];
-				$scope.paramData = paramFactory.getParamData();
-				$scope.loadMoreStores = loadMoreStores;
-				$scope.getStores = getStores;
-				activate();
-				$scope.$on('filterClicked', function() {
-					$scope.storesList = [];
-					$scope.paramData = paramFactory.getParamData();
-					getStores();
-				});
+  function userSuggestionList() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'app/user/views/userSuggestionList.html',
+      scope: {
+      	usersList: '='
+      },
+      link: function(scope, element, attrs) {
+      	console.log("link");
+      	console.log(scope);
+      },
+      controllerAs: 'vm',
+      controller: ['$scope','$auth', 'userService', 'userData',function MyTabsController($scope, $auth,userService,userData) {
+        var vm = this;
+        vm.user = {};
 
-				function loadMoreStores() {
-					$scope.paramData.page = $scope.paramData.page + 1;
-					paramFactory.setParamData($scope.paramData);
-					getStores();
-				}
+        vm.loading = true;
+        vm.authCheck =$auth.isAuthenticated();
+        
 
-				function getStores() {
-					$scope.spinnerLoading = true;
-					getStoreCollectionService.storesCollection($scope.paramData).then(function(response) {
-						
-						$scope.totalStores = response.data.total;
-						
-						angular.forEach(response.data.docs, function(value) {
-							$scope.storesList.push(value);
-						});
-						
-						$scope.spinnerLoading = false;
+    
+    vm.currentUserFollowed = currentUserFollowed;
+    vm.submitUserFollow = submitUserFollow;
+    vm.deleteUserFollow = deleteUserFollow;
+    vm.getUserPage = userData.getUserPage;
 
-					}).catch(function(error) {
-						
-						console.log(error);
-					});
-				}
+    function activate(){
+      vm.loading = true;
 
-				function activate() {
-					getStores();
-				}
+      
+    }
+    function submitUserFollow(followerId){
+      userService.submitUserFollow(userData.getUser()._id,followerId).then(function(response){
+
+        
+        userData.setUser();
+      });
+    }
+    function deleteUserFollow(followerId){
+    	if(vm.authCheck){
+    		userService.deleteUserFollow(userData.getUser()._id,followerId).then(function(response){
+        
+        userData.setUser();
+      });		
+    	}
+      
+    }
+    function currentUserFollowed(follower){
+if(vm.authCheck){
+      if(userData.getUser().following.indexOf(follower)==-1){
+        return false;
+      }
+      return true;
+    }}
+      }],
+    };
+  }
+
+})(window.angular);
+
+(function(angular){
+  'use strict';
+/*
+  *Service for getting a single store with its id
+*/
+angular.module('app.user')
+  .service('activityService',["$http","baseUrlService",ActivityService]);
+
+/*
+  * This servic has a function names getStore which takes id as parameter and returns a promise
+*/
+function ActivityService($http,baseUrlService){
+  this.getSingleUserActivity = getSingleUserActivity;
+  this.getAllActivity = getAllActivity;
+  this.getUserFollowingActivity = getUserFollowingActivity;
+  function getSingleUserActivity(id){
+    return $http.get(baseUrlService.baseUrl+'activity/singleUserActivity/'+id);
+  }
+  function getAllActivity(params){
+    return $http.get(baseUrlService.baseUrl+'activity/allActivity/',{params:params});
+  }
+  function getUserFollowingActivity(userId,params){
+    return $http.get(baseUrlService.baseUrl+'activity/userFollowingActivity/'+userId,{params:params});
+  }
 
 
-			}]
-		};
-	}
+
+}
+})(window.angular);
+
+(function(angular){
+  'use strict';
+/*
+  *Service for getting a single store with its id
+*/
+angular.module('app.user')
+  .service('userService',["$http","baseUrlService",'userData',UserService]);
+
+/*
+  * This servic has a function names getStore which takes id as parameter and returns a promise
+*/
+function UserService($http,baseUrlService,userData){
+  this.getSingleUser = getSingleUser;
+  this.getUserDetails = getUserDetails;
+  this.getStoreRating = getStoreRating;
+  this.submitUserFollow = submitUserFollow;
+  this.submitStoreReport = submitStoreReport;
+  this.deleteUserFollow = deleteUserFollow;
+  this.checkUserFollow = checkUserFollow;
+  this.getUserFollowers = getUserFollowers;
+  this.getUserFollowing = getUserFollowing;
+  this.getUserStores = getUserStores;
+  this.updateUser = updateUser;
+  this.checkUserPassword = checkUserPassword;
+  this.changeUserPassword = changeUserPassword;
+  this.getUsers = getUsers;
+
+  function getUsers(params){
+    return $http.get(baseUrlService.baseUrl+"user/collection",{params:params});
+
+  }
+  function getUserDetails(id,params){
+    return $http.get(baseUrlService.baseUrl+"user/user/"+id,{params:params});
+
+  }
+  function getSingleUser(id){
+    return $http.get(baseUrlService.baseUrl+"user/singleUser/"+id);
+
+  }
+  function getStoreRating(id){
+  	return $http.get(baseUrlService.baseUrl+"review/ratings/store/"+id);
+  }
+  function submitStoreReport(report){
+
+    return $http.post(baseUrlService.baseUrl+"user/submitStoreReport/",report);
+  }
+  function submitUserFollow(userId,followedId){
+
+    return $http.post(baseUrlService.baseUrl+"user/submitFollow/"+userId+'/'+followedId);
+  }
+  function deleteUserFollow(userId,followedId){
+
+    return $http.post(baseUrlService.baseUrl+"user/deleteFollow/"+userId+'/'+followedId);
+  }
+  function checkUserFollow(userId,followedId){
+    
+    return $http.get(baseUrlService.baseUrl+"user/checkFollow/"+userId+'/'+followedId);
+  }
+  function getUserFollowers(userId){
+    return $http.get(baseUrlService.baseUrl+"user/userFollowers/"+userId);
+  }
+  function getUserFollowing(userId){
+    return $http.get(baseUrlService.baseUrl+"user/userFollowing/"+userId);
+  }
+  function getUserStores(userId){
+    return $http.get(baseUrlService.baseUrl+"user/singleUser/"+userId,{params: { 'select': 'name address.area address.locality' }});
+  }
+  function updateUser(user){
+    console.log("the id"+userData.getUser()._id);
+    return $http.post(baseUrlService.baseUrl+'user/updateUser/'+userData.getUser()._id,user);
+  }
+  function checkUserPassword(password){
+   return $http.post(baseUrlService.baseUrl+'user/checkPassword/'+userData.getUser()._id,password); 
+  }
+  function changeUserPassword(password){
+   return $http.post(baseUrlService.baseUrl+'user/changePassword/'+userData.getUser()._id,password); 
+  }
 
 
-
+}
 })(window.angular);
 
 //inject angular file upload directives and services.
@@ -6597,239 +6832,4 @@ angular.module('app.user')
 
     }
 
-})(window.angular);
-
-(function(angular) {
-  'use strict';
-  angular.module('app.user')
-    .directive('changePassword', [changePassword]);
-
-  function changePassword() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'app/user/views/userChangePasswordTemplate.html',
-      scope: {},
-      link: function(scope, element, attrs) {
-
-      },
-      controllerAs: 'vm',
-      controller: ['$scope', 'userService', function MyTabsController($scope, userService) {
-        var vm = this;
-        vm.user = {};
-        vm.checkCurrentPassword = checkCurrentPassword;
-        vm.changePassword = changePassword;
-
-        function changePassword() {
-
-          vm.passwordChangedValue = false;
-          vm.showIncorrectPassword = false;
-          userService
-            .checkUserPassword({ 'password': vm.user.oldPassword })
-            .then(function(res) {
-              vm.passwordCheckValue = res.data;
-              if (vm.passwordCheckValue) {
-                userService
-                  .changeUserPassword({ 'password': vm.user.password })
-                  .then(function(res) {
-                    console.log("the status");
-                    console.log(res.data);
-                    vm.passwordChangedValue = true;
-                  });
-              }
-              else{
-                vm.showIncorrectPassword = true;
-                return;
-              }
-            });
-
-
-          vm.showIncorrectPassword = false;
-        }
-
-        function checkCurrentPassword() {
-
-        }
-      }],
-    };
-  }
-
-})(window.angular);
-
-(function(angular) {
-  'use strict';
-  angular.module('app.user')
-    .directive('userSuggestionList', [userSuggestionList]);
-
-  function userSuggestionList() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: 'app/user/views/userSuggestionList.html',
-      scope: {
-      	usersList: '='
-      },
-      link: function(scope, element, attrs) {
-      	console.log("link");
-      	console.log(scope);
-      },
-      controllerAs: 'vm',
-      controller: ['$scope','$auth', 'userService', 'userData',function MyTabsController($scope, $auth,userService,userData) {
-        var vm = this;
-        vm.user = {};
-
-        vm.loading = true;
-        vm.authCheck =$auth.isAuthenticated();
-        
-
-    
-    vm.currentUserFollowed = currentUserFollowed;
-    vm.submitUserFollow = submitUserFollow;
-    vm.deleteUserFollow = deleteUserFollow;
-    vm.getUserPage = userData.getUserPage;
-
-    function activate(){
-      vm.loading = true;
-
-      
-    }
-    function submitUserFollow(followerId){
-      userService.submitUserFollow(userData.getUser()._id,followerId).then(function(response){
-
-        
-        userData.setUser();
-      });
-    }
-    function deleteUserFollow(followerId){
-    	if(vm.authCheck){
-    		userService.deleteUserFollow(userData.getUser()._id,followerId).then(function(response){
-        
-        userData.setUser();
-      });		
-    	}
-      
-    }
-    function currentUserFollowed(follower){
-if(vm.authCheck){
-      if(userData.getUser().following.indexOf(follower)==-1){
-        return false;
-      }
-      return true;
-    }}
-      }],
-    };
-  }
-
-})(window.angular);
-
-(function(angular){
-  'use strict';
-/*
-  *Service for getting a single store with its id
-*/
-angular.module('app.user')
-  .service('activityService',["$http","baseUrlService",ActivityService]);
-
-/*
-  * This servic has a function names getStore which takes id as parameter and returns a promise
-*/
-function ActivityService($http,baseUrlService){
-  this.getSingleUserActivity = getSingleUserActivity;
-  this.getAllActivity = getAllActivity;
-  this.getUserFollowingActivity = getUserFollowingActivity;
-  function getSingleUserActivity(id){
-    return $http.get(baseUrlService.baseUrl+'activity/singleUserActivity/'+id);
-  }
-  function getAllActivity(params){
-    return $http.get(baseUrlService.baseUrl+'activity/allActivity/',{params:params});
-  }
-  function getUserFollowingActivity(userId,params){
-    return $http.get(baseUrlService.baseUrl+'activity/userFollowingActivity/'+userId,{params:params});
-  }
-
-
-
-}
-})(window.angular);
-
-(function(angular){
-  'use strict';
-/*
-  *Service for getting a single store with its id
-*/
-angular.module('app.user')
-  .service('userService',["$http","baseUrlService",'userData',UserService]);
-
-/*
-  * This servic has a function names getStore which takes id as parameter and returns a promise
-*/
-function UserService($http,baseUrlService,userData){
-  this.getSingleUser = getSingleUser;
-  this.getUserDetails = getUserDetails;
-  this.getStoreRating = getStoreRating;
-  this.submitUserFollow = submitUserFollow;
-  this.submitStoreReport = submitStoreReport;
-  this.deleteUserFollow = deleteUserFollow;
-  this.checkUserFollow = checkUserFollow;
-  this.getUserFollowers = getUserFollowers;
-  this.getUserFollowing = getUserFollowing;
-  this.getUserStores = getUserStores;
-  this.updateUser = updateUser;
-  this.checkUserPassword = checkUserPassword;
-  this.changeUserPassword = changeUserPassword;
-  this.getUsers = getUsers;
-
-  function getUsers(params){
-    return $http.get(baseUrlService.baseUrl+"user/collection",{params:params});
-
-  }
-  function getUserDetails(id,params){
-    return $http.get(baseUrlService.baseUrl+"user/user/"+id,{params:params});
-
-  }
-  function getSingleUser(id){
-    return $http.get(baseUrlService.baseUrl+"user/singleUser/"+id);
-
-  }
-  function getStoreRating(id){
-  	return $http.get(baseUrlService.baseUrl+"review/ratings/store/"+id);
-  }
-  function submitStoreReport(report){
-
-    return $http.post(baseUrlService.baseUrl+"user/submitStoreReport/",report);
-  }
-  function submitUserFollow(userId,followedId){
-
-    return $http.post(baseUrlService.baseUrl+"user/submitFollow/"+userId+'/'+followedId);
-  }
-  function deleteUserFollow(userId,followedId){
-
-    return $http.post(baseUrlService.baseUrl+"user/deleteFollow/"+userId+'/'+followedId);
-  }
-  function checkUserFollow(userId,followedId){
-    
-    return $http.get(baseUrlService.baseUrl+"user/checkFollow/"+userId+'/'+followedId);
-  }
-  function getUserFollowers(userId){
-    return $http.get(baseUrlService.baseUrl+"user/userFollowers/"+userId);
-  }
-  function getUserFollowing(userId){
-    return $http.get(baseUrlService.baseUrl+"user/userFollowing/"+userId);
-  }
-  function getUserStores(userId){
-    return $http.get(baseUrlService.baseUrl+"user/singleUser/"+userId,{params: { 'select': 'name address.area address.locality' }});
-  }
-  function updateUser(user){
-    console.log("the id"+userData.getUser()._id);
-    return $http.post(baseUrlService.baseUrl+'user/updateUser/'+userData.getUser()._id,user);
-  }
-  function checkUserPassword(password){
-   return $http.post(baseUrlService.baseUrl+'user/checkPassword/'+userData.getUser()._id,password); 
-  }
-  function changeUserPassword(password){
-   return $http.post(baseUrlService.baseUrl+'user/changePassword/'+userData.getUser()._id,password); 
-  }
-
-
-}
 })(window.angular);

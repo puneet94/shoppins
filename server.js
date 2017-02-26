@@ -19,14 +19,14 @@ var app = express();
 var server = http.createServer(app);
 io = io.listen(server);
 
+var cors = require('cors');
+app.use(cors());
 
 
 //moment added to be used in jade
 
 //app.locals.moment = require('moment');
 //Imports from custom made js
-var facebookAuth  = require('./services/facebookAuth.js');
-var createJWT = require('./services/jwtService.js');
 
 
 var storeRouter = require('./routes/store');

@@ -334,7 +334,21 @@ storeRouter.route('/submitStoreFollow')
             })
         });
 
-    })
+    });
+    storeRouter.route('/agg')
+    .get(function(req,res){
+        Store.aggregate([
+    {$unwind: '$category'},
+    {$group: { _id: '$category', count: {$sum: 1}, stores:{$push:{name:'$name', id:'$id'}}}},
+    {$project: {_id:0, category: '$_id',count: 1, stores:1}}
+    ],function(err,results){
+    if(err){
+
+        console.log(err);
+    }
+    res.json(results);
+});
+    });
 
 storeRouter.route('/deleteStoreFollow')
     .post(commons.ensureAuthenticated, function(req, res) {
