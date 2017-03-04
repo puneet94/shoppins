@@ -296,6 +296,7 @@ var StoreSchema = new Schema({
 	keywords: [String],
 	phone: String,
 	description: String,
+	rating: { type: Number, default: 0 },
 	reviews: [{ type: Schema.ObjectId, ref: "Review" }],
 	products: [{ type: Schema.ObjectId, ref: "Product" }],
 	upvotes: [{ type: Schema.ObjectId, ref: "Upvote" }],

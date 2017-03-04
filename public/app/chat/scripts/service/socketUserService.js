@@ -1,8 +1,5 @@
 (function(angular){
 'use strict';
-
-
-
 angular.module('app.chat')
 	.factory('SocketUserService', ['socketFactory','userData',socketFactoryFunction]);
     function socketFactoryFunction(socketFactory,userData) {
