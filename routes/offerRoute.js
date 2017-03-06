@@ -24,7 +24,7 @@ offerRouter.route('/offers')
 	});
 offerRouter.route('/offer/:offerId')
 	.get(function(req, res) {
-		Offer.findById(req.params.offerId,function(err, offer) {
+		Offer.findById(req.params.offerId, function(err, offer) {
 			if (err) {
 				res.send(err);
 			}
@@ -74,11 +74,29 @@ offerRouter.route('/collection')
 		if (req.query.location) {
 			queryObj['address.city'] = req.query.location.toLowerCase();
 		}
+		if (req.query.distance) {
+			
+		}
 		if (req.query.category) {
 			queryObj.category = req.query.category.toLowerCase();
 		}
+		if(req.query.nearby){
+			var coords = [];
+			coords[0] = req.query.longitude;
+			coords[1] = req.query.latitude;
+			var maxDistance = req.query.distance || 8;
+			maxDistance /= 6371;
+			queryObj.loc={
+				$near: coords,
+				$maxDistance: maxDistance
+			};
+		}
 		if (req.query.type) {
 			queryObj.type = req.query.type.toLowerCase();
+		}
+		if (req.query.latitude && req.query.longitude) {
+			
+
 		}
 		if (req.query.eventDate) {
 			queryObj.startDate = { '$lte': req.query.eventDate };
@@ -96,8 +114,7 @@ offerRouter.route('/collection')
 				res.json(offersList);
 
 			});
-		}
-		catch(e){
+		} catch (e) {
 			console.log(e);
 		}
 
