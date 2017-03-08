@@ -214,7 +214,12 @@ var UserSchema = new Schema({
 	visitsCount: Number,
 	upvotesCount: Number,
 	storeId: [{ type: Schema.ObjectId, ref: "Store" }],
-	events: [{ type: Schema.ObjectId, ref: "Event" }]
+	events: [{ type: Schema.ObjectId, ref: "Event" }],
+	type: String,
+	loc: {
+    		type: [Number],  // [<longitude>, <latitude>]
+    		index: '2d'      // create the geospatial index
+    	}
 
 }, { collection: 'users' });
 

@@ -54,19 +54,40 @@ function updateUser(req, res) {
 	console.log(req.params);
   User.findById(req.params.user_id, function(err, user) {
     if (err) {
-    	console.log("hit the empry iser");
     	console.log(err);
-      //next(err, null);
     }
     
 
       var item = req.body;
-      user.firstName = item.firstName.toLowerCase();
-      user.lastName = item.lastName.toLowerCase() ;
-      user.displayName = item.displayName;
-      user.phone = item.phone;
-      user.bio = item.bio;
-      user.status = item.status;
+      if(item.firstName){
+        user.firstName = item.firstName.toLowerCase();  
+      }
+      if(item.lastName){
+        user.lastName = item.lastName.toLowerCase() ;  
+      }
+      
+      if(item.displayName){
+        user.displayName = item.displayName;  
+      }
+      
+      if(item.phone){
+        user.phone = item.phone;  
+      }
+      
+      if(item.bio){
+        user.bio = item.bio;  
+      }
+      
+      if(item.status){
+        user.status = item.status;  
+      }
+
+      if(item.longitude && item.latitude){
+        console.log(item.longitude);
+        console.log(item.latitude);
+        user.loc = [item.longitude,item.latitude];
+      }
+      
 
 
       // user.bannerImage = item.bannerImage;
