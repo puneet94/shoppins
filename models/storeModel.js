@@ -58,7 +58,11 @@ var Address = new Schema({
 	locality: String,
 	landmark: String,
 	latitude: Number,
-	longitude: Number
+	longitude: Number,
+	loc: {
+    		type: [Number],  // [<longitude>, <latitude>]
+    		index: '2d'      // create the geospatial index
+    	}
 });
 
 var ReportStoreSchema = new Schema({

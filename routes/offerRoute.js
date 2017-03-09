@@ -64,7 +64,6 @@ offerRouter.route('/store/:storeId')
 offerRouter.route('/collection')
 	.get(function(req, res) {
 		var queryObj = {};
-		console.log(req.query);
 		if (req.query.area) {
 			queryObj['address.area'] = req.query.area.toLowerCase();
 		}
@@ -73,9 +72,6 @@ offerRouter.route('/collection')
 		}
 		if (req.query.location) {
 			queryObj['address.city'] = req.query.location.toLowerCase();
-		}
-		if (req.query.distance) {
-			
 		}
 		if (req.query.category) {
 			queryObj.category = req.query.category.toLowerCase();
@@ -94,10 +90,7 @@ offerRouter.route('/collection')
 		if (req.query.type) {
 			queryObj.type = req.query.type.toLowerCase();
 		}
-		if (req.query.latitude && req.query.longitude) {
-			
-
-		}
+		
 		if (req.query.eventDate) {
 			queryObj.startDate = { '$lte': req.query.eventDate };
 			queryObj.endDate = { '$gte': req.query.eventDate };
@@ -109,6 +102,9 @@ offerRouter.route('/collection')
 		options.page = req.query.page || null;
 		options.select = req.query.fields || null;
 		options.populate = req.query.populate || null;
+		console.log("query ob");
+		console.log(queryObj);
+		console.log(options);
 		try {
 			Offer.paginate(queryObj, options).then(function(offersList) {
 				res.json(offersList);

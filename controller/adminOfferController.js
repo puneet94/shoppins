@@ -12,19 +12,32 @@ var adminOfferController = {
 };
 
 function createOffer(req, res) {
-  console.log("cretae offer hit");
+  console.log("create offer hit");
+  console.log(req.body);
   var offer = new Offer();
   var item = req.body;
-  offer.tagline = item.tagline;
-  offer.description = item.description;
+  if(item.tagline){
+    offer.tagline = item.tagline;  
+  }
+  if(item.description){
+    offer.description = item.description;  
+  }
+  if(item.latitude && item.longitude){
+    offer.loc= [item.longitude,item.latitude];
+  }
   offer.startDate = item.startDate;
   offer.endDate = item.endDate;
   offer.store = req.params.storeId;
   offer.category =item.category.map(function(item) {
         return item.toLowerCase();
     });
-  offer.bannerImage = item.bannerImage;
-  offer.images = item.images;
+  if(item.bannerImage){
+    offer.bannerImage = item.bannerImage;  
+  }
+  if(item.images){
+    offer.images = item.images;  
+  }
+  
   offer.type = item.type ? item.type.toLowerCase() : 'offer';
 
 

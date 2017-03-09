@@ -50,8 +50,7 @@ function editUser(req, res) {
 }
 
 function updateUser(req, res) {
-	console.log("the id");
-	console.log(req.params);
+	
   User.findById(req.params.user_id, function(err, user) {
     if (err) {
     	console.log(err);
@@ -83,8 +82,6 @@ function updateUser(req, res) {
       }
 
       if(item.longitude && item.latitude){
-        console.log(item.longitude);
-        console.log(item.latitude);
         user.loc = [item.longitude,item.latitude];
       }
       
