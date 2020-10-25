@@ -8,9 +8,9 @@ var userController = require('../controller/userController');
 
 
 cloudinary.config({
-    cloud_name: 'shoppingdirectory',
-    api_key: '967339527283183',
-    api_secret: '74NXckYl9m1-O0_ZTU8U_qoIDfw'
+    cloud_name: '12345',
+    api_key: '12345',
+    api_secret: '12345'
 });
 
 var Store = models.Store;
