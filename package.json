@@ -22,7 +22,7 @@
     "jsonwebtoken": "^6.2.0",
     "jwt-simple": "^0.5.0",
     "moment": "^2.13.0",
-    "mongoose": "^4.4.15",
+    "mongoose": "^5.10.10",
     "mongoose-paginate": "^5.0.0",
     "mongoose-relationship": "^0.1.5",
     "mongoose-url-slugs": "^0.2.1",
